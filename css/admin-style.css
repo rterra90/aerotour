@@ -1,0 +1,317 @@
+@import './admin/embarques-admin.css';
+@import './admin/reservas-admin.css';
+@import './admin/panel-widgets.css';
+@import './admin/coupons-create.css';
+@import './admin/user-search.css';
+@import './admin/check-in-modal.css';
+@import './admin/buttons.css';
+@import './admin/product_post/meta-pontos-embarque-exc.css';
+
+
+
+/* Input de texto estilizado */
+input.merged-text-input {
+  display: block;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+  border-bottom: 1px solid black !important;
+}
+
+input.merged-text-input:focus {
+  box-shadow: none !important;
+}
+
+#passageiros_meta .wc_metaboxes .wc_metabox {
+  background-color: #fafafa;
+}
+#post-body-content #postdivrich.woocommerce-product-description {
+  display: none;
+}
+
+.d-none {
+  display: none !important;
+}
+.visibility-hidden {
+  visibility: hidden;
+}
+.passageiros-admin-config {
+  margin: 0px 20px;
+}
+.passageiros-admin-config,
+.lista-passageiros-wrapper {
+  height: 0px;
+  overflow: hidden;
+}
+.passageiros-admin-config.open,
+.lista-passageiros-wrapper.open {
+  height: auto;
+}
+.passageiros .pdv {
+  position: absolute;
+  right: 2px;
+  top: 12px;
+}
+
+.passageiros .pdv .dashicons {
+  font-size: 0.8rem;
+}
+.vendas_pdv_variacao {
+  display: flex;
+  gap: 5px;
+  padding: 10px;
+}
+.vendas_pdv_variacao .pdv_count {
+  background-color: #d5d3d7;
+  border-radius: 0.12rem;
+  font-size: 0.675rem;
+  text-transform: uppercase;
+  display: flex;
+  gap: 6px;
+}
+.vendas_pdv_variacao .pdv_count b {
+  background-color: #c1c1c1;
+}
+.vendas_pdv_variacao .pdv_count b,
+.vendas_pdv_variacao .pdv_count i {
+  padding: 4px 6px;
+}
+.passageiros .pdv-tooltip {
+  position: absolute;
+  top: -15px;
+  right: 0;
+  border-radius: 0.12rem;
+  padding: 2px 5px;
+  background-color: #202020;
+  color: rgb(235, 235, 235);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  display: none;
+}
+.passageiros .pdv:hover .pdv-tooltip {
+  display: inline-block;
+}
+.passageiros_meta .accordion-item {
+  background-color: #fafafa;
+  border: 2px solid #dddddd;
+  overflow: hidden;
+}
+.passageiros_meta .accordion-item .accordion-header {
+  font-weight: 500;
+  padding: 15px;
+  display: block;
+  cursor: pointer;
+}
+.passageiros_meta .accordion-item .accordion-header:hover {
+  background-color: #e5e5e5;
+}
+.passageiros_meta .accordion-header.open .dashicons-admin-generic:hover,
+.passageiros_meta .accordion-header.open .dashicons-admin-generic.active {
+  background-color: #c9c9c9;
+  border-radius: 0.2rem;
+}
+.woocommerce_options_panel .passageiros_meta label {
+  position: relative;
+
+  float: none;
+  margin: 0;
+}
+label.switch {
+  display: inline-block;
+  height: 18px;
+  margin-bottom: 5px;
+}
+.switch input {
+  display: none;
+}
+.slider {
+  position: relative;
+  cursor: pointer;
+  background-color: #9d9d9d;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 13px;
+  width: 13px;
+  left: 4px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+input:checked + .slider,
+input.ativado + .slider {
+  background-color: #2196f3;
+}
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+input:checked + .slider:before,
+input.ativado + .slider:before {
+  -webkit-transform: translateX(14px);
+  -ms-transform: translateX(14px);
+  transform: translateX(14px);
+}
+.slider.round {
+  border-radius: 34px;
+  width: 34px;
+  height: 16px;
+  display: inline-block;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+.passageiros-admin-config.open .email-link-wpp-btn {
+  font-size: 0.85rem;
+  color: #303030;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.passageiros-admin-config.open .wpp-link-container dialog {
+  position: relative;
+}
+.passageiros-admin-config.open .wpp-link-container dialog .closeModalBtn {
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 2px;
+  background-color: #d0d0d0;
+  width: fit-content;
+  margin: 0 auto;
+}
+.wpp-link-container dialog b {
+  margin-left: 8px;
+  font-size: 1.25rem;
+}
+.wpp-link-container dialog .confirma-envio-email,
+.wpp-link-container dialog .teste-envia-email {
+  display: inline-block;
+  font-size: 1.25rem;
+  margin-left: 8px;
+  margin-bottom: 26px;
+  cursor: pointer;
+}
+.wpp-link-container dialog .confirma-envio-email:hover {
+  text-decoration: underline;
+  font-weight: 600;
+}
+.passageiros-admin-config.open .wpp-link-container dialog .closeModalBtn:hover {
+  background-color: #acacac;
+}
+.passageiros-admin-config.open .wpp-link-container dialog.loading::before {
+  content: 'Aguarde...';
+  line-height: 4;
+  font-size: 1.25rem;
+  font-weight: 600;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  background-color: #c5c5c5;
+  display: block;
+  text-align: center;
+}
+.passageiros-admin-config.open .linhas {
+  padding: 10px;
+  background-color: #c9c9c9;
+  border-radius: 0.2rem;
+  margin: 10px 0px;
+}
+.passageiros_meta .linhas-inner-flex {
+  display: flex;
+  gap: 5px;
+}
+.passageiros_meta .linhas-inner-flex .linha {
+  width: 210px;
+  padding: 10px;
+  background-color: #dfdfdf;
+}
+.passageiros_meta .linhas-inner-flex .linha p.titulo {
+  margin: 0 0 15px 0;
+}
+.passageiros_meta .linhas-inner-flex .linha label {
+  font-size: 0.675rem;
+}
+.passageiros_meta .linhas-inner-flex .linha input[type='checkbox'] {
+  margin-right: 5px;
+}
+.passageiros-admin-config button.exc-var-config-submit {
+  margin-top: 20px;
+}
+
+.passageiros_meta .linhas-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.passageiros_meta .linhas-nav li {
+  list-style: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.passageiros_meta .linhas-nav li:hover,
+.passageiros_meta .linhas-nav li.active {
+  background-color: #e5e5e5;
+  text-decoration: underline;
+}
+.passageiros_meta .passageiros-linha li {
+  margin-bottom: 0;
+  list-style: none;
+  display: flex;
+  border-top: 1px solid #d5d5d5;
+  padding: 10px 5px;
+  position: relative;
+}
+.passageiros_meta .passageiros-linha li .linha-nome_completo {
+  flex-grow: 1;
+}
+.passageiros_meta .passageiros-linha li .linha-telefone {
+  width: 120px;
+}
+.passageiros_meta .passageiros-linha li .linha-embarque {
+  width: 190px;
+}
+.passageiros_meta .passageiros-linha li .linha-nome {
+  flex-grow: 1;
+}
+.passageiros_meta .passageiros-linha[data-linha='todos'] .geral-linha {
+  position: relative;
+}
+.passageiros_meta .passageiros-linha[data-linha='todos'] select {
+  /* border: 2px solid red; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-height: unset;
+  height: 22px;
+  line-height: 1;
+}
+.passageiros-linha .detalhes-linha p {
+  margin: 0;
+  background-color: #e5e5e5;
+}
+#exc_embarques_meta.woocommerce_options_panel label,
+#exc_embarques_meta #padraoSelect {
+  float: none;
+  margin: 0;
+}
+.woocommerce_options_panel .coupon-customer-set input[type='text'] {
+  float: none;
+  margin: 0;
+}
+.woocommerce_options_panel .coupon-customer-set label {
+  float: none;
+  margin: 0;
+}
+#advanced_product_data.panel div.options_group:nth-child(1),
+#advanced_product_data.panel div.options_group:nth-child(2) {
+  display: none !important;
+}

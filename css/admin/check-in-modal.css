@@ -1,0 +1,139 @@
+#check-in-modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.925);
+  color: white;
+  z-index: 9999;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+.check-in-modal-inner {
+  background-color: black;
+  max-width: 720px;
+  margin: 0px auto;
+  padding: 12px;
+  position: relative;
+}
+
+#check-in-modal .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+#check-in-modal h1,
+#check-in-modal h2 {
+  display: block;
+  text-align: center;
+  color: var(--aer-light-text);
+}
+.check_in_lista_wrapper {
+  margin-top: 28px;
+}
+/* FILTROS */
+.check_in_filters {
+  display: flex;
+  gap: 12px;
+}
+.check_in_filters .filter_options_wrapper span {
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  margin-right: 10px;
+  font-weight: 500;
+  border: 1px solid rgb(83, 83, 83);
+  padding: 2px 6px;
+  color: rgb(83, 83, 83);
+  background-color: #25252500;
+  transition: 0.2s;
+}
+.check_in_filters .filter_options_wrapper span.active {
+  border: 1px solid rgb(212, 212, 212);
+  color: rgb(212, 212, 212);
+  background-color: #252525ff;
+}
+/* LISTA */
+#check-in-modal ul.lista-check-in li {
+  background-color: rgb(27, 27, 27);
+  margin-bottom: 5px;
+  border-radius: 0.3rem;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#check-in-modal ul.lista-check-in li.embarque-header {
+  text-align: center;
+  display: block;
+  padding: 12px;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.035rem;
+  background: #2b2b2b;
+  margin-top: 16px;
+  position: relative;
+  justify-content: center;
+}
+#check-in-modal li.embarque-header .count {
+  margin-left: 20px;
+}
+#check-in-modal ul.lista-check-in .dashicons-hidden {
+  opacity: 0.35;
+}
+#check-in-modal li.embarque-header .show-hide-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#check-in-modal li.embarque-header > b {
+  display: inline-block;
+}
+#check-in-modal ul.lista-check-in li p {
+  margin: 0;
+  font-size: 0.925rem;
+}
+#check-in-modal .lista-check-in .passageiro_dados {
+  font-size: 0.725rem;
+  font-style: italic;
+  font-weight: 300;
+  opacity: 0.85;
+  display: none;
+}
+#check-in-modal .lista-check-in .passageiro_dados.active {
+  display: block;
+}
+#check-in-modal ul.lista-check-in .passageiro_dados > span {
+  display: inline-block;
+  margin-right: 12px;
+}
+#check-in-modal .check-in-boxes {
+  display: flex;
+  gap: 7px;
+}
+#check-in-modal span[data-sentido] {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #666666;
+  border-radius: 0.2rem;
+  transition: 0.2s;
+}
+#check-in-modal span[data-sentido].ok {
+  background-color: #a5a5a5;
+}
+#check-in-modal span[data-sentido]:not(.ok):hover,
+#check-in-modal span[data-sentido].loading {
+  background-color: #464646;
+}
+@media (max-width: 576px) {
+  #check-in-modal {
+    padding: 0;
+    top: 46px;
+  }
+  .check-in-modal-inner {
+    padding: 40px 10px 12px;
+  }
+}

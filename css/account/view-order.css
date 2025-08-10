@@ -1,0 +1,138 @@
+a.voltar-header {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  display: block;
+  width: fit-content;
+}
+a.voltar-header:hover {
+  cursor: pointer;
+}
+p.informacao-status-header {
+  font-size: 1.15rem;
+}
+p.informacao-status-header mark.order-status {
+  font-weight: 600;
+}
+p.informacao-status-header[data-status='completed'] mark.order-status {
+  background-color: #0080005c;
+}
+p.informacao-status-header[data-status='cancelled'] mark.order-status {
+  background-color: #e3b7b7;
+}
+#pedidoContent {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+#pedidoContent h2 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.025rem;
+}
+#pedidoContent #atualizacoesDoPedido {
+  max-width: 400px;
+  padding: 12px 0 12px 24px;
+}
+#pedidoContent #detalhesDoPedido,
+#pedidoContent #detalhesDoPedido .woocommerce-order-details {
+  flex-grow: 1;
+}
+.woocommerce-OrderUpdates {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.woocommerce-OrderUpdates li {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.woocommerce-OrderUpdates li:last-child {
+  border-bottom: none;
+}
+
+.woocommerce-OrderUpdate-meta {
+  font-size: 0.725rem;
+  color: #888;
+  display: block;
+  font-style: italic;
+  margin-bottom: 1px;
+}
+
+.woocommerce-OrderUpdate-description {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.woocommerce-OrderUpdate-description p {
+  margin: 0;
+  text-align: justify;
+  font-size: 0.825rem;
+}
+
+.clear {
+  clear: both;
+}
+#meus-pedidos-cta a {
+  border: 1px solid #161616;
+  padding: 10px 22px;
+  font-weight: 500;
+}
+#meus-pedidos-cta a:hover {
+  text-decoration: underline;
+}
+.pending-order-buttons a {
+  text-align: center;
+  border: 2px solid rgb(22 22 22);
+  padding: 7px 7px 0 7px;
+  width: 78px;
+  background: transparent;
+  opacity: 0.9;
+  transition: 0.2s;
+}
+.pending-order-buttons a[data-action='pay']:hover {
+  opacity: 1;
+
+  background: #a8ddbf;
+}
+.pending-order-buttons a[data-action='cancel']:hover {
+  opacity: 1;
+  border-color: #2a0909;
+  background: #ebb7b7;
+}
+.pending-order-buttons a span {
+  font-size: 0.675rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  letter-spacing: 0.02rem;
+  margin-top: 4px;
+}
+.pending-order-buttons a img {
+  width: 32px;
+  height: 32px;
+}
+@media (max-width: 1024px) {
+  #pedidoContent #atualizacoesDoPedido {
+    max-width: 300px;
+  }
+}
+@media (max-width: 768px) {
+  a.voltar-header {
+    margin-bottom: 12px;
+  }
+  #pedidoContent {
+    flex-direction: column-reverse;
+  }
+  #pedidoContent #atualizacoesDoPedido {
+    max-width: 100%;
+    width: 100%;
+    padding: 12px;
+  }
+}

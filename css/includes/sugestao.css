@@ -1,0 +1,110 @@
+.sugestao-cta-wrapper {
+  padding: 12px 18px;
+  border-radius: 0.3rem;
+  display: flex;
+  background-color: #212529;
+}
+.sugestao-cta .text-area {
+  max-width: 430px;
+  line-height: 1.25;
+}
+.sugestao-cta .input-area {
+  flex-grow: 1;
+  /*display: flex;*/
+  /*gap: 8px;*/
+  /*align-items: center;*/
+}
+.sugestao-cta .input-area input[type='text'] {
+  width: 100%;
+  display: block;
+  line-height: 2.8;
+  padding: 0 10px;
+  height: fit-content;
+  border: none;
+  border-radius: 0.3rem;
+  background-color: #7f7f7f;
+  transition: 0.2s;
+  color: #0c0c0c;
+  font-weight: 500;
+  letter-spacing: 0.04rem;
+}
+.sugestao-cta .input-area input[type='text']:hover,
+.sugestao-cta .input-area input[type='text']:focus {
+  background-color: #757575;
+}
+.sugestao-cta .input-area input[type='submit'] {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  line-height: 2.8;
+  border-radius: 0.2rem;
+  border: none;
+  font-weight: 600;
+  background-color: #212529;
+  color: var(--aer-light-text);
+}
+.sugestao-cta .input-area input[type='submit']:hover {
+  background-color: #17191b;
+}
+.sugestao-cta .input-area p {
+  margin-bottom: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.sugestao-cta .input-area p br {
+  display: none;
+}
+.sugestao-cta strong {
+  font-size: 1.725rem;
+  display: block;
+  color: var(--aer-light-text);
+}
+.sugestao-cta span {
+  font-size: 0.85rem;
+  display: block;
+  color: var(--aer-light-text);
+  opacity: 0.7;
+}
+.sugestao-cta .wpcf7,
+.sugestao-cta .wpcf7-form-control-wrap {
+  flex-grow: 1;
+}
+.sugestao-cta .wpcf7-response-output {
+  display: none;
+}
+.sugestao-cta .screen-reader-response {
+  text-align: center;
+  color: var(--aer-light-text);
+  font-weight: 600;
+}
+.sugestao-cta .screen-reader-response p {
+  margin-top: 20px;
+}
+@media (max-width: 576px) {
+  .sugestao-cta-wrapper {
+    display: block;
+    padding: 10px 12px;
+  }
+  .sugestao-cta strong {
+    font-size: 1.3rem;
+  }
+  .sugestao-cta span {
+    font-size: 0.75rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .sugestao-cta .input-area input[type='text'] {
+    line-height: 2.2rem;
+  }
+  .sugestao-cta .screen-reader-response {
+    text-align: center;
+    color: var(--aer-light-text);
+    padding-top: 5px;
+    font-weight: 600;
+  }
+  .sugestao-cta .screen-reader-response p {
+    margin-bottom: 5px;
+    margin-top: 0px;
+  }
+}

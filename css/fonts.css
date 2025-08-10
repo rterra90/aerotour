@@ -1,0 +1,8 @@
+@font-face {
+  font-family: Rockstar;
+  src: url('../assets/fonts/Rockstar-ExtraBold.otf');
+  font-weight: normal;
+}
+.rockstar-font {
+  font-family: 'Rockstar', sans-serif;
+}

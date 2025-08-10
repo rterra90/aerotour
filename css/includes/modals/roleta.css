@@ -1,0 +1,352 @@
+.modal.roleta-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#modalBotoesFinais {
+  margin-top: 10px;
+  display: flex;
+}
+#modalBotoesFinais a {
+  text-decoration: underline;
+  width: 120px;
+  margin-right: 16px;
+  font-size: 0.8rem;
+}
+#modalBotoesFinais button {
+  width: 100%;
+  border: 1px solid #000000;
+  font-size: 0.9rem;
+  background-color: white;
+}
+#modalBotoesFinais button:hover {
+  color: white;
+  background-color: #000000;
+}
+.modal-title {
+  font-size: 2rem;
+  margin: 0 auto 18px;
+  width: fit-content;
+  padding: 0px 30px;
+
+  font-weight: 500;
+}
+
+.modal-title.blink {
+  /* background: rgba(255, 0, 0, 0.99);
+  color: #ffffff; */
+  animation: blinkTitle 0.9s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-timing-function: linear(0 0%, 0.04 44.12%, 0.97 42.65%, 1 100%);
+}
+@keyframes blinkTitle {
+  from {
+    background: rgba(255, 0, 0, 0);
+    color: rgba(17, 17, 17, 0.99);
+  }
+  to {
+    background: rgba(167, 42, 42, 0.99);
+    color: rgba(255, 255, 255, 0.993);
+  }
+}
+/* Estilos da caixa de conteúdo */
+.roleta-modal .modal-content {
+  background: #fff;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transform: scale(0.9);
+  transition: transform 0.6s ease;
+  max-width: 680px;
+  width: 86vw;
+  box-shadow: inset 10px 10px 0px -6px #a72a2a,
+    inset -10px -10px 0px -6px #a72a2a;
+}
+
+/* Quando o modal está visível */
+.modal.roleta-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal.roleta-modal.show .modal-content {
+  transform: scale(1); /* Suave "pop-up" */
+}
+
+/* Botão de fechar */
+button#fechar-modal {
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  background: none;
+  color: rgb(41, 41, 41);
+  width: fit-content;
+  margin: 16px auto 0;
+  padding: 2px;
+  font-size: 0.875rem;
+}
+
+button#fechar-modal:hover {
+  text-decoration: underline;
+}
+.roleta-wrapper {
+  display: flex;
+}
+.roleta {
+  position: relative;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.roda {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  transform: rotate(0deg);
+  transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67); /* Transição suave */
+  border: 4px solid #a72a2a;
+  animation-timing-function: cubic-bezier(0.29, 0.07, 0.4, 0.96);
+}
+
+@keyframes giraRoleta {
+  from {
+    transform: rotate(0deg); /* Início */
+  }
+  to {
+    transform: rotate(var(--final-rotate, 0deg));
+  }
+}
+
+.slice {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: #ffcc00;
+  transform-origin: 100% 100%;
+  text-align: center;
+  line-height: 100%;
+  font-weight: bold;
+  color: #333;
+  padding: 30px 0px 0px 0px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+.slice span {
+  text-decoration: underline;
+  position: absolute;
+  transform: rotate(82deg);
+}
+/* Estilização das cores para cada fatia */
+.slice:nth-child(1) {
+  transform: rotate(0deg);
+  background: #99baf0;
+}
+.slice:nth-child(2) {
+  transform: rotate(40deg);
+  background: #ffde92;
+}
+.slice:nth-child(3) {
+  transform: rotate(80deg);
+  background: #99baf0;
+}
+.slice:nth-child(4) {
+  transform: rotate(120deg);
+  background: #e6c2ea;
+}
+.slice:nth-child(5) {
+  transform: rotate(160deg);
+  background: #99baf0;
+}
+.slice:nth-child(6) {
+  transform: rotate(200deg);
+  background: #ffde92;
+}
+.slice:nth-child(7) {
+  transform: rotate(240deg);
+  background: #99baf0;
+}
+.slice:nth-child(8) {
+  transform: rotate(280deg);
+  background: #aad6a3;
+}
+.slice:nth-child(9) {
+  transform: rotate(320deg);
+  background: #8cabde;
+}
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 90px 0 0 0;
+}
+button#girar {
+  padding: 10px 20px;
+  background: #992c2c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  min-width: 165px;
+  border-radius: 30px;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  font-weight: 600;
+  transition: 0.2s;
+  position: relative;
+}
+button#girar:hover {
+  background: #b04040;
+}
+
+button#girar:disabled {
+  background: #574c4c;
+  cursor: not-allowed;
+}
+
+button#girar::after {
+  content: '';
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: 6px solid #9d4242;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ring 1.5s infinite;
+}
+button#girar:disabled::after {
+  animation: none;
+}
+
+@keyframes ring {
+  0% {
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+  }
+  100% {
+    width: 150px;
+    height: 150px;
+    opacity: 0;
+  }
+}
+
+.seta {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 26px solid #333;
+  position: absolute;
+  top: 114px;
+  left: -11px;
+  transform: rotate(-18deg);
+  z-index: 10;
+}
+.roleta-info {
+  padding: 12px 0;
+}
+.final-result-container {
+  background: antiquewhite;
+  padding: 10px 8px;
+  box-shadow: 2px 2px #c7908a;
+}
+.final-result-container p.premio {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06rem;
+  margin-bottom: 6px;
+}
+.cupom-validade {
+  font-size: 0.825rem;
+  font-weight: 500;
+  margin-top: -12px;
+  color: #551a1a;
+}
+.cupom-icon {
+  background-color: #1c1c1c;
+  color: #ededed;
+  font-size: 0.925rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 1px 30px;
+}
+p.descricao {
+  font-size: 0.825rem;
+  letter-spacing: 0.06rem;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+p.ja-participou-aviso {
+  background: #dbffe6;
+  border: 2px solid #041803;
+  padding: 6px;
+  font-size: 0.825rem;
+  font-weight: 500;
+  letter-spacing: 0.025rem;
+}
+.modal-login {
+  margin-top: 60px;
+}
+.modal-login p {
+  text-decoration: underline;
+  font-weight: 600;
+  color: #242424;
+}
+@media (max-width: 750px) {
+  .modal {
+    justify-content: flex-start;
+  }
+  .roleta-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .roleta-modal .modal-content {
+    margin-top: 30px;
+    margin-left: 7vw;
+  }
+  .modal-title {
+    font-size: 1.3rem;
+  }
+  .wrap {
+    margin: 30px 0px;
+  }
+  .modal-login {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 430px) {
+  .roleta {
+    transform: scale(0.88);
+  }
+  .roleta-info {
+    font-size: 0.915rem;
+  }
+  .modal-title {
+    margin: 0 auto 6px;
+  }
+}
+@media (max-width: 400px) {
+  .modal-title {
+    font-size: 1.1rem;
+    margin: 0 auto 4px;
+  }
+}

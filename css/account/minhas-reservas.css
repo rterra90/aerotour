@@ -1,0 +1,277 @@
+@import 'cancelar-reserva-modal.css';
+@import 'alterar-embarque-modal.css';
+#minhas-reservas {
+  position: relative;
+}
+#minhas-reservas h2 {
+  font-size: 1.25rem;
+}
+
+#minhas-reservas .reservas .card-img img {
+  width: 100%;
+  height: 120px !important;
+}
+#minhas-reservas .reservas p {
+  margin-bottom: 3px;
+  font-size: 0.85rem;
+}
+#minhas-reservas .reservas .card {
+  border-radius: 1rem;
+}
+
+#minhas-reservas .reservas .card,
+#minhas-reservas .reservas .card-body {
+  position: relative;
+}
+#minhas-reservas .reservas-inner {
+  overflow: hidden;
+}
+#minhas-reservas .reservas-inner .row {
+  flex-wrap: nowrap;
+  overflow: auto;
+}
+
+#minhas-reservas .wpp-link a {
+  width: 86%;
+  background-color: #bfe5bf;
+  border-radius: 0.15rem;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  margin: 8px auto 0;
+  font-size: 0.775rem;
+  text-transform: uppercase;
+  letter-spacing: 0.045rem;
+  padding-top: 2px;
+  transform: 0.2rem;
+  cursor: pointer;
+  max-width: 240px;
+}
+#minhas-reservas .wpp-link a:hover {
+  background-color: #a6cca6;
+}
+#minhas-reservas .wpp-link i {
+  position: relative;
+  top: -2px;
+}
+#minhas-reservas .reservas .card-body .reserva-passageiros-icone {
+  position: absolute;
+  right: 65px;
+  top: 3px;
+}
+#minhas-reservas .reservas .card-body .reserva-passageiros-icone::after {
+  content: attr(data-qtd);
+  padding: 0px 5px 1px 5px;
+  background-color: #1a1a1a;
+  color: var(--aer-light-text);
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  position: absolute;
+  white-space: nowrap;
+  line-height: 1.3;
+  top: 12px;
+  left: 16px;
+}
+
+#reservas_passadas_container li {
+  margin-bottom: 10px;
+}
+#reservas_passadas_container li > div {
+  flex: 0 1 auto;
+}
+#reservas_passadas_container .p_imagem img {
+  width: 110px;
+  height: auto;
+  filter: brightness(0.7) grayscale(1);
+}
+#reservas_passadas_container .p_nome {
+  margin: 0px 10px;
+}
+#reservas_canceladas_container h2 {
+  font-size: 0.925rem;
+}
+#reservas_canceladas_container li + li {
+  margin-top: 10px;
+}
+#reservas_canceladas_container .p_nome p,
+#reservas_passadas_container .p_nome p {
+  font-size: 1rem;
+  margin-bottom: -6px;
+}
+#reservas_canceladas_container .p_nome i,
+#reservas_passadas_container .p_nome i {
+  font-size: 0.825rem;
+}
+#reservas_canceladas_container .p_nome {
+  opacity: 0.65;
+}
+#minhas-reservas .reservas .card-body .reserva-options-wrapper {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  text-align: right;
+  display: none;
+}
+#minhas-reservas .reservas .card-body .reserva-options-wrapper.active {
+  display: inline-block;
+}
+
+#minhas-reservas .reservas .card-body .options-btn {
+  letter-spacing: 0.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 0.8;
+  opacity: 0.55;
+  transition: 0.2s;
+  user-select: none;
+}
+#minhas-reservas .reservas .card-body .options-btn:hover,
+#minhas-reservas .reservas .card-body .active .options-btn {
+  opacity: 0.825;
+}
+#minhas-reservas .reservas .card:hover .reserva-options-wrapper {
+  display: inline-block;
+}
+#minhas-reservas .reservas .card-body .options-menu {
+  font-size: 0.675rem;
+  min-width: 130px;
+}
+#minhas-reservas .reservas .card-body .options-menu li {
+  padding: 2px 5px;
+  transition: 0.2s;
+  background-color: rgb(233 233 233);
+  cursor: pointer;
+}
+#minhas-reservas .reservas .card-body .options-menu li:hover {
+  background-color: rgb(196, 196, 196);
+}
+#minhas-reservas .reservas .card-body .options-menu li.cancelar:hover {
+  background-color: rgb(227 187 187);
+}
+
+/* SEÇÃO CANCELAMENTOS */
+#minhas-reservas .cancelamentos ul li:first-of-type {
+  border-top: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+}
+#minhas-reservas .cancelamentos ul li {
+  border-bottom: 1px solid #d3d3d3;
+  display: flex;
+  align-items: center;
+}
+#minhas-reservas .cancelamentos li span {
+  font-size: 0.775rem;
+  padding: 0 5px;
+  display: inline-block;
+  text-align: center;
+}
+#minhas-reservas .cancelamentos li span.cancel_status {
+  font-size: 0.65rem;
+  line-height: 1;
+  width: 100px;
+}
+#minhas-reservas .cancelamentos li i {
+  display: block;
+  line-height: 1;
+  font-size: 0.575rem;
+}
+#minhas-reservas .cancelamentos .cancel_data_solic {
+  width: 100px;
+}
+#minhas-reservas .cancelamentos span.cancel_nome {
+  width: 600px;
+  text-align: start;
+}
+#minhas-reservas .cancelamentos .cancel_preco {
+  width: 130px;
+}
+#minhas-reservas .cancelamentos .cancel_status.cancelamento_pending {
+  font-weight: 600;
+  color: #959f15;
+}
+#minhas-reservas .cancelamentos .cancel_status.cancelamento_completed {
+  font-weight: 600;
+  color: #16812e;
+}
+#minhas-reservas .aer-toast {
+  position: absolute;
+  /* right: 0px; */
+  top: -30px;
+  opacity: 0;
+  right: -30px;
+  transition: 1s;
+}
+#minhas-reservas .aer-toast.active {
+  right: 0px;
+  opacity: 1;
+}
+#minhas-reservas .aer-toast .progress {
+  margin-bottom: 0;
+  border-radius: 0.3rem 0.3rem 0 0 !important;
+  height: 5px;
+}
+#minhas-reservas .aer-toast .toast-inner {
+  background-color: #f3f3f3;
+  font-size: 0.85rem;
+}
+#minhas-reservas .aer-toast .progress-bar {
+  background-color: #747474;
+}
+#minhas-reservas .aer-toast.active .progress-bar {
+  animation-name: toast_bar;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-delay: 1s;
+  animation-duration: 6s;
+}
+@keyframes toast_bar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  #minhas-reservas .reservas .card-header {
+    padding: 4px 8px;
+    font-size: 0.725rem;
+  }
+  #minhas-reservas p {
+    font-size: 0.825rem;
+  }
+  #minhas-reservas .cancelamentos ul li {
+    display: block;
+  }
+  #minhas-reservas .cancelamentos li span.cancel_status,
+  #minhas-reservas .cancelamentos span.cancel_nome {
+    width: auto;
+    display: block;
+    text-align: start;
+    margin-bottom: 2px;
+  }
+  #minhas-reservas .reservas p {
+    font-size: 0.725rem;
+  }
+  #minhas-reservas .reservas .card-body .reserva-options-wrapper {
+    right: 12px;
+    top: 6px;
+    display: initial;
+  }
+
+  #minhas-reservas .reservas .card-body .reserva-passageiros-icone {
+    right: 60px;
+    top: 4px;
+  }
+  #minhas-reservas .reservas .card-body .reserva-passageiros-icone::after {
+    font-size: 0.65rem;
+  }
+  #minhas-reservas .reservas .card-body .options-menu {
+    margin-top: 2px;
+  }
+}

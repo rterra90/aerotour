@@ -1,0 +1,22 @@
+.alterar-embarque-modal {
+  z-index: 9999 !important;
+}
+.alterar-embarque-modal p {
+  text-align: center;
+  margin-bottom: 4px;
+}
+.alterar-embarque-modal .modal-footer {
+  display: block;
+  border-top: none;
+  padding-top: 0;
+}
+.alterar-embarque-modal form select {
+  display: block;
+  margin: 0 auto;
+  pad: 4px;
+}
+.alterar-embarque-modal .buttons-wrapper {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+}

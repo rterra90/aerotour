@@ -1,0 +1,95 @@
+#single-post #comments_container {
+  width: 60%;
+  margin: 60px auto 30px;
+  border: 2px solid var(--aer-light-dark);
+  border-radius: 0.4rem;
+  padding: 10px 14px;
+}
+
+#single-post #comments_container > h3#title-comments {
+  background-color: var(--aer-light-dark);
+  text-transform: uppercase;
+  color: var(--aer-bg-light);
+  letter-spacing: 0.075rem;
+  font-size: 1.15rem;
+  margin: -10px -14px;
+  padding: 10px 14px;
+}
+#single-post #comments_container > h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.075rem;
+  font-size: 0.725rem;
+  padding: 20px 0 2px;
+}
+#single-post #comments_container #reply-title {
+  margin-top: 26px;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+#comments_container .logged-in-as {
+  font-size: 0.825rem;
+}
+#comments_container .logged-in-as a {
+  display: none;
+}
+
+#comments_container .logged-in-as .required-field-message {
+  display: block;
+}
+#comments_container form#commentform {
+  display: flex;
+  flex-direction: column;
+}
+#comments_container form#commentform .form-submit {
+  order: 1;
+}
+#comments_container form#commentform .form-submit input.submit {
+  font-size: 0.85rem;
+  letter-spacing: 0.06rem;
+  padding: 2px 16px;
+  border: none;
+  background: var(--aer-light-dark);
+  color: var(--aer-bg-light);
+  border-radius: 1.5rem;
+  transition: 0.2s;
+}
+#comments_container form#commentform .form-submit input.submit:hover {
+  background: #262626;
+}
+#comments_container form#commentform .comment-form-comment {
+  margin-bottom: 2px;
+}
+
+ol.commentlist li .comment-meta {
+  font-size: 0.725rem;
+  margin-top: 4px;
+}
+
+ol.commentlist li .comment-edit-link {
+  font-weight: 600;
+}
+#single-post .comment-author.vcard img {
+  display: none;
+}
+
+ol.commentlist li .reply a {
+  display: none;
+  font-size: 0.85rem;
+  padding: 3px 6px;
+  border: 1px solid #979797;
+  border-radius: 0.2rem;
+  color: rgb(81 81 81);
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 1px 1px rgb(218, 218, 218);
+}
+ol.commentlist li .reply a:hover {
+  color: rgb(54, 54, 54);
+  border-color: #797979;
+  background-color: #d9d9d9;
+  box-shadow: 1px 1px rgb(194, 194, 194);
+}
+@media (max-width: 576px) {
+  ol.commentlist {
+  }
+}

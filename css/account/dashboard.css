@@ -1,0 +1,22 @@
+#painel-dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+#painel-dashboard > * {
+  background-color: var(--aer-bg-white);
+  border-radius: 0.5rem;
+  padding: 15px;
+  box-shadow: 2px 2px 6px 0px #d5d5d5;
+}
+
+#painel-dashboard > * h3 {
+  text-transform: uppercase;
+}
+
+@media (max-width: 576px) {
+  #painel-dashboard {
+    grid-template-columns: 1fr;
+  }
+}

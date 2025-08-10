@@ -1,0 +1,14 @@
+#manage_coupons fieldset {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+#manage_coupons select.pending {
+  border: 2px yellow solid;
+  background-color: #e5e4c3;
+}
+#manage_coupons select.complete {
+  border: 2px #494949 solid;
+  background-color: #ededed;
+}

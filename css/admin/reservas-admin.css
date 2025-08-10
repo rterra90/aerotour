@@ -1,0 +1,221 @@
+#admin-reservas .toast {
+  padding: 8px 20px;
+  position: fixed;
+  top: 45px;
+  right: 10px;
+  z-index: 999;
+  background-color: #080808ed;
+  font-size: 0.925rem;
+  color: whitesmoke;
+  letter-spacing: 0.05rem;
+}
+#adminReservasTable {
+  display: table;
+  position: relative;
+}
+#adminReservasTable .filtros {
+  display: flex;
+  justify-content: space-between;
+}
+#exportSheetBtn {
+  cursor: pointer;
+  max-height: 32px;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+}
+#exportSheetBtn[disabled] {
+  cursor: not-allowed;
+}
+#adminReservasTable li {
+  display: flex;
+  margin-bottom: 0px;
+}
+#adminReservasTable li:not(.table-header),
+#adminReservasTable tbody td {
+  padding: 4px 6px;
+}
+#adminReservasTable li.table-header,
+#adminReservasTable thead tr {
+  background-color: #c2c2c2;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.02rem;
+}
+
+#adminReservasTable tbody tr:nth-of-type(even) {
+  background-color: #e3e3e3;
+}
+#adminReservasTable tbody tr {
+  user-select: none;
+}
+#adminReservasTable tbody tr:hover {
+  box-shadow: 0 0 1px 1px #b9b9b9 inset;
+}
+#adminReservasTable tbody tr.menu-ativo {
+  box-shadow: 0 0 1px 1px #4e4e4e inset;
+  position: relative;
+}
+tr.menu-ativo .menu-reserva {
+  position: absolute;
+  top: 10px;
+  z-index: 90;
+  background: #c7c7c7;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.065rem;
+  font-weight: 600;
+  box-shadow: 2px 2px 3px 0px #707070;
+}
+tr.menu-ativo .menu-reserva ul {
+  margin-bottom: 0px;
+  position: relative;
+}
+tr.menu-ativo .menu-reserva ul.loading::after {
+  content: '';
+  position: absolute;
+  display: block;
+  border-radius: 10px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #e1e1e1;
+  border-top-color: transparent;
+  background-color: transparent;
+  z-index: 100;
+  left: 48%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  animation: loadingRotate 1s linear infinite;
+}
+@keyframes loadingRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+tr.menu-ativo .menu-reserva ul.loading li {
+  background-color: gray;
+  color: #565656;
+}
+tr.menu-ativo .menu-reserva ul:not(.loading) li {
+  cursor: pointer;
+}
+.menu-reserva ul:not(.loading) li[data-opcao='Cancelar reserva'] {
+  background: #c59f9f;
+}
+.menu-reserva ul:not(.loading) li[data-opcao='Cancelar reserva']:hover {
+  background: #b88585;
+}
+.menu-reserva ul:not(.loading) li:hover {
+  background: #bbbbbb;
+}
+#adminReservasTable thead [data-coluna] {
+  font-size: 0.925rem;
+  padding: 6px 4px;
+}
+#adminReservasTable tbody [data-coluna='order-id'] {
+  width: 50px;
+  font-size: 1.15rem;
+}
+#adminReservasTable tbody [data-coluna='order-id'] a {
+  color: unset;
+}
+#adminReservasTable tbody [data-coluna='order-id'] a:hover {
+  text-decoration: underline;
+}
+#adminReservasTable tbody [data-coluna='excursao'] {
+  text-transform: uppercase;
+  font-size: 1.075rem;
+  letter-spacing: 0.0325rem;
+  min-width: 80px;
+  width: fit-content;
+}
+
+#adminReservasTable [data-coluna='horario'] {
+  width: 65px;
+}
+#adminReservasTable [data-coluna='nome-completo'] {
+  width: 260px;
+}
+#adminReservasTable [data-coluna='cpf'],
+#adminReservasTable [data-coluna='telefone'] {
+  width: 125px;
+}
+
+#adminReservasTable [data-coluna='embarque'].sort-enabled {
+  cursor: pointer;
+  transition: 0.12s;
+}
+#adminReservasTable [data-coluna='embarque'].sort-enabled:hover {
+  background-color: #a7a7a7;
+}
+#adminReservasTable [data-coluna='status'] {
+  /* min-width: 60px; */
+  padding-right: 20px;
+}
+
+/* Live search select */
+.live-search-dropdown {
+  min-width: 360px;
+  width: 400px;
+  background: #e3e3e3;
+  line-height: 1.2;
+  letter-spacing: 1px;
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: 0.12s;
+}
+.live-search-dropdown:hover {
+  background: #d1d1d1;
+}
+.live-search-dropdown .dropdown-select {
+  padding: 9px 10px 7px 34px;
+}
+.live-search-dropdown .dropdown-menu {
+  width: 400px;
+  min-width: 360px;
+  max-height: 460px;
+  overflow-y: scroll;
+}
+.live-search-dropdown .dropdown-menu input {
+  width: 96%;
+  padding: 4px 10px;
+  letter-spacing: 1px;
+  margin: 0 auto;
+  display: block;
+}
+.live-search-dropdown .dropdown-menu .dropdown-menu-item {
+  padding: 10px;
+}
+.live-search-dropdown .dropdown-menu .dropdown-menu-item.is-select {
+  background-color: #c2c2c2;
+}
+.live-search-dropdown
+  .dropdown-menu
+  .dropdown-menu-item:not(.is-select):not(:disabled):hover {
+  background-color: #d5d5d5;
+  border: 1px solid #cecece;
+}
+.exc-search {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.selec-prox-pass {
+  font-size: 1.15rem;
+}
+.selec-prox-pass span {
+  opacity: 0.5;
+  cursor: pointer;
+}
+.selec-prox-pass span.ativo {
+  opacity: 1;
+  text-decoration: underline;
+  cursor: text;
+}
+.selec-prox-pass span:not(.ativo):hover {
+  text-decoration: underline;
+}

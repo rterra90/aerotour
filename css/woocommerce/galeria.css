@@ -1,0 +1,27 @@
+#secaoFotos .carousel-inner {
+  display: flex;
+  padding: 0 20px;
+}
+#secaoFotos .carousel {
+  height: 420px;
+  box-sizing: border-box;
+}
+#secaoFotos .carousel-item {
+  max-height: 420px;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+@media (max-width: 576px) {
+  #secaoFotos {
+    margin-bottom: 12px;
+  }
+  #secaoFotos .carousel {
+    height: 320px;
+  }
+  #secaoFotos .carousel-inner {
+    padding: 0 12px;
+  }
+  #secaoFotos .carousel-item {
+    max-height: 320px;
+  }
+}

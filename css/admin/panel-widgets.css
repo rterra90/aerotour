@@ -1,0 +1,93 @@
+#home_cards_widget .cards-line {
+  background-color: #e3e3e3;
+  padding: 10px;
+  transition: 0.3s;
+  display: flex;
+}
+#home_cards_widget .cards-line:hover {
+  background-color: #d8d8d8;
+}
+#home_cards_widget .cards-line .body {
+  flex-grow: 1;
+}
+#home_cards_widget .cards-line .icons {
+  width: 20px;
+}
+#home_cards_widget li[data-index='0'] {
+  display: none;
+}
+#home_cards_widget li[data-index='1'] .dashicons-trash {
+  display: none;
+}
+#home_cards_widget .cards-line input[name='cards-line-name'] {
+  display: block;
+  width: 80%;
+  margin-bottom: 10px;
+  background-color: transparent;
+  font-size: 1.075rem;
+  letter-spacing: 0.1rem;
+  border: none;
+  border-radius: 0px;
+  border-bottom: 1px solid;
+}
+
+#home_cards_widget .cards-line .type-select-container [disabled] {
+  display: none;
+}
+#home_cards_widget .cards-line .dashicons-trash {
+  opacity: 0.7;
+  transition: 0.2s;
+  cursor: pointer;
+}
+#home_cards_widget .cards-line .dashicons-trash:hover {
+  opacity: 1;
+}
+#home_cards_widget .widget-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+/* WIDGET CUPONS */
+#manage_coupons fieldset {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+#manage_coupons select.pending {
+  border: 2px yellow solid;
+  background-color: #e5e4c3;
+}
+#manage_coupons select.complete {
+  border: 2px #494949 solid;
+  background-color: #ededed;
+}
+
+/* WIDGET CHECK-IN */
+#manage_exc_widget_list li {
+  display: flex;
+  margin-bottom: 0px;
+  padding: 5px 0 5px 3px;
+}
+#manage_exc_widget_list li:nth-child(even) {
+  background-color: #e3e3e3;
+}
+#manage_exc_widget_list li a {
+  color: unset;
+}
+#manage_exc_widget_list li a:hover {
+  text-decoration: underline;
+}
+#manage_exc_widget_list li .exc_name {
+  flex-grow: 1;
+  margin-right: 12px;
+}
+#manage_exc_widget_list li .exc_total_passageiros {
+  text-align: center;
+}
+#manage_exc_widget_list li .icone {
+  width: 64px;
+  text-align: center;
+  cursor: pointer;
+}
+#manage_exc_widget_list li:first-of-type {
+  margin-bottom: 15px;
+}

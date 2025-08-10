@@ -1,0 +1,47 @@
+.coupon-customer-set .allowed_customers {
+  max-width: 700px;
+  padding-left: 10px;
+  margin-top: 20px;
+}
+.coupon-customer-set .allowed_customers > p {
+  margin: 0;
+  background-color: #dfdfdf;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.coupon-customer-set .allowed_customers ul {
+  background-color: #f7f7f7;
+  margin-top: 0;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+.coupon-customer-set .allowed_customers li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e3e3e3;
+  margin-bottom: 0px;
+  padding: 4px 8px;
+}
+.coupon-customer-set .allowed_customers li:hover {
+  background-color: #ededed;
+}
+.loading-element {
+  display: inline-block;
+  width: 8px;
+  position: absolute;
+  border-radius: 8px;
+  height: 8px;
+  right: 30px;
+  top: 3px;
+  border: 2px solid black;
+  border-bottom-color: transparent;
+  animation: loading 0.5s infinite linear;
+}
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,142 @@
+#form-login .form-row {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+#form-login .form-row.reg_username {
+  margin-bottom: 0;
+}
+
+#form-login .qr_event_inner_alert,
+#form-login .redirect_alert {
+  background-color: rgb(159, 180, 252);
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.825rem;
+  padding: 5px;
+  border-radius: 0.3rem;
+}
+#form-login h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.login-error-alert {
+  padding: 6px 10px;
+  background-color: #cfadad;
+  text-align: center;
+  font-size: 0.75rem;
+  margin-bottom: 12px;
+}
+.woocommerce-privacy-policy-text {
+  display: none;
+}
+#form-login #customer_login {
+  justify-content: space-evenly;
+}
+#form-login .aer-text-input,
+#form-login .mostra-senha {
+  width: 70%;
+}
+#form-login .mostra-senha {
+  margin: 0 auto;
+  position: relative;
+}
+#form-login .mostra-senha_icone {
+  position: absolute;
+  right: 12px;
+  top: -28px;
+}
+#customer_login .lost_password {
+  text-align: center;
+}
+#form-login #customer_login button {
+  margin: 20px auto;
+}
+.registrar.form-login-section .aviso-registro {
+  font-size: 0.75rem;
+  background-color: #f9f3f2;
+  padding: 8px;
+  border-radius: 0.3rem;
+  margin-bottom: 10px;
+}
+.registrar.form-login-section #emailRegister > div {
+  margin: 12px auto;
+  background-color: #e7e7e7;
+  min-width: 280px;
+  width: 60%;
+  box-shadow: 0px 0px 4px #8d8d8d;
+  padding: 12px 20px;
+  letter-spacing: 0.06rem;
+  border-radius: 3px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: end;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.registrar.form-login-section #emailRegister > div:hover {
+  background-color: #dfdfdf;
+  box-shadow: 0px 0px 3px #7c7c7c;
+}
+#thirdPartyLogin iframe {
+  margin: 0px auto !important;
+  display: flex;
+  justify-content: center;
+}
+#thirdPartyLogin iframe #container {
+  width: 100%;
+}
+form.register {
+  display: none;
+  padding: 10px 0;
+}
+.reg_username i {
+  font-size: 0.725rem;
+  position: relative;
+}
+.reg_username input.erro-input,
+.reg_username input.erro-input:hover {
+  background-color: #cfb0b0 !important;
+  border-color: #a56565 !important;
+}
+.reg_username input {
+  -moz-appearance: textfield;
+}
+.reg_username input::-webkit-outer-spin-button,
+.reg_username input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.woocommerce-form span.required {
+  display: none;
+}
+/* .loadingElement {
+  display: block;
+  margin: 36px auto;
+  border-radius: 15px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid black;
+  border-bottom-color: transparent;
+  background-color: transparent;
+  animation: loading 1s infinite linear;
+}
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+@media (max-width: 768px) {
+  #customer_login .form-login-section input.input-text,
+  #form-login .mostra-senha {
+    width: 85%;
+  }
+  #form-login #customer_login {
+    gap: 12px;
+  }
+}

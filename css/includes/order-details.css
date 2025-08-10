@@ -1,0 +1,31 @@
+.woocommerce-order-details > div {
+  padding: 15px;
+  background-color: var(--aer-bg-white);
+  border-radius: 0.3rem;
+}
+.woocommerce-order-details table {
+  width: 100%;
+}
+.woocommerce-order-details tfoot tr {
+  border-bottom: 1px solid rgb(223, 223, 223);
+}
+
+.woocommerce-order-details .product-name li {
+  display: flex;
+  gap: 5px;
+  font-size: 0.825rem;
+}
+.woocommerce-order-details .product-name li p {
+  margin-bottom: 0px;
+}
+
+.woocommerce-order-details .woocommerce-table__product-name.product-name {
+  padding: 5px 0;
+}
+.woocommerce-order-details tfoot th {
+  font-size: 0.725rem;
+  text-transform: uppercase;
+}
+.woocommerce-order-details table td {
+  font-size: 0.875rem;
+}

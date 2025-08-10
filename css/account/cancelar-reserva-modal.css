@@ -1,0 +1,51 @@
+.cancelar-reserva-modal {
+  z-index: 9999 !important;
+}
+.cancelar-reserva-modal label {
+  padding-left: 24px;
+  font-size: 0.675rem;
+}
+.cancelar-reserva-modal label i {
+  opacity: 0.6;
+}
+.cancelar-reserva-modal textarea {
+  display: block;
+  width: 90%;
+  resize: none;
+  margin: 0 auto;
+  border-radius: 0.3rem;
+  padding: 5px 10px;
+}
+
+.cancelar-reserva-modal .modal-footer {
+  display: block;
+}
+
+.cancelar-reserva-modal .buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.cancelar-reserva-modal .buttons-wrapper [type='submit'] {
+  background-color: #bd5454;
+  border: none;
+}
+
+.cancelar-reserva-modal .cancelamento-taxa {
+  padding-left: 30px;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.cancelar-reserva-modal .cancelamento-taxa span {
+  display: flex;
+  width: 260px;
+  justify-content: space-between;
+}
+
+.cancelar-reserva-modal .cancelamento-taxa i {
+  font-weight: 400;
+}

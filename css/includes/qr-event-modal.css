@@ -1,0 +1,71 @@
+#content-home .modal {
+  background: #000000e8;
+}
+
+#qr-event-modal {
+  color: var(--aer-light-text);
+}
+#qr-event-modal .modal-header,
+#qr-event-modal .modal-footer {
+  border: none;
+}
+#qr-event-modal .modal-footer {
+  display: block;
+}
+#qr-event-modal .modal-footer form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+#qr-event-modal .qr-modal-aer-logo {
+  width: 200px;
+  filter: invert(0.8);
+  position: absolute;
+  top: 25px;
+  transform: rotate(352deg);
+}
+#qr-event-modal .modal-header span {
+  position: absolute;
+  font-size: 3rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--aer-light-text);
+  left: 50px;
+  top: 104px;
+  transform: rotate(351deg);
+}
+
+#qr-event-modal .srs-logo {
+  border-radius: 0.3rem;
+  width: 225px;
+  margin: 30px 0 0 auto;
+}
+
+#qr-event-modal .modal-content {
+  background-color: #121212;
+}
+#qr-event-modal .btn-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+#qr-event-modal #modal-accept-btn {
+  display: block;
+  background: var(--aer-light-dark);
+  text-transform: uppercase;
+  padding: 10px 30px;
+  color: #b7b7b7;
+  margin: 0 auto;
+}
+#qr-event-modal #modal-accept-btn + span {
+  color: #3d3d3d;
+  font-size: 0.8rem;
+  display: block;
+  margin: 6px auto 0;
+  width: fit-content;
+}
+#qr-event-modal #modal-accept-btn + span:hover {
+  text-decoration: underline;
+}

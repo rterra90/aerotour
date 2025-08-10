@@ -1,0 +1,65 @@
+#banner-cupom {
+  background-color: #e3e3e3;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+#banner-cupom > p {
+  user-select: none;
+}
+#banner-cupom > p:first-child {
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.12rem;
+}
+#banner-cupom > p:last-child {
+  margin-bottom: 0px;
+  text-align: end;
+  font-size: 0.8rem;
+}
+#banner-cupom span {
+  background-color: #111111;
+  padding: 2px 5px;
+  color: #e3e3e3;
+}
+.aer-bg-light #banner-cupom {
+  color: var(--aer-bg-dark);
+}
+.aer-bg-light #banner-cupom {
+  background-color: #0a0a0a;
+  color: #e7e7e7;
+  margin-top: 12px;
+}
+.aer-bg-light #banner-cupom span {
+  background-color: #c7c7c7;
+  padding: 2px 5px;
+  color: #1a1a1a;
+}
+#archive-product #banner-cupom {
+  color: #1a1a1a;
+}
+@media (max-width: 460px) {
+  #banner-cupom {
+    margin: 60px 10px -30px;
+  }
+  #archive-product #banner-cupom {
+    margin: -6px 10px -6px;
+  }
+  .aer-bg-light #banner-cupom {
+    margin-top: 50px;
+  }
+  .aer-bg-light #banner-cupom._cart {
+    margin-top: 8px;
+    margin-bottom: 0px;
+  }
+  #banner-cupom > p:first-child {
+    font-size: 1rem;
+    letter-spacing: 0.095rem;
+    margin-bottom: 6px;
+  }
+  #banner-cupom > p:last-child {
+    font-size: 0.65rem;
+  }
+}

@@ -1,0 +1,135 @@
+#campanhas_cupons_widget #campanhasLista li {
+  display: flex;
+  background: #e5e5e5;
+  box-shadow: 2px 2px 2px #c5c5c5;
+  padding: 10px;
+  border-radius: 0.25rem;
+  justify-content: space-between;
+}
+#campanhas_cupons_widget #campanhasLista p.nome-campanha {
+  margin: 0;
+  font-size: 1.125rem;
+}
+#campanhas_cupons_widget #campanhasLista .contador-participantes {
+  width: 100px;
+  background-color: #d3d3d3;
+  border-radius: 0.25rem;
+  text-align: center;
+  transition: 0.2s;
+}
+#campanhas_cupons_widget #campanhasLista .contador-participantes:hover {
+  background-color: #bebebe;
+  cursor: pointer;
+}
+#campanhas_cupons_widget #campanhasLista .contador-participantes span {
+  font-size: 0.675rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.025rem;
+}
+#campanhas_cupons_widget #campanhasLista .contador-participantes .contador {
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+#campanhas_cupons_widget .validade-campanha {
+  display: flex;
+  gap: 20px;
+}
+#campanhas_cupons_widget .validade-campanha span {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.025rem;
+  display: block;
+  margin-bottom: -2px;
+}
+#campanhas_cupons_widget p.empty-placeholder {
+  text-align: center;
+  padding: 16px 0;
+  font-size: 1.25rem;
+}
+#campanhas_cupons_widget .configurar-nova-campanha {
+  background-color: #bcc6cf;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#campanhas_cupons_widget .novo-nome-label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+#campanhas_cupons_widget .novo-nome-label input {
+  max-width: 300px;
+}
+#campanhas_cupons_widget .tipos-flex {
+  display: flex;
+  gap: 16px;
+}
+#campanhas_cupons_widget div.tipo-select {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#campanhas_cupons_widget div.datas-select {
+  display: flex;
+}
+#campanhas_cupons_widget div.datas-select label {
+  display: flex;
+  flex-direction: column;
+}
+
+#campanhas_cupons_widget .button-primary {
+  margin-top: 4px;
+}
+#campanhas_cupons_widget .submit-btn-section span {
+  font-size: 2rem;
+  width: 50px;
+}
+
+#campanhas_cupons_widget ul.lista-participantes {
+  width: 85vw;
+  max-width: 660px;
+}
+#campanhas_cupons_widget ul.lista-participantes li {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+#campanhas_cupons_widget ul.lista-participantes li > div {
+  display: flex;
+  align-items: center;
+}
+#campanhas_cupons_widget ul.lista-participantes li .cupom-data {
+  display: inline-block;
+  margin-right: 10px;
+  font-weight: 300;
+}
+#campanhas_cupons_widget ul.lista-participantes p {
+  font-size: 1rem;
+  margin: 0;
+}
+#campanhas_cupons_widget ul.lista-participantes span.cupom-icon {
+  padding: 1px 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.075rem;
+  font-weight: 500;
+  font-size: 0.775rem;
+}
+#campanhas_cupons_widget ul.lista-participantes span.roleta5 {
+  background-color: #99baf0;
+}
+#campanhas_cupons_widget ul.lista-participantes span.roleta10 {
+  background-color: #ffde92;
+}
+#campanhas_cupons_widget ul.lista-participantes span.roleta15 {
+  background-color: #e6c2ea;
+}
+#campanhas_cupons_widget ul.lista-participantes span.roleta20 {
+  background-color: #aad6a3;
+}
+#campanhas_cupons_widget .close-modal:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

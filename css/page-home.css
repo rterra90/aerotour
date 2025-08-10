@@ -1,0 +1,106 @@
+#content-home {
+  background-color: #111111;
+  padding-bottom: 50px;
+}
+#content-home > section {
+  margin-top: 60px;
+}
+#content-home h2 {
+  color: var(--aer-light-text);
+  margin-bottom: 16px;
+}
+
+/* Posts */
+.blog-card-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  gap: 10px;
+}
+#content-home .post-list article {
+  color: var(--aer-light-text);
+  transition: 0.2s;
+  background: #f3f3f31c;
+  height: 100%;
+}
+#content-home .post-list article > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#content-home .post-list article h3 {
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.025rem;
+}
+#content-home .post-list .entry-summary p {
+  font-size: 0.875rem;
+}
+#content-home .post-list .posted-on {
+  font-size: 0.675rem;
+}
+#content-home .post-list ul {
+  justify-content: space-between;
+  /* gap: 22px; */
+}
+#content-home .post-list li {
+  flex: 24% 0 0;
+}
+#content-home .post-list .header-img {
+  height: 132px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 6px;
+}
+footer.entry-footer > a {
+  font-size: 0.825rem;
+}
+#content-home .post-list .read-more:hover,
+#content-home .post-list h3:hover {
+  text-decoration: underline;
+}
+@media (max-width: 767px) {
+  #content-home .post-list ul {
+    gap: 12px;
+    overflow-x: scroll;
+  }
+  #content-home .post-list li {
+    flex: 380px 0 0;
+  }
+}
+@media (max-width: 576px) {
+  #content-home > section + section {
+    margin-top: 40px;
+  }
+  #content-home > section.parceiros {
+    gap: 0px;
+  }
+  #content-home h2 {
+    font-size: 1.3rem !important;
+    margin-bottom: 6px;
+  }
+  .card {
+    border-top: 3px solid #212529 !important;
+  }
+  .card img.card-img-top {
+    height: 86px;
+    border-radius: 0.3rem 0.3rem 0 0;
+  }
+  .card .card-text {
+    line-height: 1.25;
+  }
+  #content-home .post-list ul {
+    gap: 16px;
+  }
+  #content-home .post-list li {
+    flex: 65% 0 0;
+  }
+  #content-home .post-list .header-img {
+    height: 120px;
+  }
+  #content-home .post-list .posted-on {
+    font-size: 0.6rem;
+  }
+}

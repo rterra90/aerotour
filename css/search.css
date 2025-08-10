@@ -1,0 +1,21 @@
+@import './home.css';
+
+main#search-main .search-results {
+  max-width: 1220px;
+  width: 70%;
+  margin: 0 auto;
+}
+main#search-main h1 {
+  font-size: 1.75rem;
+  margin-bottom: 16px;
+  margin-top: 12px;
+}
+main#search-main .blog-grid article .entry-summary p {
+  font-size: 0.825rem;
+  line-height: 1.3;
+}
+@media (max-width: 576px) {
+  main#search-main .search-results {
+    width: 100%;
+  }
+}

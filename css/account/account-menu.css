@@ -1,0 +1,81 @@
+/* sidemenu */
+.woocommerce-MyAccount-navigation-link.woocommerce-MyAccount-navigation-link--edit-address {
+  display: none;
+}
+.woocommerce-MyAccount-navigation {
+  background-color: rgb(22, 22, 22);
+  color: whitesmoke;
+  border-radius: 10px;
+}
+.woocommerce-MyAccount-navigation a {
+  padding: 10px;
+  display: block;
+  text-align: center;
+  border-bottom: 2px solid #272727;
+  color: var(--aer-light-bg);
+  letter-spacing: 0.035rem;
+}
+.woocommerce-MyAccount-navigation ul {
+  display: flex;
+  flex-direction: column;
+}
+.woocommerce-MyAccount-navigation ul li {
+  overflow: hidden;
+}
+.woocommerce-MyAccount-navigation-link--dashboard {
+  order: 1;
+}
+.woocommerce-MyAccount-navigation-link--orders {
+  order: 2;
+}
+.woocommerce-MyAccount-navigation-link--edit-account {
+  order: 4;
+}
+.woocommerce-MyAccount-navigation-link--minhas-reservas {
+  order: 3;
+}
+.woocommerce-MyAccount-navigation-link--account-details {
+  order: 5;
+}
+.woocommerce-MyAccount-navigation-link--customer-logout,
+.woocommerce-MyAccount-navigation-link--customer-logout:hover {
+  order: 6;
+  border-bottom: none !important;
+  border-radius: 0 0 10px 10px;
+}
+
+.woocommerce-MyAccount-navigation-link:first-of-type a {
+  border-radius: 10px 10px 0 0;
+}
+.woocommerce-MyAccount-navigation-link--customer-logout a {
+  border-bottom: none !important;
+}
+.woocommerce-MyAccount-navigation a:hover {
+  background-color: rgb(41, 41, 41);
+}
+
+@media (max-width: 576px) {
+  .woocommerce-MyAccount-navigation ul {
+    flex-direction: row;
+    font-size: 0.625rem;
+  }
+  .woocommerce-MyAccount-navigation ul li {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .woocommerce-MyAccount-navigation ul a:hover {
+    text-decoration: underline !important;
+  }
+  .woocommerce-MyAccount-navigation-link:first-of-type a {
+    border-radius: 10px 0 0 10px;
+  }
+  li.woocommerce-MyAccount-navigation-link--customer-logout,
+  li.woocommerce-MyAccount-navigation-link--customer-logout a {
+    border-radius: 0 10px 10px 0 !important;
+  }
+  .woocommerce-MyAccount-navigation a {
+    border-bottom: none;
+  }
+}
