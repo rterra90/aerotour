@@ -1,0 +1,454 @@
+/* modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 12px 28px rgba(2, 6, 23, 0.15);
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.modal-buttons button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-buttons button[type='submit'] {
+  background: #3182ce;
+  color: white;
+}
+.modal-buttons button[type='submit']:disabled {
+  background: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+/* .modal-buttons button[type='button'] {
+  background: #e5e7eb;
+  color: #111;
+} */
+.modal-buttons button.saveBtn {
+  background-color: #3182ce;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(49, 130, 206, 0.2);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+.modal-buttons button.saveBtn:hover {
+  background-color: #2b6cb0;
+  box-shadow: 0 6px 14px rgba(49, 130, 206, 0.3);
+}
+.modal-buttons button.saveBtn.disabled {
+  background-color: #e2e8f0;
+  color: #a0aec0;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transition: background-color 0.3s;
+}
+.modal-buttons button.saveBtn.disabled:hover {
+  background-color: #e2e8f0;
+  box-shadow: unset;
+}
+#newReservasContainer .modal-content h3 {
+  font-size: 1rem;
+}
+/* MODAL DATAS */
+.modal-content[data-modal='dates'] .date-list {
+  padding: 8px;
+}
+.modal-content .date-list label {
+  display: flex;
+  font-size: 0.875rem;
+  flex-direction: row;
+  justify-content: center;
+  color: #374151;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  position: relative;
+}
+.modal-content[data-modal='dates'] .date-list label.disabled {
+  cursor: not-allowed;
+  color: #737373;
+  background: #ededed;
+  border-color: #c3c3c3;
+  text-decoration: line-through;
+}
+.modal-content[data-modal='dates'] .date-list label.disabled span {
+  color: #a5a5a5;
+  text-decoration: line-through;
+}
+
+.date-list label[data-ultimas='true']::after {
+  content: attr(data-ultimas-vagas);
+  color: #212121;
+  font-size: 0.65rem;
+  padding: 0px 8px;
+  background-color: #dcdd81;
+  border-radius: 0.3rem;
+}
+.date-list label[data-ultimas='true'][data-esgotado='true']::after {
+  content: 'Vagas esgotadas';
+  background-color: #f87171;
+}
+.date-list.many label[data-ultimas='true']::after {
+  position: absolute;
+  right: 14px;
+  top: -9px;
+}
+/*MODAL EMBARQUE*/
+.modal-content[data-modal='embarque'] select {
+  /* padding: 8px 6px;
+  margin-top: 10px; */
+  appearance: none;
+  background-color: #f7fafc;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: #2d3748;
+  width: 100%;
+  max-width: 400px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.modal-content[data-modal='embarque'] select:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
+}
+.embarque-details-inner {
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #878787;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 12px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: sans-serif;
+  color: #2d3748;
+}
+
+.embarque-details-inner .title {
+  margin-bottom: 6px;
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+.embarque-details-inner .horarios .multi-radios {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.embarque-details-inner .horario-opcao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f1f1f1;
+  /* background-color: #c9e5c7; */
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.875rem;
+}
+
+.embarque-details-inner .horario-opcao:hover {
+  background-color: #bee3f8;
+}
+
+.embarque-details-inner .horario-opcao input[type='radio'] {
+  accent-color: #3182ce;
+}
+
+.embarque-details-inner .localizacao p.info {
+  margin: 2px 0;
+  font-size: 0.925rem;
+}
+
+.embarque-details-inner .localizacao a {
+  text-decoration: underline;
+  font-size: 0.85rem;
+  text-align: end;
+  display: block;
+  margin: 8px 0 0 auto;
+  width: fit-content;
+}
+
+.embarque-details-inner .localizacao a:hover {
+  text-decoration: underline;
+}
+
+/* MODAL DATAS */
+.date-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+
+.date-list > label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background-color: #f7fafc;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  font-size: 16px;
+}
+
+.date-list > label:hover {
+  background-color: #edf2f7;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.date-list > label input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: #3182ce;
+  cursor: pointer;
+}
+
+.date-list > label span {
+  flex: 1;
+  color: #2d3748;
+}
+/* Estilo padrão: lista vertical */
+.date-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+
+/* Estilo para quando houver muitas opções */
+.date-list.many {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 600px;
+}
+
+/* Estilo dos itens */
+.date-list > label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background-color: #f7fafc;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  font-size: 16px;
+}
+
+.date-list > label:hover {
+  background-color: #edf2f7;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.date-list > label input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: #3182ce;
+  cursor: pointer;
+}
+
+.date-list > label span {
+  flex: 1;
+  color: #2d3748;
+}
+
+/* Mobile-friendly */
+@media (max-width: 380px) {
+  .date-list.many {
+    grid-template-columns: 1fr; /* Volta para uma coluna no mobile */
+  }
+
+  .date-list > label {
+    padding: 16px;
+    font-size: 18px;
+  }
+
+  .date-list > label input[type='checkbox'] {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Mobile-friendly touch targets */
+@media (max-width: 600px) {
+  .date-list > label {
+    padding: 16px;
+    font-size: 18px;
+  }
+
+  .date-list > label input[type='checkbox'] {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* PASSAGEIRO MODAL */
+.modal-content #paxForm label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #374151;
+}
+
+.modal-content #paxForm input.input-error {
+  border: 1px solid #f87171;
+  background-color: #f8717112;
+}
+.modal-content #paxForm input.input-attention {
+  border: 1px solid #d2d379;
+  background-color: #e4fb2412;
+}
+
+.modal-content #paxForm input {
+  padding: 8px 12px;
+  margin-top: 4px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #2d3748;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.aviso-menor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 300;
+}
+
+.icone-download {
+  font-size: 20px;
+  text-decoration: none;
+  color: #333;
+  background: #e0e0e0;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.icone-download:hover {
+  background: #d0d0d0;
+}
+
+.texto-aviso {
+  flex: 1;
+}
+
+.modal-content #paxForm .custom-select {
+  position: relative;
+  height: fit-content;
+  font-size: 0.85rem;
+  min-width: 116px;
+  width: fit-content;
+}
+.modal-content #paxForm .custom-select button {
+  background-color: #f3f3f3;
+  padding: 2px 10px;
+  width: 100%;
+  text-align: left;
+  border: unset;
+  margin-bottom: 2px;
+  cursor: pointer;
+  box-shadow: -1px 1px 4px #c5c5c5;
+  border-radius: 0.2rem;
+}
+.modal-content #paxForm .custom-select button::after {
+  content: '▼';
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+.modal-content #paxForm .custom-select ul {
+  border-radius: 0.25rem;
+  box-shadow: -1px 1px 2px #b1b1b1;
+  background-color: #f9f9f9;
+  position: absolute;
+  width: 100%;
+}
+.modal-content #paxForm .custom-select li {
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.modal-content #paxForm .custom-select li:hover {
+  background-color: #efefef;
+}
+.modal-content #paxForm .modal-buttons {
+  justify-content: space-between;
+  align-items: center;
+}

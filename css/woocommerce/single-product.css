@@ -1,4 +1,5 @@
 @import url(galeria.css);
+@import url(app-reservas/app-reservas-main.css);
 
 #content-event .notices .woocommerce-error li {
   text-align: center;
@@ -634,6 +635,43 @@ p.passageiros-error-alert {
   box-shadow: 2px 2px 2px 0 #bbb;
   background: #dfdfdf;
 }
+
+#locaisEmbarqueContainer .embarque-box .horariosMulti {
+  padding: 4px 4px;
+  background-color: #f1f1f1;
+  display: flex;
+  position: relative;
+  box-shadow: 0px 0px 5px #bdbdbd;
+}
+#locaisEmbarqueContainer .embarque-box .horariosMulti::after {
+  content: '';
+  width: 1px;
+  height: 75%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #bdbdbd;
+}
+#locaisEmbarqueContainer .embarque-box .horariosMulti > div {
+  font-size: 0.925rem;
+  flex-basis: 50%;
+  padding: 0px 4px;
+}
+#locaisEmbarqueContainer .embarque-box .horariosMulti > div span {
+  text-align: center;
+}
+#locaisEmbarqueContainer .embarque-box .horariosMulti b {
+  font-size: 0.75rem;
+  background: #cfcfcf;
+  padding: 1px 3px;
+  margin-left: 2px;
+  display: inline-block;
+}
+#locaisEmbarqueContainer .embarque-box .horariosMulti .horariosMultiHor {
+  font-size: 1.175rem;
+  font-weight: 500;
+}
 #locaisEmbarqueContainer .embarque-box i {
   opacity: 0.85;
 }
@@ -656,12 +694,12 @@ p.passageiros-error-alert {
   font-weight: 500;
 }
 #locaisEmbarqueContainer .embarque-box .endereco_embarque > p {
-  font-size: 0.775rem;
+  font-size: 0.875rem;
   line-height: 1.15;
 }
 #locaisEmbarqueContainer .embarque-box .endereco_embarque > p:nth-child(2) {
   font-weight: 600;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 #locaisEmbarqueContainer .embarque-box .mapa_container {
   position: absolute;
@@ -673,7 +711,7 @@ p.passageiros-error-alert {
   align-items: center;
 }
 #locaisEmbarqueContainer .embarque-box .mapa_container span {
-  font-size: 0.525rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.025rem;
   display: block;
@@ -908,7 +946,25 @@ p.passageiros-error-alert {
 #mobile-sticky-res-btn img {
   filter: invert(1) !important;
 }
+@media (min-width: 577px) {
+  #locaisEmbarqueContainer .embarque-box .mapa_container.temMultiplo {
+    position: static;
+    flex-direction: row;
+  }
+  #locaisEmbarqueContainer .embarque-box .mapa_container.temMultiplo span {
+    width: unset;
+    font-size: 0.75rem;
+    margin-left: 8px;
+  }
+}
 @media (min-width: 768px) {
+  #locaisEmbarqueContainer .embarque-box .horariosMulti {
+    max-width: 254px;
+  }
+  #locaisEmbarqueContainer .embarque-box .horariosMulti > div span {
+    text-align: start;
+  }
+
   #mobile-sticky-res-btn {
     display: none !important;
   }
@@ -972,7 +1028,7 @@ p.passageiros-error-alert {
     border: none;
   }
   #locaisEmbarqueContainer .embarque-box p.nome_embarque {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     font-weight: 600;
   }
   #locaisEmbarqueContainer .embarque-box p.endereco_embarque {

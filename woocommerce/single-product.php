@@ -127,18 +127,18 @@ $datas = array_map(function($_var){
 
           <h1><span>Excursão<br/></span><?= $excursao['nome'] ?></h1>
           <?php
-              if(get_the_ID() == 2790){
-                $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id = 2791 AND status = 'normal'");
+              if(get_the_ID() == 4893){
+                $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id = 4894 AND status = 'normal'");
+                $total_reservas_count = count($total_reservas) + 15;
 
                 ?>
-              <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= count($total_reservas) + 6; ?> lugares reservados</p></div>
-
+              <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
                 <?php
-              } else if(get_the_ID() == 2777){
-              $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id IN (2778, 2795, 3518) AND status = 'normal'");
-
+              } else if(get_the_ID() == 2606){
+              $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id IN (2607, 2608, 2609, 2610, 2611) AND status = 'normal'");
+              $total_reservas_count = count($total_reservas) + 10;
                 ?>
-              <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= count($total_reservas) + 10; ?> lugares reservados</p></div>
+              <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
 
                 <?php
               }
@@ -240,9 +240,24 @@ $datas = array_map(function($_var){
                       <?php
                         $_i = 0;
                         foreach($excursao['embarques'] as $i => $embarque){
+
                           $horarios_simples = array_unique(array_map(function($_op){
+                            // print_r($_op);
                             return $_op['horario'];
                           }, $embarque['horarios']));
+
+                          if(count($horarios_simples) > 1){
+                            $horarios_full = array_map(function($_op){
+                              $return = array($_op['horario']);
+                              foreach($_op['disponibilidade'] as $_disp){
+                                if($_disp['status'] === 'disponivel'){
+                                  $return[] = $_disp['disp_dia'];
+                                }
+                              }
+                              
+                              return $return; // array('hh:mm', 'dd/mm/yyyy', 'dd/mm/yyyy')
+                            }, $embarque['horarios']);
+                          }
                           ?>
 
                             <div class="col-6 embarque-box">
@@ -251,24 +266,56 @@ $datas = array_map(function($_var){
                                 <div class="endereco_container">
                                   <span><?= aer_icons('pin', 14, 14); ?></span><div class="endereco_embarque"><p><?= $embarque['endereco']; ?></p><p><?= $embarque['obs']; ?></p></div>
                                 </div>
-                                <div class="d-flex gap-1 horario_container">
-                                  <span><?= aer_icons('clock', 12, 12); ?></span><p class="horario_embarque"><?= implode(' - ', $horarios_simples); ?></p>
-                                </div>
+                                <?php
+                                  if(!isset($horarios_full)){
+                                    ?>
+                                    <div class="d-flex gap-1 horario_container">
+                                      <span><?= aer_icons('clock', 12, 12); ?></span><p class="horario_embarque"><?= implode(' - ', $horarios_simples); ?></p>
+                                    </div>
+
+                                    <?php
+                                  }
+                                ?>
+                                
+
                                 <?php
                                 if(isset($embarque['link_mapa']) && $embarque['link_mapa'] !== "#"){
                                 ?>
                                 <a href="<?= $embarque['link_mapa']; ?>" target="_blank">
-                                  <div class="mapa_container">
-                                    <div><?= aer_icons('map', 15, 15); ?></div>
+                                  <div class="mapa_container<?= isset($horarios_full) ? ' temMultiplo': ''?>">
+                                    <div><?= aer_icons('map', 16, 16); ?></div>
                                     <span>Ver no mapa</span>
                                   </div>
                                 </a>
                                 
                                 <?php
                                 }
-                                ?>
-                              </div>
 
+                                if(isset($horarios_full)){
+                                  ?>
+                                    <div class="horariosMulti mt-2">
+                                      <?php
+                                      foreach($horarios_full as $_horario){
+                                        ?>
+                                        <div class="mt-1">
+                                          
+                                          <span class="d-block">
+                                            <?= aer_icons('calendar', 12, 12); ?><?php foreach($_horario as $_i => $_dia){if($_i > 0){echo ' <b>' . substr($_dia, 0, 5) . '</b> ';}}; ?>
+                                          </span>
+                                          <span class="horariosMultiHor d-block mt-1"><?= aer_icons('clock', 12, 12); ?><?= $_horario[0]; ?></span>
+
+                                        </div>
+                                        <?php
+                                      }
+                                      ?>
+                                    </div>
+                                  <?php
+                                }
+                                ?>
+
+                                
+                              </div>
+                                
                             </div>
 
                           <?php
@@ -379,14 +426,15 @@ $datas = array_map(function($_var){
           
           ?> -->
 
-          <div class="excursao-details position-relative aer-box mt-3 mt-sm-2">
-            <h2 class="mb-4">Faça aqui sua reserva</h2>
+          <!-- <div class="excursao-details position-relative aer-box mt-3 mt-sm-2"> -->
+            
+            <!-- <h2 class="mb-4">Faça aqui sua reserva</h2> -->
 
               <!-- RESERVA APP - REACT  -->
               <div id="reserva_app" data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE); ?>' data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE); ?>' data-product-id='<?= $excursao['id']; ?>'></div>
               <!-- FIM RESERVA APP - REACT  -->
           
-          </div>
+          <!-- </div> -->
           <div id="exc-wpp-cta" class="mobile">
             <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao['nome']; ?>" aria-label="Botão para chamar no WhatsApp">
               <div role="button" class="mt-4">

@@ -1,0 +1,32 @@
+export const cpfMask = (value) => {
+  return value
+    .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
+    .replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+    .replace(/(-\d{2})\d+?$/, '$1'); // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
+};
+
+export const cpfRaw = (value) => {
+  return value.replace('-', '').replaceAll('.', '');
+};
+
+export const celularMask = (value) => {
+  if (!value) return '';
+  value = value.replace(/\D/g, '');
+  value = value.replace(/(\d{2})(\d)/, '($1) $2');
+  value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+  return value;
+};
+export const celularRaw = (value) => {
+  return value
+    .replace('(', '')
+    .replace(')', '')
+    .replace('-', '')
+    .replaceAll(' ', '');
+};
+
+export const dateToISO = (dataStr) => {
+  const [dia, mes, ano] = dataStr.split('/');
+  return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+};

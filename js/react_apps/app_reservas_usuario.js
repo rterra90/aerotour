@@ -95,7 +95,7 @@
           var ContextProvider = REACT_PROVIDER_TYPE;
           var Element = REACT_ELEMENT_TYPE;
           var ForwardRef = REACT_FORWARD_REF_TYPE;
-          var Fragment2 = REACT_FRAGMENT_TYPE;
+          var Fragment3 = REACT_FRAGMENT_TYPE;
           var Lazy = REACT_LAZY_TYPE;
           var Memo = REACT_MEMO_TYPE;
           var Portal = REACT_PORTAL_TYPE;
@@ -154,7 +154,7 @@
           exports.ContextProvider = ContextProvider;
           exports.Element = Element;
           exports.ForwardRef = ForwardRef;
-          exports.Fragment = Fragment2;
+          exports.Fragment = Fragment3;
           exports.Lazy = Lazy;
           exports.Memo = Memo;
           exports.Portal = Portal;
@@ -3572,11 +3572,11 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx4 = jsxWithValidationDynamic;
-          var jsxs4 = jsxWithValidationStatic;
+          var jsx9 = jsxWithValidationDynamic;
+          var jsxs9 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx4;
-          exports.jsxs = jsxs4;
+          exports.jsx = jsx9;
+          exports.jsxs = jsxs9;
         })();
       }
     }
@@ -3611,6 +3611,10 @@
   };
   var celularRaw = (value) => {
     return value.replace("(", "").replace(")", "").replace("-", "").replaceAll(" ", "");
+  };
+  var dateToISO = (dataStr) => {
+    const [dia, mes, ano] = dataStr.split("/");
+    return `${ano}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
   };
 
   // src/Hooks/useInput.jsx
@@ -3767,8 +3771,18 @@
       }
       return true;
     }
+    function validarMaioridade(dataNascimento, dataEvento) {
+      const [ano1, mes1, dia1] = dataNascimento.split("-").map(Number);
+      const [ano2, mes2, dia2] = dataEvento.split("-").map(Number);
+      const data1 = new Date(ano1, mes1 - 1, dia1);
+      const data2 = new Date(ano2, mes2 - 1, dia2);
+      const dataLimite = new Date(data1);
+      dataLimite.setFullYear(dataLimite.getFullYear() + 18);
+      return data2 >= dataLimite;
+    }
     return {
-      validarCPF
+      validarCPF,
+      validarMaioridade
     };
   };
   var useValidations_default = useValidations;
@@ -4138,16 +4152,852 @@
   };
   var Passageiros_default = Passageiros;
 
-  // src/AppReservas/AppReservas.jsx
+  // src/AppReservas/DatesModal.jsx
   var import_prop_types3 = __toESM(require_prop_types());
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  var DatesModal = ({
+    setDateModalOpen,
+    availableDates,
+    selectedDates,
+    toggleDate,
+    getVarIdByDate
+  }) => {
+    const [preData, setPreData] = React.useState([]);
+    const preDataRef = React.useRef(preData);
+    function closeDateModal() {
+      setDateModalOpen(false);
+    }
+    React.useEffect(() => {
+      preDataRef.current = preData;
+    }, [preData]);
+    React.useEffect(() => {
+      if (selectedDates.length > 0) {
+        selectedDates.forEach((date) => {
+          setPreData((_p) => [..._p, [date, getVarIdByDate(date)]]);
+        });
+      }
+      return () => {
+        if (preDataRef.current.length > 0) {
+          toggleDate(preDataRef.current);
+        } else
+          toggleDate("", "");
+      };
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "modal-overlay", onClick: closeDateModal, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+      "div",
+      {
+        className: "modal-content",
+        "data-modal": "dates",
+        onClick: (e) => e.stopPropagation(),
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h3", { children: "Selecionar Datas" }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("form", { className: "date-list many", children: availableDates.map((dateObj) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+            "label",
+            {
+              className: dateObj.encerrado || dateObj.disponiveis === "" ? "disabled" : "",
+              "data-ultimas": dateObj.disponiveis < 10 ? "true" : "false",
+              "data-ultimas-vagas": dateObj.disponiveis < 10 ? dateObj.disponiveis + " vagas restantes" : "false",
+              "data-esgotado": dateObj.disponiveis === "" ? "true" : "false",
+              children: [
+                dateObj.encerrado || dateObj.disponiveis === "" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                  "input",
+                  {
+                    type: "checkbox",
+                    checked: preData.some((_item) => _item[0] == dateObj.dia),
+                    onChange: () => {
+                      setPreData(() => {
+                        if (preData.some((_item) => _item[0] == dateObj.dia)) {
+                          return preData.filter(
+                            (_item) => _item[0] !== dateObj.dia
+                          );
+                        } else {
+                          return [
+                            ...preData,
+                            [dateObj.dia, getVarIdByDate(dateObj.dia)]
+                          ];
+                        }
+                      });
+                    }
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: dateObj.dia })
+              ]
+            },
+            dateObj.dia
+          )) }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { type: "button", onClick: closeDateModal, children: "Conclu\xEDdo" }) })
+        ]
+      }
+    ) });
+  };
+  var DatesModal_default = DatesModal;
+  DatesModal.propTypes = {
+    setDateModalOpen: import_prop_types3.default.func.isRequired,
+    availableDates: import_prop_types3.default.array.isRequired,
+    selectedDates: import_prop_types3.default.array.isRequired,
+    toggleDate: import_prop_types3.default.func.isRequired,
+    getVarIdByDate: import_prop_types3.default.func.isRequired
+  };
+
+  // src/AppReservas/EmbarqueModal.jsx
+  var import_prop_types4 = __toESM(require_prop_types());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
+  var EmbarquesModal = ({
+    setEmbarqueModalOpen,
+    toggleEmbarque,
+    embarques,
+    embarque,
+    selectedDates,
+    variacoes,
+    getVarIdByDate,
+    setHorario
+  }) => {
+    const [embarquesNoPeriodo, setEmbarquesNoPeriodo] = React.useState([]);
+    const [preEmbarque, setPreEmbarque] = React.useState([]);
+    const [horariosDisponiveis, setHorariosDisponiveis] = React.useState([]);
+    const [disponibilidadeParcial, setDisponibilidadeParcial] = React.useState(
+      []
+    );
+    const embarqueForm = React.useRef();
+    function closeEmbarqueModal(_save) {
+      if (_save && preEmbarque.length > 0)
+        toggleEmbarque(preEmbarque[0].embarqueId);
+      setEmbarqueModalOpen(false);
+    }
+    function arrayToString(lista) {
+      if (lista.length === 0)
+        return "";
+      if (lista.length === 1)
+        return lista[0];
+      if (lista.length === 2)
+        return `${lista[0]} e ${lista[1]}`;
+      const todasMenosUltima = lista.slice(0, -1).join(" , ");
+      const ultima = lista[lista.length - 1];
+      return `${todasMenosUltima} e ${ultima}`;
+    }
+    React.useEffect(() => {
+      const embarquesPeriodo = [];
+      embarques.forEach((_embarque) => {
+        let _emb_obj = { embID: _embarque.embarqueId, variacoes: [] };
+        selectedDates.forEach((_date) => {
+          variacoes.forEach((_var) => {
+            if (_var.attributes.attribute_dia == _date) {
+              _emb_obj.variacoes.push({
+                varID: _var.variation_id,
+                varData: _date,
+                disp: []
+              });
+            }
+          });
+        });
+        _embarque.horarios.forEach((_horario) => {
+          _horario.disponibilidade.forEach((_disp) => {
+            if (selectedDates.includes(_disp.disp_dia)) {
+              _emb_obj.variacoes.forEach((_variacao) => {
+                if (_variacao.varID == getVarIdByDate(_disp.disp_dia)) {
+                  _variacao.disp.push({
+                    horario: _horario.horario,
+                    status: _disp.status
+                  });
+                }
+              });
+            }
+          });
+        });
+        embarquesPeriodo.push(_emb_obj);
+      });
+      embarquesPeriodo.forEach((_e) => {
+        let _total_horarios = 0;
+        let _total_indisp = 0;
+        _e.variacoes.forEach((_var) => {
+          _var.disp.forEach((_hor) => {
+            _total_horarios = _total_horarios + 1;
+            if (_hor.status === "indisponivel") {
+              _total_indisp = _total_indisp + 1;
+            }
+          });
+        });
+        if (_total_horarios === _total_indisp) {
+          let opcoesDom = embarqueForm.current.querySelectorAll("select option");
+          opcoesDom.forEach((_op) => {
+            if (_op.value == _e.embID) {
+              _op.innerText = _op.innerText + " - (indispon\xEDvel)";
+              _op.setAttribute("disabled", "");
+            }
+          });
+        }
+      });
+      setEmbarquesNoPeriodo(embarquesPeriodo);
+      if (embarque && embarque.length > 0) {
+        if (embarqueForm.current) {
+          embarqueForm.current.querySelector("select").value = embarque[0].embarqueId;
+        }
+        setPreEmbarque([embarque[0]]);
+      } else {
+        embarqueForm.current.querySelector("select").value = "";
+        setPreEmbarque([]);
+      }
+      return () => {
+        toggleEmbarque();
+      };
+    }, []);
+    React.useEffect(() => {
+      setDisponibilidadeParcial([]);
+      setHorariosDisponiveis([]);
+      if (preEmbarque.length > 0) {
+        let _horariosDisp = [];
+        const selectedEmbarque = embarquesNoPeriodo.find(
+          (_embarque) => _embarque.embID == preEmbarque[0].embarqueId
+          //mudar aqui
+        );
+        selectedEmbarque.variacoes.forEach((_variacao) => {
+          let _indisponiveis = _variacao.disp.filter((_disp) => {
+            if (!_horariosDisp.includes(_disp.horario))
+              _horariosDisp.push(_disp.horario);
+            return _disp.status === "indisponivel";
+          });
+          if (_indisponiveis.length > 0) {
+            _indisponiveis = _indisponiveis.map((_ind) => {
+              _ind.dia = _variacao.varData;
+              _ind.varID = _variacao.varID;
+              return _ind;
+            });
+            setDisponibilidadeParcial((_val) => [..._val, ..._indisponiveis]);
+          }
+        });
+        let _array_horarios = Array.from(new Set(_horariosDisp));
+        setHorariosDisponiveis(_array_horarios);
+        if (_array_horarios.length === 1) {
+          console.log("setar horario");
+          setHorario(_array_horarios[0]);
+        }
+      }
+    }, [preEmbarque]);
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "modal-overlay", onClick: () => closeEmbarqueModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+      "div",
+      {
+        className: "modal-content",
+        "data-modal": "embarque",
+        onClick: (e) => e.stopPropagation(),
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { children: "Selecione seu embarque" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("form", { className: "embarque-list", ref: embarqueForm, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+              "select",
+              {
+                onChange: (e) => setPreEmbarque(() => {
+                  return [
+                    embarques.find((_emb) => _emb.embarqueId == e.target.value)
+                  ];
+                }),
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { className: "select-placeholder", disabled: true, value: "", children: "Selecione..." }),
+                  embarques.map(({ embarqueId, nome }) => {
+                    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { value: embarqueId, children: nome }, embarqueId);
+                  })
+                ]
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "embarque-details", children: [
+              preEmbarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "placeholder-container", children: "Selecione um local de embarque para ver os hor\xE1rios dispon\xEDveis e endere\xE7o detalhado." }) : null,
+              disponibilidadeParcial.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "alerta-reserva disponibilidade-parcial", children: [
+                "Ops. O embarque selecionado n\xE3o est\xE1 dispon\xEDvel em",
+                " ",
+                arrayToString(disponibilidadeParcial.map((_v) => _v.dia)),
+                "."
+              ] }) : null,
+              disponibilidadeParcial.length === 0 && preEmbarque.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "embarque-details-inner", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "horarios", children: [
+                  horariosDisponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title", children: "Hor\xE1rio de embarque" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "horario-single d-block text-center", children: horariosDisponiveis[0] })
+                  ] }),
+                  horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title", children: "Selecione o hor\xE1rio" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "multi-radios", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "08:00" }),
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "08:00" })
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "10:30" }),
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "10:30" })
+                      ] })
+                    ] })
+                  ] })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "localizacao", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title my-3 mb-1", children: "Local de embarque" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Endere\xE7o:" }),
+                    " ",
+                    preEmbarque[0].endereco
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Refer\xEAncia:" }),
+                    " ",
+                    preEmbarque[0].obs
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                    "a",
+                    {
+                      href: preEmbarque[0].link_mapa,
+                      target: "_blank",
+                      rel: "noreferrer",
+                      children: "Ver no Google Maps"
+                    }
+                  )
+                ] })
+              ] }) }) : null
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "button", className: "saveBtn", onClick: () => closeEmbarqueModal(true), children: "Salvar" }) })
+          ] })
+        ]
+      }
+    ) });
+  };
+  var EmbarqueModal_default = EmbarquesModal;
+  EmbarquesModal.propTypes = {
+    setEmbarqueModalOpen: import_prop_types4.default.func.isRequired,
+    toggleEmbarque: import_prop_types4.default.func.isRequired,
+    embarques: import_prop_types4.default.array.isRequired,
+    embarque: import_prop_types4.default.array,
+    selectedDates: import_prop_types4.default.array.isRequired,
+    variacoes: import_prop_types4.default.array.isRequired,
+    getVarIdByDate: import_prop_types4.default.func.isRequired,
+    setHorario: import_prop_types4.default.func.isRequired
+  };
+
+  // src/AppReservas/PaxModal.jsx
+  var import_prop_types6 = __toESM(require_prop_types());
+
+  // src/AppReservas/CustomSelectPaxModal.jsx
+  var import_prop_types5 = __toESM(require_prop_types());
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
+  var CustomSelectPaxModal = ({ setFormData, tripType }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [selected, setSelected] = React.useState(null);
+    const listRef = React.useRef(null);
+    const buttonRef = React.useRef(null);
+    const optionsData = [
+      { value: "ida-e-volta", label: "Ida e volta" },
+      { value: "ida", label: "Apenas ida" },
+      { value: "volta", label: "Apenas volta" }
+    ];
+    const handleSelect = (option) => {
+      setSelected(option);
+      setIsOpen(false);
+      if (onChange)
+        onChange(option.value);
+    };
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape")
+        setIsOpen(false);
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        const items = listRef.current?.querySelectorAll('[role="option"]');
+        const currentIndex = Array.from(items).findIndex(
+          (item) => item === document.activeElement
+        );
+        const nextIndex = e.key === "ArrowDown" ? Math.min(currentIndex + 1, items.length - 1) : Math.max(currentIndex - 1, 0);
+        items[nextIndex]?.focus();
+      }
+      if (e.key === "Enter" && document.activeElement.getAttribute("role") === "option") {
+        const value = document.activeElement.getAttribute("data-value");
+        const label = document.activeElement.textContent;
+        handleSelect({ value, label });
+      }
+    };
+    React.useEffect(() => {
+      const initialOption = optionsData.filter(
+        (_op) => _op.value === tripType
+      )[0];
+      if (initialOption)
+        setSelected(initialOption);
+      else
+        setSelected(optionsData[0]);
+      const handleClickOutside = (e) => {
+        if (buttonRef.current && listRef.current) {
+          if (!buttonRef.current.contains(e.target) && !listRef.current.contains(e.target)) {
+            setIsOpen(false);
+          }
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [tripType]);
+    const onChange = (_value) => {
+      setFormData((_current) => {
+        return { ..._current, tripType: _value };
+      });
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "custom-select", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+        "button",
+        {
+          ref: buttonRef,
+          "aria-haspopup": "listbox",
+          "aria-expanded": isOpen,
+          "aria-labelledby": "custom-select-label",
+          onClick: (e) => {
+            e.preventDefault();
+            setIsOpen((prev) => !prev);
+          },
+          onKeyDown: handleKeyDown,
+          className: "selected",
+          children: selected ? selected.label : "Selecione uma op\xE7\xE3o"
+        }
+      ),
+      isOpen && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+        "ul",
+        {
+          ref: listRef,
+          role: "listbox",
+          tabIndex: "-1",
+          "aria-activedescendant": selected?.value,
+          className: "options",
+          children: optionsData.map((option) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            "li",
+            {
+              role: "option",
+              "data-value": option.value,
+              tabIndex: "0",
+              "aria-selected": selected?.value === option.value,
+              onClick: () => handleSelect(option),
+              onKeyDown: handleKeyDown,
+              children: option.label
+            },
+            option.value
+          ))
+        }
+      )
+    ] });
+  };
+  CustomSelectPaxModal.propTypes = {
+    setFormData: import_prop_types5.default.func,
+    tripType: import_prop_types5.default.string
+  };
+  var CustomSelectPaxModal_default = CustomSelectPaxModal;
+
+  // src/AppReservas/PaxModal.jsx
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
+  var PaxModal = ({
+    setPaxModalOpen,
+    paxModalOpen,
+    selectedDates,
+    setPassageiros
+  }) => {
+    const [formMode, setFormMode] = React.useState("");
+    const [formData, setFormData] = React.useState({
+      nome_completo: "",
+      role: "",
+      cpf: "",
+      celular: "",
+      data_nascimento: "",
+      tripType: "ida-e-volta"
+    });
+    const [paxMenor, setPaxMenor] = React.useState(false);
+    const [formErrors, setFormErrors] = React.useState([]);
+    const { validarCPF, validarMaioridade } = useValidations_default();
+    function closePaxModal() {
+      setPaxModalOpen(false);
+    }
+    function inputChange({ target }) {
+      const valueLength = target.value.length;
+      switch (target.name) {
+        case "cpf": {
+          if (valueLength == 14) {
+            const cpfValido = validarCPF(cpfMask(target.value));
+            target.classList.remove("input-attention");
+            if (cpfValido)
+              target.classList.remove("input-error");
+            else
+              target.classList.add("input-error");
+            atualizarErros(target.name, !cpfValido);
+          } else if (valueLength < 14) {
+            target.classList.remove("input-error");
+            atualizarErros(target.name, true);
+          }
+          setFormData({ ...formData, cpf: cpfMask(target.value) });
+          break;
+        }
+        case "celular": {
+          const celValido = valueLength == 14 || valueLength == 15;
+          target.classList.remove("input-error");
+          if (celValido)
+            target.classList.remove("input-attention");
+          else if (valueLength < 14)
+            target.classList.remove("input-error");
+          atualizarErros(target.name, !celValido);
+          setFormData({ ...formData, celular: celularMask(target.value) });
+          break;
+        }
+        case "data_nascimento": {
+          const dataCompleta = target.value !== "";
+          atualizarErros(target.name, !dataCompleta);
+          setFormData({ ...formData, data_nascimento: target.value });
+          break;
+        }
+        default:
+          break;
+      }
+    }
+    function inputBlur({ target }) {
+      let valueLength = target.value.length;
+      switch (target.name) {
+        case "cpf": {
+          const cpfIncompleto = valueLength < 14 && valueLength > 0;
+          const cpfEmpty = valueLength == 0;
+          if (cpfIncompleto)
+            target.classList.add("input-attention");
+          else if (valueLength == 14 || cpfEmpty) {
+            if (target.classList.contains("input-attention")) {
+              target.classList.remove("input-attention");
+            }
+          }
+          break;
+        }
+        case "nome_completo": {
+          const valor = target.value.trim();
+          const palavras = valor.split(/\s+/);
+          const isEmpty = valor.length === 0;
+          const isInvalido = !isEmpty && palavras.length < 2;
+          target.classList.toggle("input-error", isInvalido);
+          atualizarErros(target.name, isEmpty || isInvalido);
+          break;
+        }
+        case "celular": {
+          if (valueLength < 14 && valueLength > 0) {
+            target.classList.add("input-attention");
+          } else {
+            target.classList.remove("input-attention");
+          }
+          break;
+        }
+        case "data_nascimento": {
+          if (target.value !== "") {
+            if (selectedDates.some(
+              (_eventDate) => validarMaioridade(target.value, dateToISO(_eventDate)) == false
+            )) {
+              setPaxMenor(true);
+            } else
+              setPaxMenor(false);
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    }
+    function atualizarErros(campo, key) {
+      setFormErrors((errosAtuais) => {
+        if (key) {
+          return errosAtuais.includes(campo) ? errosAtuais : [...errosAtuais, campo];
+        } else {
+          return errosAtuais.filter((erro) => erro !== campo);
+        }
+      });
+    }
+    function handleSubmitPaxForm(_mode) {
+      if (formErrors.length === 0) {
+        if (_mode == "add") {
+          setPassageiros((_current) => {
+            if (_current.some(
+              (_pax) => _pax.cpf === formData.cpf && formData.cpf !== ""
+            )) {
+              alert("J\xE1 existe um passageiro com este CPF.");
+              return _current;
+            }
+            return [..._current, formData];
+          });
+        } else if (_mode == "edit") {
+          const _index = paxModalOpen[3];
+          setPassageiros((_current) => {
+            if (_current.some(
+              (_pax, _i) => _pax.cpf === formData.cpf && formData.cpf !== "" && _i != _index
+            )) {
+              alert("J\xE1 existe um passageiro com este CPF.");
+              return _current;
+            }
+            return _current.map((_pax, _i) => {
+              if (_i === _index)
+                return formData;
+              else
+                return _pax;
+            });
+          });
+        }
+      }
+    }
+    React.useEffect(() => {
+      if (paxModalOpen[0] == true) {
+        let _mode = paxModalOpen[1];
+        setFormMode(_mode);
+        if (_mode === "add") {
+          setFormErrors(["nome_completo", "cpf", "celular", "data_nascimento"]);
+        } else if (_mode === "edit") {
+          const currentPaxData = paxModalOpen[2];
+          setFormData(currentPaxData);
+        }
+      }
+    }, [paxModalOpen]);
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "modal-overlay", onClick: closePaxModal, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "modal-content", onClick: (e) => e.stopPropagation(), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { className: "modal-close", onClick: closePaxModal, children: "\u2716" }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("h3", { children: [
+        formMode === "add" ? "Adicionar " : "Editar ",
+        " passageiro"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+        "form",
+        {
+          id: "paxForm",
+          onSubmit: (e) => {
+            e.preventDefault();
+            handleSubmitPaxForm(formMode);
+          },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+              "Nome:",
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                "input",
+                {
+                  type: "text",
+                  name: "nome_completo",
+                  value: formData.nome_completo,
+                  onChange: (e) => setFormData({ ...formData, nome_completo: e.target.value }),
+                  onBlur: inputBlur
+                }
+              )
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+              "CPF:",
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                "input",
+                {
+                  type: "text",
+                  name: "cpf",
+                  maxLength: "14",
+                  value: formData.cpf,
+                  onBlur: inputBlur,
+                  onChange: inputChange
+                }
+              )
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+              "Celular (WhatsApp):",
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                "input",
+                {
+                  maxLength: "15",
+                  type: "text",
+                  name: "celular",
+                  value: formData.celular,
+                  onBlur: inputBlur,
+                  onChange: inputChange
+                }
+              )
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+              "Data de nascimento:",
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                "input",
+                {
+                  type: "date",
+                  name: "data_nascimento",
+                  value: formData.data_nascimento,
+                  onChange: inputChange,
+                  onBlur: inputBlur
+                }
+              )
+            ] }),
+            paxMenor && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "aviso-menor", id: "aviso-menor", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                "a",
+                {
+                  href: "modelo-autorizacao.pdf",
+                  download: true,
+                  className: "icone-download",
+                  "aria-label": "Baixar modelo de autoriza\xE7\xE3o",
+                  children: "\u{1F4C4}"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "texto-aviso", children: "Passageiro menor de idade. Clique para baixar o modelo de autoriza\xE7\xE3o." })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "modal-buttons", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                CustomSelectPaxModal_default,
+                {
+                  setFormData,
+                  tripType: formData.tripType
+                }
+              ),
+              formErrors.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", disabled: true, children: "Salvar" }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", children: "Salvar" })
+            ] })
+          ]
+        }
+      )
+    ] }) });
+  };
+  PaxModal.propTypes = {
+    setPaxModalOpen: import_prop_types6.default.func.isRequired,
+    setPassageiros: import_prop_types6.default.func.isRequired,
+    paxModalOpen: import_prop_types6.default.array.isRequired,
+    selectedDates: import_prop_types6.default.array.isRequired
+  };
+  var PaxModal_default = PaxModal;
+
+  // src/AppReservas/AppReservas.jsx
+  var import_prop_types8 = __toESM(require_prop_types());
+
+  // src/AppReservas/PaxCard.jsx
+  var import_prop_types7 = __toESM(require_prop_types());
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
+  var PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
+    function removePax() {
+      if (window.confirm("Remover passageiro?")) {
+        setPassageiros((_current) => {
+          return _current.filter((_pax, _i) => _i != index);
+        });
+      }
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("article", { className: "passenger-card", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "avatar", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        "svg",
+        {
+          xmlns: "http://www.w3.org/2000/svg",
+          viewBox: "0 0 24 24",
+          fill: "currentColor",
+          children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            "path",
+            {
+              d: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 \r\n          1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 \r\n          1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+            }
+          )
+        }
+      ) }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "info", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "top-row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "name", children: pax.nome_completo }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "meta", children: "role" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "pill", children: [
+            "Passageiro #",
+            index + 1
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("dl", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dt", { children: "CPF" }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dd", { children: pax.cpf })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dt", { children: "Contato" }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dd", { children: pax.celular })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dt", { children: "Nasc." }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dd", { children: pax.data_nascimento })
+          ] })
+        ] }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        "button",
+        {
+          className: "edit-pencil",
+          onClick: () => openPaxModal("edit", pax, index),
+          children: "\u270F\uFE0F"
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("button", { className: "remove-pencil", onClick: removePax, children: "\u{1F5D1}\uFE0F" })
+    ] });
+  };
+  PaxCard.propTypes = {
+    pax: import_prop_types7.default.obj,
+    index: import_prop_types7.default.number,
+    setPassageiros: import_prop_types7.default.func.isRequired,
+    openPaxModal: import_prop_types7.default.func.isRequired
+  };
+  var PaxCard_default = PaxCard;
+
+  // src/AppReservas/AppReservas.jsx
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   function AppReservas({ variacoes, embarques, productId }) {
-    const [variacaoAtual, setVariacaoAtual] = React.useState(null);
-    const [embarque, setEmbarque] = React.useState(null);
-    const [taxa, setTaxa] = React.useState(0);
-    const [horariosEmbarque, setHorariosEmbarque] = React.useState(null);
+    const [availableDates, setAvailableDates] = React.useState([]);
+    const [selectedDates, setSelectedDates] = React.useState([]);
+    const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
+    const [dateModalOpen, setDateModalOpen] = React.useState(false);
+    const [embarqueModalOpen, setEmbarqueModalOpen] = React.useState(false);
+    const [paxModalOpen, setPaxModalOpen] = React.useState(false);
+    const [embarque, setEmbarque] = React.useState([]);
     const [horario, setHorario] = React.useState(null);
     const [passageiros, setPassageiros] = React.useState([]);
+    function openDateModal() {
+      setDateModalOpen(true);
+      setAvailableDates([]);
+      variacoes.map((variacao) => {
+        let _dia = variacao.attributes.attribute_dia;
+        let _disponiveis = variacao.availability_html.slice(29).replace("</p>", "");
+        setAvailableDates((_previous) => {
+          _previous.push({
+            dia: _dia,
+            disponiveis: _disponiveis.trimEnd(),
+            encerrado: variacao.encerrar_vendas,
+            variacao: variacao.variation_id
+          });
+          return _previous;
+        });
+      });
+    }
+    function openEmbarqueModal() {
+      if (selectedDates.length > 0)
+        setEmbarqueModalOpen(true);
+      else {
+        openDateModal();
+      }
+    }
+    function openPaxModal(mode = "add", paxData = null, index = null) {
+      setPaxModalOpen([true, mode, paxData, index]);
+    }
+    function parseDate(str) {
+      const [day, month, year] = str.split("/");
+      return /* @__PURE__ */ new Date(`${year}-${month}-${day}`);
+    }
+    const getVarIdByDate = (date_str) => {
+      const foundVar = variacoes.find(
+        (_var) => _var.attributes.attribute_dia == date_str
+      );
+      return foundVar ? foundVar.variation_id : void 0;
+    };
+    const toggleDate = (_received_data_varid) => {
+      setSelectedDates([]);
+      setVariacoesSelecionadas([]);
+      setEmbarque([]);
+      if (!_received_data_varid || _received_data_varid.length === 0) {
+        return;
+      } else if (_received_data_varid.length > 0) {
+        setSelectedDates(() => {
+          return _received_data_varid.map((_date_varid) => _date_varid[0]);
+        });
+        setVariacoesSelecionadas(() => {
+          return _received_data_varid.map((_date_varid) => _date_varid[1]);
+        });
+      }
+      setSelectedDates((prevDates) => {
+        const sortedDates = prevDates.sort((a, b) => parseDate(a) - parseDate(b));
+        return sortedDates;
+      });
+    };
+    const toggleEmbarque = (embId) => {
+      embarques.forEach((_emb) => {
+        if (_emb.embarqueId == embId) {
+          setEmbarque([_emb]);
+        }
+      });
+    };
+    const [variacaoAtual, setVariacaoAtual] = React.useState(null);
+    const [taxa, setTaxa] = React.useState(0);
+    const [horariosEmbarque, setHorariosEmbarque] = React.useState(null);
     const [botaoContinuar, setBotaoContinuar] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [preco, setPreco] = React.useState(false);
@@ -4157,13 +5007,6 @@
       if (variacoes.length === 1 && embarques)
         setVariacaoAtual(variacoes[0]);
     }, []);
-    React.useEffect(() => {
-      setHorario(null);
-      if (!embarque)
-        setPreco(false);
-      else
-        setPreco(precoPadrao + taxa);
-    }, [embarque, variacaoAtual]);
     React.useEffect(() => {
       if (variacaoAtual)
         setPrecoPadrao(+variacaoAtual.display_regular_price);
@@ -4236,10 +5079,120 @@
         document.querySelector(".single_add_to_cart_button").removeAttribute("disabled");
       }
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
-      embarques && variacoes.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "datas mb-3", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "label mb-1", children: "Datas" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "datas-badges-wrapper", children: variacoes.map((variacao, i) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { id: "newReservasContainer", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "main-title", children: "Fa\xE7a aqui sua reserva" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "section-title", children: "Data e local de embarque" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid-row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+            "div",
+            {
+              className: "grid-item clickable grid-dates",
+              "data-fill": selectedDates.length < 1 ? "false" : "true",
+              onClick: openDateModal,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F4C5}" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: selectedDates.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "empty-text-placeholder", children: "Selecionar data..." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "box-title", children: [
+                    selectedDates.length > 1 ? "Datas selecionadas" : "Data selecionada",
+                    ":",
+                    " "
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("ul", { children: selectedDates.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("li", { children: d }, i)) })
+                ] }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+            "div",
+            {
+              className: "grid-item clickable grid-embarque",
+              "data-fill": embarque.length < 1 ? "false" : "true",
+              onClick: openEmbarqueModal,
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-embarque d-flex", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F68F}" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: embarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "empty-text-placeholder", children: "Selecionar embarque..." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "box-title", children: "Embarque" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: embarque && embarque[0].nome })
+                  ] }) })
+                ] }),
+                embarque.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-horario d-flex mt-2", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F559}" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: horario ? horario : "--:--" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: " " })
+                ] }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "section-title", children: "Passageiros" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "passenger-list", children: [
+          passageiros.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: passageiros.map((_pax, index) => {
+            return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              PaxCard_default,
+              {
+                pax: _pax,
+                index,
+                setPassageiros,
+                openPaxModal
+              },
+              _pax.cpf
+            );
+          }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "placeholder-container mt-1", children: 'Nenhum passageiro adicionado. Clique em "Adicionar novo passageiro" para come\xE7ar.' }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+            "div",
+            {
+              className: "passenger-card add-passenger",
+              onClick: () => openPaxModal("add"),
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "avatar", children: "\u2795" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "info", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "top-row", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "name", children: "Adicionar novo passageiro" }) }) })
+              ]
+            }
+          )
+        ] }),
+        embarqueModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          EmbarqueModal_default,
+          {
+            setEmbarqueModalOpen,
+            toggleEmbarque,
+            embarques,
+            embarque,
+            setEmbarque,
+            selectedDates,
+            variacoes,
+            getVarIdByDate,
+            setHorario
+          }
+        ),
+        dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          DatesModal_default,
+          {
+            setDateModalOpen,
+            availableDates,
+            selectedDates,
+            toggleDate,
+            getVarIdByDate,
+            setVariacoesSelecionadas,
+            setSelectedDates
+          }
+        ),
+        paxModalOpen != false && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          PaxModal_default,
+          {
+            setPaxModalOpen,
+            paxModalOpen,
+            selectedDates,
+            setPassageiros
+          }
+        )
+      ] }),
+      embarques && variacoes.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "datas mb-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mb-0", children: "Datas teste" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "datas-badges-wrapper", children: variacoes.map((variacao, i) => {
           let v_dia = variacao.attributes.attribute_dia;
           let v_disponiveis = variacao.availability_html.slice(29).replace("</p>", "");
           let badgeClasses = " ";
@@ -4252,7 +5205,7 @@
               badgeClasses += "red ";
             }
           }
-          return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             "span",
             {
               className: "badge-dia disp" + badgeClasses,
@@ -4267,36 +5220,36 @@
           );
         }) })
       ] }) }),
-      embarques && variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { id: "info-container", className: "pt-1", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+      embarques && variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { id: "info-container", className: "pt-1", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
         "div",
         {
           className: "variacao-info",
           "data-dia": variacaoAtual.attributes.attribute_dia,
           "data-variacao-id": variacaoAtual.variation_id,
           children: [
-            !variacaoAtual.encerrar_vendas && vagasVar != 0 && vagasVar < 10 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("p", { className: "alerta-vagas ultimos mb-2", children: [
+            !variacaoAtual.encerrar_vendas && vagasVar != 0 && vagasVar < 10 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "alerta-vagas ultimos mb-2", children: [
               "Restam ",
               vagasVar,
               " vagas"
             ] }) : null,
-            !variacaoAtual.encerrar_vendas && !vagasVar ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "alerta-vagas esgotado", children: "Vagas esgotadas" }) : null,
-            variacaoAtual.attributes.attribute_dia.startsWith("volta") ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "so-volta-header", children: [
+            !variacaoAtual.encerrar_vendas && !vagasVar ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "alerta-vagas esgotado", children: "Vagas esgotadas" }) : null,
+            variacaoAtual.attributes.attribute_dia.startsWith("volta") ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "so-volta-header", children: [
               "Apenas volta para",
               " ",
               variacaoAtual.attributes.attribute_dia.split(" - ")[1],
               "- desembarque nos mesmos locais de embarque"
-            ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "label mb-sm-1 mb-0", children: "Dia" }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "info", children: variacaoAtual.attributes.attribute_dia })
+            ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("small", { className: "dia-selecionado d-block mb-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "mb-sm-1 mb-0 d-inline", children: "Dia selecionado:\xA0" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "d-inline", children: variacaoAtual.attributes.attribute_dia })
             ] }) }),
-            variacaoAtual.encerrar_vendas ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "vendas_encerradas_container", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Vendas encerradas para essa excurs\xE3o." }) }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "vendas_ativas_container", children: [
+            variacaoAtual.encerrar_vendas ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "vendas_encerradas_container", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "Vendas encerradas para essa excurs\xE3o." }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "vendas_ativas_container", children: [
               variacaoAtual.attributes.attribute_dia.startsWith(
                 "volta"
-              ) ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Reserva v\xE1lida apenas para volta do evento!" }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+              ) ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "Reserva v\xE1lida apenas para volta do evento!" }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
                 " ",
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "modulo_locais_embarque", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "label my-sm-2 my-0", children: "Locais de embarque" }),
-                  embarques.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "modulo_locais_embarque", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mt-2 mb-0", children: "Locais de embarque" }),
+                  embarques.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                     "select",
                     {
                       defaultValue: "none",
@@ -4305,7 +5258,7 @@
                       "data-variacao-id": variacaoAtual.variation_id,
                       onChange: handleSelectEmbarque,
                       children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "none", disabled: true, children: "Selecione..." }),
+                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "none", disabled: true, children: "Selecione..." }),
                         embarques.map((embarque2) => {
                           let diaDaVar = variacaoAtual.attributes.attribute_dia;
                           let disponibilidadesDoEmbarque = embarque2.horarios.map((_horarioObj) => {
@@ -4322,7 +5275,6 @@
                             );
                             return todosHorariosDoEmbarque;
                           });
-                          console.log(disponibilidadesDoEmbarque);
                           let todosIndisponiveis;
                           if (disponibilidadesDoEmbarque.length > 1) {
                             todosIndisponiveis = disponibilidadesDoEmbarque.every(
@@ -4333,9 +5285,9 @@
                               (_horario, _i) => _horario[_i] && _horario[_i].status === "indisponivel"
                             );
                           }
-                          return todosIndisponiveis === false ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+                          return todosIndisponiveis === false ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
                             "(",
-                            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                               "option",
                               {
                                 value: embarque2.nome,
@@ -4348,9 +5300,9 @@
                               embarque2.embarqueId
                             ),
                             ")"
-                          ] }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+                          ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
                             "(",
-                            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+                            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
                               "option",
                               {
                                 disabled: true,
@@ -4369,16 +5321,16 @@
                       ]
                     },
                     variacaoAtual.variation_id
-                  ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("i", { children: "Locais de embarque n\xE3o definidos" })
+                  ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("i", { children: "Locais de embarque n\xE3o definidos" })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "module_horarios_embarque", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "label mt-3 my-1", children: "Hor\xE1rios" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "module_horarios_embarque", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mt-3 my-1", children: "Hor\xE1rios" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                     "div",
                     {
                       className: embarque ? "horarios-wrapper show-alert" : "horarios-wrapper",
                       children: horariosEmbarque ? horariosEmbarque.map((horario2) => {
-                        return horario2[0].status !== "indisponivel" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                        return horario2[0].status !== "indisponivel" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                           "span",
                           {
                             className: "emb_horario",
@@ -4388,23 +5340,23 @@
                           },
                           horario2[0].horario
                         ) }) : null;
-                      }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("i", { children: "Selecione o local de embarque primeiro" })
+                      }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("i", { children: "Selecione o local de embarque primeiro" })
                     }
                   )
                 ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "modulo_preco mb-3", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "label mt-sm-4 mt-3 mb-0", children: "Valor" }),
-                preco ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("p", { className: "info", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "modulo_preco mb-3", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mt-sm-4 mt-3 mb-0", children: "Valor" }),
+                preco ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "info", children: [
                     "R$ ",
                     preco,
                     ",00"
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "por passageiro" })
-                ] }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("i", { children: "Selecione o local de embarque primeiro" })
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "por passageiro" })
+                ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("i", { children: "Selecione o local de embarque primeiro" })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 Passageiros_default,
                 {
                   passageiros,
@@ -4419,7 +5371,7 @@
                   taxa
                 }
               ),
-              variacaoAtual.max_qty !== "" && variacaoAtual.max_qty >= 1 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              variacaoAtual.max_qty !== "" && variacaoAtual.max_qty >= 1 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "button",
                 {
                   className: "btn btn-dark mt-sm-4 mt-2 btn-lg btn-reservar",
@@ -4432,21 +5384,21 @@
         },
         variacaoAtual.variation_id
       ) }) }) : null,
-      embarques && variacoes.length > 1 && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { id: "info-placeholder", className: "my-5", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: variacoes.length > 1 ? "Selecione uma das op\xE7\xF5es acima para ver mais detalhes" : "Aguarde..." }) }) : null,
-      !embarques && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "mt-5", children: "Mais informa\xE7\xF5es sobre essa excurs\xE3o em breve!" }) : null
+      embarques && variacoes.length > 1 && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { id: "info-placeholder", className: "my-5", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: variacoes.length > 1 ? "Selecione uma das op\xE7\xF5es acima para ver mais detalhes" : "Aguarde..." }) }) : null,
+      !embarques && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "mt-5", children: "Mais informa\xE7\xF5es sobre essa excurs\xE3o em breve!" }) : null
     ] }) });
   }
   AppReservas.propTypes = {
-    variacoes: import_prop_types3.default.array.isRequired,
-    embarques: import_prop_types3.default.array.isRequired,
-    nome: import_prop_types3.default.string,
-    productId: import_prop_types3.default.number.isRequired
+    variacoes: import_prop_types8.default.array.isRequired,
+    embarques: import_prop_types8.default.array.isRequired,
+    nome: import_prop_types8.default.string,
+    productId: import_prop_types8.default.number.isRequired
   };
   var reservas_app_root = document.getElementById("reserva_app");
   addEventListener("DOMContentLoaded", () => {
     if (reservas_app_root) {
       ReactDOM.createRoot(reservas_app_root).render(
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           AppReservas,
           {
             variacoes: JSON.parse(reservas_app_root.dataset.variacoes),
