@@ -142,6 +142,7 @@ function ajax_send_email(){
 
       if($variation){
         $emails = obter_emails_por_produto($variation_id);
+        // $emails = [''];
 
         //para ser consumido no template do e-mail
         $email_params = array(

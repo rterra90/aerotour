@@ -29,9 +29,13 @@ const PaxModal = ({
   const [paxMenor, setPaxMenor] = React.useState(false);
   const [formErrors, setFormErrors] = React.useState([]);
   const { validarCPF, validarMaioridade } = useValidations();
+  const [visible, setVisible] = React.useState(false);
 
   function closePaxModal() {
-    setPaxModalOpen(false);
+    setVisible(false);
+    setTimeout(() => {
+      setPaxModalOpen(false);
+    }, 300);
   }
 
   function inputChange({ target }) {
@@ -178,6 +182,7 @@ const PaxModal = ({
   //Define o tipo de formulário ('add' ou 'edit')
   React.useEffect(() => {
     if (paxModalOpen[0] == true) {
+      setVisible(true);
       let _mode = paxModalOpen[1];
       setFormMode(_mode);
 
@@ -191,13 +196,20 @@ const PaxModal = ({
   }, [paxModalOpen]);
 
   return (
-    <div className="modal-overlay" onClick={closePaxModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      className={`modal-overlay ${visible ? 'show' : ''}`}
+      onClick={closePaxModal}
+    >
+      <div
+        className={`modal-content ${visible ? 'show' : 'hide'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button className="modal-close" onClick={closePaxModal}>
           ✖
         </button>
 
-        <h3>{formMode === 'add' ? 'Adicionar ' : 'Editar '} passageiro</h3>
+        <h3>{formMode === 'edit' ? 'Editar ' : 'Adicionar '} passageiro</h3>
+
         <form
           id="paxForm"
           onSubmit={(e) => {
@@ -273,11 +285,13 @@ const PaxModal = ({
               tripType={formData.tripType}
             />
             {formErrors.length > 0 ? (
-              <button type="submit" disabled>
+              <button type="submit" className="saveBtn" disabled>
                 Salvar
               </button>
             ) : (
-              <button type="submit">Salvar</button>
+              <button type="submit" className="saveBtn">
+                Salvar
+              </button>
             )}
           </div>
         </form>

@@ -1,0 +1,122 @@
+/* Container principal */
+.modal-warning {
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  max-width: 100%;
+}
+
+/* Mensagem */
+.warning-message {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+}
+
+/* Botões */
+.warning-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-warning .btn-primary {
+  background-color: #4a4a4a;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-warning .btn-primary:hover {
+  background-color: #2f2f2f;
+}
+
+.modal-warning .btn-secondary {
+  background-color: transparent;
+  color: #4a4a4a;
+  border: 1px solid #bbb;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-warning .btn-secondary:hover {
+  background-color: #eaeaea;
+}
+
+/* ERROR CONTAINER */
+.modal-warning .error-container {
+  background-color: #fff3f3;
+  border: 1px solid #f5c2c7;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #842029;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 6px;
+}
+.modal-warning .error-icon {
+  font-size: 2rem;
+}
+.modal-warning .error-message {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+.modal-warning .error-container .close-button {
+  background-color: #842029;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.modal-warning .error-container .close-button:hover {
+  background-color: #6c1a23;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .modal-warning {
+    padding: 1rem;
+  }
+
+  .warning-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .modal-warning .btn-primary,
+  .modal-warning .btn-secondary {
+    width: 100%;
+  }
+
+  .error-container .error-container {
+    padding: 1rem;
+  }
+  .error-container .error-message {
+    font-size: 0.95rem;
+  }
+  .error-container .close-button {
+    width: 100%;
+  }
+}

@@ -3,16 +3,39 @@
 import PropTypes from 'prop-types';
 
 const PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
+  const cardRef = React.useRef(null);
+
   function removePax() {
+    const card = cardRef.current;
     if (window.confirm('Remover passageiro?')) {
-      setPassageiros((_current) => {
-        return _current.filter((_pax, _i) => _i != index);
-      });
+      if (card) {
+        card.classList.add('removing');
+        setTimeout(() => {
+          // remove o card da lista
+          setPassageiros((_current) => {
+            return _current.filter((_pax, _i) => _i != index);
+          });
+        }, 500); // tempo igual ao da animação
+      }
     }
   }
 
+  React.useEffect(() => {
+    const card = cardRef.current;
+    if (card) {
+      const timeout = setTimeout(() => {
+        card.classList.add('highlight');
+        setTimeout(() => {
+          card.classList.remove('highlight');
+        }, 900); // duração do efeito de destaque
+      }, 250); // espera o modal fechar completamente
+
+      return () => clearTimeout(timeout);
+    }
+  }, []);
+
   return (
-    <article className="passenger-card">
+    <article className="passenger-card" ref={cardRef}>
       <div className="avatar">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +52,16 @@ const PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
       <div className="info">
         <div className="top-row">
           <div>
-            <div className="name">{pax.nome_completo}</div>
-            <div className="meta">{'role'}</div>
+            <div className="name" tabIndex="0">
+              <p className="my-0" data-fullname={pax.nome_completo}>
+                {pax.nome_completo}
+              </p>
+            </div>
+            <div className="meta">
+              {pax.tripType == 'ida-e-volta'
+                ? 'Ida e volta'
+                : 'Apenas ' + pax.tripType}
+            </div>
           </div>
           <div className="pill">Passageiro #{index + 1}</div>
         </div>
@@ -65,7 +96,7 @@ const PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
 };
 
 PaxCard.propTypes = {
-  pax: PropTypes.obj,
+  pax: PropTypes.object,
   index: PropTypes.number,
   setPassageiros: PropTypes.func.isRequired,
   openPaxModal: PropTypes.func.isRequired,

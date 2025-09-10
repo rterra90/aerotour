@@ -1,4 +1,12 @@
 <?php
+//Redicreciona após erro no login
+function redirecionar_apos_erro_login($username) {
+  $url_redirecionamento = home_url('/minha-conta?login=failed');
+  wp_redirect($url_redirecionamento);
+  exit;
+}
+add_action('wp_login_failed', 'redirecionar_apos_erro_login');
+
 // Limpe o username no login se for CPF
 function formata_username( $username ) {
   if(!str_contains( $username, '@' )){
@@ -47,7 +55,6 @@ function username_login_form_label( $translated, $text, $domain  ) {
   }
   return $translated;
 }
-
 
 add_action('init', 'verificar_usuario_logado');
 function verificar_usuario_logado() {

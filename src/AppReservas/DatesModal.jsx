@@ -8,36 +8,82 @@ const DatesModal = ({
   selectedDates,
   toggleDate,
   getVarIdByDate,
+  getAvailabilityById,
+  passageiros,
 }) => {
   const [preData, setPreData] = React.useState([]);
-  const preDataRef = React.useRef(preData);
+  const [visible, setVisible] = React.useState(false);
+  const [initial, setInitial] = React.useState(false);
+  const preDataRef = React.useRef(preData); //para utilizar no return do useEffect principal
+  const saveBtnRef = React.useRef();
 
-  function closeDateModal() {
-    setDateModalOpen(false);
+  function closeDateModal(_save) {
+    const hasUpdatedData = preDataRef.current.toString() != initial.toString();
+    if (_save && hasUpdatedData) {
+      if (preDataRef.current.length > 0) {
+        toggleDate(preDataRef.current);
+      } else toggleDate('', '');
+    } else setVisible(false);
+    setTimeout(() => {
+      setDateModalOpen(false);
+    }, 300);
+  }
+
+  function changeCheckbox(_dateObj, _element) {
+    setPreData(() => {
+      const dataJaSelecionada = preData.some(
+        (_item) => _item[0] == _dateObj.dia,
+      );
+
+      if (dataJaSelecionada) {
+        return preData.filter((_item) => _item[0] !== _dateObj.dia);
+      } else {
+        if (_dateObj.disponiveis < passageiros.length) {
+          window.alert(
+            'Vagas insuficientes nessa data para o número de passageiros informados.',
+          );
+          _element.setAttribute('checked', 'false');
+          console.log('aviso de vagas insuficientes');
+          return preData;
+        }
+        return [
+          ...preData,
+          [_dateObj.dia, getVarIdByDate(_dateObj.dia), _dateObj.disponiveis],
+        ];
+      }
+    });
   }
 
   React.useEffect(() => {
     preDataRef.current = preData;
+    if (preData.length < 1) saveBtnRef.current.setAttribute('disabled', '');
+    else saveBtnRef.current.removeAttribute('disabled');
   }, [preData]);
 
   React.useEffect(() => {
+    setVisible(true);
     /* Preenche preData com as datas já selecionadas */
     if (selectedDates.length > 0) {
-      selectedDates.forEach((date) => {
-        setPreData((_p) => [..._p, [date, getVarIdByDate(date)]]);
+      const mapped = selectedDates.map((date) => [
+        date,
+        getVarIdByDate(date),
+        getAvailabilityById(getVarIdByDate(date)),
+      ]);
+
+      setPreData((prev) => {
+        if (!initial) setInitial(() => [...prev, ...mapped]);
+        return [...prev, ...mapped];
       });
     }
-    return () => {
-      if (preDataRef.current.length > 0) {
-        toggleDate(preDataRef.current);
-      } else toggleDate('', '');
-    };
   }, []);
 
   return (
-    <div className="modal-overlay" onClick={closeDateModal}>
+    <div
+      className={`modal-overlay ${visible ? 'show' : ''}`}
+      onClick={() => closeDateModal(false)}
+    >
       <div
-        className="modal-content"
+        className={`modal-content ${visible ? 'show' : ''}`}
         data-modal="dates"
         onClick={(e) => e.stopPropagation()}
       >
@@ -47,9 +93,7 @@ const DatesModal = ({
             <label
               key={dateObj.dia}
               className={
-                dateObj.encerrado || dateObj.disponiveis === ''
-                  ? 'disabled'
-                  : ''
+                dateObj.encerrado || dateObj.disponiveis === 0 ? 'disabled' : ''
               }
               data-ultimas={dateObj.disponiveis < 10 ? 'true' : 'false'}
               data-ultimas-vagas={
@@ -57,30 +101,15 @@ const DatesModal = ({
                   ? dateObj.disponiveis + ' ' + 'vagas restantes'
                   : 'false'
               }
-              data-esgotado={dateObj.disponiveis === '' ? 'true' : 'false'}
+              data-esgotado={dateObj.disponiveis === 0 ? 'true' : 'false'}
             >
-              {dateObj.encerrado || dateObj.disponiveis === '' ? (
+              {dateObj.encerrado || dateObj.disponiveis === 0 ? (
                 <input type="checkbox" disabled />
               ) : (
                 <input
                   type="checkbox"
-                  // checked={selectedDates.includes(dateObj.dia)}
                   checked={preData.some((_item) => _item[0] == dateObj.dia)}
-                  // onChange={() => toggleDate(dateObj.dia, dateObj.variacao)}
-                  onChange={() => {
-                    setPreData(() => {
-                      if (preData.some((_item) => _item[0] == dateObj.dia)) {
-                        return preData.filter(
-                          (_item) => _item[0] !== dateObj.dia,
-                        );
-                      } else {
-                        return [
-                          ...preData,
-                          [dateObj.dia, getVarIdByDate(dateObj.dia)],
-                        ];
-                      }
-                    });
-                  }}
+                  onChange={({ target }) => changeCheckbox(dateObj, target)}
                 />
               )}
               <span>{dateObj.dia}</span>
@@ -88,8 +117,13 @@ const DatesModal = ({
           ))}
         </form>
         <div className="modal-buttons">
-          <button type="button" onClick={closeDateModal}>
-            Concluído
+          <button
+            type="button"
+            className="saveBtn"
+            ref={saveBtnRef}
+            onClick={() => closeDateModal(true)}
+          >
+            Salvar
           </button>
         </div>
       </div>
@@ -102,6 +136,8 @@ DatesModal.propTypes = {
   setDateModalOpen: PropTypes.func.isRequired,
   availableDates: PropTypes.array.isRequired,
   selectedDates: PropTypes.array.isRequired,
+  passageiros: PropTypes.array.isRequired,
   toggleDate: PropTypes.func.isRequired,
   getVarIdByDate: PropTypes.func.isRequired,
+  getAvailabilityById: PropTypes.func.isRequired,
 };

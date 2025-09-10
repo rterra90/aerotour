@@ -11,22 +11,6 @@ add_filter( 'loop_shop_per_page', function( $cols ) {
   return 100;
 }, 20 );
 
-//Redicreciona após erro no login
-function redirecionar_apos_erro_login($username) {
-  $url_redirecionamento = home_url('/minha-conta?login=failed');
-  wp_redirect($url_redirecionamento);
-  exit;
-}
-add_action('wp_login_failed', 'redirecionar_apos_erro_login');
-//Filtra resultados da busca de posts
-function filter_search_results($query) {
-  if ($query->is_search && !is_admin()) {
-      $query->set('post_type', 'post');
-  }
-  return $query;
-}
-add_filter('pre_get_posts', 'filter_search_results');
-
 //Remove a exibição de cross-sell do cart
 remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
 

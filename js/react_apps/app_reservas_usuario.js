@@ -95,7 +95,7 @@
           var ContextProvider = REACT_PROVIDER_TYPE;
           var Element = REACT_ELEMENT_TYPE;
           var ForwardRef = REACT_FORWARD_REF_TYPE;
-          var Fragment3 = REACT_FRAGMENT_TYPE;
+          var Fragment5 = REACT_FRAGMENT_TYPE;
           var Lazy = REACT_LAZY_TYPE;
           var Memo = REACT_MEMO_TYPE;
           var Portal = REACT_PORTAL_TYPE;
@@ -154,7 +154,7 @@
           exports.ContextProvider = ContextProvider;
           exports.Element = Element;
           exports.ForwardRef = ForwardRef;
-          exports.Fragment = Fragment3;
+          exports.Fragment = Fragment5;
           exports.Lazy = Lazy;
           exports.Memo = Memo;
           exports.Portal = Portal;
@@ -3572,11 +3572,11 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx9 = jsxWithValidationDynamic;
-          var jsxs9 = jsxWithValidationStatic;
+          var jsx11 = jsxWithValidationDynamic;
+          var jsxs11 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx9;
-          exports.jsxs = jsxs9;
+          exports.jsx = jsx11;
+          exports.jsxs = jsxs11;
         })();
       }
     }
@@ -4160,83 +4160,132 @@
     availableDates,
     selectedDates,
     toggleDate,
-    getVarIdByDate
+    getVarIdByDate,
+    getAvailabilityById,
+    passageiros
   }) => {
     const [preData, setPreData] = React.useState([]);
+    const [visible, setVisible] = React.useState(false);
+    const [initial, setInitial] = React.useState(false);
     const preDataRef = React.useRef(preData);
-    function closeDateModal() {
-      setDateModalOpen(false);
-    }
-    React.useEffect(() => {
-      preDataRef.current = preData;
-    }, [preData]);
-    React.useEffect(() => {
-      if (selectedDates.length > 0) {
-        selectedDates.forEach((date) => {
-          setPreData((_p) => [..._p, [date, getVarIdByDate(date)]]);
-        });
-      }
-      return () => {
+    const saveBtnRef = React.useRef();
+    function closeDateModal(_save) {
+      const hasUpdatedData = preDataRef.current.toString() != initial.toString();
+      if (_save && hasUpdatedData) {
         if (preDataRef.current.length > 0) {
           toggleDate(preDataRef.current);
         } else
           toggleDate("", "");
-      };
+      } else
+        setVisible(false);
+      setTimeout(() => {
+        setDateModalOpen(false);
+      }, 300);
+    }
+    function changeCheckbox(_dateObj, _element) {
+      setPreData(() => {
+        const dataJaSelecionada = preData.some(
+          (_item) => _item[0] == _dateObj.dia
+        );
+        if (dataJaSelecionada) {
+          return preData.filter((_item) => _item[0] !== _dateObj.dia);
+        } else {
+          if (_dateObj.disponiveis < passageiros.length) {
+            window.alert(
+              "Vagas insuficientes nessa data para o n\xFAmero de passageiros informados."
+            );
+            _element.setAttribute("checked", "false");
+            console.log("aviso de vagas insuficientes");
+            return preData;
+          }
+          return [
+            ...preData,
+            [_dateObj.dia, getVarIdByDate(_dateObj.dia), _dateObj.disponiveis]
+          ];
+        }
+      });
+    }
+    React.useEffect(() => {
+      preDataRef.current = preData;
+      if (preData.length < 1)
+        saveBtnRef.current.setAttribute("disabled", "");
+      else
+        saveBtnRef.current.removeAttribute("disabled");
+    }, [preData]);
+    React.useEffect(() => {
+      setVisible(true);
+      if (selectedDates.length > 0) {
+        const mapped = selectedDates.map((date) => [
+          date,
+          getVarIdByDate(date),
+          getAvailabilityById(getVarIdByDate(date))
+        ]);
+        setPreData((prev) => {
+          if (!initial)
+            setInitial(() => [...prev, ...mapped]);
+          return [...prev, ...mapped];
+        });
+      }
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "modal-overlay", onClick: closeDateModal, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
       "div",
       {
-        className: "modal-content",
-        "data-modal": "dates",
-        onClick: (e) => e.stopPropagation(),
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h3", { children: "Selecionar Datas" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("form", { className: "date-list many", children: availableDates.map((dateObj) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-            "label",
-            {
-              className: dateObj.encerrado || dateObj.disponiveis === "" ? "disabled" : "",
-              "data-ultimas": dateObj.disponiveis < 10 ? "true" : "false",
-              "data-ultimas-vagas": dateObj.disponiveis < 10 ? dateObj.disponiveis + " vagas restantes" : "false",
-              "data-esgotado": dateObj.disponiveis === "" ? "true" : "false",
-              children: [
-                dateObj.encerrado || dateObj.disponiveis === "" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-                  "input",
-                  {
-                    type: "checkbox",
-                    checked: preData.some((_item) => _item[0] == dateObj.dia),
-                    onChange: () => {
-                      setPreData(() => {
-                        if (preData.some((_item) => _item[0] == dateObj.dia)) {
-                          return preData.filter(
-                            (_item) => _item[0] !== dateObj.dia
-                          );
-                        } else {
-                          return [
-                            ...preData,
-                            [dateObj.dia, getVarIdByDate(dateObj.dia)]
-                          ];
-                        }
-                      });
-                    }
-                  }
-                ),
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: dateObj.dia })
-              ]
-            },
-            dateObj.dia
-          )) }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { type: "button", onClick: closeDateModal, children: "Conclu\xEDdo" }) })
-        ]
+        className: `modal-overlay ${visible ? "show" : ""}`,
+        onClick: () => closeDateModal(false),
+        children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+          "div",
+          {
+            className: `modal-content ${visible ? "show" : ""}`,
+            "data-modal": "dates",
+            onClick: (e) => e.stopPropagation(),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h3", { children: "Selecionar Datas" }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("form", { className: "date-list many", children: availableDates.map((dateObj) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+                "label",
+                {
+                  className: dateObj.encerrado || dateObj.disponiveis === 0 ? "disabled" : "",
+                  "data-ultimas": dateObj.disponiveis < 10 ? "true" : "false",
+                  "data-ultimas-vagas": dateObj.disponiveis < 10 ? dateObj.disponiveis + " vagas restantes" : "false",
+                  "data-esgotado": dateObj.disponiveis === 0 ? "true" : "false",
+                  children: [
+                    dateObj.encerrado || dateObj.disponiveis === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                      "input",
+                      {
+                        type: "checkbox",
+                        checked: preData.some((_item) => _item[0] == dateObj.dia),
+                        onChange: ({ target }) => changeCheckbox(dateObj, target)
+                      }
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: dateObj.dia })
+                  ]
+                },
+                dateObj.dia
+              )) }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                "button",
+                {
+                  type: "button",
+                  className: "saveBtn",
+                  ref: saveBtnRef,
+                  onClick: () => closeDateModal(true),
+                  children: "Salvar"
+                }
+              ) })
+            ]
+          }
+        )
       }
-    ) });
+    );
   };
   var DatesModal_default = DatesModal;
   DatesModal.propTypes = {
     setDateModalOpen: import_prop_types3.default.func.isRequired,
     availableDates: import_prop_types3.default.array.isRequired,
     selectedDates: import_prop_types3.default.array.isRequired,
+    passageiros: import_prop_types3.default.array.isRequired,
     toggleDate: import_prop_types3.default.func.isRequired,
-    getVarIdByDate: import_prop_types3.default.func.isRequired
+    getVarIdByDate: import_prop_types3.default.func.isRequired,
+    getAvailabilityById: import_prop_types3.default.func.isRequired
   };
 
   // src/AppReservas/EmbarqueModal.jsx
@@ -4250,8 +4299,12 @@
     selectedDates,
     variacoes,
     getVarIdByDate,
-    setHorario
+    setHorario,
+    variacoesSelecionadas,
+    setPrecoUnitario,
+    setTaxa
   }) => {
+    const [visible, setVisible] = React.useState(false);
     const [embarquesNoPeriodo, setEmbarquesNoPeriodo] = React.useState([]);
     const [preEmbarque, setPreEmbarque] = React.useState([]);
     const [horariosDisponiveis, setHorariosDisponiveis] = React.useState([]);
@@ -4259,10 +4312,15 @@
       []
     );
     const embarqueForm = React.useRef();
+    const priceContainerRef = React.useRef();
+    const saveBtnRef = React.useRef();
     function closeEmbarqueModal(_save) {
       if (_save && preEmbarque.length > 0)
         toggleEmbarque(preEmbarque[0].embarqueId);
-      setEmbarqueModalOpen(false);
+      setVisible(false);
+      setTimeout(() => {
+        setEmbarqueModalOpen(false);
+      }, 300);
     }
     function arrayToString(lista) {
       if (lista.length === 0)
@@ -4276,6 +4334,7 @@
       return `${todasMenosUltima} e ${ultima}`;
     }
     React.useEffect(() => {
+      setVisible(true);
       const embarquesPeriodo = [];
       embarques.forEach((_embarque) => {
         let _emb_obj = { embID: _embarque.embarqueId, variacoes: [] };
@@ -4337,9 +4396,6 @@
         embarqueForm.current.querySelector("select").value = "";
         setPreEmbarque([]);
       }
-      return () => {
-        toggleEmbarque();
-      };
     }, []);
     React.useEffect(() => {
       setDisponibilidadeParcial([]);
@@ -4348,7 +4404,6 @@
         let _horariosDisp = [];
         const selectedEmbarque = embarquesNoPeriodo.find(
           (_embarque) => _embarque.embID == preEmbarque[0].embarqueId
-          //mudar aqui
         );
         selectedEmbarque.variacoes.forEach((_variacao) => {
           let _indisponiveis = _variacao.disp.filter((_disp) => {
@@ -4367,94 +4422,153 @@
         });
         let _array_horarios = Array.from(new Set(_horariosDisp));
         setHorariosDisponiveis(_array_horarios);
-        if (_array_horarios.length === 1) {
-          console.log("setar horario");
+        if (_array_horarios.length === 1)
           setHorario(_array_horarios[0]);
+        if (variacoesSelecionadas.length > 0) {
+          const _precos = variacoesSelecionadas.map((_varId) => {
+            const varObj = variacoes.filter((_v) => _v.variation_id == _varId)[0];
+            return varObj.display_regular_price;
+          });
+          const uniquePrecos = Array.from(new Set(_precos));
+          const taxaEmb = embarques.filter(
+            (emb) => emb.embarqueId == preEmbarque[0].embarqueId
+          )[0]?.taxa || 0;
+          setTaxa(+taxaEmb);
+          if (uniquePrecos.length === 1) {
+            const modalPriceElement = priceContainerRef.current.querySelector("span");
+            modalPriceElement.innerText = +uniquePrecos[0] + taxaEmb;
+            setPrecoUnitario(+uniquePrecos[0] + taxaEmb);
+          } else
+            setPrecoUnitario("varios");
+        } else {
+          window.alert("Nenhuma data selecionada");
+          closeEmbarqueModal(false);
         }
+        saveBtnRef.current.removeAttribute("disabled");
+      } else {
+        saveBtnRef.current.setAttribute("disabled", "");
       }
     }, [preEmbarque]);
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "modal-overlay", onClick: () => closeEmbarqueModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+    React.useEffect(() => {
+      if (disponibilidadeParcial.length > 0) {
+        saveBtnRef.current.setAttribute("disabled", "");
+      }
+    }, [disponibilidadeParcial]);
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
       "div",
       {
-        className: "modal-content",
-        "data-modal": "embarque",
-        onClick: (e) => e.stopPropagation(),
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { children: "Selecione seu embarque" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("form", { className: "embarque-list", ref: embarqueForm, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
-              "select",
-              {
-                onChange: (e) => setPreEmbarque(() => {
-                  return [
-                    embarques.find((_emb) => _emb.embarqueId == e.target.value)
-                  ];
-                }),
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { className: "select-placeholder", disabled: true, value: "", children: "Selecione..." }),
-                  embarques.map(({ embarqueId, nome }) => {
-                    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { value: embarqueId, children: nome }, embarqueId);
-                  })
-                ]
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "embarque-details", children: [
-              preEmbarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "placeholder-container", children: "Selecione um local de embarque para ver os hor\xE1rios dispon\xEDveis e endere\xE7o detalhado." }) : null,
-              disponibilidadeParcial.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "alerta-reserva disponibilidade-parcial", children: [
-                "Ops. O embarque selecionado n\xE3o est\xE1 dispon\xEDvel em",
-                " ",
-                arrayToString(disponibilidadeParcial.map((_v) => _v.dia)),
-                "."
-              ] }) : null,
-              disponibilidadeParcial.length === 0 && preEmbarque.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "embarque-details-inner", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "horarios", children: [
-                  horariosDisponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title", children: "Hor\xE1rio de embarque" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "horario-single d-block text-center", children: horariosDisponiveis[0] })
-                  ] }),
-                  horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title", children: "Selecione o hor\xE1rio" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "multi-radios", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "08:00" }),
-                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "08:00" })
-                      ] }),
-                      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "10:30" }),
-                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "10:30" })
-                      ] })
-                    ] })
-                  ] })
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "localizacao", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title my-3 mb-1", children: "Local de embarque" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Endere\xE7o:" }),
-                    " ",
-                    preEmbarque[0].endereco
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Refer\xEAncia:" }),
-                    " ",
-                    preEmbarque[0].obs
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-                    "a",
-                    {
-                      href: preEmbarque[0].link_mapa,
-                      target: "_blank",
-                      rel: "noreferrer",
-                      children: "Ver no Google Maps"
-                    }
-                  )
-                ] })
-              ] }) }) : null
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "button", className: "saveBtn", onClick: () => closeEmbarqueModal(true), children: "Salvar" }) })
-          ] })
-        ]
+        className: `modal-overlay ${visible ? "show" : ""}`,
+        onClick: () => closeEmbarqueModal(false),
+        children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+          "div",
+          {
+            className: `modal-content ${visible ? "show" : ""}`,
+            "data-modal": "embarque",
+            onClick: (e) => e.stopPropagation(),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { children: "Selecione seu embarque" }),
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("form", { className: "embarque-list", ref: embarqueForm, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+                  "select",
+                  {
+                    onChange: (e) => setPreEmbarque(() => {
+                      return [
+                        embarques.find((_emb) => _emb.embarqueId == e.target.value)
+                      ];
+                    }),
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { className: "select-placeholder", disabled: true, value: "", children: "Selecione..." }),
+                      embarques.map(({ embarqueId, nome }) => {
+                        return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { value: embarqueId, children: nome }, embarqueId);
+                      })
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+                  "section",
+                  {
+                    className: "embarque-details",
+                    "aria-labelledby": "embarque-heading",
+                    children: [
+                      preEmbarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "placeholder-container", children: "Selecione um local de embarque para ver os hor\xE1rios dispon\xEDveis e endere\xE7o detalhado." }) : null,
+                      disponibilidadeParcial.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "alerta-reserva disponibilidade-parcial", children: [
+                        "Ops. O embarque selecionado n\xE3o est\xE1 dispon\xEDvel em",
+                        " ",
+                        arrayToString(disponibilidadeParcial.map((_v) => _v.dia)),
+                        "."
+                      ] }) : null,
+                      disponibilidadeParcial.length === 0 && preEmbarque.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { id: "embarque-heading", className: "visually-hidden", children: "Detalhes do embarque" }),
+                        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "embarque-details-inner", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "horarios", children: [
+                            horariosDisponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { className: "title", children: "Hor\xE1rio de embarque" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "horario-single d-block text-center", children: horariosDisponiveis[0] })
+                            ] }),
+                            horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title", children: "Selecione o hor\xE1rio" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "multi-radios", children: [
+                                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "08:00" }),
+                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "08:00" })
+                                ] }),
+                                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "10:30" }),
+                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "10:30" })
+                                ] })
+                              ] })
+                            ] })
+                          ] }),
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "localizacao", children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { className: "title my-2 mb-0", children: "Local de embarque" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Endere\xE7o:" }),
+                              " ",
+                              preEmbarque[0].endereco
+                            ] }),
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Refer\xEAncia:" }),
+                              " ",
+                              preEmbarque[0].obs
+                            ] }),
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                              "a",
+                              {
+                                href: preEmbarque[0].link_mapa,
+                                target: "_blank",
+                                rel: "noreferrer",
+                                children: "Ver no Google Maps"
+                              }
+                            )
+                          ] }),
+                          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "price", ref: priceContainerRef, children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Valor:" }),
+                            " R$ ",
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "120,00" }),
+                            " ",
+                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("i", { children: "por passageiro" })
+                          ] })
+                        ] })
+                      ] }) : null
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                  "button",
+                  {
+                    type: "button",
+                    className: "saveBtn",
+                    ref: saveBtnRef,
+                    onClick: () => closeEmbarqueModal(true),
+                    children: "Salvar"
+                  }
+                ) })
+              ] })
+            ]
+          }
+        )
       }
-    ) });
+    );
   };
   var EmbarqueModal_default = EmbarquesModal;
   EmbarquesModal.propTypes = {
@@ -4464,8 +4578,11 @@
     embarque: import_prop_types4.default.array,
     selectedDates: import_prop_types4.default.array.isRequired,
     variacoes: import_prop_types4.default.array.isRequired,
+    variacoesSelecionadas: import_prop_types4.default.array.isRequired,
     getVarIdByDate: import_prop_types4.default.func.isRequired,
-    setHorario: import_prop_types4.default.func.isRequired
+    setHorario: import_prop_types4.default.func.isRequired,
+    setPrecoUnitario: import_prop_types4.default.func.isRequired,
+    setTaxa: import_prop_types4.default.func.isRequired
   };
 
   // src/AppReservas/PaxModal.jsx
@@ -4599,8 +4716,12 @@
     const [paxMenor, setPaxMenor] = React.useState(false);
     const [formErrors, setFormErrors] = React.useState([]);
     const { validarCPF, validarMaioridade } = useValidations_default();
+    const [visible, setVisible] = React.useState(false);
     function closePaxModal() {
-      setPaxModalOpen(false);
+      setVisible(false);
+      setTimeout(() => {
+        setPaxModalOpen(false);
+      }, 300);
     }
     function inputChange({ target }) {
       const valueLength = target.value.length;
@@ -4702,35 +4823,42 @@
       if (formErrors.length === 0) {
         if (_mode == "add") {
           setPassageiros((_current) => {
-            if (_current.some(
+            const paxJaExiste = _current.some(
               (_pax) => _pax.cpf === formData.cpf && formData.cpf !== ""
-            )) {
+            );
+            if (paxJaExiste) {
               alert("J\xE1 existe um passageiro com este CPF.");
               return _current;
+            } else {
+              setPaxModalOpen(false);
+              return [..._current, formData];
             }
-            return [..._current, formData];
           });
         } else if (_mode == "edit") {
           const _index = paxModalOpen[3];
           setPassageiros((_current) => {
-            if (_current.some(
+            const cpfJaExiste = _current.some(
               (_pax, _i) => _pax.cpf === formData.cpf && formData.cpf !== "" && _i != _index
-            )) {
+            );
+            if (cpfJaExiste) {
               alert("J\xE1 existe um passageiro com este CPF.");
               return _current;
+            } else {
+              setPaxModalOpen(false);
+              return _current.map((_pax, _i) => {
+                if (_i === _index)
+                  return formData;
+                else
+                  return _pax;
+              });
             }
-            return _current.map((_pax, _i) => {
-              if (_i === _index)
-                return formData;
-              else
-                return _pax;
-            });
           });
         }
       }
     }
     React.useEffect(() => {
       if (paxModalOpen[0] == true) {
+        setVisible(true);
         let _mode = paxModalOpen[1];
         setFormMode(_mode);
         if (_mode === "add") {
@@ -4741,102 +4869,116 @@
         }
       }
     }, [paxModalOpen]);
-    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "modal-overlay", onClick: closePaxModal, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "modal-content", onClick: (e) => e.stopPropagation(), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { className: "modal-close", onClick: closePaxModal, children: "\u2716" }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("h3", { children: [
-        formMode === "add" ? "Adicionar " : "Editar ",
-        " passageiro"
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
-        "form",
-        {
-          id: "paxForm",
-          onSubmit: (e) => {
-            e.preventDefault();
-            handleSubmitPaxForm(formMode);
-          },
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
-              "Nome:",
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                "input",
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+      "div",
+      {
+        className: `modal-overlay ${visible ? "show" : ""}`,
+        onClick: closePaxModal,
+        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+          "div",
+          {
+            className: `modal-content ${visible ? "show" : "hide"}`,
+            onClick: (e) => e.stopPropagation(),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { className: "modal-close", onClick: closePaxModal, children: "\u2716" }),
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("h3", { children: [
+                formMode === "edit" ? "Editar " : "Adicionar ",
+                " passageiro"
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+                "form",
                 {
-                  type: "text",
-                  name: "nome_completo",
-                  value: formData.nome_completo,
-                  onChange: (e) => setFormData({ ...formData, nome_completo: e.target.value }),
-                  onBlur: inputBlur
+                  id: "paxForm",
+                  onSubmit: (e) => {
+                    e.preventDefault();
+                    handleSubmitPaxForm(formMode);
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                      "Nome:",
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        "input",
+                        {
+                          type: "text",
+                          name: "nome_completo",
+                          value: formData.nome_completo,
+                          onChange: (e) => setFormData({ ...formData, nome_completo: e.target.value }),
+                          onBlur: inputBlur
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                      "CPF:",
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        "input",
+                        {
+                          type: "text",
+                          name: "cpf",
+                          maxLength: "14",
+                          value: formData.cpf,
+                          onBlur: inputBlur,
+                          onChange: inputChange
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                      "Celular (WhatsApp):",
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        "input",
+                        {
+                          maxLength: "15",
+                          type: "text",
+                          name: "celular",
+                          value: formData.celular,
+                          onBlur: inputBlur,
+                          onChange: inputChange
+                        }
+                      )
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                      "Data de nascimento:",
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        "input",
+                        {
+                          type: "date",
+                          name: "data_nascimento",
+                          value: formData.data_nascimento,
+                          onChange: inputChange,
+                          onBlur: inputBlur
+                        }
+                      )
+                    ] }),
+                    paxMenor && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "aviso-menor", id: "aviso-menor", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        "a",
+                        {
+                          href: "modelo-autorizacao.pdf",
+                          download: true,
+                          className: "icone-download",
+                          "aria-label": "Baixar modelo de autoriza\xE7\xE3o",
+                          children: "\u{1F4C4}"
+                        }
+                      ),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "texto-aviso", children: "Passageiro menor de idade. Clique para baixar o modelo de autoriza\xE7\xE3o." })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "modal-buttons", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        CustomSelectPaxModal_default,
+                        {
+                          setFormData,
+                          tripType: formData.tripType
+                        }
+                      ),
+                      formErrors.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", className: "saveBtn", disabled: true, children: "Salvar" }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", className: "saveBtn", children: "Salvar" })
+                    ] })
+                  ]
                 }
               )
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
-              "CPF:",
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                "input",
-                {
-                  type: "text",
-                  name: "cpf",
-                  maxLength: "14",
-                  value: formData.cpf,
-                  onBlur: inputBlur,
-                  onChange: inputChange
-                }
-              )
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
-              "Celular (WhatsApp):",
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                "input",
-                {
-                  maxLength: "15",
-                  type: "text",
-                  name: "celular",
-                  value: formData.celular,
-                  onBlur: inputBlur,
-                  onChange: inputChange
-                }
-              )
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
-              "Data de nascimento:",
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                "input",
-                {
-                  type: "date",
-                  name: "data_nascimento",
-                  value: formData.data_nascimento,
-                  onChange: inputChange,
-                  onBlur: inputBlur
-                }
-              )
-            ] }),
-            paxMenor && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "aviso-menor", id: "aviso-menor", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                "a",
-                {
-                  href: "modelo-autorizacao.pdf",
-                  download: true,
-                  className: "icone-download",
-                  "aria-label": "Baixar modelo de autoriza\xE7\xE3o",
-                  children: "\u{1F4C4}"
-                }
-              ),
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "texto-aviso", children: "Passageiro menor de idade. Clique para baixar o modelo de autoriza\xE7\xE3o." })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "modal-buttons", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                CustomSelectPaxModal_default,
-                {
-                  setFormData,
-                  tripType: formData.tripType
-                }
-              ),
-              formErrors.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", disabled: true, children: "Salvar" }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", children: "Salvar" })
-            ] })
-          ]
-        }
-      )
-    ] }) });
+            ]
+          }
+        )
+      }
+    );
   };
   PaxModal.propTypes = {
     setPaxModalOpen: import_prop_types6.default.func.isRequired,
@@ -4847,20 +4989,39 @@
   var PaxModal_default = PaxModal;
 
   // src/AppReservas/AppReservas.jsx
-  var import_prop_types8 = __toESM(require_prop_types());
+  var import_prop_types10 = __toESM(require_prop_types());
 
   // src/AppReservas/PaxCard.jsx
   var import_prop_types7 = __toESM(require_prop_types());
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
+    const cardRef = React.useRef(null);
     function removePax() {
+      const card = cardRef.current;
       if (window.confirm("Remover passageiro?")) {
-        setPassageiros((_current) => {
-          return _current.filter((_pax, _i) => _i != index);
-        });
+        if (card) {
+          card.classList.add("removing");
+          setTimeout(() => {
+            setPassageiros((_current) => {
+              return _current.filter((_pax, _i) => _i != index);
+            });
+          }, 500);
+        }
       }
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("article", { className: "passenger-card", children: [
+    React.useEffect(() => {
+      const card = cardRef.current;
+      if (card) {
+        const timeout = setTimeout(() => {
+          card.classList.add("highlight");
+          setTimeout(() => {
+            card.classList.remove("highlight");
+          }, 900);
+        }, 250);
+        return () => clearTimeout(timeout);
+      }
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("article", { className: "passenger-card", ref: cardRef, children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "avatar", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         "svg",
         {
@@ -4878,8 +5039,8 @@
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "info", children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "top-row", children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "name", children: pax.nome_completo }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "meta", children: "role" })
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "name", tabIndex: "0", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { className: "my-0", "data-fullname": pax.nome_completo, children: pax.nome_completo }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "meta", children: pax.tripType == "ida-e-volta" ? "Ida e volta" : "Apenas " + pax.tripType })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "pill", children: [
             "Passageiro #",
@@ -4913,15 +5074,213 @@
     ] });
   };
   PaxCard.propTypes = {
-    pax: import_prop_types7.default.obj,
+    pax: import_prop_types7.default.object,
     index: import_prop_types7.default.number,
     setPassageiros: import_prop_types7.default.func.isRequired,
     openPaxModal: import_prop_types7.default.func.isRequired
   };
   var PaxCard_default = PaxCard;
 
-  // src/AppReservas/AppReservas.jsx
+  // src/AppReservas/AvisosModal.jsx
+  var import_prop_types8 = __toESM(require_prop_types());
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+  var AvisosModal = ({
+    alertType,
+    setAvisosModalOpen,
+    openDateModal,
+    openEmbarqueModal
+  }) => {
+    const [visible, setVisible] = React.useState(false);
+    function closeAvisosModal(_action) {
+      setVisible(false);
+      setTimeout(() => {
+        if (_action === "goto-datas") {
+          openDateModal(true);
+        } else if (_action === "goto-embarques") {
+          openEmbarqueModal(true);
+        }
+        setAvisosModalOpen(false);
+      }, 300);
+    }
+    React.useEffect(() => {
+      setVisible(true);
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      "div",
+      {
+        className: `modal-overlay ${visible ? "show" : ""}`,
+        onClick: closeAvisosModal,
+        children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          "div",
+          {
+            className: `modal-content ${visible ? "show" : "hide"}`,
+            onClick: (e) => e.stopPropagation(),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { children: "Aviso" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                "div",
+                {
+                  className: "modal-warning",
+                  role: "alertdialog",
+                  "aria-labelledby": "modal-warning-title",
+                  "aria-describedby": "modal-warning-desc",
+                  children: [
+                    alertType == "sem-data-selecionada" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { id: "modal-warning-title", className: "visually-hidden", children: "Aviso de sele\xE7\xE3o de datas" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { id: "modal-warning-desc", className: "warning-message", children: "Selecione primeiro a(s) data(s) da excurs\xE3o." }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "warning-actions", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                          "button",
+                          {
+                            type: "button",
+                            className: "btn-primary",
+                            onClick: () => closeAvisosModal("goto-datas"),
+                            children: "Ir para sele\xE7\xE3o de datas"
+                          }
+                        ),
+                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                          "button",
+                          {
+                            type: "button",
+                            className: "btn-secondary",
+                            onClick: () => closeAvisosModal("cancel"),
+                            children: "Cancelar"
+                          }
+                        )
+                      ] })
+                    ] }),
+                    alertType == "sem-embarque-selecionado" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { id: "modal-warning-title", className: "visually-hidden", children: "Aviso de sele\xE7\xE3o de embarque" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                        "p",
+                        {
+                          id: "modal-warning-desc",
+                          className: "warning-message",
+                          onClick: () => closeAvisosModal("goto-embarques"),
+                          children: "Selecione primeiro o seu ponto de embarque."
+                        }
+                      ),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "warning-actions", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                          "button",
+                          {
+                            type: "button",
+                            className: "btn-primary",
+                            onClick: () => closeAvisosModal("goto-embarques"),
+                            children: "Ir para sele\xE7\xE3o de embarque"
+                          }
+                        ),
+                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                          "button",
+                          {
+                            type: "button",
+                            className: "btn-secondary",
+                            onClick: () => closeAvisosModal("cancel"),
+                            children: "Cancelar"
+                          }
+                        )
+                      ] })
+                    ] }),
+                    alertType == "max-vagas-atingido" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "error-container", role: "alert", "aria-live": "assertive", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "error-icon", children: "\u26A0\uFE0F" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "error-message", children: "N\xFAmero m\xE1ximo de vagas dispon\xEDveis atingido..." }),
+                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                        "button",
+                        {
+                          className: "close-button",
+                          type: "button",
+                          onClick: () => closeAvisosModal("cancel"),
+                          children: "Fechar"
+                        }
+                      )
+                    ] })
+                  ]
+                }
+              )
+            ]
+          }
+        )
+      }
+    );
+  };
+  AvisosModal.propTypes = {
+    alertType: import_prop_types8.default.string.isRequired,
+    setAvisosModalOpen: import_prop_types8.default.func.isRequired,
+    openEmbarqueModal: import_prop_types8.default.func.isRequired,
+    openDateModal: import_prop_types8.default.func.isRequired
+  };
+  var AvisosModal_default = AvisosModal;
+
+  // src/AppReservas/PrecoReservas.jsx
+  var import_prop_types9 = __toESM(require_prop_types());
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+  var PrecoReservas = ({
+    passageiros,
+    selectedDates,
+    precoUnitario,
+    totalCost
+  }) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, { children: passageiros.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "passenger-card total-reservation", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "coluna-esquerda", children: [
+        selectedDates.length == 1 && passageiros.length == 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "item", children: "Valor:" }) : null,
+        selectedDates.length == 1 && passageiros.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+            "Valor unit.: R$",
+            precoUnitario,
+            ",00"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+            "Passageiros: ",
+            passageiros.length
+          ] })
+        ] }) : null,
+        selectedDates.length > 1 && passageiros.length == 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+            "Valor unit.: R$",
+            precoUnitario,
+            ",00"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+            "Dias: ",
+            selectedDates.length
+          ] })
+        ] }) : null,
+        selectedDates.length > 1 && passageiros.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+            "Valor unit.: R$",
+            precoUnitario,
+            ",00"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+            "Passageiros: ",
+            passageiros.length
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+            "Dias: ",
+            selectedDates.length
+          ] })
+        ] }) : null
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "coluna-direita", children: [
+        passageiros.length > 1 || selectedDates.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "total", children: "Total" }) : null,
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "total", children: [
+          "R$",
+          totalCost,
+          ",00"
+        ] })
+      ] })
+    ] }) });
+  };
+  PrecoReservas.propTypes = {
+    passageiros: import_prop_types9.default.array.isRequired,
+    selectedDates: import_prop_types9.default.array.isRequired,
+    precoUnitario: import_prop_types9.default.number.isRequired,
+    totalCost: import_prop_types9.default.number.isRequired
+  };
+  var PrecoReservas_default = PrecoReservas;
+
+  // src/AppReservas/AppReservas.jsx
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
   function AppReservas({ variacoes, embarques, productId }) {
     const [availableDates, setAvailableDates] = React.useState([]);
     const [selectedDates, setSelectedDates] = React.useState([]);
@@ -4929,19 +5288,55 @@
     const [dateModalOpen, setDateModalOpen] = React.useState(false);
     const [embarqueModalOpen, setEmbarqueModalOpen] = React.useState(false);
     const [paxModalOpen, setPaxModalOpen] = React.useState(false);
+    const [avisosModalOpen, setAvisosModalOpen] = React.useState(false);
     const [embarque, setEmbarque] = React.useState([]);
     const [horario, setHorario] = React.useState(null);
+    const [maxVagas, setMaxVagas] = React.useState(null);
     const [passageiros, setPassageiros] = React.useState([]);
+    const [precoUnitario, setPrecoUnitario] = React.useState(0);
+    const [taxa, setTaxa] = React.useState(0);
+    const botaoContinuarRef = React.useRef();
+    const totalCost = precoUnitario * passageiros.length * selectedDates.length;
+    React.useEffect(() => {
+      const temData = selectedDates.length > 0;
+      const temEmbarque = embarque.length > 0;
+      const temHorario = horario && horario.length > 0;
+      const temPassageiros = passageiros.length > 0;
+      if (temData && temEmbarque && temHorario && temPassageiros) {
+        botaoContinuarRef.current.removeAttribute("disabled");
+      } else {
+        botaoContinuarRef.current.setAttribute("disabled", "");
+      }
+    }, [selectedDates, embarque, horario, passageiros]);
+    function submitToCart() {
+      console.log("chamou submitToCart");
+      const submitQty = passageiros.length;
+      const submitTaxa = taxa;
+      const submitEmbarque = embarque ? embarque[0].embarqueId : null;
+      const submitHorario = horario;
+      const submitPax = passageiros.length > 0 ? passageiros : null;
+      selectedDates.forEach((_date) => {
+        const submitVarId = getVarIdByDate(_date);
+        console.log(
+          submitQty,
+          submitTaxa,
+          submitEmbarque,
+          submitHorario,
+          submitPax,
+          submitVarId
+        );
+      });
+    }
     function openDateModal() {
       setDateModalOpen(true);
       setAvailableDates([]);
       variacoes.map((variacao) => {
         let _dia = variacao.attributes.attribute_dia;
-        let _disponiveis = variacao.availability_html.slice(29).replace("</p>", "");
+        let _disponiveis = getAvailabilityById(variacao.variation_id);
         setAvailableDates((_previous) => {
           _previous.push({
             dia: _dia,
-            disponiveis: _disponiveis.trimEnd(),
+            disponiveis: _disponiveis,
             encerrado: variacao.encerrar_vendas,
             variacao: variacao.variation_id
           });
@@ -4953,11 +5348,22 @@
       if (selectedDates.length > 0)
         setEmbarqueModalOpen(true);
       else {
-        openDateModal();
+        setAvisosModalOpen("sem-data-selecionada");
       }
     }
     function openPaxModal(mode = "add", paxData = null, index = null) {
-      setPaxModalOpen([true, mode, paxData, index]);
+      if (selectedDates.length < 1) {
+        setAvisosModalOpen("sem-data-selecionada");
+        return;
+      } else if (embarque.length < 1) {
+        setAvisosModalOpen("sem-embarque-selecionado");
+        return;
+      } else {
+        if (maxVagas <= passageiros.length)
+          setAvisosModalOpen("max-vagas-atingido");
+        else
+          setPaxModalOpen([true, mode, paxData, index]);
+      }
     }
     function parseDate(str) {
       const [day, month, year] = str.split("/");
@@ -4969,24 +5375,27 @@
       );
       return foundVar ? foundVar.variation_id : void 0;
     };
-    const toggleDate = (_received_data_varid) => {
+    const getAvailabilityById = (_id) => {
+      const _var = variacoes.filter((_v) => _v.variation_id == _id)[0];
+      const _payload = _var.availability_html;
+      const _html = new DOMParser().parseFromString(_payload, "text/html");
+      return _html.querySelector("p")?.textContent || 0;
+    };
+    const toggleDate = (dataPayload) => {
       setSelectedDates([]);
       setVariacoesSelecionadas([]);
       setEmbarque([]);
-      if (!_received_data_varid || _received_data_varid.length === 0) {
+      if (!dataPayload || dataPayload.length === 0) {
         return;
-      } else if (_received_data_varid.length > 0) {
-        setSelectedDates(() => {
-          return _received_data_varid.map((_date_varid) => _date_varid[0]);
-        });
-        setVariacoesSelecionadas(() => {
-          return _received_data_varid.map((_date_varid) => _date_varid[1]);
-        });
+      } else if (dataPayload.length > 0) {
+        const arrayDatas = dataPayload.map((_payload) => _payload[0]);
+        const sorted = arrayDatas.sort((a, b) => parseDate(a) - parseDate(b));
+        setSelectedDates(sorted);
+        const arrayVarIds = dataPayload.map((_payload) => _payload[1]);
+        setVariacoesSelecionadas(() => arrayVarIds);
+        const vagasPorDia = dataPayload.map((_payload) => +_payload[2]);
+        setMaxVagas(Math.min(...vagasPorDia));
       }
-      setSelectedDates((prevDates) => {
-        const sortedDates = prevDates.sort((a, b) => parseDate(a) - parseDate(b));
-        return sortedDates;
-      });
     };
     const toggleEmbarque = (embId) => {
       embarques.forEach((_emb) => {
@@ -4996,11 +5405,9 @@
       });
     };
     const [variacaoAtual, setVariacaoAtual] = React.useState(null);
-    const [taxa, setTaxa] = React.useState(0);
     const [horariosEmbarque, setHorariosEmbarque] = React.useState(null);
     const [botaoContinuar, setBotaoContinuar] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-    const [preco, setPreco] = React.useState(false);
     const [precoPadrao, setPrecoPadrao] = React.useState(false);
     const [vagasVar, setVagasVar] = React.useState(null);
     React.useEffect(() => {
@@ -5010,7 +5417,6 @@
     React.useEffect(() => {
       if (variacaoAtual)
         setPrecoPadrao(+variacaoAtual.display_regular_price);
-      setPreco(false);
       setPassageiros([]);
       setHorariosEmbarque(null);
       const horariosWrapper = document.querySelector(
@@ -5079,59 +5485,67 @@
         document.querySelector(".single_add_to_cart_button").removeAttribute("disabled");
       }
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { id: "newReservasContainer", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "main-title", children: "Fa\xE7a aqui sua reserva" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "section-title", children: "Data e local de embarque" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid-row", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { id: "newReservasContainer", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "main-title", children: "Fa\xE7a aqui sua reserva" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "section-title", children: "Data e local de embarque" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "grid-row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
             "div",
             {
               className: "grid-item clickable grid-dates",
               "data-fill": selectedDates.length < 1 ? "false" : "true",
               onClick: openDateModal,
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F4C5}" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: selectedDates.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "empty-text-placeholder", children: "Selecionar data..." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "box-title", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "icon", children: "\u{1F4C5}" }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "text", children: selectedDates.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "empty-text-placeholder", children: [
+                  "Selecionar",
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
+                  " data..."
+                ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "box-title", children: [
                     selectedDates.length > 1 ? "Datas selecionadas" : "Data selecionada",
                     ":",
                     " "
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("ul", { children: selectedDates.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("li", { children: d }, i)) })
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("ul", { className: selectedDates.length > 1 ? "multi" : "", children: selectedDates.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("li", { children: d }, i)) })
                 ] }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
             "div",
             {
               className: "grid-item clickable grid-embarque",
               "data-fill": embarque.length < 1 ? "false" : "true",
               onClick: openEmbarqueModal,
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-embarque d-flex", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F68F}" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: embarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "empty-text-placeholder", children: "Selecionar embarque..." }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "box-title", children: "Embarque" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: embarque && embarque[0].nome })
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sub-embarque d-flex", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "icon", children: "\u{1F68F}" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "text", children: embarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "empty-text-placeholder", children: [
+                    "Selecionar ",
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
+                    "embarque..."
+                  ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "box-title", children: "Embarque" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: embarque && embarque[0].nome })
                   ] }) })
                 ] }),
-                embarque.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-horario d-flex mt-2", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F559}" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: horario ? horario : "--:--" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: " " })
+                embarque.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sub-horario d-flex mt-2", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "icon", children: "\u{1F559}" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: horario ? horario : "--:--" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "text", children: " " })
                 ] }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
               ]
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "section-title", children: "Passageiros" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "passenger-list", children: [
-          passageiros.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: passageiros.map((_pax, index) => {
-            return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "section-title", children: "Passageiros" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "passenger-list", children: [
+          passageiros.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: passageiros.map((_pax, index) => {
+            return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
               PaxCard_default,
               {
                 pax: _pax,
@@ -5141,20 +5555,39 @@
               },
               _pax.cpf
             );
-          }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "placeholder-container mt-1", children: 'Nenhum passageiro adicionado. Clique em "Adicionar novo passageiro" para come\xE7ar.' }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "placeholder-container mt-1", children: 'Nenhum passageiro adicionado. Clique em "Adicionar novo passageiro" para come\xE7ar.' }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
             "div",
             {
               className: "passenger-card add-passenger",
               onClick: () => openPaxModal("add"),
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "avatar", children: "\u2795" }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "info", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "top-row", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "name", children: "Adicionar novo passageiro" }) }) })
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "avatar", children: "\u2795" }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "info", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "top-row", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "name", children: "Adicionar novo passageiro" }) }) })
               ]
             }
           )
         ] }),
-        embarqueModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          PrecoReservas_default,
+          {
+            passageiros,
+            selectedDates,
+            precoUnitario,
+            totalCost
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          "button",
+          {
+            id: "reservasContinuar",
+            ref: botaoContinuarRef,
+            className: "single_add_to_cart_button",
+            onClick: submitToCart,
+            children: "Continuar"
+          }
+        ),
+        embarqueModalOpen && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           EmbarqueModal_default,
           {
             setEmbarqueModalOpen,
@@ -5165,10 +5598,13 @@
             selectedDates,
             variacoes,
             getVarIdByDate,
-            setHorario
+            setHorario,
+            variacoesSelecionadas,
+            setPrecoUnitario,
+            setTaxa
           }
         ),
-        dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           DatesModal_default,
           {
             setDateModalOpen,
@@ -5176,11 +5612,11 @@
             selectedDates,
             toggleDate,
             getVarIdByDate,
-            setVariacoesSelecionadas,
-            setSelectedDates
+            getAvailabilityById,
+            passageiros
           }
         ),
-        paxModalOpen != false && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        paxModalOpen != false && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           PaxModal_default,
           {
             setPaxModalOpen,
@@ -5188,11 +5624,20 @@
             selectedDates,
             setPassageiros
           }
+        ),
+        avisosModalOpen && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          AvisosModal_default,
+          {
+            alertType: avisosModalOpen,
+            setAvisosModalOpen,
+            openDateModal,
+            openEmbarqueModal
+          }
         )
       ] }),
-      embarques && variacoes.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "datas mb-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mb-0", children: "Datas teste" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "datas-badges-wrapper", children: variacoes.map((variacao, i) => {
+      embarques && variacoes.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "datas mb-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mb-0", children: "Datas teste" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "datas-badges-wrapper", children: variacoes.map((variacao, i) => {
           let v_dia = variacao.attributes.attribute_dia;
           let v_disponiveis = variacao.availability_html.slice(29).replace("</p>", "");
           let badgeClasses = " ";
@@ -5205,7 +5650,7 @@
               badgeClasses += "red ";
             }
           }
-          return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
             "span",
             {
               className: "badge-dia disp" + badgeClasses,
@@ -5220,36 +5665,36 @@
           );
         }) })
       ] }) }),
-      embarques && variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { id: "info-container", className: "pt-1", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+      embarques && variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { id: "info-container", className: "pt-1", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
         "div",
         {
           className: "variacao-info",
           "data-dia": variacaoAtual.attributes.attribute_dia,
           "data-variacao-id": variacaoAtual.variation_id,
           children: [
-            !variacaoAtual.encerrar_vendas && vagasVar != 0 && vagasVar < 10 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "alerta-vagas ultimos mb-2", children: [
+            !variacaoAtual.encerrar_vendas && vagasVar != 0 && vagasVar < 10 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "alerta-vagas ultimos mb-2", children: [
               "Restam ",
               vagasVar,
               " vagas"
             ] }) : null,
-            !variacaoAtual.encerrar_vendas && !vagasVar ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "alerta-vagas esgotado", children: "Vagas esgotadas" }) : null,
-            variacaoAtual.attributes.attribute_dia.startsWith("volta") ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "so-volta-header", children: [
+            !variacaoAtual.encerrar_vendas && !vagasVar ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "alerta-vagas esgotado", children: "Vagas esgotadas" }) : null,
+            variacaoAtual.attributes.attribute_dia.startsWith("volta") ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "so-volta-header", children: [
               "Apenas volta para",
               " ",
               variacaoAtual.attributes.attribute_dia.split(" - ")[1],
               "- desembarque nos mesmos locais de embarque"
-            ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("small", { className: "dia-selecionado d-block mb-3", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "mb-sm-1 mb-0 d-inline", children: "Dia selecionado:\xA0" }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "d-inline", children: variacaoAtual.attributes.attribute_dia })
+            ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("small", { className: "dia-selecionado d-block mb-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "mb-sm-1 mb-0 d-inline", children: "Dia selecionado:\xA0" }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "d-inline", children: variacaoAtual.attributes.attribute_dia })
             ] }) }),
-            variacaoAtual.encerrar_vendas ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "vendas_encerradas_container", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "Vendas encerradas para essa excurs\xE3o." }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "vendas_ativas_container", children: [
+            variacaoAtual.encerrar_vendas ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "vendas_encerradas_container", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { children: "Vendas encerradas para essa excurs\xE3o." }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "vendas_ativas_container", children: [
               variacaoAtual.attributes.attribute_dia.startsWith(
                 "volta"
-              ) ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "Reserva v\xE1lida apenas para volta do evento!" }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+              ) ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { children: "Reserva v\xE1lida apenas para volta do evento!" }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
                 " ",
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "modulo_locais_embarque", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mt-2 mb-0", children: "Locais de embarque" }),
-                  embarques.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "modulo_locais_embarque", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mt-2 mb-0", children: "Locais de embarque" }),
+                  embarques.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
                     "select",
                     {
                       defaultValue: "none",
@@ -5258,7 +5703,7 @@
                       "data-variacao-id": variacaoAtual.variation_id,
                       onChange: handleSelectEmbarque,
                       children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("option", { value: "none", disabled: true, children: "Selecione..." }),
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "none", disabled: true, children: "Selecione..." }),
                         embarques.map((embarque2) => {
                           let diaDaVar = variacaoAtual.attributes.attribute_dia;
                           let disponibilidadesDoEmbarque = embarque2.horarios.map((_horarioObj) => {
@@ -5285,9 +5730,9 @@
                               (_horario, _i) => _horario[_i] && _horario[_i].status === "indisponivel"
                             );
                           }
-                          return todosIndisponiveis === false ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                          return todosIndisponiveis === false ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
                             "(",
-                            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                               "option",
                               {
                                 value: embarque2.nome,
@@ -5300,9 +5745,9 @@
                               embarque2.embarqueId
                             ),
                             ")"
-                          ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                          ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
                             "(",
-                            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
                               "option",
                               {
                                 disabled: true,
@@ -5321,16 +5766,16 @@
                       ]
                     },
                     variacaoAtual.variation_id
-                  ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("i", { children: "Locais de embarque n\xE3o definidos" })
+                  ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("i", { children: "Locais de embarque n\xE3o definidos" })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "module_horarios_embarque", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mt-3 my-1", children: "Hor\xE1rios" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "module_horarios_embarque", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mt-3 my-1", children: "Hor\xE1rios" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                     "div",
                     {
                       className: embarque ? "horarios-wrapper show-alert" : "horarios-wrapper",
                       children: horariosEmbarque ? horariosEmbarque.map((horario2) => {
-                        return horario2[0].status !== "indisponivel" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                        return horario2[0].status !== "indisponivel" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                           "span",
                           {
                             className: "emb_horario",
@@ -5340,23 +5785,23 @@
                           },
                           horario2[0].horario
                         ) }) : null;
-                      }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("i", { children: "Selecione o local de embarque primeiro" })
+                      }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("i", { children: "Selecione o local de embarque primeiro" })
                     }
                   )
                 ] })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "modulo_preco mb-3", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "label mt-sm-4 mt-3 mb-0", children: "Valor" }),
-                preco ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "info", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "modulo_preco mb-3", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mt-sm-4 mt-3 mb-0", children: "Valor" }),
+                preco ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "info", children: [
                     "R$ ",
                     preco,
                     ",00"
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: "por passageiro" })
-                ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("i", { children: "Selecione o local de embarque primeiro" })
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: "por passageiro" })
+                ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("i", { children: "Selecione o local de embarque primeiro" })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                 Passageiros_default,
                 {
                   passageiros,
@@ -5371,7 +5816,7 @@
                   taxa
                 }
               ),
-              variacaoAtual.max_qty !== "" && variacaoAtual.max_qty >= 1 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              variacaoAtual.max_qty !== "" && variacaoAtual.max_qty >= 1 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                 "button",
                 {
                   className: "btn btn-dark mt-sm-4 mt-2 btn-lg btn-reservar",
@@ -5384,21 +5829,21 @@
         },
         variacaoAtual.variation_id
       ) }) }) : null,
-      embarques && variacoes.length > 1 && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { id: "info-placeholder", className: "my-5", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: variacoes.length > 1 ? "Selecione uma das op\xE7\xF5es acima para ver mais detalhes" : "Aguarde..." }) }) : null,
-      !embarques && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "mt-5", children: "Mais informa\xE7\xF5es sobre essa excurs\xE3o em breve!" }) : null
+      embarques && variacoes.length > 1 && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { id: "info-placeholder", className: "my-5", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { children: variacoes.length > 1 ? "Selecione uma das op\xE7\xF5es acima para ver mais detalhes" : "Aguarde..." }) }) : null,
+      !embarques && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "mt-5", children: "Mais informa\xE7\xF5es sobre essa excurs\xE3o em breve!" }) : null
     ] }) });
   }
   AppReservas.propTypes = {
-    variacoes: import_prop_types8.default.array.isRequired,
-    embarques: import_prop_types8.default.array.isRequired,
-    nome: import_prop_types8.default.string,
-    productId: import_prop_types8.default.number.isRequired
+    variacoes: import_prop_types10.default.array.isRequired,
+    embarques: import_prop_types10.default.array.isRequired,
+    nome: import_prop_types10.default.string,
+    productId: import_prop_types10.default.number.isRequired
   };
   var reservas_app_root = document.getElementById("reserva_app");
   addEventListener("DOMContentLoaded", () => {
     if (reservas_app_root) {
       ReactDOM.createRoot(reservas_app_root).render(
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
           AppReservas,
           {
             variacoes: JSON.parse(reservas_app_root.dataset.variacoes),

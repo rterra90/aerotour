@@ -7,6 +7,8 @@ import EmbarqueModal from './EmbarqueModal.jsx';
 import PaxModal from './PaxModal.jsx';
 import PropTypes from 'prop-types';
 import PaxCard from './PaxCard.jsx';
+import AvisosModal from './AvisosModal.jsx'; // Ensure this path is correct
+import PrecoReservas from './PrecoReservas.jsx'; // Ensure this path is correct
 
 function AppReservas({ variacoes, embarques, productId }) {
   const [availableDates, setAvailableDates] = React.useState([]);
@@ -15,9 +17,48 @@ function AppReservas({ variacoes, embarques, productId }) {
   const [dateModalOpen, setDateModalOpen] = React.useState(false);
   const [embarqueModalOpen, setEmbarqueModalOpen] = React.useState(false);
   const [paxModalOpen, setPaxModalOpen] = React.useState(false);
+  const [avisosModalOpen, setAvisosModalOpen] = React.useState(false);
   const [embarque, setEmbarque] = React.useState([]);
   const [horario, setHorario] = React.useState(null);
+  const [maxVagas, setMaxVagas] = React.useState(null);
   const [passageiros, setPassageiros] = React.useState([]);
+  const [precoUnitario, setPrecoUnitario] = React.useState(0);
+  const [taxa, setTaxa] = React.useState(0);
+  const botaoContinuarRef = React.useRef();
+
+  const totalCost = precoUnitario * passageiros.length * selectedDates.length;
+
+  React.useEffect(() => {
+    const temData = selectedDates.length > 0;
+    const temEmbarque = embarque.length > 0;
+    const temHorario = horario && horario.length > 0;
+    const temPassageiros = passageiros.length > 0;
+    if (temData && temEmbarque && temHorario && temPassageiros) {
+      botaoContinuarRef.current.removeAttribute('disabled');
+    } else {
+      botaoContinuarRef.current.setAttribute('disabled', '');
+    }
+  }, [selectedDates, embarque, horario, passageiros]);
+
+  function submitToCart() {
+    console.log('chamou submitToCart');
+    const submitQty = passageiros.length;
+    const submitTaxa = taxa;
+    const submitEmbarque = embarque ? embarque[0].embarqueId : null;
+    const submitHorario = horario;
+    const submitPax = passageiros.length > 0 ? passageiros : null;
+    selectedDates.forEach((_date) => {
+      const submitVarId = getVarIdByDate(_date);
+      console.log(
+        submitQty,
+        submitTaxa,
+        submitEmbarque,
+        submitHorario,
+        submitPax,
+        submitVarId,
+      );
+    });
+  }
 
   function openDateModal() {
     setDateModalOpen(true);
@@ -26,14 +67,12 @@ function AppReservas({ variacoes, embarques, productId }) {
     //obter as datas
     variacoes.map((variacao) => {
       let _dia = variacao.attributes.attribute_dia;
-      let _disponiveis = variacao.availability_html
-        .slice(29)
-        .replace('</p>', '');
+      let _disponiveis = getAvailabilityById(variacao.variation_id);
 
       setAvailableDates((_previous) => {
         _previous.push({
           dia: _dia,
-          disponiveis: _disponiveis.trimEnd(),
+          disponiveis: _disponiveis,
           encerrado: variacao.encerrar_vendas,
           variacao: variacao.variation_id,
         });
@@ -45,12 +84,23 @@ function AppReservas({ variacoes, embarques, productId }) {
   function openEmbarqueModal() {
     if (selectedDates.length > 0) setEmbarqueModalOpen(true);
     else {
-      openDateModal();
+      setAvisosModalOpen('sem-data-selecionada');
     }
   }
 
   function openPaxModal(mode = 'add', paxData = null, index = null) {
-    setPaxModalOpen([true, mode, paxData, index]);
+    //verifica se já existe data e embarque selecionados, se não houver exibe um alert
+    if (selectedDates.length < 1) {
+      setAvisosModalOpen('sem-data-selecionada');
+      return;
+    } else if (embarque.length < 1) {
+      setAvisosModalOpen('sem-embarque-selecionado');
+      return;
+    } else {
+      if (maxVagas <= passageiros.length)
+        setAvisosModalOpen('max-vagas-atingido');
+      else setPaxModalOpen([true, mode, paxData, index]);
+    }
   }
 
   // Função para converter "dd/mm/aaaa" em objeto Date
@@ -67,31 +117,34 @@ function AppReservas({ variacoes, embarques, productId }) {
     return foundVar ? foundVar.variation_id : undefined;
   };
 
-  const toggleDate = (_received_data_varid) => {
+  const getAvailabilityById = (_id) => {
+    const _var = variacoes.filter((_v) => _v.variation_id == _id)[0];
+    const _payload = _var.availability_html;
+    const _html = new DOMParser().parseFromString(_payload, 'text/html');
+    return _html.querySelector('p')?.textContent || 0;
+  };
+
+  const toggleDate = (dataPayload) => {
     setSelectedDates([]);
     setVariacoesSelecionadas([]);
     setEmbarque([]);
-    if (!_received_data_varid || _received_data_varid.length === 0) {
+    if (!dataPayload || dataPayload.length === 0) {
       return;
-    } else if (_received_data_varid.length > 0) {
-      setSelectedDates(() => {
-        return _received_data_varid.map((_date_varid) => _date_varid[0]);
-      });
-      setVariacoesSelecionadas(() => {
-        return _received_data_varid.map((_date_varid) => _date_varid[1]);
-      });
-    }
+    } else if (dataPayload.length > 0) {
+      const arrayDatas = dataPayload.map((_payload) => _payload[0]);
+      const sorted = arrayDatas.sort((a, b) => parseDate(a) - parseDate(b));
+      setSelectedDates(sorted);
 
-    setSelectedDates((prevDates) => {
-      const sortedDates = prevDates.sort((a, b) => parseDate(a) - parseDate(b));
-      return sortedDates;
-    });
-    // }
+      const arrayVarIds = dataPayload.map((_payload) => _payload[1]);
+      setVariacoesSelecionadas(() => arrayVarIds);
+
+      //verifica disponibilidade de vagas nas datas selecionadas
+      const vagasPorDia = dataPayload.map((_payload) => +_payload[2]);
+      setMaxVagas(Math.min(...vagasPorDia));
+    }
   };
 
   const toggleEmbarque = (embId) => {
-    // setEmbarque([]);
-
     embarques.forEach((_emb) => {
       if (_emb.embarqueId == embId) {
         setEmbarque([_emb]);
@@ -99,16 +152,16 @@ function AppReservas({ variacoes, embarques, productId }) {
     });
   };
 
+  // gtag('event', 'botao_reserva_click', {});
+
   // BARREIRA
 
   const [variacaoAtual, setVariacaoAtual] = React.useState(null);
   // const [embarque, setEmbarque] = React.useState(null);
-  const [taxa, setTaxa] = React.useState(0);
   const [horariosEmbarque, setHorariosEmbarque] = React.useState(null);
   // const [passageiros, setPassageiros] = React.useState([]);
   const [botaoContinuar, setBotaoContinuar] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [preco, setPreco] = React.useState(false);
   const [precoPadrao, setPrecoPadrao] = React.useState(false);
   const [vagasVar, setVagasVar] = React.useState(null);
 
@@ -117,15 +170,9 @@ function AppReservas({ variacoes, embarques, productId }) {
     if (variacoes.length === 1 && embarques) setVariacaoAtual(variacoes[0]);
   }, []);
 
-  // React.useEffect(() => {                      //LIXO
-  //   setHorario(null);
-  //   if (!embarque) setPreco(false);
-  //   else setPreco(precoPadrao + taxa);
-  // }, [embarque, variacaoAtual]);
-
   React.useEffect(() => {
     if (variacaoAtual) setPrecoPadrao(+variacaoAtual.display_regular_price);
-    setPreco(false);
+    // setPreco(false);
     setPassageiros([]);
     setHorariosEmbarque(null);
     const horariosWrapper = document.querySelector(
@@ -231,7 +278,8 @@ function AppReservas({ variacoes, embarques, productId }) {
               <div className="text">
                 {selectedDates.length === 0 ? (
                   <span className="empty-text-placeholder">
-                    Selecionar data...
+                    Selecionar
+                    <br /> data...
                   </span>
                 ) : (
                   <>
@@ -241,7 +289,7 @@ function AppReservas({ variacoes, embarques, productId }) {
                         : 'Data selecionada'}
                       :{' '}
                     </span>
-                    <ul>
+                    <ul className={selectedDates.length > 1 ? 'multi' : ''}>
                       {selectedDates.map((d, i) => (
                         <li key={i}>{d}</li>
                       ))}
@@ -263,7 +311,8 @@ function AppReservas({ variacoes, embarques, productId }) {
                 <div className="text">
                   {embarque.length === 0 ? (
                     <span className="empty-text-placeholder">
-                      Selecionar embarque...
+                      Selecionar <br />
+                      embarque...
                     </span>
                   ) : (
                     <>
@@ -313,6 +362,7 @@ function AppReservas({ variacoes, embarques, productId }) {
               </>
             )}
 
+            {/* Botao Adicionar passageiro */}
             <div
               className="passenger-card add-passenger"
               onClick={() => openPaxModal('add')}
@@ -326,6 +376,23 @@ function AppReservas({ variacoes, embarques, productId }) {
             </div>
           </div>
 
+          <PrecoReservas
+            passageiros={passageiros}
+            selectedDates={selectedDates}
+            precoUnitario={precoUnitario}
+            totalCost={totalCost}
+          />
+
+          <button
+            id="reservasContinuar"
+            ref={botaoContinuarRef}
+            className="single_add_to_cart_button"
+            // disabled={!(passengers.length > 0 && termsChecked)}
+            onClick={submitToCart}
+          >
+            Continuar
+          </button>
+
           {/* Modal de embarque */}
           {embarqueModalOpen && (
             <EmbarqueModal
@@ -338,6 +405,9 @@ function AppReservas({ variacoes, embarques, productId }) {
               variacoes={variacoes}
               getVarIdByDate={getVarIdByDate}
               setHorario={setHorario}
+              variacoesSelecionadas={variacoesSelecionadas}
+              setPrecoUnitario={setPrecoUnitario}
+              setTaxa={setTaxa}
             />
           )}
 
@@ -349,8 +419,8 @@ function AppReservas({ variacoes, embarques, productId }) {
               selectedDates={selectedDates}
               toggleDate={toggleDate}
               getVarIdByDate={getVarIdByDate}
-              setVariacoesSelecionadas={setVariacoesSelecionadas}
-              setSelectedDates={setSelectedDates}
+              getAvailabilityById={getAvailabilityById}
+              passageiros={passageiros}
             />
           )}
 
@@ -361,6 +431,16 @@ function AppReservas({ variacoes, embarques, productId }) {
               paxModalOpen={paxModalOpen}
               selectedDates={selectedDates}
               setPassageiros={setPassageiros}
+            />
+          )}
+
+          {/* Modal de avisos */}
+          {avisosModalOpen && (
+            <AvisosModal
+              alertType={avisosModalOpen}
+              setAvisosModalOpen={setAvisosModalOpen}
+              openDateModal={openDateModal}
+              openEmbarqueModal={openEmbarqueModal}
             />
           )}
         </div>

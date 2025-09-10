@@ -1,22 +1,54 @@
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeOutScale {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.passenger-card.removing {
+  animation: fadeOutScale 500ms ease forwards;
+  background-color: #ffe5e5;
+  box-shadow: 0 0 0px 1px #e6c7c7;
+}
+
 .passenger-card {
   display: flex;
   gap: 12px;
   align-items: center;
-  background: #e9e9e9;
+  background: var(--pax-card-bg-light);
   box-shadow: 0 0 0px 1px #c9c9c9;
   border-radius: 0.4rem;
   padding: 10px 14px;
   min-height: 56px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease,
+    background-color 700ms ease;
   width: 100%;
-  max-width: 400px;
+  /* max-width: 400px; */
   min-width: 300px;
   position: relative;
+  animation: slideFadeIn 500ms ease;
 }
 
 .passenger-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 0px 2px #cbcbcb;
+}
+
+.passenger-card.highlight {
+  background-color: #e0ffe0; /* verde claro, sensação de sucesso */
 }
 
 .avatar {
@@ -66,20 +98,55 @@
   gap: 8px;
   justify-content: space-between;
   padding-left: 46px;
+  min-height: 40px;
 }
-
+.top-row > div:first-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
 .name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: inherit;
   white-space: nowrap;
-  overflow: hidden;
+  position: relative;
+}
+.name p {
   text-overflow: ellipsis;
+  overflow: hidden;
+}
+.name.ellipsed p {
+  cursor: help;
+}
+
+.name p::after {
+  content: attr(data-fullname);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #333;
+  color: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: normal;
+  max-width: 250px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.name p:hover::after,
+.name p:focus::after {
+  opacity: 1;
 }
 
 .meta {
   font-size: 12px;
-  color: var(--muted);
+  color: #838383;
+  text-transform: uppercase;
+  font-size: 0.55rem;
 }
 
 dl {
@@ -102,11 +169,14 @@ dd {
 }
 
 .pill {
-  font-size: 12px;
-  padding: 4px 8px;
+  font-size: 0.65rem;
+  padding: 3px 6px;
   border-radius: 999px;
   border: 1px solid rgba(15, 23, 42, 0.05);
-  background: transparent;
+  background: #dfdfdf;
+  min-width: fit-content;
+  width: fit-content;
+  white-space: nowrap;
 }
 .edit-pencil,
 .remove-pencil {

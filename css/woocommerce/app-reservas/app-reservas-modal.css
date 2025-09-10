@@ -10,6 +10,14 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms ease, visibility 300ms ease;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
@@ -20,6 +28,19 @@
   width: 90%;
   position: relative;
   box-shadow: 0 12px 28px rgba(2, 6, 23, 0.15);
+  transform: translateY(-30px);
+  opacity: 0;
+  transition: all 300ms ease;
+}
+
+.modal-content.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.modal-content.hide {
+  transform: translateY(-30px);
+  opacity: 0;
 }
 
 .modal-close {
@@ -46,32 +67,18 @@
 }
 
 .modal-buttons button {
-  padding: 6px 12px;
+  padding: 5px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.modal-buttons button[type='submit'] {
-  background: #3182ce;
-  color: white;
-}
-.modal-buttons button[type='submit']:disabled {
-  background: #e2e8f0;
-  color: #a0aec0;
-  cursor: not-allowed;
-}
-
-/* .modal-buttons button[type='button'] {
-  background: #e5e7eb;
-  color: #111;
-} */
 .modal-buttons button.saveBtn {
   background-color: #3182ce;
-  color: #ffffff;
+  color: #f9f9f9;
   border: none;
   border-radius: 8px;
-  padding: 12px 20px;
+  padding: 8px 18px;
   font-size: 16px;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(49, 130, 206, 0.2);
@@ -81,21 +88,22 @@
   background-color: #2b6cb0;
   box-shadow: 0 6px 14px rgba(49, 130, 206, 0.3);
 }
-.modal-buttons button.saveBtn.disabled {
+.modal-buttons button.saveBtn:disabled:hover {
+  background-color: #e2e8f0;
+  box-shadow: unset;
+}
+.modal-buttons button.saveBtn:disabled {
   background-color: #e2e8f0;
   color: #a0aec0;
   border: none;
   border-radius: 8px;
-  padding: 12px 20px;
+  padding: 8px 18px;
   font-size: 16px;
-  cursor: not-allowed;
   opacity: 0.7;
   transition: background-color 0.3s;
-}
-.modal-buttons button.saveBtn.disabled:hover {
-  background-color: #e2e8f0;
   box-shadow: unset;
 }
+
 #newReservasContainer .modal-content h3 {
   font-size: 1rem;
 }
@@ -144,9 +152,21 @@
   top: -9px;
 }
 /*MODAL EMBARQUE*/
+/* Responsividade */
+@media (max-width: 600px) {
+  .embarque-details {
+    padding: 1rem;
+  }
+
+  .embarque-details-inner .horario-single {
+    font-size: 1.3rem;
+  }
+
+  .embarque-details-inner.price p {
+    font-size: 1rem;
+  }
+}
 .modal-content[data-modal='embarque'] select {
-  /* padding: 8px 6px;
-  margin-top: 10px; */
   appearance: none;
   background-color: #f7fafc;
   border: 1px solid #cbd5e0;
@@ -165,22 +185,34 @@
   border-color: #3182ce;
   box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
 }
-.embarque-details-inner {
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #878787;
-  border-radius: 10px;
-  max-width: 600px;
-  margin: 12px auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  font-family: sans-serif;
-  color: #2d3748;
+.embarque-details {
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  max-width: 100%;
+}
+.embarque-details-inner p.price {
+  font-size: 1.1rem;
+  font-weight: 500;
+  background-color: #fff3e0;
+  background: linear-gradient(135deg, #d8e5ef, #cedbe5);
+  color: #5851ad;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin: 16px 0 0 0;
+}
+.embarque-details-inner p.price i {
+  font-size: 0.85rem;
 }
 
-.embarque-details-inner .title {
-  margin-bottom: 6px;
-  font-size: 1.15rem;
-  text-align: center;
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #444;
 }
 
 .embarque-details-inner .horarios .multi-radios {
@@ -189,7 +221,15 @@
   margin-bottom: 24px;
   justify-content: center;
 }
-
+.embarque-details-inner .horario-single {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
 .embarque-details-inner .horario-opcao {
   display: flex;
   align-items: center;
@@ -212,21 +252,21 @@
 }
 
 .embarque-details-inner .localizacao p.info {
-  margin: 2px 0;
-  font-size: 0.925rem;
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+  line-height: 1.3;
 }
 
 .embarque-details-inner .localizacao a {
-  text-decoration: underline;
-  font-size: 0.85rem;
-  text-align: end;
-  display: block;
-  margin: 8px 0 0 auto;
-  width: fit-content;
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #1976d2;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
-
 .embarque-details-inner .localizacao a:hover {
   text-decoration: underline;
+  color: #0d47a1;
 }
 
 /* MODAL DATAS */

@@ -11,18 +11,30 @@ const EmbarquesModal = ({
   variacoes,
   getVarIdByDate,
   setHorario,
+  variacoesSelecionadas,
+  setPrecoUnitario,
+  setTaxa,
 }) => {
+  const [visible, setVisible] = React.useState(false);
   const [embarquesNoPeriodo, setEmbarquesNoPeriodo] = React.useState([]);
   const [preEmbarque, setPreEmbarque] = React.useState([]);
   const [horariosDisponiveis, setHorariosDisponiveis] = React.useState([]);
   const [disponibilidadeParcial, setDisponibilidadeParcial] = React.useState(
     [],
   );
+
   const embarqueForm = React.useRef();
+  const priceContainerRef = React.useRef();
+  const saveBtnRef = React.useRef();
+
   function closeEmbarqueModal(_save) {
     if (_save && preEmbarque.length > 0)
-      toggleEmbarque(preEmbarque[0].embarqueId); //mudar aqui
-    setEmbarqueModalOpen(false);
+      toggleEmbarque(preEmbarque[0].embarqueId);
+
+    setVisible(false);
+    setTimeout(() => {
+      setEmbarqueModalOpen(false);
+    }, 300);
   }
 
   function arrayToString(lista) {
@@ -36,6 +48,7 @@ const EmbarquesModal = ({
   }
 
   React.useEffect(() => {
+    setVisible(true);
     /* Verifica e compara a disponibilidade dos embarques nas datas selecionadas */
     const embarquesPeriodo = [];
     embarques.forEach((_embarque) => {
@@ -107,10 +120,6 @@ const EmbarquesModal = ({
       embarqueForm.current.querySelector('select').value = '';
       setPreEmbarque([]);
     }
-
-    return () => {
-      toggleEmbarque();
-    };
   }, []);
 
   React.useEffect(() => {
@@ -121,9 +130,10 @@ const EmbarquesModal = ({
     if (preEmbarque.length > 0) {
       let _horariosDisp = [];
       const selectedEmbarque = embarquesNoPeriodo.find(
-        (_embarque) => _embarque.embID == preEmbarque[0].embarqueId, //mudar aqui
+        (_embarque) => _embarque.embID == preEmbarque[0].embarqueId,
       );
 
+      //Checa a disponibilidade do embarque escolhido na(s) data(s) selecionada(s)
       selectedEmbarque.variacoes.forEach((_variacao) => {
         let _indisponiveis = _variacao.disp.filter((_disp) => {
           if (!_horariosDisp.includes(_disp.horario))
@@ -143,18 +153,58 @@ const EmbarquesModal = ({
       //Remove duplicatas e define horários existentes para o embarque
       let _array_horarios = Array.from(new Set(_horariosDisp));
       setHorariosDisponiveis(_array_horarios);
+      if (_array_horarios.length === 1) setHorario(_array_horarios[0]);
 
-      if (_array_horarios.length === 1) {
-        console.log('setar horario');
-        setHorario(_array_horarios[0]);
+      //Confere a disponibilidade de vagas do embarque na(s) data(s) selecionada(s)
+
+      //Define o preço do embarque
+      if (variacoesSelecionadas.length > 0) {
+        const _precos = variacoesSelecionadas.map((_varId) => {
+          const varObj = variacoes.filter((_v) => _v.variation_id == _varId)[0];
+          return varObj.display_regular_price;
+        });
+
+        //eliminar valores duplicados de _precos
+        const uniquePrecos = Array.from(new Set(_precos));
+
+        //obter a propriedade "taxa" do embarque selecionado
+        const taxaEmb =
+          embarques.filter(
+            (emb) => emb.embarqueId == preEmbarque[0].embarqueId,
+          )[0]?.taxa || 0;
+        setTaxa(+taxaEmb);
+        if (uniquePrecos.length === 1) {
+          const modalPriceElement =
+            priceContainerRef.current.querySelector('span');
+          modalPriceElement.innerText = +uniquePrecos[0] + taxaEmb;
+          setPrecoUnitario(+uniquePrecos[0] + taxaEmb);
+        } else setPrecoUnitario('varios');
+      } else {
+        window.alert('Nenhuma data selecionada');
+        closeEmbarqueModal(false);
       }
+
+      //Atualiza o estado do botão
+      saveBtnRef.current.removeAttribute('disabled');
+    } else {
+      //Atualiza o estado do botão
+      saveBtnRef.current.setAttribute('disabled', '');
     }
   }, [preEmbarque]);
 
+  React.useEffect(() => {
+    if (disponibilidadeParcial.length > 0) {
+      saveBtnRef.current.setAttribute('disabled', '');
+    }
+  }, [disponibilidadeParcial]);
+
   return (
-    <div className="modal-overlay" onClick={() => closeEmbarqueModal(false)}>
+    <div
+      className={`modal-overlay ${visible ? 'show' : ''}`}
+      onClick={() => closeEmbarqueModal(false)}
+    >
       <div
-        className="modal-content"
+        className={`modal-content ${visible ? 'show' : ''}`}
         data-modal="embarque"
         onClick={(e) => e.stopPropagation()}
       >
@@ -181,7 +231,10 @@ const EmbarquesModal = ({
             })}
           </select>
 
-          <div className="embarque-details">
+          <section
+            className="embarque-details"
+            aria-labelledby="embarque-heading"
+          >
             {/* Placeholder */}
             {preEmbarque.length === 0 ? (
               <div className="placeholder-container">
@@ -201,12 +254,16 @@ const EmbarquesModal = ({
             {/* Informações sobre o embarque */}
             {disponibilidadeParcial.length === 0 && preEmbarque.length > 0 ? (
               <>
+                <h2 id="embarque-heading" className="visually-hidden">
+                  Detalhes do embarque
+                </h2>
+
                 <div className="embarque-details-inner">
                   {/* Horário simples */}
                   <div className="horarios">
                     {horariosDisponiveis.length === 1 && (
                       <>
-                        <p className="title">Horário de embarque</p>
+                        <h3 className="title">Horário de embarque</h3>
                         <span className="horario-single d-block text-center">
                           {horariosDisponiveis[0]}
                         </span>
@@ -232,7 +289,7 @@ const EmbarquesModal = ({
                   </div>
 
                   <div className="localizacao">
-                    <p className="title my-3 mb-1">Local de embarque</p>
+                    <h3 className="title my-2 mb-0">Local de embarque</h3>
                     <p className="info">
                       <strong>Endereço:</strong> {preEmbarque[0].endereco}
                     </p>
@@ -248,13 +305,22 @@ const EmbarquesModal = ({
                       Ver no Google Maps
                     </a>
                   </div>
+                  <p className="price" ref={priceContainerRef}>
+                    <strong>Valor:</strong> R$ <span>120,00</span>{' '}
+                    <i>por passageiro</i>
+                  </p>
                 </div>
               </>
             ) : null}
-          </div>
+          </section>
 
           <div className="modal-buttons">
-            <button type="button" className="saveBtn" onClick={() => closeEmbarqueModal(true)}>
+            <button
+              type="button"
+              className="saveBtn"
+              ref={saveBtnRef}
+              onClick={() => closeEmbarqueModal(true)}
+            >
               Salvar
             </button>
           </div>
@@ -272,6 +338,9 @@ EmbarquesModal.propTypes = {
   embarque: PropTypes.array,
   selectedDates: PropTypes.array.isRequired,
   variacoes: PropTypes.array.isRequired,
+  variacoesSelecionadas: PropTypes.array.isRequired,
   getVarIdByDate: PropTypes.func.isRequired,
   setHorario: PropTypes.func.isRequired,
+  setPrecoUnitario: PropTypes.func.isRequired,
+  setTaxa: PropTypes.func.isRequired,
 };

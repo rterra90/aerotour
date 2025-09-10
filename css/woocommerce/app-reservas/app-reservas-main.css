@@ -1,9 +1,11 @@
 @import url(app-reservas-modal.css);
-@import url(app-pax-card.css);
+@import url(app-reservas-modal-aviso.css);
+@import url(app-reservas-pax-card.css);
 
 :root {
   --box-bg: #f5f5f5;
   --box-border: #cbcbcb;
+  --pax-card-bg-light: #e9e9e9;
 }
 #newReservasContainer {
   box-shadow: 0 0 2px 0px #676767;
@@ -57,8 +59,8 @@
   background-color: #e3e3e3;
 }
 #newReservasContainer .grid-item[data-fill='true'] {
-  border: 2px solid #7e817f;
-  background-color: #ecf1ee;
+  border: 1px solid #adadad;
+  background-color: #ebebeb;
 }
 
 #newReservasContainer .grid-item .icon {
@@ -84,9 +86,13 @@
   font-size: 14px;
   opacity: 0.6;
 }
-#newReservasContainer .grid-item.grid-dates li {
+#newReservasContainer .grid-dates ul li {
   font-size: 1rem;
   margin-top: 2px;
+}
+#newReservasContainer .grid-dates ul.multi li {
+  font-size: 0.775rem;
+  font-weight: 600;
 }
 #newReservasContainer .grid-item {
   color: #111827;
@@ -164,7 +170,64 @@
 }
 #newReservasContainer .grid-item .text span {
   font-weight: 400;
-  font-size: 0.75rem;
-  line-height: 14px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  font-style: italic;
+  line-height: 15px;
   display: block;
+}
+
+/* VALOR */
+.passenger-card.total-reservation {
+  background: #f0f9ff;
+  border: 1px solid #a5d8ff;
+  color: #3d535e;
+  justify-content: center;
+  margin-top: 18px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-width: unset;
+}
+.coluna-esquerda {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.coluna-esquerda.expanded {
+  opacity: 0.65;
+}
+.coluna-esquerda .item.small-info {
+  font-size: 0.775rem;
+}
+.coluna-direita {
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 160px;
+  flex-shrink: 1;
+  text-align: right;
+}
+
+.coluna-direita .total,
+.coluna-esquerda .item:not(.item.small-info) {
+  font-weight: bold;
+  font-size: 1.075rem;
+  color: #31416f;
+  white-space: nowrap;
+}
+
+/* BOTÃO CONTINUAR */
+button#reservasContinuar {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #46a4fb;
+  color: white;
+  font-weight: 600;
+  transition: 0.2s;
+}
+button#reservasContinuar:disabled {
+  background-color: #cbd5e1;
 }
