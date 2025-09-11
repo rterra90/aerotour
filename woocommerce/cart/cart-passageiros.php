@@ -9,8 +9,8 @@
 					<div class="dados">
 						<p class="nome"><?= $passageiro -> nome_completo; ?></p>
 						<div class="d-flex">
-							<p>CPF: <?= $passageiro -> doc; ?></p>
-							<p>Cel: <?= $passageiro -> telefone; ?></p>
+							<p>CPF: <?= $passageiro -> cpf; ?></p>
+							<p>Cel: <?= $passageiro -> celular; ?></p>
 						</div>
 					</div>
 				</div>

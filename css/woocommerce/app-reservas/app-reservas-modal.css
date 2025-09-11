@@ -106,6 +106,7 @@
 
 #newReservasContainer .modal-content h3 {
   font-size: 1rem;
+  text-align: center;
 }
 /* MODAL DATAS */
 .modal-content[data-modal='dates'] .date-list {

@@ -26,6 +26,8 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
   const [taxa, setTaxa] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const botaoContinuarRef = React.useRef();
+  const dataBoxRef = React.useRef();
+  const embarqueBoxRef = React.useRef();
 
   const totalCost = precoUnitario * passageiros.length * selectedDates.length;
 
@@ -34,6 +36,10 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
     const temEmbarque = embarque.length > 0;
     const temHorario = horario && horario.length > 0;
     const temPassageiros = passageiros.length > 0;
+
+    // if (temData) dataBoxRef.current.classList.add('completed');
+    // if (temEmbarque) embarqueBoxRef.current.classList.add('completed');
+
     if (temData && temEmbarque && temHorario && temPassageiros) {
       botaoContinuarRef.current.removeAttribute('disabled');
     } else {
@@ -49,6 +55,19 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
       return;
     }
   }, [loading]);
+
+  React.useEffect(() => {
+    if (variacoes.length == 1) {
+      const singleVarId = variacoes[0].variation_id;
+      const dataPayload = [
+        variacoes[0].attributes.attribute_dia,
+        singleVarId,
+        getAvailabilityById(singleVarId),
+      ];
+
+      toggleDate([dataPayload]);
+    }
+  }, []);
 
   function submitToCart(index = 0) {
     if (!loading) setLoading(true);
@@ -115,13 +134,11 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
 
   function openEmbarqueModal() {
     if (selectedDates.length > 0) setEmbarqueModalOpen(true);
-    else {
-      setAvisosModalOpen('sem-data-selecionada');
-    }
+    else setAvisosModalOpen('sem-data-selecionada');
   }
 
   function openPaxModal(mode = 'add', paxData = null, index = null) {
-    //verifica se já existe data e embarque selecionados, se não houver exibe um alert
+    //verifica se já existe data e embarque selecionados
     if (selectedDates.length < 1) {
       setAvisosModalOpen('sem-data-selecionada');
       return;
@@ -193,6 +210,7 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
             className="grid-item clickable grid-dates"
             data-fill={selectedDates.length < 1 ? 'false' : 'true'}
             onClick={openDateModal}
+            ref={dataBoxRef}
           >
             <div className="icon">📅</div>
             <div className="text">
@@ -225,6 +243,7 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
             className="grid-item clickable grid-embarque"
             data-fill={embarque.length < 1 ? 'false' : 'true'}
             onClick={openEmbarqueModal}
+            ref={embarqueBoxRef}
           >
             <div className="sub-embarque d-flex">
               <div className="icon">🚏</div>

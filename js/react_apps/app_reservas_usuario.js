@@ -3682,27 +3682,33 @@
             onClick: (e) => e.stopPropagation(),
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Selecionar Datas" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("form", { className: "date-list many", children: availableDates.map((dateObj) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-                "label",
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                "form",
                 {
-                  className: dateObj.encerrado || dateObj.disponiveis === 0 ? "disabled" : "",
-                  "data-ultimas": dateObj.disponiveis < 10 ? "true" : "false",
-                  "data-ultimas-vagas": dateObj.disponiveis < 10 ? dateObj.disponiveis + " vagas restantes" : "false",
-                  "data-esgotado": dateObj.disponiveis === 0 ? "true" : "false",
-                  children: [
-                    dateObj.encerrado || dateObj.disponiveis === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                      "input",
-                      {
-                        type: "checkbox",
-                        checked: preData.some((_item) => _item[0] == dateObj.dia),
-                        onChange: ({ target }) => changeCheckbox(dateObj, target)
-                      }
-                    ),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: dateObj.dia })
-                  ]
-                },
-                dateObj.dia
-              )) }),
+                  className: `date-list${availableDates.length > 1 ? " many" : ""}`,
+                  children: availableDates.map((dateObj) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+                    "label",
+                    {
+                      className: dateObj.encerrado || dateObj.disponiveis === 0 ? "disabled" : "",
+                      "data-ultimas": dateObj.disponiveis < 10 ? "true" : "false",
+                      "data-ultimas-vagas": dateObj.disponiveis < 10 ? dateObj.disponiveis + " vagas restantes" : "false",
+                      "data-esgotado": dateObj.disponiveis === 0 ? "true" : "false",
+                      children: [
+                        dateObj.encerrado || dateObj.disponiveis === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                          "input",
+                          {
+                            type: "checkbox",
+                            checked: preData.some((_item) => _item[0] == dateObj.dia),
+                            onChange: ({ target }) => changeCheckbox(dateObj, target)
+                          }
+                        ),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: dateObj.dia })
+                      ]
+                    },
+                    dateObj.dia
+                  ))
+                }
+              ),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                 "button",
                 {
@@ -4308,7 +4314,7 @@
             if (selectedDates.some(
               (_eventDate) => validarMaioridade(
                 target.value,
-                convertDate2(_eventDate, "iso")
+                convertDate2(_eventDate, "ISO")
               ) == false
             )) {
               setPaxMenor(true);
@@ -4850,6 +4856,8 @@
     const [taxa, setTaxa] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const botaoContinuarRef = React.useRef();
+    const dataBoxRef = React.useRef();
+    const embarqueBoxRef = React.useRef();
     const totalCost = precoUnitario * passageiros.length * selectedDates.length;
     React.useEffect(() => {
       const temData = selectedDates.length > 0;
@@ -4869,6 +4877,17 @@
         return;
       }
     }, [loading]);
+    React.useEffect(() => {
+      if (variacoes.length == 1) {
+        const singleVarId = variacoes[0].variation_id;
+        const dataPayload = [
+          variacoes[0].attributes.attribute_dia,
+          singleVarId,
+          getAvailabilityById(singleVarId)
+        ];
+        toggleDate([dataPayload]);
+      }
+    }, []);
     function submitToCart(index = 0) {
       if (!loading)
         setLoading(true);
@@ -4992,6 +5011,7 @@
             className: "grid-item clickable grid-dates",
             "data-fill": selectedDates.length < 1 ? "false" : "true",
             onClick: openDateModal,
+            ref: dataBoxRef,
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F4C5}" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: selectedDates.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "empty-text-placeholder", children: [
@@ -5016,6 +5036,7 @@
             className: "grid-item clickable grid-embarque",
             "data-fill": embarque.length < 1 ? "false" : "true",
             onClick: openEmbarqueModal,
+            ref: embarqueBoxRef,
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-embarque d-flex", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F68F}" }),

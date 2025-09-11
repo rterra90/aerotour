@@ -46,6 +46,9 @@
 .passenger-card:hover {
   transform: translateY(-3px);
 }
+.passenger-card.add-passenger {
+  cursor: pointer;
+}
 
 .passenger-card.highlight {
   background-color: #e0ffe0; /* verde claro, sensação de sucesso */

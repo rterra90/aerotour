@@ -88,7 +88,9 @@ const DatesModal = ({
         onClick={(e) => e.stopPropagation()}
       >
         <h3>Selecionar Datas</h3>
-        <form className="date-list many">
+        <form
+          className={`date-list${availableDates.length > 1 ? ' many' : ''}`}
+        >
           {availableDates.map((dateObj) => (
             <label
               key={dateObj.dia}
