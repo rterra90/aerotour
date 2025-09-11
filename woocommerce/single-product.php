@@ -430,9 +430,9 @@ $datas = array_map(function($_var){
             
             <!-- <h2 class="mb-4">Faça aqui sua reserva</h2> -->
 
-              <!-- RESERVA APP - REACT  -->
-              <div id="reserva_app" data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE); ?>' data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE); ?>' data-product-id='<?= $excursao['id']; ?>'></div>
-              <!-- FIM RESERVA APP - REACT  -->
+            <!-- RESERVA APP - REACT  -->
+            <div id="reserva_app" data-cart-url='<?= wc_get_cart_url(); ?>' data-ajax-url='<?php echo admin_url( 'admin-ajax.php' ); ?>' data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE); ?>' data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE); ?>' data-product-id='<?= $excursao['id']; ?>'></div>
+            <!-- FIM RESERVA APP - REACT  -->
           
           <!-- </div> -->
           <div id="exc-wpp-cta" class="mobile">
@@ -530,6 +530,7 @@ $datas = array_map(function($_var){
 
   
   </section>
+  <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js"></script>
 <script>
   const stickyElement = document.querySelector('#mobile-sticky-res-btn');
   const buttonValores = document.querySelector('.accordion-item:nth-child(3)');
@@ -554,6 +555,6 @@ stickyElement.addEventListener('click', ({currentTarget}) => {
 })
 
 </script>
-  <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js"></script>
+  
 
 <?php get_footer(); ?>

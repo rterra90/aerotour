@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import PropTypes from 'prop-types';
+import { convertDate } from '../Utilities';
 
 const PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
   const cardRef = React.useRef(null);
@@ -77,7 +78,7 @@ const PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
             </div>
             <div>
               <dt>Nasc.</dt>
-              <dd>{pax.data_nascimento}</dd>
+              <dd>{convertDate(pax.data_nascimento, 'DMY')}</dd>
             </div>
           </dl>
         </div>

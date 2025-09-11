@@ -112,25 +112,6 @@ form.register {
 .woocommerce-form span.required {
   display: none;
 }
-/* .loadingElement {
-  display: block;
-  margin: 36px auto;
-  border-radius: 15px;
-  width: 18px;
-  height: 18px;
-  border: 2px solid black;
-  border-bottom-color: transparent;
-  background-color: transparent;
-  animation: loading 1s infinite linear;
-}
-@keyframes loading {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
 @media (max-width: 768px) {
   #customer_login .form-login-section input.input-text,
   #form-login .mostra-senha {

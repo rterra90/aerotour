@@ -3572,11 +3572,11 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx11 = jsxWithValidationDynamic;
-          var jsxs11 = jsxWithValidationStatic;
+          var jsx9 = jsxWithValidationDynamic;
+          var jsxs9 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx11;
-          exports.jsxs = jsxs11;
+          exports.jsx = jsx9;
+          exports.jsxs = jsxs9;
         })();
       }
     }
@@ -3594,567 +3594,9 @@
     }
   });
 
-  // src/AppReservas/InputMasks.js
-  var cpfMask = (value) => {
-    return value.replace(/\D/g, "").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})/, "$1-$2").replace(/(-\d{2})\d+?$/, "$1");
-  };
-  var cpfRaw = (value) => {
-    return value.replace("-", "").replaceAll(".", "");
-  };
-  var celularMask = (value) => {
-    if (!value)
-      return "";
-    value = value.replace(/\D/g, "");
-    value = value.replace(/(\d{2})(\d)/, "($1) $2");
-    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
-    return value;
-  };
-  var celularRaw = (value) => {
-    return value.replace("(", "").replace(")", "").replace("-", "").replaceAll(" ", "");
-  };
-  var dateToISO = (dataStr) => {
-    const [dia, mes, ano] = dataStr.split("/");
-    return `${ano}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
-  };
-
-  // src/Hooks/useInput.jsx
-  var useInput = (setPassageiros, index, setDone, done) => {
-    const [error, setError] = React.useState(false);
-    const [value, setValue] = React.useState("");
-    const [jaErrou, setJaErrou] = React.useState(false);
-    function validaPassageiro(pAtual) {
-      const validacaoPassageiro = Object.keys(pAtual).every((key) => {
-        if (key === "doc")
-          return validarCPF(cpfMask(pAtual[key]));
-        else if (key === "telefone")
-          return pAtual[key].length >= 14;
-        else
-          return pAtual[key].length > 2;
-      });
-      if (validacaoPassageiro)
-        setDone(true);
-      else
-        setDone(false);
-    }
-    function validate(value2, campo, element) {
-      if (campo === "doc") {
-        if (validarCPF(value2)) {
-          element.classList.add("border-fill");
-          element.classList.remove("error");
-          setError(false);
-        } else {
-          element.classList.remove("border-fill");
-          element.classList.add("error");
-          setError(true);
-        }
-      } else if (campo === "telefone") {
-        if (value2.length >= 14) {
-          element.classList.add("border-fill");
-          element.classList.remove("error");
-          setError(false);
-        } else {
-          element.classList.remove("border-fill");
-          element.classList.add("error");
-          setError(true);
-        }
-      } else if (campo === "nome_completo") {
-        if (value2.length >= 3) {
-          element.classList.add("border-fill");
-          element.classList.remove("error");
-          setError(false);
-        } else {
-          element.classList.remove("border-fill");
-          element.classList.add("error");
-          setError(true);
-        }
-      }
-      setPassageiros((_passageiros) => {
-        let passageiros_a = _passageiros;
-        passageiros_a[index][campo] = campo === "doc" ? cpfRaw(value2) : value2;
-        validaPassageiro(passageiros_a[index]);
-        return passageiros_a;
-      });
-    }
-    function onChange({ target }) {
-      if (target.dataset.campo === "doc")
-        setValue(cpfMask(target.value));
-      else if (target.dataset.campo === "telefone")
-        setValue(celularMask(target.value));
-      else
-        setValue(target.value);
-    }
-    function onBlur({ target }) {
-      console.log(target);
-    }
-    function validarCPF(cpf) {
-      var cpfRegex = /^(?:(\d{3}).(\d{3}).(\d{3})-(\d{2}))$/;
-      if (!cpfRegex.test(cpf)) {
-        return false;
-      }
-      var numeros = cpf.match(/\d/g).map(Number);
-      var soma = numeros.reduce((acc, cur, idx) => {
-        if (idx < 9) {
-          return acc + cur * (10 - idx);
-        }
-        return acc;
-      }, 0);
-      var resto = soma * 10 % 11;
-      if (resto === 10 || resto === 11) {
-        resto = 0;
-      }
-      if (resto !== numeros[9]) {
-        return false;
-      }
-      soma = numeros.reduce((acc, cur, idx) => {
-        if (idx < 10) {
-          return acc + cur * (11 - idx);
-        }
-        return acc;
-      }, 0);
-      resto = soma * 10 % 11;
-      if (resto === 10 || resto === 11) {
-        resto = 0;
-      }
-      if (resto !== numeros[10]) {
-        return false;
-      }
-      return true;
-    }
-    React.useEffect(() => {
-      if (index === 0)
-        setDone(true);
-    }, []);
-    return {
-      value,
-      setValue,
-      onChange,
-      error,
-      onBlur,
-      validate: (type, element) => validate(value, type, element)
-    };
-  };
-  var useInput_default = useInput;
-
-  // src/Hooks/useValidations.jsx
-  var useValidations = () => {
-    function validarCPF(cpf) {
-      var cpfRegex = /^(?:(\d{3}).(\d{3}).(\d{3})-(\d{2}))$/;
-      if (!cpfRegex.test(cpf)) {
-        return false;
-      }
-      var numeros = cpf.match(/\d/g).map(Number);
-      var soma = numeros.reduce((acc, cur, idx) => {
-        if (idx < 9) {
-          return acc + cur * (10 - idx);
-        }
-        return acc;
-      }, 0);
-      var resto = soma * 10 % 11;
-      if (resto === 10 || resto === 11) {
-        resto = 0;
-      }
-      if (resto !== numeros[9]) {
-        return false;
-      }
-      soma = numeros.reduce((acc, cur, idx) => {
-        if (idx < 10) {
-          return acc + cur * (11 - idx);
-        }
-        return acc;
-      }, 0);
-      resto = soma * 10 % 11;
-      if (resto === 10 || resto === 11) {
-        resto = 0;
-      }
-      if (resto !== numeros[10]) {
-        return false;
-      }
-      return true;
-    }
-    function validarMaioridade(dataNascimento, dataEvento) {
-      const [ano1, mes1, dia1] = dataNascimento.split("-").map(Number);
-      const [ano2, mes2, dia2] = dataEvento.split("-").map(Number);
-      const data1 = new Date(ano1, mes1 - 1, dia1);
-      const data2 = new Date(ano2, mes2 - 1, dia2);
-      const dataLimite = new Date(data1);
-      dataLimite.setFullYear(dataLimite.getFullYear() + 18);
-      return data2 >= dataLimite;
-    }
-    return {
-      validarCPF,
-      validarMaioridade
-    };
-  };
-  var useValidations_default = useValidations;
-
-  // src/AppReservas/LiPassageiro.jsx
+  // src/AppReservas/DatesModal.jsx
   var import_prop_types = __toESM(require_prop_types());
   var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var LiPassageiro = ({
-    passageiro,
-    index,
-    removePassageiro,
-    setPassageiros,
-    passageiros
-  }) => {
-    const [done, setDone] = React.useState(false);
-    const nomeInput = useInput_default(setPassageiros, index, setDone, done);
-    const telInput = useInput_default(setPassageiros, index, setDone, done);
-    const docInput = useInput_default(setPassageiros, index, setDone, done);
-    const { validarCPF } = useValidations_default();
-    const inputsContainer = React.useRef();
-    React.useEffect(() => {
-      setTimeout(() => {
-        inputsContainer.current && inputsContainer.current.parentElement.classList.add("animate-in");
-      }, 100);
-    }, []);
-    React.useEffect(() => {
-      [nomeInput, telInput, docInput].forEach((inp) => {
-      });
-    }, [passageiros]);
-    React.useEffect(() => {
-      if (index === 0) {
-        const currentUser = JSON.parse(window.sessionStorage.getItem("aer_user"));
-        if (currentUser) {
-          nomeInput.setValue(currentUser.nome_completo);
-          docInput.setValue(cpfMask(currentUser.doc));
-          telInput.setValue(celularMask(celularRaw(currentUser.telefone)));
-          setPassageiros((_passageiros) => {
-            let passageiros_a = _passageiros;
-            passageiros_a[0].nome_completo = currentUser.nome_completo;
-            passageiros_a[0].doc = currentUser.doc;
-            passageiros_a[0].telefone = celularMask(currentUser.telefone);
-            const pAtual = passageiros_a[0];
-            const validacaoPassageiro = Object.keys(pAtual).every((key) => {
-              if (key === "doc")
-                return validarCPF(cpfMask(pAtual[key]));
-              else if (key === "telefone")
-                return pAtual[key].length >= 14;
-              else
-                return pAtual[key].length > 2;
-            });
-            if (validacaoPassageiro)
-              setDone(true);
-            console.log(passageiros_a);
-            return passageiros_a;
-          });
-          inputsContainer.current.querySelectorAll("input").forEach((input) => {
-            if (input.dataset.campo === "nome_completo" || input.dataset.campo === "doc") {
-              input.classList.add("border-fill");
-            }
-          });
-        }
-      }
-    }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { className: "passageiro-li", "data-index": index, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "user-icon", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "svg",
-        {
-          xmlns: "http://www.w3.org/2000/svg",
-          width: "40",
-          height: "40",
-          fill: "currentColor",
-          className: "bi bi-person",
-          viewBox: "0 0 16 16",
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" })
-        }
-      ) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-        "div",
-        {
-          className: "dados-passageiro",
-          ref: inputsContainer,
-          "data-index": "Dados do(a) passageiro(a)",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-              "input",
-              {
-                className: "nome_completo",
-                type: "text",
-                "data-campo": "nome_completo",
-                "data-index": index,
-                value: nomeInput.value,
-                placeholder: "Nome completo",
-                onChange: (e) => nomeInput.onChange(e),
-                onBlur: ({ target }) => nomeInput.validate("nome_completo", target)
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "d-flex gap-2", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-                  "svg",
-                  {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    width: "15",
-                    height: "14",
-                    fill: "currentColor",
-                    className: "bi bi-person-badge",
-                    viewBox: "0 0 16 16",
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492z" })
-                    ]
-                  }
-                ) }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                  "input",
-                  {
-                    className: "doc",
-                    type: "text",
-                    value: docInput.value,
-                    placeholder: "CPF",
-                    "data-campo": "doc",
-                    maxLength: "14",
-                    "data-index": index,
-                    onChange: (e) => docInput.onChange(e),
-                    onBlur: ({ target }) => docInput.validate("doc", target)
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                  "svg",
-                  {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    width: "15",
-                    height: "14",
-                    fill: "currentColor",
-                    className: "bi bi-phone-fill",
-                    viewBox: "0 0 16 16",
-                    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M3 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm6 11a1 1 0 1 0-2 0 1 1 0 0 0 2 0" })
-                  }
-                ) }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                  "input",
-                  {
-                    className: index === 0 && telInput.value.length > 0 && telInput.value.length < 14 ? "telefone error" : telInput.value.length === 0 ? "telefone" : "telefone border-fill",
-                    type: "text",
-                    value: telInput.value,
-                    placeholder: "Celular",
-                    maxLength: "15",
-                    "data-campo": "telefone",
-                    "data-index": index,
-                    onChange: (e) => telInput.onChange(e),
-                    onBlur: ({ target }) => telInput.validate("telefone", target)
-                  }
-                )
-              ] })
-            ] })
-          ]
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "icones-passageiro", children: index !== 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { "data-index": index, onClick: removePassageiro, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-        "svg",
-        {
-          xmlns: "http://www.w3.org/2000/svg",
-          width: "16",
-          height: "16",
-          fill: "currentColor",
-          className: "bi bi-trash",
-          viewBox: "0 0 16 16",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" })
-          ]
-        }
-      ) }) })
-    ] });
-  };
-  LiPassageiro.propTypes = {
-    passageiro: import_prop_types.default.object.isRequired,
-    index: import_prop_types.default.number.isRequired,
-    removePassageiro: import_prop_types.default.func,
-    setPassageiros: import_prop_types.default.func,
-    passageiros: import_prop_types.default.array.isRequired
-  };
-  var LiPassageiro_default = LiPassageiro;
-
-  // src/AppReservas/Passageiros.jsx
-  var import_prop_types2 = __toESM(require_prop_types());
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
-  var Passageiros = ({
-    passageiros,
-    setPassageiros,
-    botaoContinuar,
-    embarque,
-    horario,
-    variacao,
-    pID,
-    setLoading,
-    loading,
-    taxa
-  }) => {
-    const moduloPassageiros = React.useRef();
-    const addToCartForm = React.useRef();
-    const passageirosHidden = React.useRef();
-    const { validarCPF } = useValidations_default();
-    const [submitError, setSubmitError] = React.useState(false);
-    function handleSubmit(event) {
-      event.preventDefault();
-      if (!loading) {
-        setLoading(true);
-        passageirosHidden.current.setAttribute(
-          "value",
-          JSON.stringify(passageiros)
-        );
-        setSubmitError(false);
-        const validacoes = [];
-        passageiros.forEach((pAtual) => {
-          if (pAtual) {
-            const validacaoPassageiro = Object.keys(pAtual).every((key) => {
-              if (key === "doc")
-                return validarCPF(cpfMask(pAtual[key]));
-              else if (key === "telefone")
-                return pAtual[key].length >= 14;
-              else
-                return pAtual[key].length > 2;
-            });
-            validacoes.push(validacaoPassageiro);
-          }
-        });
-        const todosDocs = [];
-        let docRepetido = false;
-        passageiros.forEach((pAtual) => {
-          if (pAtual) {
-            if (!todosDocs.includes(pAtual.doc))
-              todosDocs.push(pAtual.doc);
-            else
-              docRepetido = true;
-          }
-        });
-        if (validacoes.some((val) => val === false)) {
-          validacoes.forEach((val, i) => {
-            if (!val) {
-              moduloPassageiros.current.querySelectorAll("ul li.passageiro-li")[i].classList.add("error-animate");
-            }
-            setTimeout(() => {
-              moduloPassageiros.current.querySelectorAll("ul li.passageiro-li")[i].classList.remove("error-animate");
-            }, 3200);
-          });
-          setSubmitError("Por favor, verifique os dados informados");
-          setLoading(false);
-        } else if (docRepetido) {
-          setSubmitError("Informe o CPF corretamente para cada passageiro");
-          setLoading(false);
-        } else if (embarque === null) {
-          setSubmitError("Selecione o local de embarque");
-          setLoading(false);
-        } else if (horario === null) {
-          setSubmitError("Selecione um hor\xE1rio");
-          setLoading(false);
-        } else {
-          setPassageiros([...passageiros]);
-          event.target.setAttribute("method", "post");
-          event.target.setAttribute("action", "");
-          event.target.submit();
-        }
-      }
-    }
-    function addPassageiro() {
-      if (passageiros.filter((p) => p || false).length < variacao.max_qty) {
-        setPassageiros([
-          ...passageiros,
-          { nome_completo: "", doc: "", telefone: "" }
-        ]);
-      }
-    }
-    function removePassageiro({ currentTarget }) {
-      const passageiros_a = passageiros.map((p, i) => {
-        return i !== +currentTarget.dataset.index ? p : false;
-      });
-      const targetLi = currentTarget.parentElement.parentElement;
-      targetLi.classList.remove("animate-in");
-      setTimeout(() => {
-        setPassageiros(passageiros_a);
-      }, 500);
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { id: "modulo_passageiros", className: "d-none", ref: moduloPassageiros, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { children: "Passageiros" }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("ul", { children: [
-        passageiros.map((passageiro, i) => {
-          if (passageiro) {
-            return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-              LiPassageiro_default,
-              {
-                passageiro,
-                index: i,
-                removePassageiro,
-                setPassageiros,
-                passageiros
-              },
-              i
-            );
-          }
-        }),
-        passageiros.filter((p) => p || false).length < variacao.max_qty ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("li", { className: "add_passageiro_btn", onClick: addPassageiro, children: "Adicionar passageiro" }) : null
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-        "form",
-        {
-          className: "variations_form cart",
-          onSubmit: handleSubmit,
-          encType: "multipart/form-data",
-          "data-product-id": pID,
-          ref: addToCartForm,
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "hidden", name: "add-to-cart", value: pID }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-              "input",
-              {
-                id: "reservaQty",
-                type: "number",
-                className: "input-text qty text d-none",
-                name: "quantity",
-                value: passageiros.filter((p) => p || false).length,
-                min: "1",
-                inputMode: "numeric",
-                readOnly: true
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "hidden", name: "taxa", value: taxa || "" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "hidden", name: "embarque", value: embarque || "" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "hidden", name: "horario", value: horario || "" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "hidden", name: "passageiros", ref: passageirosHidden }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-              "input",
-              {
-                type: "hidden",
-                name: "variation_id",
-                value: variacao.variation_id || ""
-              }
-            ),
-            botaoContinuar && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-              "input",
-              {
-                type: "submit",
-                value: loading ? "Aguarde..." : "Continuar",
-                className: "single_add_to_cart_button button alt",
-                disabled: true
-              }
-            ),
-            submitError ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "passageiros-error-alert", children: submitError }) : null
-          ]
-        }
-      )
-    ] });
-  };
-  Passageiros.propTypes = {
-    passageiros: import_prop_types2.default.array.isRequired,
-    setPassageiros: import_prop_types2.default.func.isRequired,
-    botaoContinuar: import_prop_types2.default.bool,
-    embarque: import_prop_types2.default.string,
-    horario: import_prop_types2.default.string,
-    variacao: import_prop_types2.default.object.isRequired,
-    pID: import_prop_types2.default.number.isRequired,
-    setLoading: import_prop_types2.default.func,
-    loading: import_prop_types2.default.bool,
-    taxa: import_prop_types2.default.number
-  };
-  var Passageiros_default = Passageiros;
-
-  // src/AppReservas/DatesModal.jsx
-  var import_prop_types3 = __toESM(require_prop_types());
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var DatesModal = ({
     setDateModalOpen,
     availableDates,
@@ -4227,20 +3669,20 @@
         });
       }
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       "div",
       {
         className: `modal-overlay ${visible ? "show" : ""}`,
         onClick: () => closeDateModal(false),
-        children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
           "div",
           {
             className: `modal-content ${visible ? "show" : ""}`,
             "data-modal": "dates",
             onClick: (e) => e.stopPropagation(),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h3", { children: "Selecionar Datas" }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("form", { className: "date-list many", children: availableDates.map((dateObj) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Selecionar Datas" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("form", { className: "date-list many", children: availableDates.map((dateObj) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
                 "label",
                 {
                   className: dateObj.encerrado || dateObj.disponiveis === 0 ? "disabled" : "",
@@ -4248,7 +3690,7 @@
                   "data-ultimas-vagas": dateObj.disponiveis < 10 ? dateObj.disponiveis + " vagas restantes" : "false",
                   "data-esgotado": dateObj.disponiveis === 0 ? "true" : "false",
                   children: [
-                    dateObj.encerrado || dateObj.disponiveis === 0 ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                    dateObj.encerrado || dateObj.disponiveis === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                       "input",
                       {
                         type: "checkbox",
@@ -4256,12 +3698,12 @@
                         onChange: ({ target }) => changeCheckbox(dateObj, target)
                       }
                     ),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: dateObj.dia })
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: dateObj.dia })
                   ]
                 },
                 dateObj.dia
               )) }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                 "button",
                 {
                   type: "button",
@@ -4279,18 +3721,18 @@
   };
   var DatesModal_default = DatesModal;
   DatesModal.propTypes = {
-    setDateModalOpen: import_prop_types3.default.func.isRequired,
-    availableDates: import_prop_types3.default.array.isRequired,
-    selectedDates: import_prop_types3.default.array.isRequired,
-    passageiros: import_prop_types3.default.array.isRequired,
-    toggleDate: import_prop_types3.default.func.isRequired,
-    getVarIdByDate: import_prop_types3.default.func.isRequired,
-    getAvailabilityById: import_prop_types3.default.func.isRequired
+    setDateModalOpen: import_prop_types.default.func.isRequired,
+    availableDates: import_prop_types.default.array.isRequired,
+    selectedDates: import_prop_types.default.array.isRequired,
+    passageiros: import_prop_types.default.array.isRequired,
+    toggleDate: import_prop_types.default.func.isRequired,
+    getVarIdByDate: import_prop_types.default.func.isRequired,
+    getAvailabilityById: import_prop_types.default.func.isRequired
   };
 
   // src/AppReservas/EmbarqueModal.jsx
-  var import_prop_types4 = __toESM(require_prop_types());
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
+  var import_prop_types2 = __toESM(require_prop_types());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var EmbarquesModal = ({
     setEmbarqueModalOpen,
     toggleEmbarque,
@@ -4454,21 +3896,21 @@
         saveBtnRef.current.setAttribute("disabled", "");
       }
     }, [disponibilidadeParcial]);
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
       "div",
       {
         className: `modal-overlay ${visible ? "show" : ""}`,
         onClick: () => closeEmbarqueModal(false),
-        children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
           "div",
           {
             className: `modal-content ${visible ? "show" : ""}`,
             "data-modal": "embarque",
             onClick: (e) => e.stopPropagation(),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { children: "Selecione seu embarque" }),
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("form", { className: "embarque-list", ref: embarqueForm, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { children: "Selecione seu embarque" }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("form", { className: "embarque-list", ref: embarqueForm, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
                   "select",
                   {
                     onChange: (e) => setPreEmbarque(() => {
@@ -4477,61 +3919,61 @@
                       ];
                     }),
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { className: "select-placeholder", disabled: true, value: "", children: "Selecione..." }),
+                      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { className: "select-placeholder", disabled: true, value: "", children: "Selecione..." }),
                       embarques.map(({ embarqueId, nome }) => {
-                        return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { value: embarqueId, children: nome }, embarqueId);
+                        return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: embarqueId, children: nome }, embarqueId);
                       })
                     ]
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
                   "section",
                   {
                     className: "embarque-details",
                     "aria-labelledby": "embarque-heading",
                     children: [
-                      preEmbarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "placeholder-container", children: "Selecione um local de embarque para ver os hor\xE1rios dispon\xEDveis e endere\xE7o detalhado." }) : null,
-                      disponibilidadeParcial.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "alerta-reserva disponibilidade-parcial", children: [
+                      preEmbarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "placeholder-container", children: "Selecione um local de embarque para ver os hor\xE1rios dispon\xEDveis e endere\xE7o detalhado." }) : null,
+                      disponibilidadeParcial.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "alerta-reserva disponibilidade-parcial", children: [
                         "Ops. O embarque selecionado n\xE3o est\xE1 dispon\xEDvel em",
                         " ",
                         arrayToString(disponibilidadeParcial.map((_v) => _v.dia)),
                         "."
                       ] }) : null,
-                      disponibilidadeParcial.length === 0 && preEmbarque.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h2", { id: "embarque-heading", className: "visually-hidden", children: "Detalhes do embarque" }),
-                        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "embarque-details-inner", children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "horarios", children: [
-                            horariosDisponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { className: "title", children: "Hor\xE1rio de embarque" }),
-                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "horario-single d-block text-center", children: horariosDisponiveis[0] })
+                      disponibilidadeParcial.length === 0 && preEmbarque.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h2", { id: "embarque-heading", className: "visually-hidden", children: "Detalhes do embarque" }),
+                        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "embarque-details-inner", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "horarios", children: [
+                            horariosDisponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Hor\xE1rio de embarque" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "horario-single d-block text-center", children: horariosDisponiveis[0] })
                             ] }),
-                            horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { className: "title", children: "Selecione o hor\xE1rio" }),
-                              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "multi-radios", children: [
-                                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
-                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "08:00" }),
-                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "08:00" })
+                            horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "title", children: "Selecione o hor\xE1rio" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "multi-radios", children: [
+                                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: "horario-opcao", children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "radio", name: "horario", value: "08:00" }),
+                                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: "08:00" })
                                 ] }),
-                                /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "horario-opcao", children: [
-                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { type: "radio", name: "horario", value: "10:30" }),
-                                  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "10:30" })
+                                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: "horario-opcao", children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "radio", name: "horario", value: "10:30" }),
+                                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: "10:30" })
                                 ] })
                               ] })
                             ] })
                           ] }),
-                          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "localizacao", children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h3", { className: "title my-2 mb-0", children: "Local de embarque" }),
-                            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Endere\xE7o:" }),
+                          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "localizacao", children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title my-2 mb-0", children: "Local de embarque" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("p", { className: "info", children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: "Endere\xE7o:" }),
                               " ",
                               preEmbarque[0].endereco
                             ] }),
-                            /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "info", children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Refer\xEAncia:" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("p", { className: "info", children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: "Refer\xEAncia:" }),
                               " ",
                               preEmbarque[0].obs
                             ] }),
-                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
                               "a",
                               {
                                 href: preEmbarque[0].link_mapa,
@@ -4541,19 +3983,19 @@
                               }
                             )
                           ] }),
-                          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("p", { className: "price", ref: priceContainerRef, children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("strong", { children: "Valor:" }),
+                          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("p", { className: "price", ref: priceContainerRef, children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: "Valor:" }),
                             " R$ ",
-                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { children: "120,00" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: "120,00" }),
                             " ",
-                            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("i", { children: "por passageiro" })
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("i", { children: "por passageiro" })
                           ] })
                         ] })
                       ] }) : null
                     ]
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
                   "button",
                   {
                     type: "button",
@@ -4572,25 +4014,25 @@
   };
   var EmbarqueModal_default = EmbarquesModal;
   EmbarquesModal.propTypes = {
-    setEmbarqueModalOpen: import_prop_types4.default.func.isRequired,
-    toggleEmbarque: import_prop_types4.default.func.isRequired,
-    embarques: import_prop_types4.default.array.isRequired,
-    embarque: import_prop_types4.default.array,
-    selectedDates: import_prop_types4.default.array.isRequired,
-    variacoes: import_prop_types4.default.array.isRequired,
-    variacoesSelecionadas: import_prop_types4.default.array.isRequired,
-    getVarIdByDate: import_prop_types4.default.func.isRequired,
-    setHorario: import_prop_types4.default.func.isRequired,
-    setPrecoUnitario: import_prop_types4.default.func.isRequired,
-    setTaxa: import_prop_types4.default.func.isRequired
+    setEmbarqueModalOpen: import_prop_types2.default.func.isRequired,
+    toggleEmbarque: import_prop_types2.default.func.isRequired,
+    embarques: import_prop_types2.default.array.isRequired,
+    embarque: import_prop_types2.default.array,
+    selectedDates: import_prop_types2.default.array.isRequired,
+    variacoes: import_prop_types2.default.array.isRequired,
+    variacoesSelecionadas: import_prop_types2.default.array.isRequired,
+    getVarIdByDate: import_prop_types2.default.func.isRequired,
+    setHorario: import_prop_types2.default.func.isRequired,
+    setPrecoUnitario: import_prop_types2.default.func.isRequired,
+    setTaxa: import_prop_types2.default.func.isRequired
   };
 
   // src/AppReservas/PaxModal.jsx
-  var import_prop_types6 = __toESM(require_prop_types());
+  var import_prop_types4 = __toESM(require_prop_types());
 
   // src/AppReservas/CustomSelectPaxModal.jsx
-  var import_prop_types5 = __toESM(require_prop_types());
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
+  var import_prop_types3 = __toESM(require_prop_types());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var CustomSelectPaxModal = ({ setFormData, tripType }) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [selected, setSelected] = React.useState(null);
@@ -4648,8 +4090,8 @@
         return { ..._current, tripType: _value };
       });
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "custom-select", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "custom-select", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
         "button",
         {
           ref: buttonRef,
@@ -4665,7 +4107,7 @@
           children: selected ? selected.label : "Selecione uma op\xE7\xE3o"
         }
       ),
-      isOpen && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+      isOpen && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
         "ul",
         {
           ref: listRef,
@@ -4673,7 +4115,7 @@
           tabIndex: "-1",
           "aria-activedescendant": selected?.value,
           className: "options",
-          children: optionsData.map((option) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          children: optionsData.map((option) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
             "li",
             {
               role: "option",
@@ -4691,17 +4133,83 @@
     ] });
   };
   CustomSelectPaxModal.propTypes = {
-    setFormData: import_prop_types5.default.func,
-    tripType: import_prop_types5.default.string
+    setFormData: import_prop_types3.default.func,
+    tripType: import_prop_types3.default.string
   };
   var CustomSelectPaxModal_default = CustomSelectPaxModal;
 
+  // src/Hooks/useValidations.jsx
+  var useValidations = () => {
+    function validarCPF(cpf) {
+      var cpfRegex = /^(?:(\d{3}).(\d{3}).(\d{3})-(\d{2}))$/;
+      if (!cpfRegex.test(cpf)) {
+        return false;
+      }
+      var numeros = cpf.match(/\d/g).map(Number);
+      var soma = numeros.reduce((acc, cur, idx) => {
+        if (idx < 9) {
+          return acc + cur * (10 - idx);
+        }
+        return acc;
+      }, 0);
+      var resto = soma * 10 % 11;
+      if (resto === 10 || resto === 11) {
+        resto = 0;
+      }
+      if (resto !== numeros[9]) {
+        return false;
+      }
+      soma = numeros.reduce((acc, cur, idx) => {
+        if (idx < 10) {
+          return acc + cur * (11 - idx);
+        }
+        return acc;
+      }, 0);
+      resto = soma * 10 % 11;
+      if (resto === 10 || resto === 11) {
+        resto = 0;
+      }
+      if (resto !== numeros[10]) {
+        return false;
+      }
+      return true;
+    }
+    function validarMaioridade(dataNascimento, dataEvento) {
+      const [ano1, mes1, dia1] = dataNascimento.split("-").map(Number);
+      const [ano2, mes2, dia2] = dataEvento.split("-").map(Number);
+      const data1 = new Date(ano1, mes1 - 1, dia1);
+      const data2 = new Date(ano2, mes2 - 1, dia2);
+      const dataLimite = new Date(data1);
+      dataLimite.setFullYear(dataLimite.getFullYear() + 18);
+      return data2 >= dataLimite;
+    }
+    return {
+      validarCPF,
+      validarMaioridade
+    };
+  };
+  var useValidations_default = useValidations;
+
+  // src/AppReservas/InputMasks.js
+  var cpfMask = (value) => {
+    return value.replace(/\D/g, "").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})/, "$1-$2").replace(/(-\d{2})\d+?$/, "$1");
+  };
+  var celularMask = (value) => {
+    if (!value)
+      return "";
+    value = value.replace(/\D/g, "");
+    value = value.replace(/(\d{2})(\d)/, "($1) $2");
+    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
+    return value;
+  };
+
   // src/AppReservas/PaxModal.jsx
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var PaxModal = ({
     setPaxModalOpen,
     paxModalOpen,
     selectedDates,
+    convertDate: convertDate2,
     setPassageiros
   }) => {
     const [formMode, setFormMode] = React.useState("");
@@ -4798,7 +4306,10 @@
         case "data_nascimento": {
           if (target.value !== "") {
             if (selectedDates.some(
-              (_eventDate) => validarMaioridade(target.value, dateToISO(_eventDate)) == false
+              (_eventDate) => validarMaioridade(
+                target.value,
+                convertDate2(_eventDate, "iso")
+              ) == false
             )) {
               setPaxMenor(true);
             } else
@@ -4869,23 +4380,23 @@
         }
       }
     }, [paxModalOpen]);
-    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
       "div",
       {
         className: `modal-overlay ${visible ? "show" : ""}`,
         onClick: closePaxModal,
-        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
           "div",
           {
             className: `modal-content ${visible ? "show" : "hide"}`,
             onClick: (e) => e.stopPropagation(),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { className: "modal-close", onClick: closePaxModal, children: "\u2716" }),
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("h3", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "modal-close", onClick: closePaxModal, children: "\u2716" }),
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("h3", { children: [
                 formMode === "edit" ? "Editar " : "Adicionar ",
                 " passageiro"
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+              /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
                 "form",
                 {
                   id: "paxForm",
@@ -4894,9 +4405,9 @@
                     handleSubmitPaxForm(formMode);
                   },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { children: [
                       "Nome:",
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         "input",
                         {
                           type: "text",
@@ -4907,9 +4418,9 @@
                         }
                       )
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { children: [
                       "CPF:",
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         "input",
                         {
                           type: "text",
@@ -4921,9 +4432,9 @@
                         }
                       )
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { children: [
                       "Celular (WhatsApp):",
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         "input",
                         {
                           maxLength: "15",
@@ -4935,9 +4446,9 @@
                         }
                       )
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { children: [
                       "Data de nascimento:",
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         "input",
                         {
                           type: "date",
@@ -4948,8 +4459,8 @@
                         }
                       )
                     ] }),
-                    paxMenor && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "aviso-menor", id: "aviso-menor", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                    paxMenor && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "aviso-menor", id: "aviso-menor", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         "a",
                         {
                           href: "modelo-autorizacao.pdf",
@@ -4959,17 +4470,17 @@
                           children: "\u{1F4C4}"
                         }
                       ),
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "texto-aviso", children: "Passageiro menor de idade. Clique para baixar o modelo de autoriza\xE7\xE3o." })
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "texto-aviso", children: "Passageiro menor de idade. Clique para baixar o modelo de autoriza\xE7\xE3o." })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "modal-buttons", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "modal-buttons", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         CustomSelectPaxModal_default,
                         {
                           setFormData,
                           tripType: formData.tripType
                         }
                       ),
-                      formErrors.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", className: "saveBtn", disabled: true, children: "Salvar" }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { type: "submit", className: "saveBtn", children: "Salvar" })
+                      formErrors.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "submit", className: "saveBtn", disabled: true, children: "Salvar" }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { type: "submit", className: "saveBtn", children: "Salvar" })
                     ] })
                   ]
                 }
@@ -4981,19 +4492,61 @@
     );
   };
   PaxModal.propTypes = {
-    setPaxModalOpen: import_prop_types6.default.func.isRequired,
-    setPassageiros: import_prop_types6.default.func.isRequired,
-    paxModalOpen: import_prop_types6.default.array.isRequired,
-    selectedDates: import_prop_types6.default.array.isRequired
+    setPaxModalOpen: import_prop_types4.default.func.isRequired,
+    setPassageiros: import_prop_types4.default.func.isRequired,
+    paxModalOpen: import_prop_types4.default.array.isRequired,
+    selectedDates: import_prop_types4.default.array.isRequired,
+    convertDate: import_prop_types4.default.func.isRequired
   };
   var PaxModal_default = PaxModal;
 
   // src/AppReservas/AppReservas.jsx
-  var import_prop_types10 = __toESM(require_prop_types());
+  var import_prop_types8 = __toESM(require_prop_types());
 
   // src/AppReservas/PaxCard.jsx
-  var import_prop_types7 = __toESM(require_prop_types());
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
+  var import_prop_types5 = __toESM(require_prop_types());
+
+  // src/Utilities.jsx
+  function convertDate(inputDate, action) {
+    function detectFormat(dateStr) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr))
+        return "ISO";
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr))
+        return "DMY";
+      return "UNKNOWN";
+    }
+    function dmyToIso(dmy) {
+      const [day, month, year] = dmy.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
+    function isoToDmy(iso) {
+      const [year, month, day] = iso.split("-");
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+    }
+    const format = detectFormat(inputDate);
+    if (format === "UNKNOWN") {
+      throw new Error(
+        'Formato de data n\xE3o reconhecido. Use "dd/mm/aaaa" ou "aaaa-mm-dd".'
+      );
+    }
+    switch (action.toLowerCase()) {
+      case "iso":
+        return format === "ISO" ? inputDate : dmyToIso(inputDate);
+      case "dmy":
+        return format === "DMY" ? inputDate : isoToDmy(inputDate);
+      case "dateobject": {
+        const isoDate = format === "ISO" ? inputDate : dmyToIso(inputDate);
+        return new Date(isoDate);
+      }
+      default:
+        throw new Error(
+          `A\xE7\xE3o "${action}" n\xE3o reconhecida. Use "iso", "dmy" ou "dateObject".`
+        );
+    }
+  }
+
+  // src/AppReservas/PaxCard.jsx
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
     const cardRef = React.useRef(null);
     function removePax() {
@@ -5021,14 +4574,14 @@
         return () => clearTimeout(timeout);
       }
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("article", { className: "passenger-card", ref: cardRef, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "avatar", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("article", { className: "passenger-card", ref: cardRef, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "avatar", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
         "svg",
         {
           xmlns: "http://www.w3.org/2000/svg",
           viewBox: "0 0 24 24",
           fill: "currentColor",
-          children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+          children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
             "path",
             {
               d: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 \r\n          1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 \r\n          1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
@@ -5036,33 +4589,33 @@
           )
         }
       ) }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "info", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "top-row", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "name", tabIndex: "0", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { className: "my-0", "data-fullname": pax.nome_completo, children: pax.nome_completo }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "meta", children: pax.tripType == "ida-e-volta" ? "Ida e volta" : "Apenas " + pax.tripType })
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "info", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "top-row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "name", tabIndex: "0", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "my-0", "data-fullname": pax.nome_completo, children: pax.nome_completo }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "meta", children: pax.tripType == "ida-e-volta" ? "Ida e volta" : "Apenas " + pax.tripType })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "pill", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "pill", children: [
             "Passageiro #",
             index + 1
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { marginTop: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("dl", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dt", { children: "CPF" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dd", { children: pax.cpf })
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { marginTop: "12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("dl", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("dt", { children: "CPF" }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("dd", { children: pax.cpf })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dt", { children: "Contato" }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dd", { children: pax.celular })
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("dt", { children: "Contato" }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("dd", { children: pax.celular })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dt", { children: "Nasc." }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("dd", { children: pax.data_nascimento })
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("dt", { children: "Nasc." }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("dd", { children: convertDate(pax.data_nascimento, "DMY") })
           ] })
         ] }) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
         "button",
         {
           className: "edit-pencil",
@@ -5070,20 +4623,20 @@
           children: "\u270F\uFE0F"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("button", { className: "remove-pencil", onClick: removePax, children: "\u{1F5D1}\uFE0F" })
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { className: "remove-pencil", onClick: removePax, children: "\u{1F5D1}\uFE0F" })
     ] });
   };
   PaxCard.propTypes = {
-    pax: import_prop_types7.default.object,
-    index: import_prop_types7.default.number,
-    setPassageiros: import_prop_types7.default.func.isRequired,
-    openPaxModal: import_prop_types7.default.func.isRequired
+    pax: import_prop_types5.default.object,
+    index: import_prop_types5.default.number,
+    setPassageiros: import_prop_types5.default.func.isRequired,
+    openPaxModal: import_prop_types5.default.func.isRequired
   };
   var PaxCard_default = PaxCard;
 
   // src/AppReservas/AvisosModal.jsx
-  var import_prop_types8 = __toESM(require_prop_types());
-  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+  var import_prop_types6 = __toESM(require_prop_types());
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   var AvisosModal = ({
     alertType,
     setAvisosModalOpen,
@@ -5105,19 +4658,19 @@
     React.useEffect(() => {
       setVisible(true);
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
       "div",
       {
         className: `modal-overlay ${visible ? "show" : ""}`,
         onClick: closeAvisosModal,
-        children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
           "div",
           {
             className: `modal-content ${visible ? "show" : "hide"}`,
             onClick: (e) => e.stopPropagation(),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { children: "Aviso" }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h3", { children: "Aviso" }),
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
                 "div",
                 {
                   className: "modal-warning",
@@ -5125,11 +4678,11 @@
                   "aria-labelledby": "modal-warning-title",
                   "aria-describedby": "modal-warning-desc",
                   children: [
-                    alertType == "sem-data-selecionada" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { id: "modal-warning-title", className: "visually-hidden", children: "Aviso de sele\xE7\xE3o de datas" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { id: "modal-warning-desc", className: "warning-message", children: "Selecione primeiro a(s) data(s) da excurs\xE3o." }),
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "warning-actions", children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                    alertType == "sem-data-selecionada" && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h2", { id: "modal-warning-title", className: "visually-hidden", children: "Aviso de sele\xE7\xE3o de datas" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { id: "modal-warning-desc", className: "warning-message", children: "Selecione primeiro a(s) data(s) da excurs\xE3o." }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "warning-actions", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                           "button",
                           {
                             type: "button",
@@ -5138,7 +4691,7 @@
                             children: "Ir para sele\xE7\xE3o de datas"
                           }
                         ),
-                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                           "button",
                           {
                             type: "button",
@@ -5149,9 +4702,9 @@
                         )
                       ] })
                     ] }),
-                    alertType == "sem-embarque-selecionado" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h2", { id: "modal-warning-title", className: "visually-hidden", children: "Aviso de sele\xE7\xE3o de embarque" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                    alertType == "sem-embarque-selecionado" && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h2", { id: "modal-warning-title", className: "visually-hidden", children: "Aviso de sele\xE7\xE3o de embarque" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                         "p",
                         {
                           id: "modal-warning-desc",
@@ -5160,8 +4713,8 @@
                           children: "Selecione primeiro o seu ponto de embarque."
                         }
                       ),
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "warning-actions", children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "warning-actions", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                           "button",
                           {
                             type: "button",
@@ -5170,7 +4723,7 @@
                             children: "Ir para sele\xE7\xE3o de embarque"
                           }
                         ),
-                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                           "button",
                           {
                             type: "button",
@@ -5181,10 +4734,10 @@
                         )
                       ] })
                     ] }),
-                    alertType == "max-vagas-atingido" && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "error-container", role: "alert", "aria-live": "assertive", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "error-icon", children: "\u26A0\uFE0F" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "error-message", children: "N\xFAmero m\xE1ximo de vagas dispon\xEDveis atingido..." }),
-                      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                    alertType == "max-vagas-atingido" && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "error-container", role: "alert", "aria-live": "assertive", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "error-icon", children: "\u26A0\uFE0F" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { className: "error-message", children: "N\xFAmero m\xE1ximo de vagas dispon\xEDveis atingido..." }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                         "button",
                         {
                           className: "close-button",
@@ -5204,66 +4757,66 @@
     );
   };
   AvisosModal.propTypes = {
-    alertType: import_prop_types8.default.string.isRequired,
-    setAvisosModalOpen: import_prop_types8.default.func.isRequired,
-    openEmbarqueModal: import_prop_types8.default.func.isRequired,
-    openDateModal: import_prop_types8.default.func.isRequired
+    alertType: import_prop_types6.default.string.isRequired,
+    setAvisosModalOpen: import_prop_types6.default.func.isRequired,
+    openEmbarqueModal: import_prop_types6.default.func.isRequired,
+    openDateModal: import_prop_types6.default.func.isRequired
   };
   var AvisosModal_default = AvisosModal;
 
   // src/AppReservas/PrecoReservas.jsx
-  var import_prop_types9 = __toESM(require_prop_types());
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+  var import_prop_types7 = __toESM(require_prop_types());
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var PrecoReservas = ({
     passageiros,
     selectedDates,
     precoUnitario,
     totalCost
   }) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, { children: passageiros.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "passenger-card total-reservation", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "coluna-esquerda", children: [
-        selectedDates.length == 1 && passageiros.length == 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "item", children: "Valor:" }) : null,
-        selectedDates.length == 1 && passageiros.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: passageiros.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "passenger-card total-reservation", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "coluna-esquerda", children: [
+        selectedDates.length == 1 && passageiros.length == 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "item", children: "Valor:" }) : null,
+        selectedDates.length == 1 && passageiros.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "item small-info", children: [
             "Valor unit.: R$",
             precoUnitario,
             ",00"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "item small-info", children: [
             "Passageiros: ",
             passageiros.length
           ] })
         ] }) : null,
-        selectedDates.length > 1 && passageiros.length == 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+        selectedDates.length > 1 && passageiros.length == 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "item small-info", children: [
             "Valor unit.: R$",
             precoUnitario,
             ",00"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "item small-info", children: [
             "Dias: ",
             selectedDates.length
           ] })
         ] }) : null,
-        selectedDates.length > 1 && passageiros.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+        selectedDates.length > 1 && passageiros.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "item small-info", children: [
             "Valor unit.: R$",
             precoUnitario,
             ",00"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "item small-info", children: [
             "Passageiros: ",
             passageiros.length
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "item small-info", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "item small-info", children: [
             "Dias: ",
             selectedDates.length
           ] })
         ] }) : null
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "coluna-direita", children: [
-        passageiros.length > 1 || selectedDates.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "total", children: "Total" }) : null,
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "total", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "coluna-direita", children: [
+        passageiros.length > 1 || selectedDates.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "total", children: "Total" }) : null,
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "total", children: [
           "R$",
           totalCost,
           ",00"
@@ -5272,16 +4825,16 @@
     ] }) });
   };
   PrecoReservas.propTypes = {
-    passageiros: import_prop_types9.default.array.isRequired,
-    selectedDates: import_prop_types9.default.array.isRequired,
-    precoUnitario: import_prop_types9.default.number.isRequired,
-    totalCost: import_prop_types9.default.number.isRequired
+    passageiros: import_prop_types7.default.array.isRequired,
+    selectedDates: import_prop_types7.default.array.isRequired,
+    precoUnitario: import_prop_types7.default.number.isRequired,
+    totalCost: import_prop_types7.default.number.isRequired
   };
   var PrecoReservas_default = PrecoReservas;
 
   // src/AppReservas/AppReservas.jsx
-  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
-  function AppReservas({ variacoes, embarques, productId }) {
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+  function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
     const [availableDates, setAvailableDates] = React.useState([]);
     const [selectedDates, setSelectedDates] = React.useState([]);
     const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -5295,6 +4848,7 @@
     const [passageiros, setPassageiros] = React.useState([]);
     const [precoUnitario, setPrecoUnitario] = React.useState(0);
     const [taxa, setTaxa] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
     const botaoContinuarRef = React.useRef();
     const totalCost = precoUnitario * passageiros.length * selectedDates.length;
     React.useEffect(() => {
@@ -5308,23 +4862,49 @@
         botaoContinuarRef.current.setAttribute("disabled", "");
       }
     }, [selectedDates, embarque, horario, passageiros]);
-    function submitToCart() {
-      console.log("chamou submitToCart");
+    React.useEffect(() => {
+      if (loading) {
+        botaoContinuarRef.current.setAttribute("disabled", "");
+        botaoContinuarRef.current.innerHTML = '<span class="loadingElement my-0"></span>';
+        return;
+      }
+    }, [loading]);
+    function submitToCart(index = 0) {
+      if (!loading)
+        setLoading(true);
+      if (index >= selectedDates.length) {
+        botaoContinuarRef.current.innerHTML = "Redirecionando para o carrinho...";
+        window.location.href = "http://localhost/aerotour-site/carrinho/";
+        return;
+      }
       const submitQty = passageiros.length;
       const submitTaxa = taxa;
       const submitEmbarque = embarque ? embarque[0].embarqueId : null;
       const submitHorario = horario;
-      const submitPax = passageiros.length > 0 ? passageiros : null;
-      selectedDates.forEach((_date) => {
-        const submitVarId = getVarIdByDate(_date);
-        console.log(
-          submitQty,
-          submitTaxa,
-          submitEmbarque,
-          submitHorario,
-          submitPax,
-          submitVarId
-        );
+      const submitPax = passageiros.length > 0 ? JSON.stringify(passageiros) : null;
+      const _date = selectedDates[index];
+      const submitVarId = getVarIdByDate(_date);
+      $.ajax({
+        type: "POST",
+        url: ajaxUrl,
+        data: {
+          action: "add_variation_to_cart",
+          product_id: productId,
+          variation_id: submitVarId,
+          quantity: submitQty,
+          taxa: submitTaxa,
+          embarque: submitEmbarque,
+          horario: submitHorario,
+          passageiros: submitPax
+        },
+        success: function() {
+          console.log(`Varia\xE7\xE3o ${submitVarId} adicionada`);
+          submitToCart(index + 1);
+        },
+        error: function(response) {
+          console.log(["Erro ao adicionar varia\xE7\xE3o:", response]);
+          submitToCart(index + 1);
+        }
       });
     }
     function openDateModal() {
@@ -5365,10 +4945,6 @@
           setPaxModalOpen([true, mode, paxData, index]);
       }
     }
-    function parseDate(str) {
-      const [day, month, year] = str.split("/");
-      return /* @__PURE__ */ new Date(`${year}-${month}-${day}`);
-    }
     const getVarIdByDate = (date_str) => {
       const foundVar = variacoes.find(
         (_var) => _var.attributes.attribute_dia == date_str
@@ -5389,7 +4965,9 @@
         return;
       } else if (dataPayload.length > 0) {
         const arrayDatas = dataPayload.map((_payload) => _payload[0]);
-        const sorted = arrayDatas.sort((a, b) => parseDate(a) - parseDate(b));
+        const sorted = arrayDatas.sort(
+          (a, b) => convertDate(a, "dateobject") - convertDate(b, "dateobject")
+        );
         setSelectedDates(sorted);
         const arrayVarIds = dataPayload.map((_payload) => _payload[1]);
         setVariacoesSelecionadas(() => arrayVarIds);
@@ -5404,451 +4982,176 @@
         }
       });
     };
-    const [variacaoAtual, setVariacaoAtual] = React.useState(null);
-    const [horariosEmbarque, setHorariosEmbarque] = React.useState(null);
-    const [botaoContinuar, setBotaoContinuar] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
-    const [precoPadrao, setPrecoPadrao] = React.useState(false);
-    const [vagasVar, setVagasVar] = React.useState(null);
-    React.useEffect(() => {
-      if (variacoes.length === 1 && embarques)
-        setVariacaoAtual(variacoes[0]);
-    }, []);
-    React.useEffect(() => {
-      if (variacaoAtual)
-        setPrecoPadrao(+variacaoAtual.display_regular_price);
-      setPassageiros([]);
-      setHorariosEmbarque(null);
-      const horariosWrapper = document.querySelector(
-        ".excursao-details .horarios-wrapper"
-      );
-      if (horariosWrapper)
-        horariosWrapper.classList.remove("show-alert");
-      setBotaoContinuar(false);
-      if (variacaoAtual) {
-        const parser = new DOMParser();
-        const _html = parser.parseFromString(
-          variacaoAtual.availability_html,
-          "text/html"
-        );
-        if (variacaoAtual.availability_html)
-          setVagasVar(+_html.querySelector("p").textContent);
-        else
-          setVagasVar(0);
-      }
-    }, [variacaoAtual]);
-    React.useEffect(() => {
-      verificaBotaoContinuar();
-    }, [botaoContinuar]);
-    function handleSelectEmbarque({ target }) {
-      target.parentElement.nextElementSibling.querySelector(".horarios-wrapper").classList.add("show-alert");
-      setEmbarque(+target.selectedOptions[0].dataset.id);
-      setTaxa(() => {
-        const embObj = embarques.filter((_emb) => _emb.nome == target.value)[0];
-        if (embObj.taxa == "unset" || embObj.taxa == "0")
-          return 0;
-        else
-          return +embObj.taxa;
-      });
-      setHorariosEmbarque(() => {
-        const selectedOption = Array.prototype.slice.call(target.children).filter((opt) => opt.selected)[0];
-        let _return = JSON.parse(selectedOption.dataset.horarios);
-        return _return;
-      });
-    }
-    function handleClickHorario({ target }) {
-      setHorario(target.innerText);
-      target.parentElement.querySelectorAll("span").forEach((btn) => btn.classList.remove("active"));
-      target.classList.add("active");
-      target.parentElement.classList.remove("show-alert");
-    }
-    function handlePassageirosContainer({ target }) {
-      const passageirosContainer = document.querySelector("#modulo_passageiros");
-      setPassageiros([{ nome_completo: "", doc: "", telefone: "" }]);
-      gtag("event", "botao_reserva_click", {});
-      if (passageirosContainer.classList.contains("d-none")) {
-        target.setAttribute("disabled", "");
-        target.classList.add("d-none");
-        passageirosContainer.classList.remove("d-none");
-        setTimeout(() => passageirosContainer.classList.add("animate-in"), 120);
-      } else {
-        target.removeAttribute("disabled");
-        passageirosContainer.classList.add("d-none");
-        target.classList.remove("d-none");
-        passageirosContainer.classList.remove("animate-in");
-        setTimeout(() => passageirosContainer.classList.remove("d-none"), 500);
-      }
-      setBotaoContinuar(!botaoContinuar);
-    }
-    function verificaBotaoContinuar() {
-      if (botaoContinuar) {
-        document.querySelector(".single_add_to_cart_button").removeAttribute("disabled");
-      }
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { id: "newReservasContainer", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "main-title", children: "Fa\xE7a aqui sua reserva" }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "section-title", children: "Data e local de embarque" }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "grid-row", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-            "div",
-            {
-              className: "grid-item clickable grid-dates",
-              "data-fill": selectedDates.length < 1 ? "false" : "true",
-              onClick: openDateModal,
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "icon", children: "\u{1F4C5}" }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "text", children: selectedDates.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "empty-text-placeholder", children: [
-                  "Selecionar",
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
-                  " data..."
-                ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "box-title", children: [
-                    selectedDates.length > 1 ? "Datas selecionadas" : "Data selecionada",
-                    ":",
-                    " "
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("ul", { className: selectedDates.length > 1 ? "multi" : "", children: selectedDates.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("li", { children: d }, i)) })
-                ] }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
-              ]
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-            "div",
-            {
-              className: "grid-item clickable grid-embarque",
-              "data-fill": embarque.length < 1 ? "false" : "true",
-              onClick: openEmbarqueModal,
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sub-embarque d-flex", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "icon", children: "\u{1F68F}" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "text", children: embarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "empty-text-placeholder", children: [
-                    "Selecionar ",
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
-                    "embarque..."
-                  ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "box-title", children: "Embarque" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: embarque && embarque[0].nome })
-                  ] }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { id: "newReservasContainer", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "main-title", children: "Fa\xE7a aqui sua reserva" }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "section-title", children: "Data e local de embarque" }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          "div",
+          {
+            className: "grid-item clickable grid-dates",
+            "data-fill": selectedDates.length < 1 ? "false" : "true",
+            onClick: openDateModal,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F4C5}" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: selectedDates.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "empty-text-placeholder", children: [
+                "Selecionar",
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("br", {}),
+                " data..."
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "box-title", children: [
+                  selectedDates.length > 1 ? "Datas selecionadas" : "Data selecionada",
+                  ":",
+                  " "
                 ] }),
-                embarque.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sub-horario d-flex mt-2", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "icon", children: "\u{1F559}" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: horario ? horario : "--:--" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "text", children: " " })
-                ] }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
-              ]
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "section-title", children: "Passageiros" }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "passenger-list", children: [
-          passageiros.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: passageiros.map((_pax, index) => {
-            return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-              PaxCard_default,
-              {
-                pax: _pax,
-                index,
-                setPassageiros,
-                openPaxModal
-              },
-              _pax.cpf
-            );
-          }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "placeholder-container mt-1", children: 'Nenhum passageiro adicionado. Clique em "Adicionar novo passageiro" para come\xE7ar.' }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-            "div",
-            {
-              className: "passenger-card add-passenger",
-              onClick: () => openPaxModal("add"),
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "avatar", children: "\u2795" }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "info", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "top-row", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "name", children: "Adicionar novo passageiro" }) }) })
-              ]
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          PrecoReservas_default,
-          {
-            passageiros,
-            selectedDates,
-            precoUnitario,
-            totalCost
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("ul", { className: selectedDates.length > 1 ? "multi" : "", children: selectedDates.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("li", { children: d }, i)) })
+              ] }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
+            ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          "button",
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          "div",
           {
-            id: "reservasContinuar",
-            ref: botaoContinuarRef,
-            className: "single_add_to_cart_button",
-            onClick: submitToCart,
-            children: "Continuar"
-          }
-        ),
-        embarqueModalOpen && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          EmbarqueModal_default,
-          {
-            setEmbarqueModalOpen,
-            toggleEmbarque,
-            embarques,
-            embarque,
-            setEmbarque,
-            selectedDates,
-            variacoes,
-            getVarIdByDate,
-            setHorario,
-            variacoesSelecionadas,
-            setPrecoUnitario,
-            setTaxa
-          }
-        ),
-        dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          DatesModal_default,
-          {
-            setDateModalOpen,
-            availableDates,
-            selectedDates,
-            toggleDate,
-            getVarIdByDate,
-            getAvailabilityById,
-            passageiros
-          }
-        ),
-        paxModalOpen != false && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          PaxModal_default,
-          {
-            setPaxModalOpen,
-            paxModalOpen,
-            selectedDates,
-            setPassageiros
-          }
-        ),
-        avisosModalOpen && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          AvisosModal_default,
-          {
-            alertType: avisosModalOpen,
-            setAvisosModalOpen,
-            openDateModal,
-            openEmbarqueModal
+            className: "grid-item clickable grid-embarque",
+            "data-fill": embarque.length < 1 ? "false" : "true",
+            onClick: openEmbarqueModal,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-embarque d-flex", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F68F}" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: embarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "empty-text-placeholder", children: [
+                  "Selecionar ",
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("br", {}),
+                  "embarque..."
+                ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "box-title", children: "Embarque" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: embarque && embarque[0].nome })
+                ] }) })
+              ] }),
+              embarque.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-horario d-flex mt-2", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F559}" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: horario ? horario : "--:--" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: " " })
+              ] }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
+            ]
           }
         )
       ] }),
-      embarques && variacoes.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "datas mb-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mb-0", children: "Datas teste" }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "datas-badges-wrapper", children: variacoes.map((variacao, i) => {
-          let v_dia = variacao.attributes.attribute_dia;
-          let v_disponiveis = variacao.availability_html.slice(29).replace("</p>", "");
-          let badgeClasses = " ";
-          if (variacao.encerrar_vendas) {
-            badgeClasses += "badge-venda-encerrada ";
-          } else {
-            if (v_disponiveis > 0 && v_disponiveis <= 10) {
-              badgeClasses += "yellow ";
-            } else if (v_disponiveis === "" || v_disponiveis == 0) {
-              badgeClasses += "red ";
-            }
-          }
-          return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-            "span",
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "section-title", children: "Passageiros" }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "passenger-list", children: [
+        passageiros.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: passageiros.map((_pax, index) => {
+          return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            PaxCard_default,
             {
-              className: "badge-dia disp" + badgeClasses,
-              onClick: ({ target }) => {
-                document.querySelectorAll(".badge-dia").forEach((b) => b.classList.remove("active"));
-                target.classList.add("active");
-                setVariacaoAtual(variacoes[i]);
-              },
-              children: v_dia.slice(0, -5)
+              pax: _pax,
+              index,
+              setPassageiros,
+              openPaxModal
             },
-            v_dia
+            _pax.cpf
           );
-        }) })
-      ] }) }),
-      embarques && variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { id: "info-container", className: "pt-1", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-        "div",
+        }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "placeholder-container mt-1", children: 'Nenhum passageiro adicionado. Clique em "Adicionar novo passageiro" para come\xE7ar.' }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          "div",
+          {
+            className: "passenger-card add-passenger",
+            onClick: () => openPaxModal("add"),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "avatar", children: "\u2795" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "info", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "top-row", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "name", children: "Adicionar novo passageiro" }) }) })
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        PrecoReservas_default,
         {
-          className: "variacao-info",
-          "data-dia": variacaoAtual.attributes.attribute_dia,
-          "data-variacao-id": variacaoAtual.variation_id,
-          children: [
-            !variacaoAtual.encerrar_vendas && vagasVar != 0 && vagasVar < 10 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "alerta-vagas ultimos mb-2", children: [
-              "Restam ",
-              vagasVar,
-              " vagas"
-            ] }) : null,
-            !variacaoAtual.encerrar_vendas && !vagasVar ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "alerta-vagas esgotado", children: "Vagas esgotadas" }) : null,
-            variacaoAtual.attributes.attribute_dia.startsWith("volta") ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "so-volta-header", children: [
-              "Apenas volta para",
-              " ",
-              variacaoAtual.attributes.attribute_dia.split(" - ")[1],
-              "- desembarque nos mesmos locais de embarque"
-            ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("small", { className: "dia-selecionado d-block mb-3", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "mb-sm-1 mb-0 d-inline", children: "Dia selecionado:\xA0" }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "d-inline", children: variacaoAtual.attributes.attribute_dia })
-            ] }) }),
-            variacaoAtual.encerrar_vendas ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "vendas_encerradas_container", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { children: "Vendas encerradas para essa excurs\xE3o." }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "vendas_ativas_container", children: [
-              variacaoAtual.attributes.attribute_dia.startsWith(
-                "volta"
-              ) ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { children: "Reserva v\xE1lida apenas para volta do evento!" }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                " ",
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "modulo_locais_embarque", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mt-2 mb-0", children: "Locais de embarque" }),
-                  embarques.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                    "select",
-                    {
-                      defaultValue: "none",
-                      id: "embarque_" + variacaoAtual.attributes.attribute_dia,
-                      className: "embarque-select",
-                      "data-variacao-id": variacaoAtual.variation_id,
-                      onChange: handleSelectEmbarque,
-                      children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "none", disabled: true, children: "Selecione..." }),
-                        embarques.map((embarque2) => {
-                          let diaDaVar = variacaoAtual.attributes.attribute_dia;
-                          let disponibilidadesDoEmbarque = embarque2.horarios.map((_horarioObj) => {
-                            let todosHorariosDoEmbarque = [];
-                            _horarioObj.disponibilidade.forEach(
-                              (_dispObj) => {
-                                if (_dispObj.disp_dia == variacaoAtual.attributes.attribute_dia)
-                                  todosHorariosDoEmbarque.push({
-                                    disp_dia: diaDaVar,
-                                    status: _dispObj.status,
-                                    horario: _horarioObj.horario
-                                  });
-                              }
-                            );
-                            return todosHorariosDoEmbarque;
-                          });
-                          let todosIndisponiveis;
-                          if (disponibilidadesDoEmbarque.length > 1) {
-                            todosIndisponiveis = disponibilidadesDoEmbarque.every(
-                              (_horario) => _horario[0] && _horario[0].status === "indisponivel"
-                            );
-                          } else {
-                            todosIndisponiveis = disponibilidadesDoEmbarque.every(
-                              (_horario, _i) => _horario[_i] && _horario[_i].status === "indisponivel"
-                            );
-                          }
-                          return todosIndisponiveis === false ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                            "(",
-                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              "option",
-                              {
-                                value: embarque2.nome,
-                                "data-id": embarque2.embarqueId,
-                                "data-horarios": JSON.stringify(
-                                  disponibilidadesDoEmbarque
-                                ),
-                                children: embarque2.nome
-                              },
-                              embarque2.embarqueId
-                            ),
-                            ")"
-                          ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                            "(",
-                            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                              "option",
-                              {
-                                disabled: true,
-                                value: "",
-                                "data-horarios": [],
-                                children: [
-                                  embarque2.nome,
-                                  " (indisponivel)"
-                                ]
-                              },
-                              embarque2.embarqueId
-                            ),
-                            ")"
-                          ] });
-                        })
-                      ]
-                    },
-                    variacaoAtual.variation_id
-                  ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("i", { children: "Locais de embarque n\xE3o definidos" })
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "module_horarios_embarque", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mt-3 my-1", children: "Hor\xE1rios" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                    "div",
-                    {
-                      className: embarque ? "horarios-wrapper show-alert" : "horarios-wrapper",
-                      children: horariosEmbarque ? horariosEmbarque.map((horario2) => {
-                        return horario2[0].status !== "indisponivel" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                          "span",
-                          {
-                            className: "emb_horario",
-                            "data-variacao-id": variacaoAtual.variation_id,
-                            onClick: handleClickHorario,
-                            children: horario2[0].horario
-                          },
-                          horario2[0].horario
-                        ) }) : null;
-                      }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("i", { children: "Selecione o local de embarque primeiro" })
-                    }
-                  )
-                ] })
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "modulo_preco mb-3", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "label mt-sm-4 mt-3 mb-0", children: "Valor" }),
-                preco ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "info", children: [
-                    "R$ ",
-                    preco,
-                    ",00"
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: "por passageiro" })
-                ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("i", { children: "Selecione o local de embarque primeiro" })
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                Passageiros_default,
-                {
-                  passageiros,
-                  setPassageiros,
-                  botaoContinuar,
-                  embarque,
-                  horario,
-                  variacao: variacaoAtual,
-                  pID: productId,
-                  setLoading,
-                  loading,
-                  taxa
-                }
-              ),
-              variacaoAtual.max_qty !== "" && variacaoAtual.max_qty >= 1 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                "button",
-                {
-                  className: "btn btn-dark mt-sm-4 mt-2 btn-lg btn-reservar",
-                  onClick: handlePassageirosContainer,
-                  children: "Reservar lugar"
-                }
-              ) : null
-            ] })
-          ]
-        },
-        variacaoAtual.variation_id
-      ) }) }) : null,
-      embarques && variacoes.length > 1 && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { id: "info-placeholder", className: "my-5", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { children: variacoes.length > 1 ? "Selecione uma das op\xE7\xF5es acima para ver mais detalhes" : "Aguarde..." }) }) : null,
-      !embarques && !variacaoAtual ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "mt-5", children: "Mais informa\xE7\xF5es sobre essa excurs\xE3o em breve!" }) : null
+          passageiros,
+          selectedDates,
+          precoUnitario,
+          totalCost
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "button",
+        {
+          id: "reservasContinuar",
+          ref: botaoContinuarRef,
+          className: "single_add_to_cart_button",
+          onClick: () => submitToCart(),
+          children: "Continuar"
+        }
+      ),
+      embarqueModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        EmbarqueModal_default,
+        {
+          setEmbarqueModalOpen,
+          toggleEmbarque,
+          embarques,
+          embarque,
+          setEmbarque,
+          selectedDates,
+          variacoes,
+          getVarIdByDate,
+          setHorario,
+          variacoesSelecionadas,
+          setPrecoUnitario,
+          setTaxa
+        }
+      ),
+      dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        DatesModal_default,
+        {
+          setDateModalOpen,
+          availableDates,
+          selectedDates,
+          toggleDate,
+          getVarIdByDate,
+          getAvailabilityById,
+          passageiros
+        }
+      ),
+      paxModalOpen != false && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        PaxModal_default,
+        {
+          setPaxModalOpen,
+          paxModalOpen,
+          selectedDates,
+          setPassageiros,
+          convertDate
+        }
+      ),
+      avisosModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        AvisosModal_default,
+        {
+          alertType: avisosModalOpen,
+          setAvisosModalOpen,
+          openDateModal,
+          openEmbarqueModal
+        }
+      )
     ] }) });
   }
   AppReservas.propTypes = {
-    variacoes: import_prop_types10.default.array.isRequired,
-    embarques: import_prop_types10.default.array.isRequired,
-    nome: import_prop_types10.default.string,
-    productId: import_prop_types10.default.number.isRequired
+    variacoes: import_prop_types8.default.array.isRequired,
+    embarques: import_prop_types8.default.array.isRequired,
+    nome: import_prop_types8.default.string,
+    ajaxUrl: import_prop_types8.default.string,
+    cartUrl: import_prop_types8.default.string,
+    productId: import_prop_types8.default.number.isRequired
   };
   var reservas_app_root = document.getElementById("reserva_app");
   addEventListener("DOMContentLoaded", () => {
     if (reservas_app_root) {
       ReactDOM.createRoot(reservas_app_root).render(
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           AppReservas,
           {
             variacoes: JSON.parse(reservas_app_root.dataset.variacoes),
             embarques: JSON.parse(reservas_app_root.dataset.embarques),
-            productId: JSON.parse(reservas_app_root.dataset.productId)
+            productId: JSON.parse(reservas_app_root.dataset.productId),
+            ajaxUrl: reservas_app_root.dataset.ajaxUrl
           }
         )
       );

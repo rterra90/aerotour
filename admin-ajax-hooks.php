@@ -1,5 +1,31 @@
 <?php
 add_action('wp_ajax_update_reserva', 'ajax_update_reserva');
+
+add_action( 'wp_ajax_add_variation_to_cart', 'ajax_add_variation_to_cart' );
+add_action( 'wp_ajax_nopriv_add_variation_to_cart', 'ajax_add_variation_to_cart' );
+function ajax_add_variation_to_cart() {
+    $product_id   = absint( $_POST['product_id'] );
+    $variation_id = absint( $_POST['variation_id'] );
+    $quantity     = absint( $_POST['quantity'] );
+    $taxa     = $_POST['taxa'];
+    $embarque     = $_POST['embarque'];
+    $horario     = $_POST['horario'];
+    $passageiros     = $_POST['passageiros'];
+
+    $cart_item_data = array(
+        'mensagem_personalizada' => $mensagem
+    );
+
+    WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, array(), $cart_item_data );
+
+    // Retorna os fragments para atualizar o mini-carrinho
+    WC_AJAX::get_refreshed_fragments();
+    wp_die();
+}
+
+
+
+
 function ajax_update_reserva(){
   global $wpdb;
   $acao = $_POST['to'];

@@ -6,6 +6,8 @@ function slugify($str, $delimiter = '-'){
   return $slug;
 
 } 
+
+
 //Número de produtos na página de arquivo
 add_filter( 'loop_shop_per_page', function( $cols ) {
   return 100;
@@ -42,6 +44,8 @@ include 'includes/functions/coupons-functions.php';
 include 'includes/functions/blog.php';
 include 'includes/functions/general-customize.php';
 include 'includes/functions/process-product-meta.php';
+
+
 
 function remover_breadcrumb_em_arquivos_woocommerce() {
   if ( is_product_category() || is_shop() || is_product_tag() ) remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );

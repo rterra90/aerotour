@@ -3,18 +3,13 @@
 import PropTypes from 'prop-types';
 import CustomSelectPaxModal from './CustomSelectPaxModal.jsx';
 import useValidations from '../Hooks/useValidations';
-import {
-  cpfMask,
-  cpfRaw,
-  celularMask,
-  celularRaw,
-  dateToISO,
-} from '../AppReservas/InputMasks';
+import { cpfMask, celularMask } from '../AppReservas/InputMasks';
 
 const PaxModal = ({
   setPaxModalOpen,
   paxModalOpen,
   selectedDates,
+  convertDate,
   setPassageiros,
 }) => {
   const [formMode, setFormMode] = React.useState('');
@@ -112,7 +107,10 @@ const PaxModal = ({
           if (
             selectedDates.some(
               (_eventDate) =>
-                validarMaioridade(target.value, dateToISO(_eventDate)) == false,
+                validarMaioridade(
+                  target.value,
+                  convertDate(_eventDate, 'ISO'),
+                ) == false,
             )
           ) {
             setPaxMenor(true);
@@ -305,6 +303,7 @@ PaxModal.propTypes = {
   setPassageiros: PropTypes.func.isRequired,
   paxModalOpen: PropTypes.array.isRequired,
   selectedDates: PropTypes.array.isRequired,
+  convertDate: PropTypes.func.isRequired,
 };
 
 export default PaxModal;

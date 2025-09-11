@@ -6,11 +6,9 @@ export const cpfMask = (value) => {
     .replace(/(\d{3})(\d{1,2})/, '$1-$2')
     .replace(/(-\d{2})\d+?$/, '$1'); // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
 };
-
 export const cpfRaw = (value) => {
   return value.replace('-', '').replaceAll('.', '');
 };
-
 export const celularMask = (value) => {
   if (!value) return '';
   value = value.replace(/\D/g, '');
@@ -24,9 +22,4 @@ export const celularRaw = (value) => {
     .replace(')', '')
     .replace('-', '')
     .replaceAll(' ', '');
-};
-
-export const dateToISO = (dataStr) => {
-  const [dia, mes, ano] = dataStr.split('/');
-  return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
 };
