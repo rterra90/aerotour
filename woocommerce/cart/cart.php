@@ -45,71 +45,64 @@ do_action( 'woocommerce_before_cart' ); ?>
 						 * @param string $cart_item_key Key for the product in the cart.
 						 */
 						$product_name = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
+						$data_exc = explode(' - ', $product_name);
+						$data_exc = $data_exc[sizeof($data_exc) - 1];
 
+						$remove_url   = wc_get_cart_remove_url( $cart_item_key );
 						if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
 							$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
 							?>
-							<tr class="woocommerce-cart-form__cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?> checkout-box">
 
-								<td class="product-remove">
-									<?php
-										echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-											'woocommerce_cart_item_remove_link',
-											sprintf(
-												'<a href="%s" class="remove" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
-												esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
-												/* translators: %s is the product name */
-												esc_attr( sprintf( __( 'Remove %s from cart', 'woocommerce' ), wp_strip_all_tags( $product_name ) ) ),
-												esc_attr( $product_id ),
-												esc_attr( $_product->get_sku() )
-											),
-											$cart_item_key
-										);
-									?>
-								</td>
+							<div class="cart-item" data-cart-key="<?php echo esc_attr($cart_item_key); ?>">
+								<!-- Botão remover -->
+								<a href="<?php echo esc_url( $remove_url ); ?>" 
+									class="remove-item" 
+									aria-label="<?php esc_attr_e( 'Remover', 'woocommerce' ); ?>" 
+									data-product_id="<?php echo esc_attr( $product_id ); ?>" 
+									data-cart_item_key="<?php echo esc_attr( $cart_item_key ); ?>" 
+									data-product_sku="<?php echo esc_attr( $_product->get_sku() ); ?>">
+									✖
+								</a>
 
-								<td class="product-name" data-title="<?php esc_attr_e( 'Product', 'woocommerce' ); ?>">
-									<div>
-										<?php
-											if ( ! $product_permalink ) {
-												echo wp_kses_post( $product_name . '&nbsp;' );
-											} else {
-												$nome_exp = explode(' - ', $_product->get_name());
-												echo '<i>Excursão Aerotour</i>' . wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( explode('?', $product_permalink)[0] ), $nome_exp[sizeof($nome_exp) - 2] ), $cart_item, $cart_item_key ) );
-											}
-											echo '<p class="data-excursao mb-0">Data: '. $nome_exp[sizeof($nome_exp) - 1] .' | Horário: ' . $horario .'</p><p class="mb-0">Local de embarque: ' . $embarque . '</p>';
-
-											do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key );
-
-											// Meta data.
-											echo wc_get_formatted_cart_item_data( $cart_item ); // PHPCS: XSS ok.
-
-											// Backorder notification.
-											if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ) {
-												echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'woocommerce' ) . '</p>', $product_id ) );
-											}
-										?>
-									</div>
+								<!-- Informações da excursão -->
+								<div class="tour-info">
+									<h3>Excursão <?php echo esc_html( preg_replace('/ - \d{2}\/\d{2}\/\d{4}$/', '', $product_name) ); ?></h3>
 									
-									<div class="mobile-cart-passageiros">
-										<span onclick="handleMobilePassageiros(this)"><?= sizeof($passageiros); ?> <?= sizeof($passageiros) > 1 ? 'passageiros' : 'passageiro' ?><span class="arrow">></span></span>
-										<div class="d-none">
-											<?php include 'cart-passageiros.php'; ?>
-										</div>
-										
+									<div class="d-flex justify-content-between">
+										<?php if ($data_exc) : ?>
+											<p><strong>Data:</strong> <?php echo esc_html($data_exc); ?></p>
+										<?php endif; ?>
+										<?php if ($horario) : ?>
+											<p class="w-50"><strong>Horário:</strong> <?php echo esc_html($horario); ?></p>
+										<?php endif; ?>
 									</div>
-								</td>
+										<?php if ($embarque) : ?>
+											<p><strong>Embarque:</strong> <?php echo esc_html($embarque); ?></p>
+										<?php endif; ?>
+											<p><strong>Valor:</strong> <?php echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); ?></p>
+								
+								</div>
 
-								<td class="product-passageiro" data-title="Passageiro">
-									<?php include 'cart-passageiros.php'; ?>
-								</td>
+								<!-- Passageiros -->
+								<?php if (!empty($passageiros)) : ?>
+									<div class="passengers">
+										<button type="button" class="toggle-passengers">👥 Ver passageiros</button>
+										<div class="passenger-list">
+											<?php foreach ($passageiros as $passenger) : ?>
+												<div class="passenger">
+													<p><strong>Nome:</strong> <?php echo esc_html($passenger -> nome_completo); ?></p>
+													<p><strong>CPF:</strong> <?php echo esc_html($passenger -> cpf); ?></p>
+													<p><strong>Celular:</strong> <?php echo esc_html($passenger -> celular); ?></p>
+													<p><strong>Nascimento:</strong> <?php echo esc_html(data_to_dmy($passenger -> data_nascimento)); ?></p>
+												</div>
+											<?php endforeach; ?>
+										</div>
+									</div>
+								<?php endif; ?>
 
-								<td class="product-subtotal" data-title="<?php esc_attr_e( 'Subtotal', 'woocommerce' ); ?>">
-									<?php
-										echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
-									?>
-								</td>
-							</tr>
+							</div>
+
+
 							<?php
 						}
 					}
@@ -161,11 +154,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 	<!--<div id="bannerRoleta" class="mt-2"><img style="width: 100%; max-width: 460px" src="<?= get_stylesheet_directory_uri()?>/assets/banners/banner-roleta.webp" alt="Banner roleta Aerotour"></div>-->
 	<script>
 		const finalizarBtn = document.querySelector('.checkout-button');
-		finalizarBtn.classList.add('btn');
-		finalizarBtn.classList.add('btn-dark');
-		finalizarBtn.classList.add('btn-lg');
 		finalizarBtn.innerText = "Continuar para pagamento"
-
 
 		function toggleCupomInputs(element_id){
 			document.querySelector('#' + element_id).classList.toggle('active');
@@ -176,11 +165,42 @@ do_action( 'woocommerce_before_cart' ); ?>
 			element.parentElement.classList.toggle('active');
 		}
 
-
 			gtag('event', 'ads_conversion_Adicionar_ao_carrinho_1', {
 				// <event_parameters>
 			});
 
+
+			document.addEventListener("DOMContentLoaded", () => {
+				// Toggle passageiros
+				document.querySelectorAll(".toggle-passengers").forEach(btn => {
+					btn.addEventListener("click", () => {
+						const list = btn.nextElementSibling;
+						list.classList.toggle("open");
+						btn.textContent = list.classList.contains("open") 
+							? "👥 Ocultar passageiros"
+							: "👥 Ver passageiros";
+					});
+				});
+
+				// // Remover item com animação (WooCommerce já remove via link)
+				// document.querySelectorAll(".remove-item").forEach(btn => {
+				// 	btn.addEventListener("click", (e) => {
+				// 		const item = btn.closest(".cart-item");
+				// 		item.style.opacity = "0";
+				// 		item.style.transform = "translateX(50px)";
+				// 		setTimeout(() => item.remove(), 300);
+				// 	});
+				// });
+
+				// Remover item com confirmação
+				document.querySelectorAll(".remove-item").forEach(btn => {
+					btn.addEventListener("click", (e) => {
+						if (!confirm("Tem certeza que deseja remover esta excursão do carrinho?")) {
+							e.preventDefault(); // bloqueia remoção
+						}
+					});
+				});
+			});
 
 	</script>
 

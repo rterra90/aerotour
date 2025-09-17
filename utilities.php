@@ -140,9 +140,16 @@ function card_datas($datas){
     }
   };
 }
-function data_unicode_std($data_raw){ //$data_raw = dd/mm/YYYY
+
+//Converte data DMY para ISO
+function data_to_iso($data_raw){ //$data_raw = dd/mm/YYYY
   return explode('/', $data_raw)[2] . '-' . explode('/', $data_raw)[1] . '-' . explode('/', $data_raw)[0];
 }
+
+//Converte data ISO para DMY
+function data_to_dmy($data_raw){ //$data_raw = YYYY-mm-dd
+  return explode('-', $data_raw)[2] . '/' . explode('-', $data_raw)[1] . '/' . explode('-', $data_raw)[0];
+} 
 
 function horario_formatado($_order, $index){
   $passageiro = json_decode(get_post_meta($_order -> get_id(), 'passageiro', true));

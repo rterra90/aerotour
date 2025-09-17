@@ -28,7 +28,7 @@ $tem_variacao = count($exc_variacoes) > 1;
             $v_disponiveis = trim(str_replace('</p>', '', substr($exc_variacoes[0]['availability_html'], 29)));
             $data_evento = count(explode('/', $datas_array[0])) == 3 ? $datas_array[0] : $datas_array[0] . "/" .date("Y");
 
-            if(strtotime("now") > strtotime(data_unicode_std($data_evento)) + 10800)echo '<span class="card-alert card-alert-red">Vendas encerradas!</span>';
+            if(strtotime("now") > strtotime(data_to_iso($data_evento)) + 10800)echo '<span class="card-alert card-alert-red">Vendas encerradas!</span>';
             else{
                 if($v_disponiveis === '')echo '<span class="card-alert card-alert-red">Esgotado!</span>';
                 else if(is_numeric($v_disponiveis) && $v_disponiveis <= 10) echo '<span class="card-alert">Últimos lugares!</span>';
@@ -43,7 +43,7 @@ $tem_variacao = count($exc_variacoes) > 1;
             };
 
             foreach($dias_lugares as $_dia => $_lugares){
-              $status_vendas_var = (int)strtotime('now') >= ((int)strtotime(data_unicode_std($_dia)) + (3600 * 10)) ? 'encerrada' : 'ativa';
+              $status_vendas_var = (int)strtotime('now') >= ((int)strtotime(data_to_iso($_dia)) + (3600 * 10)) ? 'encerrada' : 'ativa';
 
               if($status_vendas_var === 'encerrada' || $_lugares === 'encerrada'){
                 echo '<span class="card-alert card-alert-red"><b>' . substr($_dia, 0, -5) . '</b>Vendas encerradas!</span>';

@@ -1,6 +1,22 @@
 @import url(galeria.css);
 @import url(app-reservas/app-reservas-main.css);
 
+#info-body {
+  min-width: 500px;
+  flex-grow: 1;
+}
+#info-body .share {
+  padding: 10px 10px 0px;
+  height: fit-content;
+}
+#info-body .share > span {
+  font-size: 0.675rem;
+  display: block;
+  text-align: right;
+}
+#info-body .share .share-icons {
+  gap: 0.4rem;
+}
 #content-event .notices .woocommerce-error li {
   text-align: center;
   display: flex;
@@ -205,206 +221,6 @@
 .excursao-details .alerta-vagas.esgotado {
   background-color: #a13f3f;
 }
-.modulo_preco p.info {
-  margin-bottom: -10px;
-  line-height: 1.35;
-}
-.modulo_preco > span {
-  font-size: 0.6rem;
-}
-#modulo_passageiros {
-  background: #d5d5d5;
-  padding: 10px;
-  border-radius: 0.2rem;
-  transform: scale(0.85);
-  opacity: 0;
-  transition: 0.5s;
-}
-#modulo_passageiros.animate-in,
-#modulo_passageiros .animate-in {
-  transform: scale(1) !important;
-  opacity: 1 !important;
-}
-#modulo_passageiros .user-icon {
-  font-size: 2.4rem;
-  max-width: 40px;
-}
-#modulo_passageiros li.passageiro-li {
-  box-shadow: 1px 1px 5px rgb(0 0 0 / 40%);
-  padding: 8px;
-  border-radius: 0.2rem;
-  background-color: #efefef;
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
-  transform: scale(0.85);
-  opacity: 0;
-  transition: 0.5s;
-}
-
-#modulo_passageiros .add_passageiro_btn {
-  font-size: 0.7rem;
-  padding: 4px 0;
-  width: 240px;
-  margin: 0 auto;
-  text-align: center;
-  margin-top: 12px;
-  transition: 0.2s;
-  background-color: rgba(0, 0, 0, 0);
-  cursor: pointer;
-  border-radius: 0.2rem;
-}
-#modulo_passageiros .add_passageiro_btn:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  text-decoration: underline;
-}
-#modulo_passageiros li input {
-  border: 1px solid #00000018;
-  background-color: #00000000;
-  border-radius: 0.2rem;
-  font-size: 0.875rem;
-  padding: 2px 6px;
-}
-#modulo_passageiros li .dados-passageiro {
-  max-width: 350px;
-  width: 80%;
-}
-#modulo_passageiros li label {
-  position: relative;
-  width: 50%;
-}
-#modulo_passageiros li label i {
-  position: absolute;
-  left: 4px;
-  top: 50%;
-  transform: translateY(-44%) scale(0.85);
-  opacity: 0.8;
-}
-#modulo_passageiros li .dados-passageiro > div input {
-  width: 100%;
-  padding-left: 24px;
-}
-#modulo_passageiros input[data-campo='nome_completo'] {
-  width: 100%;
-  margin-bottom: 4px;
-}
-#modulo_passageiros input[data-campo].error::after {
-  content: 'Revise o dado informado';
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: red;
-}
-#modulo_passageiros form#passsageiro_reserva {
-  margin-top: 16px;
-}
-#modulo_passageiros form.variations_form input[type='submit'] {
-  width: 90%;
-  margin: 0 auto;
-  display: block;
-  background-color: #353535;
-  border: #353535;
-  border-radius: 0.1rem;
-  font-size: 0.825rem;
-  text-transform: uppercase;
-  color: #d9d9d9;
-  line-height: 2;
-  transition: 0.2s;
-  cursor: pointer;
-  margin-top: 16px;
-}
-#modulo_passageiros li input.error {
-  border: 2px solid #868900;
-  background: #fbff001c;
-}
-#modulo_passageiros li input.border-fill {
-  border: 2px solid #3b3b3b;
-}
-#modulo_passageiros form.variations_form input[type='submit']:hover {
-  background-color: #505050;
-  border: #505050;
-}
-#modulo_passageiros form.variations_form input[type='submit']:disabled {
-  background-color: rgba(239, 239, 239, 0.3);
-  border: 1px solid rgba(118, 118, 118, 0.3);
-  color: rgb(89 89 89 / 60%);
-  cursor: not-allowed;
-}
-p.passageiros-error-alert {
-  font-size: 0.675rem;
-  font-weight: 600;
-  color: #ab6262;
-  text-align: center;
-  margin-top: 6px;
-}
-#modulo_passageiros li.error-animate {
-  animation: passageiroError 3s;
-  animation-delay: 0.2s;
-  background-color: #efefef;
-}
-@keyframes passageiroError {
-  0% {
-    background-color: #efefef;
-  }
-  5% {
-    background-color: #d8baba;
-  }
-  10% {
-    background-color: #e6d7d7;
-  }
-  15% {
-    background-color: #d8baba;
-  }
-  100% {
-    background-color: #efefef;
-  }
-}
-
-#modulo_passageiros .icones-passageiro {
-  display: flex;
-  align-items: center;
-}
-#modulo_passageiros .icones-passageiro i {
-  opacity: 0.4;
-  transition: 0.2s;
-  color: inherit;
-  cursor: pointer;
-}
-#modulo_passageiros .icones-passageiro i:hover {
-  opacity: 0.8;
-  color: rgb(190, 91, 91);
-}
-#reserva-dados-passageiro {
-  background-color: #d7d7d7;
-  border: 3px solid #6a6a6a;
-}
-#reserva-dados-passageiro form {
-  text-align: center;
-}
-#reserva-dados-passageiro form .label {
-  font-size: 0.675rem;
-  display: block;
-}
-#passsageiro_reserva .item input {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid var(--aer-bg-dark);
-  margin-bottom: 1rem;
-  text-align: center;
-}
-#passsageiro_reserva .item[data-item='rg'] input[name='p_rg'] {
-  width: 45%;
-}
-#passsageiro_reserva .item[data-item='rg'] input[name='p_rg_orgao_exp'] {
-  width: 30%;
-}
-#reserva-dados-passageiro .input-dado-placeholder {
-  margin-top: -3px;
-}
-#reserva-dados-passageiro .cancelar {
-  text-align: center;
-  font-size: 0.625rem;
-  margin-bottom: 2px;
-}
 
 #content-event #info-container.tem-variacao::before {
   content: '';
@@ -430,21 +246,31 @@ p.passageiros-error-alert {
   background-color: #e7e7e7;
   z-index: 99;
   position: relative;
+  width: 92%;
 }
 #content-event .excursao-wrapper {
   margin-top: 0px;
 }
-@media (min-width: 768px) {
-  #content-event .row.product-body {
-    flex-direction: row;
-  }
-  #content-event .main-image {
-    margin-top: 12px;
-    max-width: 1400px;
-    margin: 0 auto;
-    display: block;
+@media (max-width: 1400px) {
+  #content-event .excursao-wrapper {
+    background-color: tomato;
   }
 }
+@media (max-width: 1080px) {
+  #content-event .excursao-wrapper {
+    background-color: rgb(255, 191, 71);
+    width: 100%;
+  }
+}
+@media (min-width: 1080px) {
+  #content-event .excursao-wrapper {
+    margin-top: -92px;
+  }
+  #content-event .hero-img {
+    padding: 0 20px;
+  }
+}
+
 #info-body .disp-header {
   padding: 2px 16px;
   width: fit-content;
@@ -777,16 +603,11 @@ p.passageiros-error-alert {
 }
 
 #exc-wpp-cta {
-  width: fit-content;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
-#exc-wpp-cta.desktop {
-  margin: unset;
-  display: none;
-}
-#exc-wpp-cta.mobile {
-  display: block;
-}
+
 #exc-wpp-cta div[role='button'] {
   display: flex;
   align-items: center;
@@ -957,18 +778,7 @@ p.passageiros-error-alert {
     margin-left: 8px;
   }
 }
-@media (min-width: 768px) {
-  #locaisEmbarqueContainer .embarque-box .horariosMulti {
-    max-width: 254px;
-  }
-  #locaisEmbarqueContainer .embarque-box .horariosMulti > div span {
-    text-align: start;
-  }
 
-  #mobile-sticky-res-btn {
-    display: none !important;
-  }
-}
 @media (max-width: 768px) {
   #content-event h3 {
     font-size: 0.825rem;
@@ -1129,6 +939,25 @@ p.passageiros-error-alert {
   }
 }
 @media (min-width: 768px) {
+  #content-event .row.product-body {
+    flex-direction: row;
+  }
+  #content-event .main-image {
+    margin-top: 12px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: block;
+  }
+  #locaisEmbarqueContainer .embarque-box .horariosMulti {
+    max-width: 254px;
+  }
+  #locaisEmbarqueContainer .embarque-box .horariosMulti > div span {
+    text-align: start;
+  }
+
+  #mobile-sticky-res-btn {
+    display: none !important;
+  }
   #info-body h1 {
     font-size: 2rem;
   }
@@ -1144,24 +973,10 @@ p.passageiros-error-alert {
   #info-body .info-row-icon {
     width: 80px;
   }
-  #exc-wpp-cta.desktop {
-    display: block;
-  }
-  #exc-wpp-cta.mobile {
-    display: none;
-  }
 }
 @media (min-width: 992px) {
   #info-body .disp-header {
     padding: 3px 18px;
     font-size: 0.875rem;
-  }
-}
-@media (min-width: 1080px) {
-  #content-event .excursao-wrapper {
-    margin-top: -92px;
-  }
-  #content-event .hero-img {
-    padding: 0 20px;
   }
 }

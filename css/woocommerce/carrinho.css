@@ -1,4 +1,4 @@
-.woocommerce-cart-form .cart-passageiro {
+/* .woocommerce-cart-form .cart-passageiro {
   background-color: #ffffff42;
   border-radius: 0.2rem;
   padding: 3px 4px;
@@ -36,15 +36,129 @@
 .woocommerce-cart-form .passageiros .person-icone {
   display: flex;
   align-items: center;
+} */
+
+/* body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  padding: 20px;
+} */
+#carrinho-container a.checkout-button {
 }
-.aer-notices-cart {
-  text-align: center;
+.cart-item {
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 20px;
+  background: #f7f7f7;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.aer-notices-cart-title {
-  font-size: 2rem;
+
+.cart-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
-.aer-notices-cart-title span {
+
+.remove-item {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.remove-item:hover {
+  color: #e74c3c;
+}
+
+.tour-info h3 {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+  color: #222;
+}
+
+.tour-info p {
+  margin: 3px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.passengers {
+  margin-top: 14px;
+}
+
+.toggle-passengers,
+#carrinho-container a.checkout-button {
+  background: #0066cc;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+#carrinho-container a.checkout-button:hover,
+.toggle-passengers:hover {
+  background: #0055aa;
+}
+
+.passenger-list {
+  margin-top: 12px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.passenger-list.open {
+  max-height: 400px; /* com rolagem quando muitos passageiros */
+  overflow-y: auto;
+}
+
+.passenger {
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+
+.passenger p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* Scrollbar suave */
+.passenger-list::-webkit-scrollbar {
+  width: 6px;
+}
+.passenger-list::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 4px;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .tour-info h3 {
+    font-size: 1.1rem;
+  }
+  .toggle-passengers {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /*Item do carrinho*/
@@ -128,7 +242,7 @@
 
 .cart-collaterals {
   background-color: #f7f7f7;
-  padding: 10px;
+  padding: 18px;
   border-radius: 0.3rem;
 }
 .cart-collaterals table {

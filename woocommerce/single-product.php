@@ -99,12 +99,12 @@ $datas = array_map(function($_var){
     </div>
 
 
-    <div class="container-lg py-md-5 py-3 excursao-wrapper">
+    <div class="container-xxl py-md-5 py-3 excursao-wrapper">
       <div class="notices">
         <?php wc_print_notices(); ?>
       </div>
       
-      <section class="row product-body px-md-3">
+      <section class="row product-body">
         <!-- INFORMAÇÕES -->
         <div id="info-body" class="col-md-7 col">
           <div id="mobile-sticky-res-btn">
@@ -124,8 +124,22 @@ $datas = array_map(function($_var){
               <?php
             };
           ?>
+          <div class="d-flex justify-content-between gap-2">
+            <h1><span>Excursão<br/></span><?= $excursao['nome'] ?></h1>
 
-          <h1><span>Excursão<br/></span><?= $excursao['nome'] ?></h1>
+            <div class="share">
+            <span>Compartilhe</span>
+            <div class="share-icons d-flex gap-2">
+              <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons('whatsapp', 18, 18)?></a>
+              <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons('instagram', 18, 18)?>
+              </a>
+              <a href="https://www.facebook.com/aerotourcampinas/" aria-label="Botão compartilhar pelo Facebook">
+                <?= aer_icons('facebook', 18, 18)?>
+              </a>
+            </div>
+          </div>
+          </div>
+          
           <?php
               if(get_the_ID() == 4893){
                 $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id = 4894 AND status = 'normal'");
@@ -143,17 +157,7 @@ $datas = array_map(function($_var){
                 <?php
               }
             ?>
-          <div class="share mb-2">
-            <span>Compartilhe</span>
-            <div class="share-icons d-flex gap-2">
-              <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons('whatsapp', 22, 22)?></a>
-              <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons('instagram', 22, 22)?>
-              </a>
-              <a href="https://www.facebook.com/aerotourcampinas/" aria-label="Botão compartilhar pelo Facebook">
-                <?= aer_icons('facebook', 22, 22)?>
-              </a>
-            </div>
-          </div>
+          
 
           <div class="info">
             
@@ -393,21 +397,9 @@ $datas = array_map(function($_var){
               </div>
             </div>
           </div>
-          <div id="exc-wpp-cta" class="desktop">
-            <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao['nome']; ?>" aria-label="Botão para chamar no WhatsApp">
-              <div role="button" class="mt-5">
-                <div class="wpp-icon">
-                  <?= aer_icons('whatsapp', 30, 30); ?>
-                </div>
-                <div class="wpp-text">
-                  <p>Dúvidas?</p>
-                  <span>Fale conosco no WhatsApp!</span>                
-                </div>
-              </div>
-            </a>
-          </div>
+
         </div>
-        
+
         <!-- RESERVA -->
         <div id="reservaBox" class="col-md-5 col center-element reserva-box">
 
@@ -434,10 +426,12 @@ $datas = array_map(function($_var){
             <div id="reserva_app" data-cart-url='<?= wc_get_cart_url(); ?>' data-ajax-url='<?php echo admin_url( 'admin-ajax.php' ); ?>' data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE); ?>' data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE); ?>' data-product-id='<?= $excursao['id']; ?>'></div>
             <!-- FIM RESERVA APP - REACT  -->
           
-          <!-- </div> -->
-          <div id="exc-wpp-cta" class="mobile">
+
+        </div>
+      </section>
+          <div id="exc-wpp-cta" class="desktop">
             <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao['nome']; ?>" aria-label="Botão para chamar no WhatsApp">
-              <div role="button" class="mt-4">
+              <div role="button" class="mt-5">
                 <div class="wpp-icon">
                   <?= aer_icons('whatsapp', 30, 30); ?>
                 </div>
@@ -447,11 +441,7 @@ $datas = array_map(function($_var){
                 </div>
               </div>
             </a>
-            
           </div>
-        </div>
-      </section>
-
       <!-- EXCURSÕES RELACIONADAS -->
       <section id="excursoes-relacionadas" class="mt-5 py-md-3">
         <?php 
