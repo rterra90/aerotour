@@ -8,9 +8,10 @@
   --pax-card-bg-light: #e9e9e9;
 }
 #newReservasContainer {
-  box-shadow: 0 0 2px 2px #afafaf;
+  box-shadow: 0 0 0px 3px var(--aer-accent);
   border-radius: 0.6rem;
   background-color: #f5f5f5;
+  background-color: var(--aer-box-light);
   max-width: 500px;
   margin: 12px auto;
   padding: 10px;
@@ -18,12 +19,13 @@
     'Helvetica Neue', Arial;
 }
 #newReservasContainer .main-title {
-  background-color: #e3e3e3;
+  background-color: var(--aer-accent);
   box-shadow: 0 0 3px 0 #a1a1a1;
+  color: #f9f9f9;
   text-align: center;
   font-size: 1.325rem;
-  color: #535353;
   border-radius: 0.2rem;
+  padding: 4px 0;
 }
 #newReservasContainer .section-title {
   text-align: center;
@@ -54,14 +56,29 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
 }
-
+#newReservasContainer .grid-item svg {
+  width: 16px;
+  height: 16px;
+}
+#newReservasContainer .grid-dates svg {
+  transform: translateY(-6px);
+}
+#newReservasContainer .grid-embarque svg {
+  transform: translateY(-8px);
+}
+#newReservasContainer .grid-item[data-fill='false'] svg {
+  fill: #a1a1a1;
+}
+#newReservasContainer .grid-item[data-fill='true'] svg {
+  fill: #4f1515;
+}
 #newReservasContainer .grid-item[data-fill='false'] {
   border: 2px dashed #a5a5a5;
   background-color: #e3e3e3;
 }
 #newReservasContainer .grid-item[data-fill='true'] {
-  border: 1px solid #314b64;
-  background-color: #ebebeb;
+  border: 2px solid var(--aer-accent);
+  background-color: #f9f9f9;
 }
 
 #newReservasContainer .grid-item .icon {
@@ -119,7 +136,7 @@
   top: -5px;
   right: -5px;
   color: #ebebeb;
-  background: #0055aa;
+  background: var(--aer-accent);
   border-radius: 1rem;
   width: 22px;
   height: 22px;
@@ -185,6 +202,7 @@
   font-size: 0.75rem;
   line-height: 14px;
   display: block;
+  color: var(--aer-accent);
 }
 #newReservasContainer .grid-item .text span {
   font-weight: 400;
@@ -241,7 +259,7 @@ button#reservasContinuar {
   padding: 10px;
   border-radius: 8px;
   border: none;
-  background-color: #06c;
+  background-color: var(--aer-accent);
   color: white;
   font-weight: 600;
   transition: 0.2s;
@@ -250,7 +268,7 @@ button#reservasContinuar {
   transition: 0.3s;
 }
 button#reservasContinuar:disabled {
-  background-color: #cbd5e1;
+  background-color: #4f15153b;
 }
 button#reservasContinuar:not(:disabled):hover {
   background-color: #0055aa;

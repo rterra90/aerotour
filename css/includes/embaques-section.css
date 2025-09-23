@@ -1,0 +1,185 @@
+.embarque-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.filtro-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 7px;
+  position: relative;
+}
+
+.filtro-header span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.filtro-header span br {
+  display: none;
+}
+.filtro-wrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px 0 20px;
+}
+
+.filtro-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.filtro-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.filtro-btn {
+  padding: 4px 12px;
+  margin: 0 4px;
+  border: 1px dashed #aaa;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+
+.filtro-btn:hover {
+  background: #eee;
+}
+
+.filtro-btn.active {
+  border: 2px solid var(--aer-accent);
+  font-weight: bold;
+  background: #ddd;
+  color: var(--aer-accent);
+}
+
+/* Botões de seta */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-size: 0.75rem;
+  color: var(--aer-accent);
+}
+.scroll-btn.left {
+  left: 0;
+}
+.scroll-btn.right {
+  right: 0;
+}
+
+/* Lista de pontos */
+.lista-embarque {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-embarque {
+  background: #fff;
+  border-radius: 8px;
+  padding: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.item-embarque-info {
+  flex-grow: 1;
+  min-width: 75%;
+}
+
+.item-embarque-info p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555;
+  margin: -4px 0 8px;
+}
+.item-embarque-info p.nome-embarque {
+  margin-bottom: 4px;
+  font-size: 1.1rem;
+}
+.item-embarque-info p:not(.nome-embarque) {
+  font-size: 0.9rem;
+}
+.item-embarque-info span {
+  display: block;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+.detalhes {
+  text-align: right;
+  min-width: 100px;
+}
+
+.horario {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.mapa {
+  font-size: 13px;
+  color: #0077cc;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.mostrar-tudo-btn {
+  margin: 12px auto 0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--aer-accent);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  width: fit-content;
+  font-size: 0.875rem;
+  text-decoration: underline;
+}
+/* Mobile */
+@media (max-width: 768px) {
+  .filtro-wrapper {
+    padding: 0;
+  }
+  .scroll-btn {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .info {
+    max-width: 100%;
+  }
+  .detalhes {
+    margin-top: 10px;
+    text-align: left;
+  }
+  .filtro-header span {
+    font-size: 0.8rem;
+    line-height: 1.075;
+    font-weight: 400;
+  }
+  .filtro-header span br {
+    display: inline-block;
+  }
+  .filtro-btn {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+}

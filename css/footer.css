@@ -72,7 +72,7 @@
   margin-bottom: 0px;
   font-size: 0.725rem;
 }
-@media (max-width: 576px) {
+@media (max-width: 600px) {
   #aer-footer {
     padding: 40px 20px;
     height: 480px;

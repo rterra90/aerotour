@@ -40,6 +40,12 @@ body {
   --aer-bg-dark: #080808ff;
   --aer-light-dark: #474747;
   --aer-red-error: #ab6262;
+
+  /* novas variaveis */
+  --aer-text-dark: #202020;
+  --aer-accent: #4f1515;
+  --aer-box-light: #f9f9f9;
+
   font-family: Raleway, sans-serif !important;
   display: flex;
   flex-direction: column;
@@ -228,7 +234,7 @@ form#searchform input#s::after {
     font-size: 0.9rem !important;
   }
   h1 {
-    font-size: 1.4rem !important;
+    font-size: 1.4rem;
   }
   .woocommerce-notices-wrapper > * {
     width: auto;

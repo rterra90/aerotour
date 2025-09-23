@@ -86,14 +86,21 @@ do_action( 'woocommerce_before_cart' ); ?>
 								<!-- Passageiros -->
 								<?php if (!empty($passageiros)) : ?>
 									<div class="passengers">
-										<button type="button" class="toggle-passengers">👥 Ver passageiros</button>
+										<button type="button" data-qty="<?= count($passageiros); ?>"class="toggle-passengers cart-btn-style">Ver passageiros (<?= count($passageiros); ?>)</button>
 										<div class="passenger-list">
 											<?php foreach ($passageiros as $passenger) : ?>
 												<div class="passenger">
 													<p><strong>Nome:</strong> <?php echo esc_html($passenger -> nome_completo); ?></p>
 													<p><strong>CPF:</strong> <?php echo esc_html($passenger -> cpf); ?></p>
 													<p><strong>Celular:</strong> <?php echo esc_html($passenger -> celular); ?></p>
+													<?php
+														$rota = esc_html($passenger -> tripType);
+														$rota = $rota == 'ida-e-volta' ? "Ida e volta" : 'Apenas ' . $rota;
+													?>
+													<div class="d-flex justify-content-between">
 													<p><strong>Nascimento:</strong> <?php echo esc_html(data_to_dmy($passenger -> data_nascimento)); ?></p>
+													<span class="rota"><?= strtoupper($rota); ?></span>
+													</div>
 												</div>
 											<?php endforeach; ?>
 										</div>
@@ -120,7 +127,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 								<div class="coupon">
 									<label for="coupon_code" class="screen-reader-text" onclick="toggleCupomInputs('coupon_inputs')">Tem um cupom de desconto?</label> 
 									<div id="coupon_inputs">
-										<input type="text" name="coupon_code" class="aer-text-input input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <button data-btn-reactive type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?> btn btn-dark" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
+										<input type="text" name="coupon_code" class="aer-text-input input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <button data-btn-reactive type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?> btn cart-btn-style" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
 									</div>
 									
 									<?php do_action( 'woocommerce_cart_coupon' ); ?>
@@ -175,10 +182,12 @@ do_action( 'woocommerce_before_cart' ); ?>
 				document.querySelectorAll(".toggle-passengers").forEach(btn => {
 					btn.addEventListener("click", () => {
 						const list = btn.nextElementSibling;
+						const paxQty = btn.dataset.qty;
 						list.classList.toggle("open");
+						btn.classList.toggle("open");
 						btn.textContent = list.classList.contains("open") 
-							? "👥 Ocultar passageiros"
-							: "👥 Ver passageiros";
+							? "Ocultar passageiros ("+paxQty+")"
+							: "Ver passageiros ("+paxQty+")";
 					});
 				});
 

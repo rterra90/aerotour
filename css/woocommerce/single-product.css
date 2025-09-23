@@ -1,12 +1,45 @@
 @import url(galeria.css);
 @import url(app-reservas/app-reservas-main.css);
-
+@import url(../includes/sticky-tag.css);
+@import url(../includes/embaques-section.css);
+.box1,
+.box2 {
+  grid-row: span 2;
+}
+.box3,
+.box4 {
+  padding: 12px 12px 12px 22px !important;
+}
+.box1 .label,
+.box2 .label,
+.tab-nav {
+  margin-bottom: 10px;
+}
+#nav-error a,
+.ingressos-link:hover,
+.instagram-feed .LoadMoreButton:hover {
+  text-decoration: underline;
+}
+.excursao-wrapper h2 {
+  margin-top: 20px;
+  font-size: 1.75rem;
+  font-weight: 300;
+}
 #info-body {
-  min-width: 500px;
   flex-grow: 1;
+  position: relative;
+}
+#info-body h1 {
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+}
+#info-body h1 span {
+  color: var(--aer-accent);
+  display: block;
+  font-size: 0.9rem;
 }
 #info-body .share {
-  padding: 10px 10px 0px;
+  padding: 10px 10px 0;
   height: fit-content;
 }
 #info-body .share > span {
@@ -17,13 +50,239 @@
 #info-body .share .share-icons {
   gap: 0.4rem;
 }
+#info-body .info > .grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 64px);
+  gap: 10px;
+  padding: 20px 0;
+}
+.info > .grid-container .box::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 62%;
+  top: 50%;
+  left: 4%;
+  transform: translateY(-50%);
+  background-color: var(--aer-accent);
+}
+.info > .grid-container .box {
+  padding: 16px 16px 16px 22px;
+  box-sizing: border-box;
+  height: 100%;
+  word-break: break-word;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--aer-box-light);
+  backdrop-filter: blur(6px) saturate(110%);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  position: relative;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial;
+}
+.box .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b6b6b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--aer-accent);
+  font-weight: 600;
+}
+.box .pre-value {
+  font-size: 10px;
+  color: var(--aer-accent);
+}
+#info-body .info-row-value p,
+.box .post-value {
+  font-size: 0.9rem;
+}
+#info-body .reserva-box h3,
+#infos-accordion h3 button {
+  font-size: 1rem;
+  color: #494949 !important;
+  position: relative;
+}
+.box .value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #131313;
+  letter-spacing: 0.04rem;
+}
+.box3 .value,
+.box4 .value {
+  font-size: 14px;
+}
+.box1 {
+  grid-column: 1;
+}
+.box2 {
+  grid-column: 2;
+}
+.box3 {
+  grid-row: 1;
+}
+.box4 {
+  grid-row: 2;
+}
+.box1,
+.box2 {
+  min-height: 100px;
+}
+.box3,
+.box4 {
+  padding: 10px 14px;
+  grid-column: 3;
+}
+@media (max-width: 1200px) {
+  .box1,
+  .box2 {
+    grid-row: span 2;
+  }
+  #info-body .info > .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+  .box1 {
+    grid-column: 1;
+  }
+  .box2 {
+    grid-column: 2;
+  }
+  .box3 {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .box4 {
+    grid-column: 2;
+    grid-row: 3;
+  }
+}
+.ingressos-link {
+  position: relative;
+}
+.ingressos-link::after {
+  content: '\27A5';
+  position: absolute;
+  right: -26px;
+  bottom: -5px;
+  font-size: 20px;
+  color: #131313;
+}
+
+/* cta button */
+.cta-button {
+  display: block;
+  width: fit-content;
+  margin: 14px auto 20px;
+  padding: 12px 24px;
+  background-color: var(--aer-accent);
+  color: #f9f9f9;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.cta-button img {
+  position: relative;
+  top: -2px;
+}
+
+@media (min-width: 768px) {
+  .cta-button {
+    display: none !important;
+  }
+}
+/* tab navigation */
+.tab-container {
+  margin-top: 16px;
+}
+.tab-nav {
+  display: flex;
+  gap: 10px;
+}
+.tab-nav button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--aer-box-light);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.875rem;
+}
+.tab-nav button.active {
+  background-color: var(--aer-accent);
+  color: #fff;
+}
+.tab-content {
+  display: none;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  max-height: 440px;
+  overflow-y: auto;
+  scrollbar-width: thin; /* para Firefox */
+  scrollbar-color: #9c9c9c #e0e0e0; /* para Firefox */
+}
+.tab-content.active {
+  display: block;
+}
+
+/* Estilo para navegadores WebKit (Chrome, Edge, Safari) */
+.tab-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tab-content::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+}
+
+.tab-content::-webkit-scrollbar-thumb:hover {
+  background-color: #0056b3;
+}
+li.list-group-item::before {
+  content: '';
+  background-image: url('../../assets/icons/arrow.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  height: 15px;
+  width: 14px;
+  display: inline-block;
+  position: relative;
+  top: 2px;
+}
+
+/* PRINCIPAIS DÚVIDAS */
+dl#principaisDuvidasContent {
+  padding: 8px 0 0 10px;
+}
+dl#principaisDuvidasContent .resposta {
+  font-size: 0.9rem;
+}
+
 #content-event .notices .woocommerce-error li {
   text-align: center;
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
   align-items: baseline;
-  margin-right: 10px;
   font-size: 0.825rem;
   padding: 15px 25px;
   background-color: #d3d2ba;
@@ -38,227 +297,15 @@
   font-size: 1.3rem;
   margin: 0 10px 0 0;
 }
-.excursao-details {
-  background-color: #efefef;
-  padding: 20px;
-  text-align: right;
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-  font-weight: 500;
-  border-radius: 0.5rem;
-  box-shadow: 0px 0px 6px #515151;
-}
-#bfBanner img {
-  max-width: 90%;
-  margin: 0 auto 16px;
-  display: block;
-}
-.excursao-details h3::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  bottom: -8px;
-  height: 2px;
-  width: 100%;
-  background-image: linear-gradient(90deg, transparent 0%, #494949 90%);
-}
-.excursao-details .label {
-  font-size: 1rem;
-}
-.excursao-details p.info {
-  font-size: 1.3rem;
-}
-.excursao-details .embarque-select {
-  border: 3px solid #919191;
-  padding: 6px;
-  border-radius: 0.3rem;
-  font-size: 0.9rem;
-  width: 100%;
-  max-width: 330px;
-}
-.excursao-details .horarios-wrapper {
-  display: flex;
-  gap: 3px;
-  justify-content: flex-end;
-  position: relative;
-}
-.excursao-details .horarios-wrapper.show-alert::after {
-  content: 'Selecione um horário';
-  position: absolute;
-  right: 110px;
-  font-style: italic;
-  bottom: 2px;
-  font-size: 0.55rem;
-  opacity: 0.75;
-}
-.excursao-details .horarios-wrapper span {
-  background-color: #b3b3b3;
-  border-radius: 0.2rem;
-  padding: 2px 5px;
-  font-size: 0.875rem;
-  color: #757575;
-  transition: 0.2s;
-  cursor: pointer;
-}
-.excursao-details .module_horarios_embarque i,
-.excursao-details .modulo_preco i {
-  font-size: 0.675rem;
-  opacity: 0.6;
-}
-.excursao-details .horarios-wrapper span:not(.active):hover {
-  background-color: #6b6b6b;
-  color: #c3c3c3;
-}
-.excursao-details .horarios-wrapper span.active {
-  background-color: #2b2b2b;
-  color: #cdcdcd;
-}
-
-/* BADGES DE DATAS */
-.datas-badges-wrapper {
-  padding: 5px 0px;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-}
-.excursao-details .badge-dia {
-  background-color: #ffffff00;
-  border: 2px solid #222222;
-  border-radius: 8px;
-  box-sizing: border-box;
-  color: #222222;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 20px;
-  margin: 0;
-  outline: none;
-  padding: 3px 8px;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  touch-action: manipulation;
-  transition: box-shadow 0.2s, background-color 0.2s, -ms-transform 0.1s,
-    -webkit-transform 0.1s, transform 0.1s;
-  user-select: none;
-  -webkit-user-select: none;
-  width: auto;
-}
-.excursao-details .badge-dia:focus-visible {
-  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
-  transition: box-shadow 0.2s;
-}
-.excursao-details .badge-dia:active {
-  background-color: #f7f7f7;
-  border-color: #000000;
-  transform: scale(0.96);
-}
-.excursao-details .badge-dia.badge-venda-encerrada:active {
-  border-color: #9d9d9d;
-}
-.excursao-details .badge-dia:disabled {
-  border-color: #dddddd;
-  color: #dddddd;
-  cursor: not-allowed;
-  opacity: 1;
-}
-.badge-dia:hover {
-  background-color: #d1d1d1;
-}
-.badge-dia:not(.badge-venda-encerrada).active {
-  background: #3b3b3b;
-  color: var(--aer-light-text);
-}
-.badge-dia.disp.yellow {
-  border-color: #777931;
-  color: #61640e;
-}
-.badge-dia.disp.yellow:not(.active):hover {
-  background-color: #e2e2cf;
-}
-.badge-dia.yellow.active {
-  background-color: #7f810e;
-}
-.badge-dia.disp.red {
-  border-color: #761010;
-  color: #6a3e3e;
-}
-.badge-dia.red:not(.active):hover {
-  background-color: #e2cfcf;
-}
-.badge-dia.red.active {
-  background-color: #5a0c0c;
-}
-.excursao-details span.badge-dia:not(.badge-venda-encerrada).active {
-  color: var(--aer-bg-light);
-}
-.excursao-details .badge-dia.badge-venda-encerrada {
-  background-color: #bbbbbb !important;
-}
-.badge-dia.badge-venda-encerrada {
-  color: #fafafa;
-  background: #818181;
-  border-color: #9d9d9d;
-  color: #9d9d9d;
-}
-
-/* ALERTAS DE VAGAS */
-.excursao-details .alerta-vagas {
-  text-transform: initial;
-  letter-spacing: 0.05rem;
-  color: var(--aer-bg-white);
-  width: fit-content;
-  margin: -8px 0 8px auto;
-  font-size: 0.825rem;
-  padding: 2px 28px;
-  border-radius: 0.2rem;
-}
-.excursao-details .alerta-vagas.ultimos {
-  background-color: #868900;
-}
-.excursao-details .alerta-vagas.esgotado {
-  background-color: #a13f3f;
-}
-
-#content-event #info-container.tem-variacao::before {
-  content: '';
-  position: relative;
-  display: block;
-  height: 3px;
-  width: 70%;
-  top: -14px;
-  background-color: var(--aer-bg-dark);
-  opacity: 0.6;
-  margin: 0 auto;
-}
-#info-placeholder p {
-  font-size: 0.775rem;
-}
-
-/*NOVO LAYOUT*/
-/* #content-event .main-image {
-  margin: 54px auto 0;
-} */
 #content-event .excursao-wrapper {
-  margin-top: -92px;
   background-color: #e7e7e7;
   z-index: 99;
   position: relative;
   width: 92%;
-}
-#content-event .excursao-wrapper {
-  margin-top: 0px;
-}
-@media (max-width: 1400px) {
-  #content-event .excursao-wrapper {
-    background-color: tomato;
-  }
+  margin-top: 0;
 }
 @media (max-width: 1080px) {
   #content-event .excursao-wrapper {
-    background-color: rgb(255, 191, 71);
     width: 100%;
   }
 }
@@ -270,7 +317,6 @@
     padding: 0 20px;
   }
 }
-
 #info-body .disp-header {
   padding: 2px 16px;
   width: fit-content;
@@ -280,18 +326,11 @@
 }
 #info-body .disp-header.esgotado {
   background-color: #b98b8b;
-  box-shadow: -2px 2px 0px #2e1616;
+  box-shadow: -2px 2px 0 #2e1616;
 }
 #info-body .disp-header.ultimos {
   background-color: #c3bf8a;
-  box-shadow: -2px 2px 0px #2e2c16;
-}
-#info-body {
-  position: relative;
-}
-#info-body h1 {
-  font-size: 1.2rem;
-  letter-spacing: 0.1rem;
+  box-shadow: -2px 2px 0 #2e2c16;
 }
 #info-body .lugares-reservados {
   display: flex;
@@ -306,46 +345,6 @@
 }
 #info-body .lugares-reservados p {
   line-height: 1.85;
-}
-#info-body h1 span {
-  display: block;
-  font-size: 0.9rem;
-}
-#info-body .share span {
-  font-size: 0.725rem;
-}
-#info-body .aer-icon img {
-  filter: brightness(0);
-  opacity: 0.8;
-}
-#info-body .info-row {
-  gap: 42px;
-  display: flex;
-  min-height: 32px;
-  align-items: center;
-  border-top: 1px solid #404040;
-  padding: 2px 0;
-}
-#info-body .info-row.ingressos a {
-  text-decoration: underline;
-  position: relative;
-}
-#info-body .info-row.ingressos a:after {
-  content: '\27A5';
-  position: absolute;
-  right: -26px;
-  bottom: -8px;
-  font-size: 20px;
-}
-#info-body .info-row-icon {
-  gap: 4px;
-  display: flex;
-  width: 60px;
-}
-#info-body .info-row h2 {
-  font-size: 0.75rem;
-  margin-bottom: 0;
-  line-height: 1.4rem;
 }
 .reserva-box {
   margin-top: 15px;
@@ -362,12 +361,7 @@
   bottom: -8px;
   height: 2px;
   width: 100%;
-  /* background-image: linear-gradient(90deg, transparent 0%, #494949 90%); */
   background-image: radial-gradient(#494949 20%, transparent 80%);
-}
-
-#info-body .info-row-value p {
-  font-size: 0.9rem;
 }
 #info-body .info-row-value .data-span {
   padding: 2px 3px;
@@ -383,8 +377,6 @@
   padding-top: 4px;
   line-height: 0.8;
   text-align: center;
-  line-height: 0.8;
-  text-align: center;
   font-size: 0.625rem;
   min-width: 56px;
 }
@@ -392,26 +384,10 @@
   border-top: 1px solid #2e2e2e;
   background-color: transparent;
 }
-
 #info-body #infos-accordion .accordion-item .accordion-collapse {
   background-color: #e7e7e7;
 }
-#info-body #infos-accordion .accordion-item li.list-group-item::before {
-  content: '';
-  background-image: url('../../assets/icons/arrow.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 10px;
-  height: 15px;
-  width: 14px;
-  display: inline-block;
-  position: relative;
-  top: 2px;
-}
 #infos-accordion h3 button {
-  font-size: 1rem;
-  color: #494949 !important;
-  position: relative;
   text-transform: uppercase;
   background-color: #e7e7e7;
   font-weight: 600;
@@ -424,168 +400,15 @@
   height: 24px;
   background-size: 1.2rem;
   background-position: 2px 2px;
-  border: 1px solid #333333;
+  border: 1px solid #333;
   border-radius: 30px;
 }
-
 #infos-accordion #accordion-item-duvidas .resposta {
   padding-left: 0.5rem;
   font-size: 0.9rem;
 }
-#locaisEmbarqueContainer > div {
-  padding: 6px 1%;
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 10px;
-}
-#locaisEmbarqueContainer .embarque-box {
-  position: relative;
-}
-#locaisEmbarqueContainer .embarque-box::before {
-  content: '';
-  display: block;
-  width: 2px;
-  height: 65%;
-  background-color: #2e2e2e;
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-#locaisEmbarqueContainer .embarque-box > div {
-  width: 97%;
-  margin: 0 auto;
-  border-radius: 0.2rem;
-  height: 100%;
-  padding: 8px 10px 8px 20px;
-  box-shadow: 2px 2px 2px 0 #bbb;
-  background: #dfdfdf;
-}
-
-#locaisEmbarqueContainer .embarque-box .horariosMulti {
-  padding: 4px 4px;
-  background-color: #f1f1f1;
-  display: flex;
-  position: relative;
-  box-shadow: 0px 0px 5px #bdbdbd;
-}
-#locaisEmbarqueContainer .embarque-box .horariosMulti::after {
-  content: '';
-  width: 1px;
-  height: 75%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #bdbdbd;
-}
-#locaisEmbarqueContainer .embarque-box .horariosMulti > div {
-  font-size: 0.925rem;
-  flex-basis: 50%;
-  padding: 0px 4px;
-}
-#locaisEmbarqueContainer .embarque-box .horariosMulti > div span {
-  text-align: center;
-}
-#locaisEmbarqueContainer .embarque-box .horariosMulti b {
-  font-size: 0.75rem;
-  background: #cfcfcf;
-  padding: 1px 3px;
-  margin-left: 2px;
-  display: inline-block;
-}
-#locaisEmbarqueContainer .embarque-box .horariosMulti .horariosMultiHor {
-  font-size: 1.175rem;
-  font-weight: 500;
-}
-#locaisEmbarqueContainer .embarque-box i {
-  opacity: 0.85;
-}
-#locaisEmbarqueContainer .embarque-box .endereco_container i {
-  position: relative;
-  top: -4px;
-}
-#locaisEmbarqueContainer .embarque-box .endereco_container {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-#locaisEmbarqueContainer .embarque-box p {
-  margin-bottom: 3px;
-}
-#locaisEmbarqueContainer .embarque-box p.nome_embarque {
-  font-size: 0.925rem;
-  line-height: 1.15;
-  margin-bottom: 12px;
-  font-weight: 500;
-}
-#locaisEmbarqueContainer .embarque-box .endereco_embarque > p {
-  font-size: 0.875rem;
-  line-height: 1.15;
-}
-#locaisEmbarqueContainer .embarque-box .endereco_embarque > p:nth-child(2) {
-  font-weight: 600;
-  font-size: 0.8rem;
-}
-#locaisEmbarqueContainer .embarque-box .mapa_container {
-  position: absolute;
-  right: 14px;
-  bottom: 10px;
-  text-align: center;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-}
-#locaisEmbarqueContainer .embarque-box .mapa_container span {
-  font-size: 0.625rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025rem;
-  display: block;
-  opacity: 0.8;
-  width: 40px;
-  line-height: 1;
-}
-/* #accordionLocaisEmbarque {
-  --bs-accordion-bg: transparent !important;
-}
-#accordionLocaisEmbarque .accordion-item {
-  border: none;
-  transition: 0.2s;
-}
-#accordionLocaisEmbarque .accordion-item:hover,
-#accordionLocaisEmbarque .accordion-item .show {
-  background-color: #dfdfdf;
-}
-#accordionLocaisEmbarque .accordion-button {
-  padding: 5px 5px 5px 20px;
-}
-
-#accordionLocaisEmbarque .accordion-button::after {
-  position: absolute;
-  left: 2px;
-  background-size: cover;
-  width: 10px;
-  height: 10px;
-}
-#accordionLocaisEmbarque .accordion-button:not(.collapsed) {
-  background-color: #dfdfdf;
-  box-shadow: none;
-} */
-.accordion-button:focus {
-  box-shadow: unset !important;
-}
-/* #accordionLocaisEmbarque .accordion-body {
-  font-size: 0.875rem;
-  padding: 3px 3px 12px 3px;
-  border-bottom: none;
-  margin-bottom: 5px;
-} */
 #info-body .reserva-box h3 {
-  font-size: 1rem;
-  color: #494949 !important;
-  position: relative;
   text-align: center;
-  position: relative;
   text-align: end;
 }
 #nav-error {
@@ -598,16 +421,13 @@
   margin-top: 40px;
 }
 #nav-error a {
-  text-decoration: underline;
   font-size: 1.125rem;
 }
-
 #exc-wpp-cta {
   margin: 0 auto;
   display: flex;
   justify-content: center;
 }
-
 #exc-wpp-cta div[role='button'] {
   display: flex;
   align-items: center;
@@ -616,14 +436,14 @@
   background: linear-gradient(135deg, #25d36659, #128c7e59);
   border: none;
   padding: 6px 14px;
-  box-shadow: 0px 6px 6px 0px #cdcdcd;
+  box-shadow: 0 6px 6px 0 #cdcdcd;
   border-radius: 6px;
   transition: 1s;
   user-select: none;
   color: #1a1a1a;
 }
 #exc-wpp-cta div[role='button']:hover {
-  box-shadow: 0px 4px 3px 0px #c2c2c2;
+  box-shadow: 0 4px 3px 0 #c2c2c2;
   background: linear-gradient(315deg, #25d36659, #128c7e59);
 }
 #exc-wpp-cta .wpp-icon img {
@@ -646,20 +466,9 @@
   max-width: 860px;
   width: 76%;
 }
-/* #promo-wide-banner .img-bg {
-  max-width: 860px;
-  width: 76%;
-  height: 7.4rem;
-  margin: -20px auto 10px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url('../../assets/banners/linkinpark-promo.jpg');
-} */
-
 #social-footer h2 {
   padding-left: 10px;
 }
-/* INSTAGRAM */
 .FeedLayout__wrapper {
   background-color: rgb(215 215 215) !important;
 }
@@ -667,7 +476,6 @@
   border-radius: 12px;
   overflow: hidden;
 }
-
 .FeedHeader__bio.FeedHeader__subtext.FeedHeader__info-row span {
   font-size: 0.715rem;
   line-height: 0;
@@ -686,137 +494,61 @@
     #bc1888
   ) !important;
   border: none !important;
-  border-radius: 50px !important; /* Deixa o botão com bordas arredondadas */
-  color: white !important;
+  border-radius: 50px !important;
+  color: #fff !important;
   padding: 10px 20px !important;
   font-size: 16px !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   text-transform: uppercase !important;
   text-align: center !important;
   cursor: pointer !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  transition: transform 0.3s, box-shadow 0.3s !important;
 }
 .instagram-feed .LoadMoreButton {
   background-color: none !important;
   color: rgb(29 29 29) !important;
   padding: 0;
 }
-.instagram-feed .LoadMoreButton:hover {
-  text-decoration: underline;
-}
-
-/* STICKY RESERVE*/
-#mobile-sticky-res-btn {
-  background: #2e2e2e;
-  position: sticky;
-  z-index: 99999;
-  width: 60px;
-  top: 70px;
-  float: right;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: 5px 7px 5px 4px;
-  color: #e7e7e7;
-  margin-right: -60px;
-  opacity: 0;
-  animation: showStickyBtn 1s forwards;
-  animation-delay: 3s;
-  border-radius: 3px 0 0 3px;
-  box-shadow: -2px 2px 2px 0px #252525a1;
-  transition: 0.12s;
-}
-#mobile-sticky-res-btn {
-  box-shadow: -1px 1px 1px 0px #252525a1;
-}
-#mobile-sticky-res-btn.reshow {
-  animation: showStickyBtn 1s forwards;
-}
-
-#mobile-sticky-res-btn.remove {
-  animation: hideStickyBtn 1s forwards;
-  animation-delay: 0s;
-}
-@keyframes hideStickyBtn {
-  from {
-    opacity: 1;
-    margin-right: -10px;
-  }
-  to {
-    opacity: 0;
-    margin-right: -60px;
-  }
-}
-@keyframes showStickyBtn {
-  from {
-    opacity: 0;
-    margin-right: -60px;
-  }
-  to {
-    opacity: 1;
-    margin-right: -10px;
-  }
-}
-#mobile-sticky-res-btn span {
-  font-size: 0.685rem;
-  line-height: 1;
-  text-align: end;
-  margin-top: 4px;
-  font-weight: 500;
-}
-#mobile-sticky-res-btn img {
-  filter: invert(1) !important;
-}
-@media (min-width: 577px) {
-  #locaisEmbarqueContainer .embarque-box .mapa_container.temMultiplo {
-    position: static;
-    flex-direction: row;
-  }
-  #locaisEmbarqueContainer .embarque-box .mapa_container.temMultiplo span {
-    width: unset;
-    font-size: 0.75rem;
-    margin-left: 8px;
-  }
-}
-
 @media (max-width: 768px) {
+  #info-body h1 {
+    font-size: 1.4rem;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+  #info-body h1 span {
+    font-weight: 600;
+    display: block;
+    margin: 0 auto 5px;
+    background: var(--aer-accent);
+    width: fit-content;
+    color: #f9f9f9;
+    padding: 4px 14px;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  #info-body .share {
+    display: none;
+  }
   #content-event h3 {
     font-size: 0.825rem;
   }
-  #info-placeholder p {
-    text-align: center;
-  }
-  #content-event .reserva-box h3,
   #content-event .datas,
-  #content-event .variacao-info {
+  #content-event .reserva-box h3,
+  #content-event .variacao-info,
+  #info-placeholder p {
     text-align: center;
   }
   #content-event .variacao-info {
     position: relative;
-  }
-
-  .excursao-details .horarios-wrapper {
-    justify-content: center;
-  }
-  .excursao-details .horarios-wrapper span {
-    font-size: 1rem;
-  }
-  .excursao-details .horarios-wrapper.show-alert {
-    margin-bottom: 28px;
-  }
-  .excursao-details .horarios-wrapper.show-alert::after {
-    right: 50%;
-    transform: translateX(50%);
-    bottom: -18px;
   }
   #promo-wide-banner .img-bg {
     margin-top: 10px;
     height: 5rem;
     background-position-x: center;
   }
-
   #promo-wide-banner img {
-    margin-top: 0px;
+    margin-top: 0;
   }
   #social-footer {
     flex-direction: column-reverse;
@@ -828,55 +560,41 @@
   }
 }
 @media (max-width: 576px) {
-  #locaisEmbarqueContainer > div {
-    padding: 6px 0;
+  #info-body .info > .grid-container {
+    gap: 12px;
+    padding: 20px 0;
   }
-  #locaisEmbarqueContainer .embarque-box {
-    width: 100%;
+  .box1 .label,
+  .box2 .label {
+    font-size: 0.775rem;
   }
-  #locaisEmbarqueContainer .embarque-box > div {
-    border: none;
-  }
-  #locaisEmbarqueContainer .embarque-box p.nome_embarque {
-    font-size: 0.95rem;
-    font-weight: 600;
-  }
-  #locaisEmbarqueContainer .embarque-box p.endereco_embarque {
+  .box3 .label,
+  .box4 .label {
     font-size: 0.675rem;
   }
-  #locaisEmbarqueContainer .embarque-box p.horario_embarque {
-    font-size: 0.875rem;
+  .box3 i,
+  .box4 i {
+    transform: translateY(-2px);
   }
-  #locaisEmbarqueContainer .embarque-box .horario_container {
-    position: absolute;
-    border-radius: 0.2rem;
-    top: 4px;
-    right: 8px;
-    padding: 0 6px;
-    background-color: #2e2e2e;
+  .box .value {
+    font-size: 0.925rem;
   }
-  #locaisEmbarqueContainer .embarque-box .horario_container i {
-    position: relative;
-    top: -3px;
+  .box1,
+  .box2 {
+    min-height: 90px;
   }
-  #locaisEmbarqueContainer .embarque-box .horario_container img {
-    opacity: 1;
-    filter: invert(1);
+  .excursao-wrapper h2 {
+    font-size: 1.4rem;
+    margin-top: 26px;
   }
-  #locaisEmbarqueContainer .embarque-box .horario_container p {
-    color: #e0e0e0;
-    font-weight: 500;
-  }
-  #locaisEmbarqueContainer .embarque-box .mapa_container {
-    bottom: unset;
-    top: 34px;
-    flex-direction: column;
-    line-height: 1.2;
+  .tab-nav button {
+    padding: 10px 12px;
+    border-radius: 0.75rem;
+    line-height: 1;
   }
   .reserva-box h3 {
     font-size: 0.875rem;
     color: #494949 !important;
-    position: relative;
     text-align: center;
     position: relative;
   }
@@ -890,7 +608,6 @@
   .datas-badges-wrapper {
     justify-content: center;
   }
-
   .excursao-details .alerta-vagas {
     margin-left: auto;
     margin-right: auto;
@@ -928,12 +645,6 @@
     right: 6px;
     font-size: 0.75rem;
   }
-  /* #promo-wide-banner .img-bg {
-    background-image: url('../../assets/banners/linkinpark-promo-mobile.jpg');
-    margin-top: 0px;
-    height: 3.4rem;
-    width: 100%;
-  } */
   #promo-wide-banner img {
     width: 100%;
   }
@@ -943,18 +654,10 @@
     flex-direction: row;
   }
   #content-event .main-image {
-    margin-top: 12px;
     max-width: 1400px;
     margin: 0 auto;
     display: block;
   }
-  #locaisEmbarqueContainer .embarque-box .horariosMulti {
-    max-width: 254px;
-  }
-  #locaisEmbarqueContainer .embarque-box .horariosMulti > div span {
-    text-align: start;
-  }
-
   #mobile-sticky-res-btn {
     display: none !important;
   }
@@ -968,7 +671,7 @@
     background-image: radial-gradient(#494949 20%, transparent 80%);
   }
   .reserva-box {
-    margin-top: 0px;
+    margin-top: 0;
   }
   #info-body .info-row-icon {
     width: 80px;

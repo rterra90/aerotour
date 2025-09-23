@@ -78,9 +78,15 @@ foreach($excursao['variacoes'] as $i => $var){
   $excursao['variacoes'][$i]['encerrar_vendas'] = get_post_meta($var['variation_id'], 'encerrar_vendas', true) === 'yes' ? true : false;
 
 }
+//Define e ordena a array de datas
 $datas = array_map(function($_var){
   return $_var['attributes']['attribute_dia'];
 }, $excursao['variacoes']);
+usort($datas, function($a, $b) {
+    $dataA = DateTime::createFromFormat('d/m/Y', $a);
+    $dataB = DateTime::createFromFormat('d/m/Y', $b);
+    return $dataA <=> $dataB;
+})
 ?>
 	<link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/woocommerce/single-product.min.css?ver=<?= time(); ?>">
 
@@ -107,10 +113,10 @@ $datas = array_map(function($_var){
       <section class="row product-body">
         <!-- INFORMAÇÕES -->
         <div id="info-body" class="col-md-7 col">
-          <div id="mobile-sticky-res-btn">
+          <!-- <div id="mobile-sticky-res-btn">
             <?= aer_icons("form", 29, 29); ?>
             <span>Faça sua reserva!</span>
-          </div>
+          </div> -->
           
           <?php
             if(gettype($excursao['disp_vagas']) == 'integer' && (int)$excursao['disp_vagas'] <= 10){
@@ -158,77 +164,186 @@ $datas = array_map(function($_var){
               }
             ?>
           
-
           <div class="info">
-            
-            <div class="info-row">
-              <div class="info-row-icon">
-                <?= aer_icons('pin', 20, 20)?>
-                <h2>Local</h2>
-              </div>
-              <div class="info-row-value">
-                <p class="mb-0"><?= get_post_meta($excursao['id'], 'local_evento', true); ?></p>
-              </div>
-            </div>
-            <div class="info-row">
-              <div class="info-row-icon">
-                <?= aer_icons('calendar', 20, 20)?>
-                <h2><?php echo $datas > 1 ? 'Datas' : 'Data'; ?></h2>
-              </div>
-              <div class="info-row-value">
-                <p class="mb-0"><?php 
-                if(count($datas) > 1){
-                  foreach($datas as $_data){
-                    ?>
-                      <span class="data-span">
-                        <?= substr($_data, 0, -5); ?>
-                      </span>
-                    <?php
-                  }
-                }else if(count($datas) == 1){
-                  echo $datas[0];
-                } else echo 'A definir';
-                  
+            <section class="grid-container">
+              <!-- Box Datas -->
+              <div class="box box1">
+                <div class="label"><?= aer_icons('calendar-red', 22, 22)?>
+                  <span>Data</span>
+                </div>
                 
-                ?></p>
+                  <?php 
+                    if(count($datas) > 2){
+                      ?>
+                      <div class="pre-value">Entre</div>
+                      <div class="value" style="margin-top: -6px"><?= $datas[0]; ?></div>
+                      <div class="pre-value">e</div>
+                      <div class="value" style="margin-top: -6px"><?= $datas[count($datas) - 1]; ?></div>
+
+                      <?php
+
+                    }else if(count($datas) <= 2){
+                      foreach($datas as $data){
+                        ?>
+                        <div class="value"><?= $data; ?></div>
+                        <?php
+                      }
+                    }
+                  ?>
+                
               </div>
-            </div>
-            <?php
-            $previsao_chegada = get_post_meta(get_the_ID(), 'previsao_chegada', true);
-              if($previsao_chegada == true){
-                ?>
-                <div class="info-row previsao">
-                  <div class="info-row-icon">
-                    <?= aer_icons('bus-clock', 20, 20)?>
-                    <h2>Previsão de chegada</h2>
-                  </div>
-                  <div class="info-row-value">
-                    <p class="mb-0"><?= $previsao_chegada; ?></p>
-                  </div>
+
+              <!-- Box Local -->
+              <div class="box box2">
+                <div class="label"><?= aer_icons('pin-red', 22, 22)?>
+                  <span>Local</span>
                 </div>
                 <?php
-              }
-              
-            $ingressos_label = get_post_meta(get_the_ID(), 'ingressos_label', true);
-            $ingressos_link = get_post_meta(get_the_ID(), 'ingressos_link', true);
-            if($ingressos_link == true){
-              ?>
-                <div class="info-row ingressos">
-                  <div class="info-row-icon">
-                    <?= aer_icons('ticket', 20, 20)?>
-                    <h2>Ingressos</h2>
+                $local = get_post_meta($excursao['id'], 'local_evento', true);
+                $local_array = preg_split('/\s*\/\s*/', $local);
+                ?>
+                <div class="value"><?= $local_array[0]; ?></div>
+                <div class="post-value"><?= $local_array[1]; ?></div>
+              </div>
+
+              <!-- Box Previsão chegada -->
+              <div class="box box3">
+                <div class="label"><?= aer_icons('clock-red', 15, 15)?>
+                  <span>Chegada prevista</span>
+                </div>
+                <div class="value"><?= get_post_meta(get_the_ID(), 'previsao_chegada', true); ?></div>
+              </div>
+
+              <!-- Box Ingressos -->
+              <div class="box box4">
+                <div class="label"><?= aer_icons('ticket-red', 15, 15)?>
+                  <span>Ingressos</span>
+                </div>
+                <div class="value"><a class="ingressos-link" aria-label="Link para venda de ingressos" href="<?= get_post_meta(get_the_ID(), 'ingressos_link', true); ?>" target="_blank"><?= get_post_meta(get_the_ID(), 'ingressos_label', true); ?></a></div>
+              </div>
+            </section>
+
+            <!-- CTA BUTTON -->
+            <a href="#reservaBox" class="cta-button">
+              <?= aer_icons('bookmark-light', 16, 16, '.webp'); ?> Reservar agora
+            </a>
+
+
+            <h2>Informações sobre a excursão</h2>
+
+            <!-- TABS NAVIGATION -->
+            <div class="tab-container">
+              <div class="tab-nav">
+                <button class="tab-btn active" data-tab="tab1">Como funciona</button>
+                <button class="tab-btn" data-tab="tab2">Locais de embarque</button>
+                <button class="tab-btn" data-tab="tab3">Principais dúvidas</button>
+              </div>
+
+              <!-- TAB CONTENT COMO FUNCIONA -->
+              <div id="tab1" class="tab-content active">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-transparent">Transporte para o evento, ida e volta.</li>
+                  <li class="list-group-item bg-transparent">Grupo exclusivo no WhatsApp para comunicação.</li>
+                  <li class="list-group-item bg-transparent">Retorno logo após o final do evento. No caso de festivais, será considerado o final da última apresentação musical do palco principal.</li>
+                  <li class="list-group-item bg-transparent">No retorno, os desembarques acontecem nos mesmos pontos.</li>
+                  <li class="list-group-item bg-transparent">O desembarque e estacionamento do veículo no local do evento dependem das condições e orientações de trânsito local.</li>
+                  <li class="list-group-item bg-transparent">Tolerância para retorno ao veículo a ser definida de acordo com as condições de cada evento. Em geral, é de 1h após o final do evento.</li>
+                  <li class="list-group-item bg-transparent">Incluso monitoria e água a bordo.</li>
+                  <li class="list-group-item bg-transparent">NÃO inclui ingresso para os eventos.</li>
+                </ul>
+              </div>
+
+              <!-- TAB CONTENT EMBARQUES -->
+              <div id="tab2" class="tab-content">
+                <div class="embarque-container">
+                  <div class="filtro-header">
+                    <span>Filtre por <br />cidade:</span>
+                    <div class="filtro-wrapper">
+                      <button class="scroll-btn left" id="scrollLeft">&#9664;</button>
+                      <div class="filtro-scroll" id="filtroCidades">
+                        <button class="filtro-btn active" data-cidade="todas">Todas</button>
+                        <?php 
+                        //iterar $excursao['embarques'], obter a string $embarque['nome'], dividir essa string em ' - ', retornar o primeiro termo, armazenar em uma array única e ordenar em ordem alafabetica
+                        $cidades = array_unique(array_map(function($_emb){
+                          return strtolower(trim(explode(' - ', $_emb['nome'])[0]));
+                        }, $excursao['embarques']));
+                        sort($cidades);
+                        
+                        foreach($cidades as $cidade){
+                          ?>
+                            <button class="filtro-btn" data-cidade="<?= $cidade; ?>"><?= ucfirst($cidade); ?></button>
+
+
+                          <?php
+                        }
+
+                        ?>
+                        
+                        <button class="filtro-btn" data-cidade="indaiatuba">Indaiatuba</button>
+                      </div>
+                      <button class="scroll-btn right" id="scrollRight">&#9654;</button>
+                    </div>
                   </div>
-                  <div class="info-row-value">
-                    <p class="mb-0"><a target="_blank" aria-label="Link para venda de ingressos" href="<?= $ingressos_link; ?>"><?= $ingressos_label; ?></a></p>
+
+                  <div class="lista-embarque" id="listaEmbarque">
+                    <?php
+                    foreach($excursao['embarques'] as $i => $embarque){
+                      $horarios_simples = array_unique(array_map(function($_op){
+                        return $_op['horario'];
+                      }, $embarque['horarios']));
+
+                      // o single product antigo tem funções para lidar com múltiplos horários
+
+                      ?>
+                      <div class="item-embarque" data-cidade="<?= strtolower(trim(explode(' - ', $embarque['nome'])[0])); ?>">
+                        <div class="item-embarque-info">
+                          <p class="nome-embarque"><?= $embarque['nome']; ?></p>
+                          <span>Endereço:</span> 
+                          <p><?= $embarque['endereco']; ?></p>
+                          <span>Referência para embarque:</span>
+                          <p><?= $embarque['obs']; ?></p>
+                        </div>
+                        <div class="detalhes">
+                          <div class="horario"><?= $horarios_simples[0]; ?></div>
+                          <div class="mapa"><a href="<?= $embarque['link_mapa']; ?>" target="_blank"></a>Ver no mapa</div>
+                        </div>
+                      </div>
+
+                      <?php
+                    }
+                    ?>
+                    <div class="mostrar-tudo-btn d-none" data-cidade="todas">Mostrar tudo</div>
                   </div>
                 </div>
-              <?php
-            }
-            ?>
+              </div>
+
+              <!-- TAB CONTENT PRINCIPAIS DÚVIDAS -->
+              <div id="tab3" class="tab-content">
+                <dl id="principaisDuvidasContent">
+                  <dt class="text-start pergunta fw-bold mb-1">• A excursão inclui ingresso para os eventos?</dt>
+                  <dd class="text-start resposta">Não. Nós não comercializamos ingressos, a menos que expressamente informado, e recomendamos a compra apenas em pontos de venda autorizados.</dd>
+                  <dt class="text-start pergunta fw-bold mb-1">• É possível reservar apenas ida ou volta?</dt>
+                  <dd class="text-start resposta">Não oferecemos opções de reserva para apenas um dos sentidos. As excursões compreendem ida e volta, portanto, cada reserva representa um lugar reservado por toda a viagem. No entanto, você pode fazer sua reserva normalmente e utilizar o transporte em apenas um dos sentidos, sem problemas.</dd>
+                  <dt class="text-start pergunta fw-bold mb-1">• Como saber se há disponibilidade de vagas?</dt>
+                  <dd class="text-start resposta">As vagas são gerenciadas pelo próprio site. Enquanto houver vagas, estará disponível para reservas. Um aviso em amarelo surgirá quando estivermos na últimas vagas, e um aviso em vermelho indicará que as vagas estão esgotadas.</dd>
+                  <dt class="text-start pergunta fw-bold mb-1">• É preciso encaminhar comprovante de pagamento por e-mail?</dt>
+                  <dd class="text-start resposta">Não, você não precisa encaminhar nenhum tipo de comprovante após fazer sua reserva com a Aerotour. Você receberá um email de confirmação de reserva e você também poderá vê-la na página "Minhas reservas", na sua área logada aqui no site.</dd>
+                  <dt class="text-start pergunta fw-bold mb-1">• Como acessar o grupo de WhatsApp da excursão?</dt>
+                  <dd class="text-start resposta">Os grupos são criados 5 dias antes da data da excursão. Quem reservar antes desse período, receberá um e-mail com o link para acesso assim que o grupo for disponibilizado. Caso contrário, o link será enviado no e-mail de confirmação de reserva. Também será possível acessar o grupo por meio da página <b>Minhas reservas</b>.</dd>
+                  <dt class="text-start pergunta fw-bold mb-1">• É permitido deixar pertences no veículo?</dt>
+                  <dd class="text-start resposta">De forma geral, não há impedimentos para quem deseja deixar algum item no interior do veículo durante os eventos. No entanto, não dispomos de serviço de guarda de objetos e não assumimos a responsabilidade por eles. Por isso, não recomendamos que sejam deixados objetos de valor.</dd>
+                  <dt class="text-start pergunta fw-bold mb-1">• Em qual tipo de veículo será feito o transporte?</dt>
+                  <dd class="text-start resposta">As excursões podem acontecer em veículos como ônibus e micro-ônibus executivos ou vans. A definição depende da demanda de passageiros para cada excursão, visando garantir a eficiência, conforto e segurança da viagem</dd>
+                  <dt class="text-start pergunta fw-bold mb-1">• Qual o itinerário da viagem?.</dt>
+                  <dd class="text-start resposta">Em excursões para São Paulo, organizamos as excursões em duas rotas. Uma delas inclui Sumaré, Hortolândia, Paulínia e Campinas(Unicamp). A outra inclui Salto, Indaiatuba e Campinas (Largo do Pará). Os passageiros de Valinhos, Vinhedo e Jundiaí são acomodados conforme a disponiblidade dos veículos. Para outros destinos, as definições ocorrem de acordo com a rota.</dd>
+                </dl>
+              </div>
+            </div>
+            
             
 
             <!-- Accordion -->
-            <div class="accordion accordion-flush" id="infos-accordion">
+            <div class="accordion accordion-flush d-none" id="infos-accordion">
               <div class="accordion-item">
                 <h3 class="accordion-header" id="infos-headingOne">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -268,7 +383,7 @@ $datas = array_map(function($_var){
                               <div>                              
                                 <p class="nome_embarque"><?= $embarque['nome']; ?></p>
                                 <div class="endereco_container">
-                                  <span><?= aer_icons('pin', 14, 14); ?></span><div class="endereco_embarque"><p><?= $embarque['endereco']; ?></p><p><?= $embarque['obs']; ?></p></div>
+                                  <span><?= aer_icons('pin', 14, 14); ?></span><div class="endereco_embarque"><p>v</p><p><?= $embarque['obs']; ?></p></div>
                                 </div>
                                 <?php
                                   if(!isset($horarios_full)){
@@ -338,51 +453,13 @@ $datas = array_map(function($_var){
                 </div>
               </div>
               <div class="accordion-item">
-                <h3 class="accordion-header" id="infos-headingTwo">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                    Como funciona
-                  </button>
-                </h3>
-                <div id="flush-collapseTwo" class="accordion-collapse collapse " aria-labelledby="flush-headingTwo" data-bs-parent="#infos-accordion">
-                  <div class="info-exc-box">
-                    <ul class="list-group list-group-flush">
-                      <li class="list-group-item bg-transparent">Transporte para o evento, ida e volta.</li>
-                      <li class="list-group-item bg-transparent">Grupo exclusivo no WhatsApp para comunicação.</li>
-                      <li class="list-group-item bg-transparent">Retorno logo após o final do evento. No caso de festivais, será considerado o final da última apresentação musical do palco principal.</li>
-                      <li class="list-group-item bg-transparent">No retorno, os desembarques acontecem nos mesmos pontos.</li>
-                      <li class="list-group-item bg-transparent">O desembarque e estacionamento do veículo no local do evento dependem das condições e orientações de trânsito local.</li>
-                      <li class="list-group-item bg-transparent">Tolerância para retorno ao veículo a ser definida de acordo com as condições de cada evento. Em geral, é de 1h após o final do evento.</li>
-                      <li class="list-group-item bg-transparent">Incluso monitoria e água a bordo.</li>
-                      <li class="list-group-item bg-transparent">NÃO inclui ingresso para os eventos.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item">
                 <h3 class="accordion-header" id="infos-headingThree">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-item-duvidas" aria-expanded="false" aria-controls="accordion-item-duvidas">
                     Principais dúvidas
                   </button>
                 </h3>
                 <div id="accordion-item-duvidas" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#infos-accordion">
-                  <dl class="info-exc-box">
-                    <dt class="text-start pergunta fw-bold mb-1">• A excursão inclui ingresso para os eventos?</dt>
-                    <dd class="text-start resposta">Não. Nós não comercializamos ingressos, a menos que expressamente informado, e recomendamos a compra apenas em pontos de venda autorizados.</dd>
-                    <dt class="text-start pergunta fw-bold mb-1">• É possível reservar apenas ida ou volta?</dt>
-                    <dd class="text-start resposta">Não oferecemos opções de reserva para apenas um dos sentidos. As excursões compreendem ida e volta, portanto, cada reserva representa um lugar reservado por toda a viagem. No entanto, você pode fazer sua reserva normalmente e utilizar o transporte em apenas um dos sentidos, sem problemas.</dd>
-                    <dt class="text-start pergunta fw-bold mb-1">• Como saber se há disponibilidade de vagas?</dt>
-                    <dd class="text-start resposta">As vagas são gerenciadas pelo próprio site. Enquanto houver vagas, estará disponível para reservas. Um aviso em amarelo surgirá quando estivermos na últimas vagas, e um aviso em vermelho indicará que as vagas estão esgotadas.</dd>
-                    <dt class="text-start pergunta fw-bold mb-1">• É preciso encaminhar comprovante de pagamento por e-mail?</dt>
-                    <dd class="text-start resposta">Não, você não precisa encaminhar nenhum tipo de comprovante após fazer sua reserva com a Aerotour. Você receberá um email de confirmação de reserva e você também poderá vê-la na página "Minhas reservas", na sua área logada aqui no site.</dd>
-                    <dt class="text-start pergunta fw-bold mb-1">• Como acessar o grupo de WhatsApp da excursão?</dt>
-                    <dd class="text-start resposta">Os grupos são criados 5 dias antes da data da excursão. Quem reservar antes desse período, receberá um e-mail com o link para acesso assim que o grupo for disponibilizado. Caso contrário, o link será enviado no e-mail de confirmação de reserva. Também será possível acessar o grupo por meio da página <b>Minhas reservas</b>.</dd>
-                    <dt class="text-start pergunta fw-bold mb-1">• É permitido deixar pertences no veículo?</dt>
-                    <dd class="text-start resposta">De forma geral, não há impedimentos para quem deseja deixar algum item no interior do veículo durante os eventos. No entanto, não dispomos de serviço de guarda de objetos e não assumimos a responsabilidade por eles. Por isso, não recomendamos que sejam deixados objetos de valor.</dd>
-                    <dt class="text-start pergunta fw-bold mb-1">• Em qual tipo de veículo será feito o transporte?</dt>
-                    <dd class="text-start resposta">As excursões podem acontecer em veículos como ônibus e micro-ônibus executivos ou vans. A definição depende da demanda de passageiros para cada excursão, visando garantir a eficiência, conforto e segurança da viagem</dd>
-                    <dt class="text-start pergunta fw-bold mb-1">• Qual o itinerário da viagem?.</dt>
-                    <dd class="text-start resposta">Em excursões para São Paulo, organizamos as excursões em duas rotas. Uma delas inclui Sumaré, Hortolândia, Paulínia e Campinas(Unicamp). A outra inclui Salto, Indaiatuba e Campinas (Largo do Pará). Os passageiros de Valinhos, Vinhedo e Jundiaí são acomodados conforme a disponiblidade dos veículos. Para outros destinos, as definições ocorrem de acordo com a rota.</dd>
-                  </dl>
+                  
                 </div>
               </div>
               <div class="accordion-item">
@@ -522,27 +599,27 @@ $datas = array_map(function($_var){
   </section>
   <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js"></script>
 <script>
-  const stickyElement = document.querySelector('#mobile-sticky-res-btn');
-  const buttonValores = document.querySelector('.accordion-item:nth-child(3)');
+//   const stickyElement = document.querySelector('#mobile-sticky-res-btn');
+//   const buttonValores = document.querySelector('.accordion-item:nth-child(3)');
 
-  const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-          if (!entry.isIntersecting && entry.boundingClientRect.top <= 0) {
-            stickyElement.classList.remove('reshow');
-            stickyElement.classList.add('remove');
-          }else if(entry.isIntersecting && entry.boundingClientRect.top <= 0){
-            stickyElement.classList.remove('remove');
-            stickyElement.classList.add('reshow');
-          }
-      });
-  });
-observer.observe(buttonValores);
+//   const observer = new IntersectionObserver((entries) => {
+//       entries.forEach(entry => {
+//           if (!entry.isIntersecting && entry.boundingClientRect.top <= 0) {
+//             stickyElement.classList.remove('reshow');
+//             stickyElement.classList.add('remove');
+//           }else if(entry.isIntersecting && entry.boundingClientRect.top <= 0){
+//             stickyElement.classList.remove('remove');
+//             stickyElement.classList.add('reshow');
+//           }
+//       });
+//   });
+// observer.observe(buttonValores);
 
-stickyElement.addEventListener('click', ({currentTarget}) => {
-  const targetElement = document.querySelector('#reservaBox');
-  setTimeout(() => {currentTarget.classList.remove('reshow'); currentTarget.classList.add('remove')}, 150);
-  setTimeout(() => targetElement.scrollIntoView({behavior: 'smooth', block: 'center'}), 500);
-})
+// stickyElement.addEventListener('click', ({currentTarget}) => {
+//   const targetElement = document.querySelector('#reservaBox');
+//   setTimeout(() => {currentTarget.classList.remove('reshow'); currentTarget.classList.add('remove')}, 150);
+//   setTimeout(() => targetElement.scrollIntoView({behavior: 'smooth', block: 'center'}), 500);
+// })
 
 </script>
   

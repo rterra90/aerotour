@@ -1,93 +1,68 @@
-// let hide_placeholder = false;
-// let dados_reserva = false;
+// Tab Navigation
+const buttons = document.querySelectorAll('.tab-btn');
+const contents = document.querySelectorAll('.tab-content');
 
-// function handle_selecao_variante_excursao(event) {
-//   const dia = event.currentTarget.innerText;
-//   const all_badges = document.querySelectorAll('.badge-dia');
-//   const cards_variacao = document.querySelectorAll('.variacao-info');
+buttons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    // Remove active de todos os botões e conteúdos
+    buttons.forEach((b) => b.classList.remove('active'));
+    contents.forEach((c) => c.classList.remove('active'));
 
-//   if (event.currentTarget.classList.contains('badge-dia')) {
-//     if (!hide_placeholder) {
-//       hide_placeholder = true;
-//       document.querySelector('#info-placeholder').classList.add('d-none');
-//       document.querySelector('#info-container').classList.remove('d-none');
-//       document.querySelector('#info-container');
-//     }
-//     all_badges.forEach((b) => b.classList.remove('active'));
-//     event.currentTarget.classList.add('active');
+    // Ativa o botão e conteúdo correspondente
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
 
-//     /* Alterna container de info */
-//     cards_variacao.forEach((card) => {
-//       if (card.dataset.dia.substring(0, 5) === dia) {
-//         card.classList.remove('d-none');
-//         const embarqueHidden = card.querySelector('input.embarque-hidden');
-//         embarqueHidden && embarqueHidden.setAttribute('name', 'embarque');
-//       } else {
-//         card.classList.add('d-none');
-//         const embarqueHidden = card.querySelector('input.embarque-hidden');
-//         embarqueHidden && embarqueHidden.setAttribute('name', '');
-//       }
-//     });
-//   }
-// }
+// Seção Embarques
+const botoesFiltro = document.querySelectorAll(
+  '.filtro-btn, .mostrar-tudo-btn',
+);
+const itens = document.querySelectorAll('.item-embarque');
+const filtroCidades = document.getElementById('filtroCidades');
+const mostrarTudoBtn = document.querySelector('.mostrar-tudo-btn');
 
-// function handle_ativacao_botao_pagamento(variant_id) {
-//   const reserva_inputs = document.querySelectorAll(
-//     `[data-variacao-id="${variant_id}"] .reserva-input`,
-//   );
-//   const reserva_inputs_array = Array.prototype.slice.call(reserva_inputs);
-//   const pagamento_btn = document.querySelector(
-//     `[data-variacao-id="${variant_id}"] .single_add_to_cart_button`,
-//   );
-//   const embarqueInputHidden = document.querySelector(
-//     `.embarque-hidden[data-variation-id="${variant_id}"]`,
-//   );
-//   if (
-//     reserva_inputs_array.every((input) => input.value !== '') &&
-//     embarqueInputHidden.value !== ''
-//   ) {
-//     pagamento_btn.hasAttribute('disabled') &&
-//       pagamento_btn.removeAttribute('disabled');
-//   } else pagamento_btn.setAttribute('disabled', '');
-// }
+botoesFiltro.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    // Exibe/oculta botão "mostrar tudo"
+    if (btn.dataset.cidade == 'todas') mostrarTudoBtn.classList.add('d-none');
+    else mostrarTudoBtn.classList.remove('d-none');
 
-// function handle_reservar_excursao(event) {
-//   const variant_id = event.target.dataset.variacaoId;
-//   const reservar_btn = event.currentTarget;
-//   const box_dados = document.querySelector(
-//     `[data-variacao-id="${variant_id}"]#reserva-dados-passageiro`,
-//   );
-//   box_dados.classList.toggle('d-none');
-//   event.currentTarget.classList.toggle('active');
+    //Estiliza botão ativo
+    document.querySelector('.filtro-btn.active').classList.remove('active');
+    if (btn.tagName == 'BUTTON') btn.classList.add('active');
+    else {
+      document.querySelector('.filtro-btn:first-child').classList.add('active');
+    }
+    //Alterna o conteúdo visível
+    const cidade = btn.dataset.cidade;
+    itens.forEach((item) => {
+      if (cidade === 'todas' || item.dataset.cidade === cidade) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
 
-//   const reserva_inputs = document.querySelectorAll(
-//     `[data-variacao-id="${variant_id}"] .reserva-input`,
-//   );
-//   if (reservar_btn.classList.contains('active')) {
-//     reserva_inputs.forEach((input) =>
-//       input.addEventListener('keyup', () =>
-//         handle_ativacao_botao_pagamento(variant_id),
-//       ),
-//     );
-//     reservar_btn.innerText = 'Cancelar';
-//   } else {
-//     reserva_inputs.forEach((input) =>
-//       input.removeEventListener('keyup', () =>
-//         handle_ativacao_botao_pagamento(variant_id),
-//       ),
-//     );
-//     reservar_btn.innerText = 'Reservar lugar';
-//   }
+// Scroll com setas
+const scrollLeftBtn = document.getElementById('scrollLeft');
+const scrollRightBtn = document.getElementById('scrollRight');
 
-//   handle_ativacao_botao_pagamento(variant_id);
-// }
+scrollLeftBtn.addEventListener('click', () => {
+  filtroCidades.scrollBy({ left: -150, behavior: 'smooth' });
+});
 
-// document
-//   .querySelectorAll('.datas .badge-dia')
-//   .forEach((bdg) =>
-//     bdg.addEventListener('click', handle_selecao_variante_excursao),
-//   );
+scrollRightBtn.addEventListener('click', () => {
+  filtroCidades.scrollBy({ left: 150, behavior: 'smooth' });
+});
 
-// document
-//   .querySelectorAll('.btn-reservar')
-//   .forEach((btn) => btn.addEventListener('click', handle_reservar_excursao));
+//Botão CTA Reserve Agora
+document.querySelector('.cta-button').addEventListener('click', function (e) {
+  e.preventDefault();
+  const target = document.querySelector(this.getAttribute('href'));
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+});

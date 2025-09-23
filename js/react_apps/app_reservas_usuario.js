@@ -4946,9 +4946,8 @@
     function openEmbarqueModal() {
       if (selectedDates.length > 0)
         setEmbarqueModalOpen(true);
-      else {
+      else
         setAvisosModalOpen("sem-data-selecionada");
-      }
     }
     function openPaxModal(mode = "add", paxData = null, index = null) {
       if (selectedDates.length < 1) {
@@ -5013,7 +5012,19 @@
             onClick: openDateModal,
             ref: dataBoxRef,
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F4C5}" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                "svg",
+                {
+                  xmlns: "http://www.w3.org/2000/svg",
+                  className: "bi bi-calendar2-event",
+                  viewBox: "0 0 16 16",
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z" })
+                  ]
+                }
+              ) }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: selectedDates.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "empty-text-placeholder", children: [
                 "Selecionar",
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("br", {}),
@@ -5039,7 +5050,15 @@
             ref: embarqueBoxRef,
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-embarque d-flex", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F68F}" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                  "svg",
+                  {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    className: "bi bi-geo-alt-fill",
+                    viewBox: "0 0 16 16",
+                    children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" })
+                  }
+                ) }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: embarque.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { className: "empty-text-placeholder", children: [
                   "Selecionar ",
                   /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("br", {}),

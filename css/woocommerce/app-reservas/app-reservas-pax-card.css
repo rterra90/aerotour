@@ -87,7 +87,7 @@
   height: 28px;
 }
 
-.info {
+.passenger-card .info {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -152,26 +152,26 @@
   font-size: 0.55rem;
 }
 
-dl {
+.passenger-card dl {
   display: flex;
   gap: 18px;
   align-items: center;
   margin: 0;
 }
 
-dt {
+.passenger-card dt {
   font-size: 11px;
   color: var(--muted);
   min-width: 78px;
 }
 
-dd {
+.passenger-card dd {
   margin: 0;
   font-size: 13px;
   font-weight: 500;
 }
 
-.pill {
+.passenger-card .pill {
   font-size: 0.65rem;
   padding: 3px 6px;
   border-radius: 999px;

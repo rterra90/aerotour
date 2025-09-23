@@ -74,7 +74,7 @@
 }
 
 .modal-buttons button.saveBtn {
-  background-color: #3182ce;
+  background-color: var(--aer-accent);
   color: #f9f9f9;
   border: none;
   border-radius: 8px;
@@ -85,7 +85,6 @@
   transition: background-color 0.3s, box-shadow 0.3s;
 }
 .modal-buttons button.saveBtn:hover {
-  background-color: #2b6cb0;
   box-shadow: 0 6px 14px rgba(49, 130, 206, 0.3);
 }
 .modal-buttons button.saveBtn:disabled:hover {
