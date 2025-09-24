@@ -4459,24 +4459,12 @@
                         {
                           type: "date",
                           name: "data_nascimento",
+                          maxLength: "10",
                           value: formData.data_nascimento,
                           onChange: inputChange,
                           onBlur: inputBlur
                         }
                       )
-                    ] }),
-                    paxMenor && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "aviso-menor", id: "aviso-menor", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-                        "a",
-                        {
-                          href: "modelo-autorizacao.pdf",
-                          download: true,
-                          className: "icone-download",
-                          "aria-label": "Baixar modelo de autoriza\xE7\xE3o",
-                          children: "\u{1F4C4}"
-                        }
-                      ),
-                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "texto-aviso", children: "Passageiro menor de idade. Clique para baixar o modelo de autoriza\xE7\xE3o." })
                     ] }),
                     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "modal-buttons", children: [
                       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
@@ -4779,7 +4767,7 @@
     precoUnitario,
     totalCost
   }) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: passageiros.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "passenger-card total-reservation", children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: passageiros.length > 0 && precoUnitario > 0 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "passenger-card total-reservation", children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "coluna-esquerda", children: [
         selectedDates.length == 1 && passageiros.length == 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "item", children: "Valor:" }) : null,
         selectedDates.length == 1 && passageiros.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
@@ -4828,7 +4816,7 @@
           ",00"
         ] })
       ] })
-    ] }) });
+    ] }) : null });
   };
   PrecoReservas.propTypes = {
     passageiros: import_prop_types7.default.array.isRequired,
@@ -4893,7 +4881,7 @@
         setLoading(true);
       if (index >= selectedDates.length) {
         botaoContinuarRef.current.innerHTML = "Redirecionando para o carrinho...";
-        window.location.href = "http://localhost/aerotour-site/carrinho/";
+        window.location.href = "http://aerotour.com.br/carrinho/";
         return;
       }
       const submitQty = passageiros.length;
@@ -4979,6 +4967,7 @@
       setSelectedDates([]);
       setVariacoesSelecionadas([]);
       setEmbarque([]);
+      setPrecoUnitario(0);
       if (!dataPayload || dataPayload.length === 0) {
         return;
       } else if (dataPayload.length > 0) {

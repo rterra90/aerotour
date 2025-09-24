@@ -11,7 +11,7 @@ const PrecoReservas = ({
   return (
     <>
       {/* Valor da reserva */}
-      {passageiros.length > 0 && (
+      {passageiros.length > 0 && precoUnitario > 0 ? (
         <div className="passenger-card total-reservation">
           <div className="coluna-esquerda">
             {/* 1 passageiro e 1 data */}
@@ -62,7 +62,7 @@ const PrecoReservas = ({
             <div className="total">R${totalCost},00</div>
           </div>
         </div>
-      )}
+      ) : null}
     </>
   );
 };

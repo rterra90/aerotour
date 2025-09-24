@@ -23,3 +23,26 @@ export const celularRaw = (value) => {
     .replace('-', '')
     .replaceAll(' ', '');
 };
+export const dataMask = (value) => {
+  // Remove tudo que não seja número ou "/"
+  let valor = value.replace(/[^\d\/]/g, '');
+
+  // Remove barras extras
+  valor = valor.replace(/\/+/g, '/');
+
+  // Remove barras em posições erradas
+  valor = valor.replace(/^\/|\/{2,}/g, '');
+
+  // Remove qualquer caractere após 10 dígitos
+  valor = valor.replace(/(\d{2})(\/?)(\d{2})(\/?)(\d{4}).*/, '$1/$3/$5');
+
+  // Adiciona barras automaticamente
+  if (valor.length >= 2 && valor[2] !== '/') {
+    valor = valor.slice(0, 2) + '/' + valor.slice(2);
+  }
+  if (valor.length >= 5 && valor[5] !== '/') {
+    valor = valor.slice(0, 5) + '/' + valor.slice(5);
+  }
+
+  return valor;
+};

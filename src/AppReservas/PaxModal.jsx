@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import CustomSelectPaxModal from './CustomSelectPaxModal.jsx';
 import useValidations from '../Hooks/useValidations';
-import { cpfMask, celularMask } from '../AppReservas/InputMasks';
+import { cpfMask, celularMask, dataMask } from '../AppReservas/InputMasks';
 
 const PaxModal = ({
   setPaxModalOpen,
@@ -254,13 +254,14 @@ const PaxModal = ({
             <input
               type="date"
               name="data_nascimento"
+              maxLength="10"
               value={formData.data_nascimento}
               onChange={inputChange}
               onBlur={inputBlur}
             />
           </label>
 
-          {paxMenor && (
+          {/* {paxMenor && (
             <div className="aviso-menor" id="aviso-menor">
               <a
                 href="modelo-autorizacao.pdf"
@@ -275,7 +276,7 @@ const PaxModal = ({
                 autorização.
               </span>
             </div>
-          )}
+          )} */}
 
           <div className="modal-buttons">
             <CustomSelectPaxModal

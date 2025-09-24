@@ -371,50 +371,7 @@ dl#principaisDuvidasContent .resposta {
   width: 100%;
   background-image: radial-gradient(#494949 20%, transparent 80%);
 }
-#info-body .info-row-value .data-span {
-  padding: 2px 3px;
-  background-color: #9c9c9c;
-  display: inline-block;
-  margin-right: 3px;
-  font-size: 0.775rem;
-  font-weight: 600;
-  border-radius: 0.1rem;
-}
-#info-body .info-row.previsao h2 {
-  width: 56px;
-  padding-top: 4px;
-  line-height: 0.8;
-  text-align: center;
-  font-size: 0.625rem;
-  min-width: 56px;
-}
-#info-body #infos-accordion .accordion-item {
-  border-top: 1px solid #2e2e2e;
-  background-color: transparent;
-}
-#info-body #infos-accordion .accordion-item .accordion-collapse {
-  background-color: #e7e7e7;
-}
-#infos-accordion h3 button {
-  text-transform: uppercase;
-  background-color: #e7e7e7;
-  font-weight: 600;
-}
-.accordion-button:not(.collapsed)::after {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-}
-#infos-accordion h3 button::after {
-  width: 24px;
-  height: 24px;
-  background-size: 1.2rem;
-  background-position: 2px 2px;
-  border: 1px solid #333;
-  border-radius: 30px;
-}
-#infos-accordion #accordion-item-duvidas .resposta {
-  padding-left: 0.5rem;
-  font-size: 0.9rem;
-}
+
 #info-body .reserva-box h3 {
   text-align: center;
   text-align: end;
@@ -626,39 +583,7 @@ dl#principaisDuvidasContent .resposta {
     margin-left: auto;
     margin-right: auto;
   }
-  form#passsageiro_reserva .item p {
-    font-size: 0.775rem;
-    margin-bottom: 4px;
-  }
-  form#passsageiro_reserva button[type='submit'] {
-    margin-top: 20px;
-  }
-  #modulo_passageiros .user-icon {
-    display: none;
-  }
-  #modulo_passageiros li.passageiro-li {
-    display: block;
-    position: relative;
-  }
-  #modulo_passageiros li .dados-passageiro::before {
-    content: attr(data-index);
-    font-size: 0.55rem;
-    font-style: italic;
-    display: block;
-    text-align: left;
-    opacity: 0.6;
-    margin-bottom: 2px;
-  }
-  #modulo_passageiros li .dados-passageiro {
-    max-width: unset;
-    width: unset;
-  }
-  #modulo_passageiros .icones-passageiro {
-    position: absolute;
-    top: 3px;
-    right: 6px;
-    font-size: 0.75rem;
-  }
+
   #promo-wide-banner img {
     width: 100%;
   }
@@ -672,9 +597,6 @@ dl#principaisDuvidasContent .resposta {
     margin: 0 auto;
     display: block;
   }
-  #mobile-sticky-res-btn {
-    display: none !important;
-  }
   #info-body h1 {
     font-size: 2rem;
   }
@@ -686,9 +608,6 @@ dl#principaisDuvidasContent .resposta {
   }
   .reserva-box {
     margin-top: 0;
-  }
-  #info-body .info-row-icon {
-    width: 80px;
   }
 }
 @media (min-width: 992px) {
