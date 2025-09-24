@@ -46,7 +46,7 @@
 } */
 
 .cart-item {
-  border-radius: 14px;
+  border-radius: var(--aer-radius);
   padding: 18px;
   margin-bottom: 20px;
   background: #f7f7f7;
@@ -74,12 +74,6 @@
 
 .remove-item:hover {
   color: #e74c3c;
-}
-
-.tour-info h3 {
-  margin: 0 0 6px;
-  font-size: 1.3rem;
-  color: var(--aer-accent);
 }
 
 .tour-info p {
@@ -146,7 +140,11 @@
   font-size: 0.9rem;
   color: #444;
 }
-
+.passenger > div {
+  max-width: 420px;
+  display: flex;
+  justify-content: space-between;
+}
 .passenger .rota {
   border: 1px dashed var(--aer-text-dark);
   color: var(--aer-text-dark);
@@ -156,7 +154,14 @@
   display: block;
   height: fit-content;
 }
-
+input#coupon_code {
+  padding: 4px 10px;
+  margin-right: 10px;
+  border-radius: 0.3rem;
+  border: 1px solid #717171;
+  font-weight: 300;
+  letter-spacing: 0.035rem;
+}
 /* Scrollbar suave */
 .passenger-list::-webkit-scrollbar {
   width: 6px;
@@ -262,13 +267,10 @@
 .cart-collaterals {
   background-color: #f7f7f7;
   padding: 18px;
-  border-radius: 0.3rem;
+  border-radius: var(--aer-radius);
 }
 .cart-collaterals table {
   width: 100%;
-}
-.cart-collaterals h2 {
-  font-size: 1.5rem;
 }
 .wc-proceed-to-checkout {
   text-align: center;
@@ -279,8 +281,8 @@
   font-size: 0.8rem;
   text-transform: uppercase;
 }
-#carrinho-container .coupon #coupon_inputs {
-  display: block;
+#carrinho-container #coupon_inputs {
+  display: flex;
 }
 #carrinho-container .coupon label {
   font-size: 0.925rem;

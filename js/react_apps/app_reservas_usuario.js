@@ -5118,7 +5118,7 @@
         {
           id: "reservasContinuar",
           ref: botaoContinuarRef,
-          className: "single_add_to_cart_button",
+          className: "main-btn single_add_to_cart_button",
           onClick: () => submitToCart(),
           children: "Continuar"
         }

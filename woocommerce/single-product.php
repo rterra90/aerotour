@@ -1,19 +1,39 @@
 <?php
 get_header();
+// JSON-LD
+if($product){
+    $jsonLd = [
+    "@context" => "https://schema.org/",
+    "@type" => "Product",
+    "name" => "Excursão ".$product->get_name(),
+    "image" => wp_get_attachment_url( $product->get_image_id() ),
+    "description" => wp_strip_all_tags( $product->get_short_description() ),
+    "brand" => [
+        "@type" => "Brand",
+        "name" => "Aerotour Excursões"
+    ],
+    "offers" => [
+        "@type" => "Offer",
+        "priceCurrency" => 'BRL',
+        "price" => "A partir de " . $product->get_price() . ',00',
+        "availability" => $product->is_in_stock() ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        "url" => get_permalink( $product->get_id() )
+    ]
+    ];
+}
+echo '<script type="application/ld+json">' . json_encode($jsonLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
+// FIM JSON-LD
+
 $user = wp_get_current_user();
 $user_meta = get_user_meta($user->ID);
 $user -> metafields = $user_meta;
-$ja_comprado = false;
 global $wpdb;
-
-$exc_embarques = get_post_meta(get_the_ID(), 'exc_embarques', true);
 
 function excursao_formatada($id){
   global $wpdb;
   $_excursao = wc_get_product($id);
   $_excursao_img = wp_get_attachment_image_src($_excursao->get_image_id(), 'full');
   $locais_embarque = json_decode(get_post_meta($id, 'embarques', true), true);
-  
   
   if($locais_embarque !== null){
     $ids_embarques = array_map(function($_emb){
@@ -36,23 +56,15 @@ function excursao_formatada($id){
       }
     }
   }
+
   
-  
-  // if($locais_embarque){
-  //   usort($locais_embarque, function ($a, $b) {
-  //     $_a = isset($a["nome"]) ? $a["nome"] : $a["nome_embarque"];
-  //     $_b = isset($b["nome"]) ? $b["nome"] : $b["nome_embarque"];
-  //     return strcmp($_a, $_b);
-  //   });
-  // }
-  
-  function disp_vagas($_e){
-    $_variacoes = $_e->get_available_variations();
-    if(count($_variacoes) == 1){
-      $return = (int) trim(str_replace('</p>', '', substr($_variacoes[0]['availability_html'], 29)));
-      return $return == '' ? 0 : $return;
-    } else return false;
-  };
+  // function disp_vagas($_e){
+  //   $_variacoes = $_e->get_available_variations();
+  //   if(count($_variacoes) == 1){
+  //     $return = (int) trim(str_replace('</p>', '', substr($_variacoes[0]['availability_html'], 29)));
+  //     return $return == '' ? 0 : $return;
+  //   } else return false;
+  // };
 
   
   return [
@@ -67,11 +79,13 @@ function excursao_formatada($id){
     'atributos' => $_excursao->get_attributes(),
     'embarques' => $locais_embarque ? $locais_embarque : null,
     // 'data_final' => $data_final,
-    'disp_vagas' => disp_vagas($_excursao),
+    // 'disp_vagas' => disp_vagas($_excursao),
   ];
 }
 
 $excursao = excursao_formatada(get_the_ID());
+
+// print_r($excursao);
 
 //Define a propriedade 'encerrar_vendas' em cada variação
 foreach($excursao['variacoes'] as $i => $var){
@@ -104,67 +118,58 @@ usort($datas, function($a, $b) {
       <img class="main-image" src="<?= $excursao['img'] ?>" alt="Imagem representativa da excursão <?= $excursao['nome'] ?> da Aerotour" width="100%" height="100%">
     </div>
 
-
     <div class="container-xxl py-md-5 py-3 excursao-wrapper">
       <div class="notices">
         <?php wc_print_notices(); ?>
       </div>
       
       <section class="row product-body">
+
         <!-- INFORMAÇÕES -->
         <div id="info-body" class="col-md-7 col">
-          <!-- <div id="mobile-sticky-res-btn">
-            <?= aer_icons("form", 29, 29); ?>
-            <span>Faça sua reserva!</span>
-          </div> -->
-          
-          <?php
-            if(gettype($excursao['disp_vagas']) == 'integer' && (int)$excursao['disp_vagas'] <= 10){
-              ?>
-              <div class="disp-header <?= (int)$excursao['disp_vagas'] === 0 ? 'esgotado' : 'ultimos'; ?> mb-3">
-              <?php
-                if((int)$excursao['disp_vagas'] === 0){ ?>Vagas esgotadas...<?php
-                }else{ ?>Últimos lugares!<?php }
-                ?>
-              </div>
-              <?php
-            };
-          ?>
           <div class="d-flex justify-content-between gap-2">
             <h1><span>Excursão<br/></span><?= $excursao['nome'] ?></h1>
 
+            <!-- SOCIAL SHARE -->
             <div class="share">
-            <span>Compartilhe</span>
-            <div class="share-icons d-flex gap-2">
-              <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons('whatsapp', 18, 18)?></a>
-              <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons('instagram', 18, 18)?>
-              </a>
-              <a href="https://www.facebook.com/aerotourcampinas/" aria-label="Botão compartilhar pelo Facebook">
-                <?= aer_icons('facebook', 18, 18)?>
-              </a>
+              <span>Compartilhe</span>
+              <div class="share-icons d-flex gap-2">
+                <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons('whatsapp', 18, 18)?></a>
+                <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons('instagram', 18, 18)?>
+                </a>
+                <a href="https://www.facebook.com/aerotourcampinas/" aria-label="Botão compartilhar pelo Facebook">
+                  <?= aer_icons('facebook', 18, 18)?>
+                </a>
+              </div>
             </div>
-          </div>
+            <!-- FIM SOCIAL SHARE -->
+
           </div>
           
+
+          <!-- CONTADOR DE RESERVAS -->
           <?php
-              if(get_the_ID() == 4893){
-                $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id = 4894 AND status = 'normal'");
-                $total_reservas_count = count($total_reservas) + 15;
+            if(get_the_ID() == 4893){
+              $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id = 4894 AND status = 'normal'");
+              $total_reservas_count = count($total_reservas) + 15;
 
-                ?>
-              <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
-                <?php
-              } else if(get_the_ID() == 2606){
-              $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id IN (2607, 2608, 2609, 2610, 2611) AND status = 'normal'");
-              $total_reservas_count = count($total_reservas) + 10;
-                ?>
-              <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
+              ?>
+            <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
+              <?php
+            } else if(get_the_ID() == 2606){
+            $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id IN (2607, 2608, 2609, 2610, 2611) AND status = 'normal'");
+            $total_reservas_count = count($total_reservas) + 10;
+              ?>
+            <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
 
-                <?php
-              }
-            ?>
+              <?php
+            }
+          ?>
+          <!-- FIM CONTADOR DE RESERVAS -->
           
+          <!-- info inner -->
           <div class="info">
+            <!-- grid container -->
             <section class="grid-container">
               <!-- Box Datas -->
               <div class="box box1">
@@ -223,7 +228,7 @@ usort($datas, function($a, $b) {
               </div>
             </section>
 
-            <!-- CTA BUTTON -->
+            <!-- cta button -->
             <a href="#reservaBox" class="cta-button">
               <?= aer_icons('bookmark-light', 16, 16, '.webp'); ?> Reservar agora
             </a>
@@ -240,7 +245,7 @@ usort($datas, function($a, $b) {
               </div>
 
               <!-- TAB CONTENT COMO FUNCIONA -->
-              <div id="tab1" class="tab-content active">
+              <div id="tab1" class="tab-content tab-como-funciona active">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item bg-transparent">Transporte para o evento, ida e volta.</li>
                   <li class="list-group-item bg-transparent">Grupo exclusivo no WhatsApp para comunicação.</li>
@@ -254,7 +259,7 @@ usort($datas, function($a, $b) {
               </div>
 
               <!-- TAB CONTENT EMBARQUES -->
-              <div id="tab2" class="tab-content">
+              <div id="tab2" class="tab-content tab-embarques">
                 <div class="embarque-container">
                   <div class="filtro-header">
                     <span>Filtre por <br />cidade:</span>
@@ -318,7 +323,7 @@ usort($datas, function($a, $b) {
               </div>
 
               <!-- TAB CONTENT PRINCIPAIS DÚVIDAS -->
-              <div id="tab3" class="tab-content">
+              <div id="tab3" class="tab-content tab-duvidas">
                 <dl id="principaisDuvidasContent">
                   <dt class="text-start pergunta fw-bold mb-1">• A excursão inclui ingresso para os eventos?</dt>
                   <dd class="text-start resposta">Não. Nós não comercializamos ingressos, a menos que expressamente informado, e recomendamos a compra apenas em pontos de venda autorizados.</dd>
@@ -339,161 +344,17 @@ usort($datas, function($a, $b) {
                 </dl>
               </div>
             </div>
-            
-            
-
-            <!-- Accordion -->
-            <div class="accordion accordion-flush d-none" id="infos-accordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" id="infos-headingOne">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                    Locais de embarque e horários
-                  </button>
-                </h3>
-                <div id="flush-collapseOne" class="accordion-collapse collapse info-exc-box"" aria-labelledby="flush-headingOne" data-bs-parent="#infos-accordion">
-                <?php 
-                if($excursao['embarques']){
-                ?>
-                  <div id="locaisEmbarqueContainer">
-                    <div>
-                      <?php
-                        $_i = 0;
-                        foreach($excursao['embarques'] as $i => $embarque){
-
-                          $horarios_simples = array_unique(array_map(function($_op){
-                            // print_r($_op);
-                            return $_op['horario'];
-                          }, $embarque['horarios']));
-
-                          if(count($horarios_simples) > 1){
-                            $horarios_full = array_map(function($_op){
-                              $return = array($_op['horario']);
-                              foreach($_op['disponibilidade'] as $_disp){
-                                if($_disp['status'] === 'disponivel'){
-                                  $return[] = $_disp['disp_dia'];
-                                }
-                              }
-                              
-                              return $return; // array('hh:mm', 'dd/mm/yyyy', 'dd/mm/yyyy')
-                            }, $embarque['horarios']);
-                          }
-                          ?>
-
-                            <div class="col-6 embarque-box">
-                              <div>                              
-                                <p class="nome_embarque"><?= $embarque['nome']; ?></p>
-                                <div class="endereco_container">
-                                  <span><?= aer_icons('pin', 14, 14); ?></span><div class="endereco_embarque"><p>v</p><p><?= $embarque['obs']; ?></p></div>
-                                </div>
-                                <?php
-                                  if(!isset($horarios_full)){
-                                    ?>
-                                    <div class="d-flex gap-1 horario_container">
-                                      <span><?= aer_icons('clock', 12, 12); ?></span><p class="horario_embarque"><?= implode(' - ', $horarios_simples); ?></p>
-                                    </div>
-
-                                    <?php
-                                  }
-                                ?>
-                                
-
-                                <?php
-                                if(isset($embarque['link_mapa']) && $embarque['link_mapa'] !== "#"){
-                                ?>
-                                <a href="<?= $embarque['link_mapa']; ?>" target="_blank">
-                                  <div class="mapa_container<?= isset($horarios_full) ? ' temMultiplo': ''?>">
-                                    <div><?= aer_icons('map', 16, 16); ?></div>
-                                    <span>Ver no mapa</span>
-                                  </div>
-                                </a>
-                                
-                                <?php
-                                }
-
-                                if(isset($horarios_full)){
-                                  ?>
-                                    <div class="horariosMulti mt-2">
-                                      <?php
-                                      foreach($horarios_full as $_horario){
-                                        ?>
-                                        <div class="mt-1">
-                                          
-                                          <span class="d-block">
-                                            <?= aer_icons('calendar', 12, 12); ?><?php foreach($_horario as $_i => $_dia){if($_i > 0){echo ' <b>' . substr($_dia, 0, 5) . '</b> ';}}; ?>
-                                          </span>
-                                          <span class="horariosMultiHor d-block mt-1"><?= aer_icons('clock', 12, 12); ?><?= $_horario[0]; ?></span>
-
-                                        </div>
-                                        <?php
-                                      }
-                                      ?>
-                                    </div>
-                                  <?php
-                                }
-                                ?>
-
-                                
-                              </div>
-                                
-                            </div>
-
-                          <?php
-                          $_i = $_i + 1;
-                        }
-                      ?>
-                    </div>
-                  </div>
-                <?php
-                    }else{
-                      ?>
-                        <p>Locais de embarque não definidos para essa excursão.</p>
-                      <?php
-                    }
-                  ?>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h3 class="accordion-header" id="infos-headingThree">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-item-duvidas" aria-expanded="false" aria-controls="accordion-item-duvidas">
-                    Principais dúvidas
-                  </button>
-                </h3>
-                <div id="accordion-item-duvidas" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#infos-accordion">
-                  
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h3 class="accordion-header" id="infos-headingValores">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#infos-valores" aria-expanded="false" aria-controls="infos-valores">
-                    Valores
-                  </button>
-                </h3>
-                <div id="infos-valores" class="accordion-collapse collapse" aria-labelledby="infos-headingValores" data-bs-parent="#infos-accordion">
-                <div class="info-exc-box"><p class="mb-0">Selecione seu ponto de embarque na seção de reservas para ver o valor.</p></div>
-                </div>
-              </div>
-            </div>
           </div>
 
         </div>
+        <!-- FIM INFORMAÇÕES -->
 
-        <!-- RESERVA -->
+        <!-- RESERVA REACT -->
         <div id="reservaBox" class="col-md-5 col center-element reserva-box">
 
           <!--<div id="bannerRoleta">-->
           <!--  <img class="w-100 mb-1" src="<?= get_stylesheet_directory_uri()?>/assets/banners/banner-roleta.webp" alt="Banner roleta Aerotour">-->
           <!--</div>-->
-
-          <!-- <?php
-            if ( has_term( 'rodeios', 'product_cat' ) ) {
-              ?>
-                <div id="bannerRoleta">
-                  <img class="w-100 mb-1" src="<?= get_stylesheet_directory_uri()?>/assets/banners/aerotour-rodeio10.webp" alt="Banner promoção cupom RODEIO10">
-                </div>
-              <?php
-            }
-          
-          ?> -->
 
           <!-- <div class="excursao-details position-relative aer-box mt-3 mt-sm-2"> -->
             
@@ -505,20 +366,26 @@ usort($datas, function($a, $b) {
           
 
         </div>
+        <!-- FIM RESERVA REACT -->
+
       </section>
-          <div id="exc-wpp-cta" class="desktop">
-            <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao['nome']; ?>" aria-label="Botão para chamar no WhatsApp">
-              <div role="button" class="mt-5">
-                <div class="wpp-icon">
-                  <?= aer_icons('whatsapp', 30, 30); ?>
-                </div>
-                <div class="wpp-text">
-                  <p>Dúvidas?</p>
-                  <span>Fale conosco no WhatsApp!</span>                
-                </div>
-              </div>
-            </a>
+
+      <!-- BOTÃO WHATSAPP -->
+      <div id="exc-wpp-cta" class="desktop">
+        <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao['nome']; ?>" aria-label="Botão para chamar no WhatsApp">
+          <div role="button" class="mt-5">
+            <div class="wpp-icon">
+              <?= aer_icons('whatsapp', 30, 30); ?>
+            </div>
+            <div class="wpp-text">
+              <p>Dúvidas?</p>
+              <span>Fale conosco no WhatsApp!</span>                
+            </div>
           </div>
+        </a>
+      </div>
+      <!-- FIM BOTÃO WHATSAPP -->
+
       <!-- EXCURSÕES RELACIONADAS -->
       <section id="excursoes-relacionadas" class="mt-5 py-md-3">
         <?php 
@@ -541,15 +408,16 @@ usort($datas, function($a, $b) {
         ?> 
       </section>
 
+      <!-- SOCIAL FOOTER -->
       <div id="social-footer" class="d-flex mt-sm-4 mt-5">
         <div class="instagram-feed col-md-6">
-          <h2>Siga a Aerotour</h2>
+          <h2 class="bg-title">Siga a Aerotour</h2>
           <?php
           echo do_shortcode( '[instagram feed="4017"]' );
           ?>
         </div>
         <div id="secaoFotos" col-md-6">
-          <h2>Fotos das excursões</h2>
+          <h2 class="bg-title">Fotos das excursões</h2>
           <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
@@ -589,39 +457,8 @@ usort($datas, function($a, $b) {
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-
-
-        </div>
-      </div>
     </div>
-
-  
   </section>
   <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js"></script>
-<script>
-//   const stickyElement = document.querySelector('#mobile-sticky-res-btn');
-//   const buttonValores = document.querySelector('.accordion-item:nth-child(3)');
-
-//   const observer = new IntersectionObserver((entries) => {
-//       entries.forEach(entry => {
-//           if (!entry.isIntersecting && entry.boundingClientRect.top <= 0) {
-//             stickyElement.classList.remove('reshow');
-//             stickyElement.classList.add('remove');
-//           }else if(entry.isIntersecting && entry.boundingClientRect.top <= 0){
-//             stickyElement.classList.remove('remove');
-//             stickyElement.classList.add('reshow');
-//           }
-//       });
-//   });
-// observer.observe(buttonValores);
-
-// stickyElement.addEventListener('click', ({currentTarget}) => {
-//   const targetElement = document.querySelector('#reservaBox');
-//   setTimeout(() => {currentTarget.classList.remove('reshow'); currentTarget.classList.add('remove')}, 150);
-//   setTimeout(() => targetElement.scrollIntoView({behavior: 'smooth', block: 'center'}), 500);
-// })
-
-</script>
-  
 
 <?php get_footer(); ?>

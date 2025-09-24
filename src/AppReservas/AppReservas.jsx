@@ -343,7 +343,7 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
         <button
           id="reservasContinuar"
           ref={botaoContinuarRef}
-          className="single_add_to_cart_button"
+          className="main-btn single_add_to_cart_button"
           // disabled={!(passengers.length > 0 && termsChecked)}
           onClick={() => submitToCart()}
         >

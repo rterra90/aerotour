@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 						<?php echo wc_get_formatted_cart_item_data( $cart_item ); ?></p>
 						<div class="detalhes">
 							<p>Data: <?= $_product->get_attribute('dia') ?></p>
-							<p>Embarque: <?= $cart_item['embarque'] ?> &nbsp; <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?= $endereco_embarque; ?>"></i></p>
+							<p>Embarque: <?php print_r(get_embarque_by_id($cart_item['embarque'], 'nome')); ?> &nbsp; <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?= $endereco_embarque; ?>"></i></p>
 							<p>Horário: <?= $cart_item['horario'] ?></p>
 						</div>
 						<div class="passageiros">
@@ -39,8 +39,8 @@ defined( 'ABSPATH' ) || exit;
 											</div>
 											<div>
 												<p class="nome-passageiro"><?= $passageiro -> nome_completo; ?></p>
-												<p class="doc-passageiro d-inline-block small mb-1" style="margin-right: 20px">CPF: <?= cpf_mask($passageiro -> doc); ?></p>
-												<p class="telefone-passageiro d-inline small">Telefone: <?= $passageiro -> telefone; ?></p>
+												<p class="doc-passageiro d-inline-block small mb-1" style="margin-right: 20px">CPF: <?= cpf_mask($passageiro -> cpf); ?></p>
+												<p class="telefone-passageiro d-inline small">Telefone: <?= $passageiro -> celular; ?></p>
 											</div>
 	
 										</li>

@@ -20,7 +20,7 @@
 .instagram-feed .LoadMoreButton:hover {
   text-decoration: underline;
 }
-.excursao-wrapper h2 {
+.excursao-wrapper .info h2 {
   margin-top: 20px;
   font-size: 1.75rem;
   font-weight: 300;
@@ -34,9 +34,15 @@
   letter-spacing: 0.1rem;
 }
 #info-body h1 span {
-  color: var(--aer-accent);
+  font-weight: 600;
   display: block;
-  font-size: 0.9rem;
+  margin: 0 0 5px 0;
+  background: var(--aer-accent);
+  width: fit-content;
+  color: var(--aer-text-light);
+  padding: 4px 14px;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 #info-body .share {
   padding: 10px 10px 0;
@@ -236,7 +242,9 @@
 .tab-content.active {
   display: block;
 }
-
+.tab-content.tab-como-funciona ul {
+  font-size: 0.925rem;
+}
 /* Estilo para navegadores WebKit (Chrome, Edge, Safari) */
 .tab-content::-webkit-scrollbar {
   width: 8px;
@@ -466,8 +474,13 @@ dl#principaisDuvidasContent .resposta {
   max-width: 860px;
   width: 76%;
 }
-#social-footer h2 {
-  padding-left: 10px;
+#social-footer > div {
+  padding: 0 20px;
+}
+@media (max-width: 576px) {
+  #social-footer > div {
+    padding: 0px;
+  }
 }
 .FeedLayout__wrapper {
   background-color: rgb(215 215 215) !important;
@@ -552,6 +565,7 @@ dl#principaisDuvidasContent .resposta {
   }
   #social-footer {
     flex-direction: column-reverse;
+    gap: 8px;
   }
   .FeedLayout__col-footer {
     margin-top: 6px;
@@ -583,7 +597,7 @@ dl#principaisDuvidasContent .resposta {
   .box2 {
     min-height: 90px;
   }
-  .excursao-wrapper h2 {
+  .excursao-wrapper .info h2 {
     font-size: 1.4rem;
     margin-top: 26px;
   }

@@ -215,19 +215,17 @@ add_action( 'wp', 'remover_breadcrumb_em_arquivos_woocommerce' );
     $order = wc_get_order( $order_id );
     $passageiros_items = get_post_meta($order_id, 'passageiros_items', true);
     
-    
-  
     $p_index = 0;
     foreach($order -> get_items() as $order_item){
       $passageiros = $passageiros_items[$p_index]['passageiros'];
-      $passageiros = array_filter($passageiros, function ($item){ if($item !== false) return $item; });
+      // $passageiros = array_filter($passageiros, function ($item){ if($item !== false) return $item; });
       $embarque = $passageiros_items[$p_index]['embarque'];
       $horario = $passageiros_items[$p_index]['horario'];
       $variation_id = $passageiros_items[$p_index]['variation_id'];
-
       $p_index = $p_index + 1;
 
       foreach($passageiros as $passageiro){
+        //Obtém o ID do usuário titular do pedido
         $order_user_id = $order -> get_customer_id();
         $reserva_user_id = 0;
 
@@ -285,8 +283,14 @@ add_action( 'wp', 'remover_breadcrumb_em_arquivos_woocommerce' );
 
         $nome_embarque = $wpdb -> get_results("SELECT nome from aer_embarques WHERE id = $embarque");
         $nome_embarque = $nome_embarque[0] -> nome;
+        $mapaRota = [
+            'ida-e-volta' => 1,
+            'ida' => 2,
+            'volta' => 3
+        ];
+        $rota = $mapaRota[$passageiro->tripType] ?? null;
 
-        $wpdb -> query("INSERT INTO `aer_reservas` (`ID`, `user_id`, `order_user_id`, `variation_id`, `order_id`, `status`, `p_nome`, `p_cpf`, `p_telefone`, `embarque`, `horario`) VALUES (NULL, '".$reserva_user_id."', '".$order_user_id."', '".$variation_id."', '".$order_id."', 'normal', '".$passageiro -> nome_completo."', '".$passageiro -> doc."', '".$passageiro -> telefone."', '".$nome_embarque."', '".$horario."')");
+        $wpdb -> query("INSERT INTO `aer_reservas` (`ID`, `user_id`, `order_user_id`, `variation_id`, `order_id`, `status`, `p_nome`, `p_cpf`, `p_telefone`, `embarque`, `horario`, `data_nasc`, `rota`) VALUES (NULL, '".$reserva_user_id."', '".$order_user_id."', '".$variation_id."', '".$order_id."', 'normal', '".$passageiro -> nome_completo."', '".$passageiro -> cpf."', '".$passageiro -> celular."', '".$nome_embarque."', '".$horario."', '".$passageiro -> data_nascimento."', '".$rota."')");
       }
     }
   }

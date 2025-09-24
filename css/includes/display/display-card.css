@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-radius: var(--aer-radius);
+  overflow: hidden;
 }
 .display-card-header {
   display: flex;

@@ -18,7 +18,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 		<?php wc_print_notices(); ?>
 	</div>
   <div id="carrinho-container" class="row">
-    <form class="woocommerce-cart-form col-lg-9" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
+    <form class="woocommerce-cart-form col-lg-8" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
 			<?php do_action( 'woocommerce_before_cart_table' ); ?>
 
 			<table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
@@ -66,7 +66,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 								<!-- Informações da excursão -->
 								<div class="tour-info">
-									<h3>Excursão <?php echo esc_html( preg_replace('/ - \d{2}\/\d{2}\/\d{4}$/', '', $product_name) ); ?></h3>
+									<h3 class="bg-title">Excursão <?php echo esc_html( preg_replace('/ - \d{2}\/\d{2}\/\d{4}$/', '', $product_name) ); ?></h3>
 									
 									<div class="d-flex justify-content-between">
 										<?php if ($data_exc) : ?>
@@ -97,7 +97,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 														$rota = esc_html($passenger -> tripType);
 														$rota = $rota == 'ida-e-volta' ? "Ida e volta" : 'Apenas ' . $rota;
 													?>
-													<div class="d-flex justify-content-between">
+													<div>
 													<p><strong>Nascimento:</strong> <?php echo esc_html(data_to_dmy($passenger -> data_nascimento)); ?></p>
 													<span class="rota"><?= strtoupper($rota); ?></span>
 													</div>
@@ -127,7 +127,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 								<div class="coupon">
 									<label for="coupon_code" class="screen-reader-text" onclick="toggleCupomInputs('coupon_inputs')">Tem um cupom de desconto?</label> 
 									<div id="coupon_inputs">
-										<input type="text" name="coupon_code" class="aer-text-input input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <button data-btn-reactive type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?> btn cart-btn-style" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
+										<input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <button data-btn-reactive type="submit" class="button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?> btn cart-btn-style" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
 									</div>
 									
 									<?php do_action( 'woocommerce_cart_coupon' ); ?>
@@ -143,7 +143,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 		</form>
 
 		<?php do_action( 'woocommerce_before_cart_collaterals' ); ?>
-		<div class="col-lg-3">
+		<div class="col-lg-4">
 			<div class="cart-collaterals">
 				<?php
 					/**
@@ -160,6 +160,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 	</div>
 	<!--<div id="bannerRoleta" class="mt-2"><img style="width: 100%; max-width: 460px" src="<?= get_stylesheet_directory_uri()?>/assets/banners/banner-roleta.webp" alt="Banner roleta Aerotour"></div>-->
 	<script>
+		const totalTitle = document.querySelector('.cart_totals h2');
+		totalTitle.classList.add('bg-title');
 		const finalizarBtn = document.querySelector('.checkout-button');
 		finalizarBtn.innerText = "Continuar para pagamento"
 

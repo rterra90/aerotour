@@ -1,7 +1,7 @@
 .woocommerce-order-details > div {
-  padding: 15px;
-  background-color: var(--aer-bg-white);
-  border-radius: 0.3rem;
+  padding: 16px;
+  background-color: var(--aer-box-light);
+  border-radius: var(--aer-radius);
 }
 .woocommerce-order-details table {
   width: 100%;

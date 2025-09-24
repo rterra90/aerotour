@@ -35,7 +35,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 	<div class="row justify-content-between">
-		<div class="col-sm-5 col-md-7 p-3" id="customer_details">
+		<div class="col-sm-6 col-md-7 p-3" id="customer_details">
       <div class="row">
 			<div>
 				<?php do_action( 'woocommerce_checkout_billing' ); ?>
@@ -53,7 +53,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
 	<div class="checkout-pagamento col-sm-6 col-md-5 p-3">
 		<div class="checkout-pagamento-inner">
-			<h3 id="order_review_heading" class="text-center heading-6 mb-3">Confira seu pedido</h3>
+			<h2 id="order_review_heading" class="bg-title mx-auto mb-3">Confira seu pedido</h2>
 			<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
 			<div id="order_review" class="woocommerce-checkout-review-order">
 				<?php do_action( 'woocommerce_checkout_order_review' ); ?>
@@ -70,5 +70,6 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
 
 <script>
-  document.querySelector('button#place_order').classList.add('btn', 'btn-lg', 'btn-dark', 'mt-4')
+	const formCheckoutTitle = document.querySelector('#customer_details h3');
+	formCheckoutTitle.classList.add('bg-title')
 </script>

@@ -8,6 +8,7 @@ function formatar_local_embarque($embarque_element, $_i){
   if(gettype($embarque_element) === 'string') return $embarque_element;
   else return $embarque_element[$_i];
 }
+
 function preco_item_cancel($order_id, $variation_id){
   $_order = wc_get_order($order_id);
   $_order_items = $_order->get_items();
@@ -66,7 +67,7 @@ function custom_override_checkout_fields( $fields ) {
   return $fields;
 }
  
- add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
+add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
 function my_front_end_login_fail( $username ) {
    $referrer = $_SERVER['HTTP_REFERER'];  // where did the post submission come from?
    // if there's a valid referrer, and it's not the default log-in screen
@@ -177,8 +178,16 @@ add_filter( 'woocommerce_cart_totals_coupon_html', 'filter_woocommerce_cart_tota
 // Adicionar o filtro ao texto de "obrigado pelo pedido"
 add_filter('woocommerce_thankyou_order_received_text', 'customizar_texto_obrigado', 10, 2);
 function customizar_texto_obrigado($texto, $pedido) {
-    $novo_texto = "Pedido de reserva aberto com sucesso!"; // Substitua pelo texto desejado
+    $novo_texto = "Confira os detalhes do pedido"; // Substitua pelo texto desejado
     return $novo_texto;
+}
+
+//Obtém informações de um embarque pelo ID
+function get_embarque_by_id($emb_id, $value = 'nome'){
+  global $wpdb;
+  $return = $wpdb -> get_results("SELECT $value from aer_embarques WHERE id = $emb_id");
+  $return = $return[0] -> {$value};
+  return $return;
 }
 
 ?>

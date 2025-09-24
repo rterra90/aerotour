@@ -3,7 +3,16 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 <script src="<?php echo get_stylesheet_directory_uri() ?>/js/thankyou.js"></script>
+<script>
+  function rearrangeThankyou(){
+    const successContainer = document.querySelector('#pagamentoSucesso').parentElement;
+    const refContainer = document.querySelector('.woocommerce-order.row');
+    refContainer.insertBefore(successContainer, refContainer.firstChild);
 
+    const prazoContainer = document.querySelector('#pedido-prazo')
+    if(prazoContainer) prazoContainer.remove();
+  }
+</script>
 <div class="woocommerce-order row">
 
 	<?php
@@ -31,10 +40,13 @@ defined( 'ABSPATH' ) || exit;
         <div class="progress-bar <?= $order -> status === 'completed' ? 'completed' : 'animate-1 success'; ?>" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
 
-      <div class="thankyou-box aer-box">
+      <div class="thankyou-box">
         <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', esc_html__( 'Thank you. Your order has been received.', 'woocommerce' ), $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
-      <p class="pedido-prazo">Pedido válido por 30 minutos</p>
-      <p class="pedido-prazo-aviso">Após esse período, o pedido é automaticamente cancelado e as vagas voltam a ser disponibilizadas para reserva.</p>
+        <div id="pedido-prazo">
+          <p class="pedido-prazo">Pedido válido por 30 minutos</p>
+          <p class="pedido-prazo-aviso">Após esse período, o pedido é automaticamente cancelado e as vagas voltam a ser disponibilizadas para reserva.</p>
+        </div>
+        
         <ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details">
 
           <li class="woocommerce-order-overview__order order">
@@ -100,8 +112,12 @@ defined( 'ABSPATH' ) || exit;
           </div>
           <script>
             const successBox = document.querySelector('#pagamentoSucesso');
-            successBox.classList.remove('d-none');
-            successBox.classList.add('animate');
+            if(successBox){
+              successBox.classList.remove('d-none');
+              successBox.classList.add('animate');
+              rearrangeThankyou()
+            }
+
 
           //   //conversão Pixel Facebook
           //   fbq('track', 'Purchase');

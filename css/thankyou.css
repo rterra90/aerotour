@@ -1,7 +1,7 @@
 .thankyou-box {
-  background-color: var(--aer-bg-light);
-  padding: 8px;
-  border-radius: 0.3rem;
+  background-color: var(--aer-box-light);
+  padding: 16px;
+  border-radius: var(--aer-radius);
 }
 .progress {
   margin-bottom: 20px;
@@ -57,14 +57,14 @@
   margin-top: 20px;
   border: 3px solid #608f54;
   text-align: center;
-  border-radius: 0.3rem;
+  border-radius: var(--aer-radius);
   background-color: var(--aer-bg-light);
   opacity: 0;
   transition: 1s ease-in-out;
 }
 #pagamentoSucesso.animate {
   animation-name: enterSuccessPaymentBox;
-  animation-delay: 2s;
+  animation-delay: 1s;
   animation-duration: 1.5s;
   animation-fill-mode: forwards;
 }
@@ -77,8 +77,8 @@
 }
 #pagamentoSucesso .lead a {
   font-weight: 600;
-  opacity: 0.8;
   transition: 0.2s;
+  color: var(--aer-accent);
 }
 #pagamentoSucesso .lead a:hover {
   opacity: 1;

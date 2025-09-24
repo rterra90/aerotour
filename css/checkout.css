@@ -8,7 +8,7 @@
   border-radius: 0.3rem;
   text-align: center;
   font-size: 0.9rem;
-  width: 70%;
+  width: 100%;
 }
 .cart_collaterals_pdv p {
   text-align: start;
@@ -22,8 +22,8 @@
 }
 .checkout-pagamento .checkout-pagamento-inner {
   padding: 15px;
-  border-radius: 1rem;
-  border: 3px solid #393939;
+  border-radius: var(--aer-radius);
+  border: 3px solid var(--aer-accent);
 }
 .checkout-box {
   padding: 10px 0;
@@ -107,6 +107,17 @@
 form.woocommerce-checkout #customer_details label {
   font-size: 0.8rem;
 }
+.woocommerce-billing-fields__field-wrapper {
+  display: grid;
+  grid-template-columns: 48% 48%;
+  grid-template-rows: 1fr 1fr;
+  justify-content: space-between;
+  max-width: 600px;
+}
+.woocommerce-billing-fields__field-wrapper p:last-child {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
 .woocommerce-billing-fields__field-wrapper p {
   margin-bottom: 2px;
 }
@@ -176,16 +187,7 @@ p.pedido-prazo-aviso {
   line-height: 1.25;
   opacity: 0.88;
 }
-@media (max-width: 768px) {
-  #customer_details input {
-    /* border: 3px solid var(--aer-bg-light);
-    padding: 3px;
-    border-radius: 0.3rem;
-    text-align: center;
-    font-size: 0.9rem; */
-    width: 100%;
-  }
-}
+
 @media (max-width: 576px) {
   .flex-checkout-review-order-table .single-excursao .detalhes {
     font-size: 0.8rem;

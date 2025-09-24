@@ -43,13 +43,60 @@ body {
 
   /* novas variaveis */
   --aer-text-dark: #202020;
+  --aer-text-light: #f9f9f9;
   --aer-accent: #4f1515;
+  --secondary-color: #1a4c8e;
+  --aer-accent-hover: #672222;
   --aer-box-light: #f9f9f9;
+  --aer-radius: 0.875rem;
 
   font-family: Raleway, sans-serif !important;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+/* CUSTOM TITLES */
+h1.bg-title,
+h2.bg-title,
+h3.bg-title {
+  background-color: var(--aer-accent);
+  border-radius: 4px;
+  color: #f9f9f9;
+  padding: 4px 14px;
+  width: fit-content;
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+}
+h1.bg-title {
+  font-size: 1.65rem;
+}
+h2.bg-title {
+  font-size: 1.35rem;
+}
+h3.bg-title {
+  font-size: 1.15rem;
+}
+
+/* BUTTONS */
+.main-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--aer-accent);
+  color: white;
+  font-weight: 600;
+  transition: 0.2s;
+  min-height: 44px;
+  transition: 0.3s;
+}
+.main-btn:disabled {
+  background-color: #4f15153b;
+}
+.main-btn:not(:disabled):hover {
+  background-color: var(--aer-accent-hover);
 }
 body.no-scroll {
   height: 100vh !important;
