@@ -37,10 +37,14 @@ defined( 'ABSPATH' ) || exit;
 													<path id="Icon_awesome-ticket-alt" data-name="Icon awesome-ticket-alt" d="M2.714,6.535H9.5v4.07H2.714Zm8.48,2.035a1.018,1.018,0,0,0,1.018,1.018v2.035a1.018,1.018,0,0,1-1.018,1.018H1.018A1.018,1.018,0,0,1,0,11.623V9.588A1.018,1.018,0,0,0,1.018,8.57,1.018,1.018,0,0,0,0,7.553V5.518A1.018,1.018,0,0,1,1.018,4.5H11.193a1.018,1.018,0,0,1,1.018,1.018V7.553A1.018,1.018,0,0,0,11.193,8.57Zm-1.018-2.2a.509.509,0,0,0-.509-.509H2.544a.509.509,0,0,0-.509.509v4.409a.509.509,0,0,0,.509.509H9.667a.509.509,0,0,0,.509-.509Z" transform="translate(0 -4.5)" fill="#707070"/>
 												</svg>
 											</div>
-											<div>
+											<div style="flex-grow:1">
 												<p class="nome-passageiro"><?= $passageiro -> nome_completo; ?></p>
-												<p class="doc-passageiro d-inline-block small mb-1" style="margin-right: 20px">CPF: <?= cpf_mask($passageiro -> cpf); ?></p>
-												<p class="telefone-passageiro d-inline small">Telefone: <?= $passageiro -> celular; ?></p>
+												<div class="pax-info-flex">
+													<p class="doc-passageiro small">CPF: <?= cpf_mask($passageiro -> cpf); ?></p>
+													<p class="telefone-passageiro small">Telefone: <?= $passageiro -> celular; ?></p>
+													<p class="data-nasc-passageiro small">Nasc.: <?= data_to_dmy($passageiro -> data_nascimento); ?></p>
+													<p class="rota-passageiro small"><?= $passageiro -> tripType == 'ida-e-volta' ? "Ida e volta" : 'Apenas ' . $passageiro -> tripType ?></p></div>
+												
 											</div>
 	
 										</li>

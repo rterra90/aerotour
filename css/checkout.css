@@ -75,18 +75,31 @@
   margin-bottom: 0px;
 }
 .flex-checkout-review-order-table .single-excursao .nome-passageiro {
-  margin-bottom: -6px;
+  margin-bottom: 2px;
 }
 .flex-checkout-review-order-table .passageiros {
   background-color: #ececec;
   padding: 10px 16px;
 }
+.flex-checkout-review-order-table .passageiros li + li {
+  margin-top: 12px;
+}
 .flex-checkout-review-order-table .passageiros > p {
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 0.825rem;
   margin-bottom: 6px;
   letter-spacing: 0.05rem;
   font-weight: 500;
+}
+.flex-checkout-review-order-table .pax-info-flex {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.flex-checkout-review-order-table .pax-info-flex > p {
+  flex-basis: 50%;
+  margin-bottom: 0px;
+  font-size: 0.775rem;
 }
 .checkout-pagamento table {
   width: 100%;
