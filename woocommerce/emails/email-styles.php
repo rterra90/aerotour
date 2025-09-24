@@ -49,7 +49,8 @@ body {
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
 	background-color: <?php echo esc_attr( $body ); ?>;
 	border: 1px solid <?php echo esc_attr( $bg_darker_10 ); ?>;
-	border-radius: 3px !important;
+	border-radius: 14px !important;
+	overflow: hidden;
 }
 
 #template_header {
@@ -98,7 +99,8 @@ body {
 }
 
 #body_content table td {
-	padding: 48px 48px 32px;
+	padding: 0;
+	background: inherit;
 }
 
 #body_content table td td {
