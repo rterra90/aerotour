@@ -459,6 +459,6 @@ usort($datas, function($a, $b) {
       </div>
     </div>
   </section>
-  <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js"></script>
+  <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js?ver=<?= time(); ?>"></script>
 
 <?php get_footer(); ?>

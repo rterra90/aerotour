@@ -37,7 +37,7 @@ const PaxModal = ({
     const valueLength = target.value.length;
     switch (target.name) {
       case 'cpf': {
-        if (valueLength == 14) {
+        if (cpfMask(target.value).length == 14) {
           const cpfValido = validarCPF(cpfMask(target.value));
           target.classList.remove('input-attention');
           if (cpfValido) target.classList.remove('input-error');
@@ -51,7 +51,9 @@ const PaxModal = ({
         break;
       }
       case 'celular': {
-        const celValido = valueLength == 14 || valueLength == 15;
+        const celValido =
+          celularMask(target.value).length == 14 ||
+          celularMask(target.value).length == 15;
         target.classList.remove('input-error');
         if (celValido) target.classList.remove('input-attention');
         else if (valueLength < 14) target.classList.remove('input-error');
