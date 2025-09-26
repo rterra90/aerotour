@@ -232,7 +232,7 @@ usort($datas, function($a, $b) {
             </section>
 
             <!-- cta button -->
-            <a href="#reservaBox" class="cta-button">
+            <a href="#reservaBox" class="cta-button" aria-label="Reservar lugar na excursão <?= $excursao['nome']; ?>">
               <?= aer_icons('bookmark-light', 16, 16, '.webp'); ?> Reservar agora
             </a>
 
@@ -331,7 +331,7 @@ usort($datas, function($a, $b) {
                   <dt class="text-start pergunta fw-bold mb-1">• A excursão inclui ingresso para os eventos?</dt>
                   <dd class="text-start resposta">Não. Nós não comercializamos ingressos, a menos que expressamente informado, e recomendamos a compra apenas em pontos de venda autorizados.</dd>
                   <dt class="text-start pergunta fw-bold mb-1">• É possível reservar apenas ida ou volta?</dt>
-                  <dd class="text-start resposta">Não oferecemos opções de reserva para apenas um dos sentidos. As excursões compreendem ida e volta, portanto, cada reserva representa um lugar reservado por toda a viagem. No entanto, você pode fazer sua reserva normalmente e utilizar o transporte em apenas um dos sentidos, sem problemas.</dd>
+                  <dd class="text-start resposta">Sim, porém não há diferenciação nos valores. Cada reserva na excursão representa um lugar reservado por toda a viagem — ida e volta. Você poderá informar durante o processo de reserva se deseja utilizar o transporte em apenas um dos sentidos ou pela viagem toda. Essa informação é importante para controle do embarque de passageiros, mas não impede que o passageiro altere seus planos se precisar.</dd>
                   <dt class="text-start pergunta fw-bold mb-1">• Como saber se há disponibilidade de vagas?</dt>
                   <dd class="text-start resposta">As vagas são gerenciadas pelo próprio site. Enquanto houver vagas, estará disponível para reservas. Um aviso em amarelo surgirá quando estivermos na últimas vagas, e um aviso em vermelho indicará que as vagas estão esgotadas.</dd>
                   <dt class="text-start pergunta fw-bold mb-1">• É preciso encaminhar comprovante de pagamento por e-mail?</dt>
@@ -463,5 +463,7 @@ usort($datas, function($a, $b) {
     </div>
   </section>
   <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js?ver=<?= time(); ?>"></script>
-
+<!-- React e ReactDOM em produção -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
 <?php get_footer(); ?>

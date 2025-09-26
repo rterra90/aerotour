@@ -52,7 +52,17 @@
 
                 <div class="d-flex">
                   <div class="carousel-img mobile">
-                    <img loading="lazy" data-animate style="animation-delay:1.5s" src="<?= $focus_img; ?>" alt="<?= $excursao -> get_name(); ?>">
+                    <?php
+                    if($i_main == 0){ 
+                      ?>
+                      <img data-animate style="animation-delay:1.5s" src="<?= $focus_img; ?>" alt="<?= $excursao -> get_name(); ?>">
+                      <?php
+                    } else {
+                      ?>
+                      <img loading="lazy" data-animate style="animation-delay:1.5s" src="<?= $focus_img; ?>" alt="<?= $excursao -> get_name(); ?>">
+                      <?php
+                    }
+                    ?>
                   </div>
                   <div>
                     <div class="data-local" data-animate style="animation-delay:1s">
@@ -79,44 +89,22 @@
                   </div> 
               </div>
               <div class="carousel-img desktop">
-                <a href="<?= get_permalink($excursao -> get_id()); ?>"><img loading="lazy" data-animate style="animation-delay:1.5s" src="<?= $focus_img; ?>" alt="<?= $excursao -> get_name(); ?>"></a>
+                <a href="<?= get_permalink($excursao -> get_id()); ?>">
+                  <?php
+                    if($i_main == 0){ 
+                      ?>
+                      <img data-animate style="animation-delay:1.5s" src="<?= $focus_img; ?>" alt="<?= $excursao -> get_name(); ?>">
+                      <?php
+                    } else {
+                      ?>
+                      <img loading="lazy" data-animate style="animation-delay:1.5s" src="<?= $focus_img; ?>" alt="<?= $excursao -> get_name(); ?>">
+                      <?php
+                    }
+                  ?>
+                  
+                </a>
               </div>
             </div>
-            <!-- <a href="<?= get_permalink($excursao -> get_id()); ?>">
-              <img class="hero w-100" loading=<?= $_i == 0 ? "eager" : "lazy"?> src="<?= $img[0]; ?>" class="d-block w-100" alt="Excursão <?= $excursao -> get_name(); ?> - Aerotour">
-            </a>
-            
-            <div class="carousel-caption d-block">
-              <div class="carousel-caption-wrapper container-fluid-md" >
-                <div class="container d-flex justify-content-between align-items-center">
-                  <div>
-                    
-                    <i class="exc-aerotour">Excursão Aerotour</i>
-                    <h5><a href="<?= get_permalink($excursao -> get_id()); ?>"><?= $excursao -> get_name(); ?></a></h5>
-                    <span><?= aer_icons('calendar', 16, 19); ?>&nbsp;<?php
-                      $datas_array = $excursao -> attributes['dia']['options'];
-                      foreach($excursao -> attributes['dia']['options'] as $i => $data) {
-                        if($i===0){
-                          echo substr($data, 0, 5);
-                        } elseif($i === sizeof($datas_array) - 1){
-                          echo ' e ' . substr($data, 0, 5);
-                        } else{
-                          echo ', ' . substr($data, 0, 5);
-                        }
-                      } ?>
-                    </span>
-                    <span class="d-inline-block ms-md-3 ms-2">
-                      <?= aer_icons('pin', 16, 18); ?> <?= get_post_meta($excursao -> get_id(), 'local_evento', true); ?>
-                    </span>
-                  </div>
-                  <div class="banner-btn">
-                    <a data-btn-reactive href="<?= get_permalink($excursao -> get_id()); ?>">Reserve já!</a>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-
-
           </div>
             <?php
             $i_main++;

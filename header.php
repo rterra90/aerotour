@@ -16,6 +16,12 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
   <meta name="copyright" content="© <?= date('Y'); ?> Aerotour Excursões" />
   <meta name='impact-site-verification' value='add848c6-76d4-4a87-bb61-581c82810766'>
 
+  <style>
+    .carousel-item.active {
+      background-image: url('<?= esc_url($background_img); ?>');
+    }
+  </style>
+
   <title><?= wp_title('|', true, 'right'); ?></title>
   <!-- //bloginfo('name') -->
   <link rel="canonical" href="<?= esc_url( get_permalink( get_the_ID() ) ); ?>" />
@@ -26,9 +32,28 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" /> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@1,300..700&display=swap"> -->
-<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 <!-- <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;700&display=swap" rel="stylesheet"> -->
+
+<?php
+  $excursoes = wc_get_products(array(
+      'orderby' => 'date',
+      'order' => 'DESC',
+      'status' => 'publish',
+      'limit' => -1,
+    ));
+
+      foreach(aer_proximas_excursoes($excursoes, 'destaque') as $_i => $_exc){
+
+        $background_img = wp_get_attachment_image_src(get_post_meta( $_exc -> get_id(), 'dest_img_1_id', true ), 'single-post-thumbnail')[0];
+        $focus_img = wp_get_attachment_image_src(get_post_meta( $_exc -> get_id(), 'dest_img_2_id', true ), 'large')[0];
+        ?>
+          <link rel="preload" as="image" href="<?= esc_url($background_img); ?>" />
+          <link rel="preload" as="image" href="<?= esc_url($focus_img); ?>" />
+        <?php
+        break;
+      }
+?>
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/style-selected-element.js"></script>
@@ -50,10 +75,6 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
   ]
 }
 </script>
-
-<!-- Carrega o React e React Dom -->
-    <script defer src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script defer src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
   <!-- Meta Pixel Code -->
     <script>
@@ -92,30 +113,12 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
     <script>window.sessionStorage.setItem('aer_pdv', '<?= $_GET['aer_pdv']; ?>')</script>
   <?php 
   } 
-
-    $excursoes = wc_get_products(array(
-      'orderby' => 'date',
-      'order' => 'DESC',
-      'status' => 'publish',
-      'limit' => -1,
-    ));
-
-      foreach(aer_proximas_excursoes($excursoes, 'destaque') as $_i => $_exc){
-        // $_img_url = wp_get_attachment_image_src(get_post_thumbnail_id( $_exc -> get_id() ), 'single-post-thumbnail');
-
-        $background_img = wp_get_attachment_image_src(get_post_meta( $_exc -> get_id(), 'dest_img_1_id', true ), 'single-post-thumbnail')[0];
-        $focus_img = wp_get_attachment_image_src(get_post_meta( $_exc -> get_id(), 'dest_img_2_id', true ), 'large')[0];
-        ?>
-          <link rel="preload" as="image" href="<?= $background_img; ?>" />
-          <link rel="preload" as="image" href="<?= $focus_img; ?>" />
-
-          
-        <?php
-      }
     ?>
 </head>
 
 <body <?php body_class(); ?>>
+          <img src="<?= esc_url($background_img); ?>" fetchpriority="high" decoding="async" alt="" style="display:none;" />
+
   <?php
     if(!is_user_logged_in() && get_option('new_register_coupon_status') && get_option('new_register_coupon_status')['status'] === 'ativado'){
       ?>

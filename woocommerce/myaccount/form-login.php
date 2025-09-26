@@ -7,7 +7,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 
 
 <?php if ( 'yes' === get_option( 'woocommerce_enable_myaccount_registration' ) ) : ?><?php endif; ?>
-
+<link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/form-login.min.css?ver=<?= time(); ?>">
 <section id="form-login" class="container">
 
 	<!-- Título -->
@@ -253,5 +253,9 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
       document.getElementById(tabId).classList.add('active');
       document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('active');
     }
+		
 </script>
+<!-- React e ReactDOM em produção -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
 <?php do_action( 'woocommerce_after_customer_login_form' ); ?>	
