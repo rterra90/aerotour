@@ -1,11 +1,25 @@
 <?php
 //Redicreciona após erro no login
-function redirecionar_apos_erro_login($username) {
-  $url_redirecionamento = home_url('/minha-conta?login=failed');
-  wp_redirect($url_redirecionamento);
-  exit;
+add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
+function my_front_end_login_fail( $username ) {
+    $referrer = $_SERVER['HTTP_REFERER'];
+
+    // Verifica se o referrer é válido e não é a tela padrão de login/admin
+    if ( !empty($referrer) && !strstr($referrer, 'wp-login') && !strstr($referrer, 'wp-admin') ) {
+
+        // Verifica se o parâmetro 'login=failed' já está presente
+        if ( strpos($referrer, 'login=failed') === false ) {
+            // Decide se deve usar ? ou & dependendo da presença de outros parâmetros
+            $separator = (parse_url($referrer, PHP_URL_QUERY)) ? '&' : '?';
+            wp_redirect( $referrer . $separator . 'login=failed' );
+            exit;
+        } else {
+            // Se já contém 'login=failed', redireciona sem modificar
+            wp_redirect( $referrer );
+            exit;
+        }
+    }
 }
-add_action('wp_login_failed', 'redirecionar_apos_erro_login');
 
 // Limpe o username no login se for CPF
 function formata_username( $username ) {
@@ -23,7 +37,7 @@ function custom_authenticate($user, $username, $password) {
   global $wpdb;
   
   if (!empty($username) && !empty($password)){
-    if(!str_contains($username, '@')){
+    if(!str_contains($username, '@')){ //Login com CPF
       $username = str_replace('.', '', $username);
       $username = str_replace('-', '', $username);
 
@@ -42,7 +56,7 @@ function custom_authenticate($user, $username, $password) {
     }
   }
 
-  // Processa o login normalmente
+  // Processa o login normalmente com e-mail
   return wp_authenticate_username_password($user, $username, $password);
 }
 
@@ -109,21 +123,4 @@ function verificar_usuario_logado() {
   }
 }
 
-
-
-
-// function login_if_tp($errors, $sanitized_user_login, $user_email) {
-//   if (username_exists($user_email)) {
-//     $user_id = get_user_by( 'email', $user_email ) -> ID;
-//     // $errors->add('username_exists', __('Esse nome de usuário já está registrado. ID '.$user_id.''));
-//     wp_set_current_user($user_id);
-//     wp_set_auth_cookie($user_id);
-//     // wp_redirect(wc_get_page_permalink( 'myaccount' ));
-//     return $errors;
-//   }else{
-//     $errors->add('username_exists', __('Verifique os dados informados no cadastro.'));
-
-//   }
-// }
-// add_filter('registration_errors', 'login_if_tp', 10, 3);
 ?>

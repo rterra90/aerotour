@@ -88,7 +88,6 @@
   margin-top: 14px;
 }
 
-.toggle-passengers,
 #carrinho-container a.checkout-button,
 .cart-btn-style {
   background: #f7f7f7;
@@ -111,10 +110,10 @@
   background: var(--aer-accent);
   color: #f7f7f7;
 }
-.toggle-passengers.open {
+/* #carrinho-container .toggle-passengers.open {
   background: var(--aer-accent);
   color: #f7f7f7;
-}
+} */
 .passenger-list {
   margin-top: 12px;
   max-height: 0;

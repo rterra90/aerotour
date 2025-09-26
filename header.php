@@ -7,49 +7,21 @@ $description_content = '';
 if(is_product()) $description_content = get_post_meta(get_the_ID(), '_yoast_wpseo_metadesc', true);
 else if(is_product_category()) $description_content = 'Confira todas as nossas próximas excursões para ' . strtolower(get_queried_object() -> name) . 'e faça sua reserva!';
 else if(is_archive()) $description_content = 'Confira todas as nossas próximas excursões e faça sua reserva!';
-else $description_content = 'Excursões para shows e eventos saindo de Campinas e Região. Saídas de Campinas, Sumaré, Indaiatuba, Hortolândia, Monte Mor, Salto, Valinhos, Vinhedo e Jundiaí.';
-
-$keywords = '';
-if(is_product()){
-  $product_tags = get_the_terms(get_the_id(), 'product_tag');
-  if($product_tags){
-    foreach($product_tags as $tag){
-      $keywords = $keywords . 'transporte '.$tag -> name . ', ';
-      $keywords = $keywords . 'excursão '.$tag -> name . ', ';
-      $keywords = $keywords .$tag -> name . ' campinas, ';
-      $keywords = $keywords .$tag -> name . ' indaiatuba, ';
-      $keywords = $keywords .$tag -> name . ' salto, ';
-      $keywords = $keywords .$tag -> name . ' sumare, ';
-      $keywords = $keywords .$tag -> name . ' hortolandia, ';
-      $keywords = $keywords .$tag -> name . ' monte mor, ';
-      $keywords = $keywords .$tag -> name . ' valinhos, ';
-      $keywords = $keywords .$tag -> name . ' vinhedo, ';
-      $keywords = $keywords .$tag -> name . ' jundiai, ';
-    }
-    $keywords = substr($keywords, 0 , -2);
-
-  } else{
-    global $product;
-    $keywords = 'excursao ' . str_replace('-', ' ', $product) . ', transporte ' . str_replace('-', ' ', $product);
-  } 
-} else{
-  $keywords = 'excursão, caravana, shows em sp, eventos em sp, excursão saindo de campinas, excursão saindo de indaiatuba, excursão saindo de Valinhos, excursão saindo de sumaré, excursão saindo de salto, excursão saindo de hortolandia, excursão saindo de jundiai';
-}
+else $description_content = 'Excursões para shows e eventos é com a Aerotour! Saídas de Campinas, Indaiatuba, Sumaré, Hortolândia, Paulínia, Salto, Valinhos, Vinhedo e Jundiaí.';
 ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="keywords" content="<?= $keywords; ?>">
   <meta name="description" content="<?= $description_content?>">
   <meta name="copyright" content="© <?= date('Y'); ?> Aerotour Excursões" />
   <meta name='impact-site-verification' value='add848c6-76d4-4a87-bb61-581c82810766'>
 
   <title><?= wp_title('|', true, 'right'); ?></title>
   <!-- //bloginfo('name') -->
-  <link rel="canonical" href="https://aerotour.com.br/" />
+  <link rel="canonical" href="<?= esc_url( get_permalink( get_the_ID() ) ); ?>" />
   <link rel="shortcut icon" href="<?= get_stylesheet_directory_uri(); ?>/assets/images/icones/aer-favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/style.min.css?ver=<?= time(); ?>">
-  <link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/checkout.css"ver=<?= time(); ?>">
+  <link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/checkout.css?ver=<?= time(); ?>">
   <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> -->
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" /> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,8 +32,8 @@ if(is_product()){
 
 <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/style-selected-element.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" defer></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+
 <script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js"></script>
 <script type="application/ld+json">
 {

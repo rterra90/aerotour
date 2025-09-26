@@ -98,6 +98,26 @@ h3.bg-title {
 .main-btn:not(:disabled):hover {
   background-color: var(--aer-accent-hover);
 }
+.secondary-btn {
+  background: #f7f7f7;
+  color: var(--aer-accent);
+  box-shadow: inset 0 0 0px 1px var(--aer-accent);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  transition: background 0.3s;
+}
+.secondary-btn.toggle-active.active {
+  background: var(--aer-accent);
+  color: #f7f7f7;
+}
 body.no-scroll {
   height: 100vh !important;
   overflow: hidden !important;

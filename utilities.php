@@ -67,15 +67,7 @@ function custom_override_checkout_fields( $fields ) {
   return $fields;
 }
  
-add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
-function my_front_end_login_fail( $username ) {
-   $referrer = $_SERVER['HTTP_REFERER'];  // where did the post submission come from?
-   // if there's a valid referrer, and it's not the default log-in screen
-   if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
-      wp_redirect( $referrer . '/minha-conta?login=failed' );  // let's append some information (login=failed) to the URL for the theme to use
-      exit;
-   }
-}
+
 
 add_action( 'woocommerce_account_menu_items', 'custom_account_menu' );
 function custom_account_menu($menu_links){

@@ -15,9 +15,12 @@ if($product){
     "offers" => [
         "@type" => "Offer",
         "priceCurrency" => 'BRL',
-        "price" => "A partir de " . $product->get_price() . ',00',
+        "price" => $product->get_price() . '.00',
         "availability" => $product->is_in_stock() ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-        "url" => get_permalink( $product->get_id() )
+        "url" => get_permalink( $product->get_id() ),
+        "seller" => [
+            "@id" => "https://www.aerotour.com.br/",
+        ]
     ]
     ];
 }

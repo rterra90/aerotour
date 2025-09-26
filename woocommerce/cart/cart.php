@@ -86,7 +86,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 								<!-- Passageiros -->
 								<?php if (!empty($passageiros)) : ?>
 									<div class="passengers">
-										<button type="button" data-qty="<?= count($passageiros); ?>"class="toggle-passengers cart-btn-style">Ver passageiros (<?= count($passageiros); ?>)</button>
+										<button type="button" data-qty="<?= count($passageiros); ?>"class="toggle-passengers secondary-btn toggle-active">Ver passageiros (<?= count($passageiros); ?>)</button>
 										<div class="passenger-list">
 											<?php foreach ($passageiros as $passenger) : ?>
 												<div class="passenger">
@@ -186,8 +186,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 						const list = btn.nextElementSibling;
 						const paxQty = btn.dataset.qty;
 						list.classList.toggle("open");
-						btn.classList.toggle("open");
-						btn.textContent = list.classList.contains("open") 
+						btn.classList.toggle("active");
+						btn.textContent = list.classList.contains("active") 
 							? "Ocultar passageiros ("+paxQty+")"
 							: "Ver passageiros ("+paxQty+")";
 					});

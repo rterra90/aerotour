@@ -1,12 +1,143 @@
-#form-login .form-row {
+#form-login .login-title-section {
+  text-align: center;
+}
+#form-login .login-title-section span {
+  font-size: 0.975rem;
+  font-weight: 500;
+}
+#form-login .login-title-section h1 {
+  font-size: 1.5rem;
+}
+#form-login .login-container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: var(--aer-box-light);
+  border-radius: var(--aer-radius);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  overflow: hidden;
+}
+#form-login .login-box {
+  flex: 1;
+  padding: 40px;
+  border-right: 1px solid #ccc;
+}
+#form-login .login-box:last-child {
+  border-right: none;
+}
+#form-login h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+#form-login label {
+  font-size: 0.925rem;
+}
+#form-login input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-bottom: 1px var(--aer-accent) solid;
+  background: #f5f3f3;
+}
+#form-login .mobile-tabs {
+  display: none;
+}
+#form-login button.main-btn {
+  width: fit-content;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+#form-login .mostra-senha {
+  position: relative;
+  width: 100%;
+}
+#form-login .mostra-senha {
+  margin: 0 auto;
+  position: relative;
+}
+#form-login .mostra-senha_icone {
+  position: absolute;
+  right: 14px;
+  top: -55px;
+}
+#form-login .form-login-end {
   display: flex;
   flex-direction: column;
   text-align: center;
 }
-#form-login .form-row.reg_username {
-  margin-bottom: 0;
+#customer_login .lost_password {
+  text-decoration: underline;
+  font-size: 0.825rem;
 }
+#form-login .woocommerce-form__label-for-checkbox {
+  display: flex;
+}
+#form-login .woocommerce-form__label-for-checkbox input {
+  width: fit-content;
+  margin: 0 10px 0 0;
+}
+#emailRegister {
+  margin: 20px auto;
+}
+#emailRegister span {
+  position: relative;
+  top: 1px;
+}
+#emailRegister.active img {
+  filter: invert(1);
+}
+#thirdPartyLogin iframe {
+  margin: 0px auto !important;
+  display: flex;
+  justify-content: center;
+}
+#thirdPartyLogin iframe #container {
+  width: 100%;
+}
+form#emailRegisterForm {
+  padding: 10px 0;
+  display: none;
+}
+/* Mobile/Tablet: transforma em abas */
+@media (max-width: 768px) {
+  #form-login .login-container {
+    flex-direction: column;
+  }
+  #form-login h2 {
+    display: none;
+  }
 
+  #form-login .mobile-tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+  }
+
+  #form-login .mobile-tabs .tab {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+    background: var(--aer-text-light);
+    border-bottom: 2px solid transparent;
+  }
+
+  #form-login .mobile-tabs .tab.active {
+    border-bottom: 2px solid var(--aer-accent);
+    background: var(--aer-box-light);
+    font-weight: 600;
+    color: var(--aer-accent);
+  }
+  #form-login .login-box {
+    display: none;
+    border-right: none;
+    padding: 20px;
+  }
+  #form-login .login-box.active {
+    display: block;
+  }
+}
+/* BARREIRA */
 #form-login .qr_event_inner_alert,
 #form-login .redirect_alert {
   background-color: rgb(159, 180, 252);
@@ -15,10 +146,6 @@
   font-size: 0.825rem;
   padding: 5px;
   border-radius: 0.3rem;
-}
-#form-login h2 {
-  text-align: center;
-  margin-bottom: 15px;
 }
 .login-error-alert {
   padding: 6px 10px;
@@ -33,25 +160,6 @@
 #form-login #customer_login {
   justify-content: space-evenly;
 }
-#form-login .aer-text-input,
-#form-login .mostra-senha {
-  width: 70%;
-}
-#form-login .mostra-senha {
-  margin: 0 auto;
-  position: relative;
-}
-#form-login .mostra-senha_icone {
-  position: absolute;
-  right: 12px;
-  top: -28px;
-}
-#customer_login .lost_password {
-  text-align: center;
-}
-#form-login #customer_login button {
-  margin: 20px auto;
-}
 .registrar.form-login-section .aviso-registro {
   font-size: 0.75rem;
   background-color: #f9f3f2;
@@ -59,38 +167,7 @@
   border-radius: 0.3rem;
   margin-bottom: 10px;
 }
-.registrar.form-login-section #emailRegister > div {
-  margin: 12px auto;
-  background-color: #e7e7e7;
-  min-width: 280px;
-  width: 60%;
-  box-shadow: 0px 0px 4px #8d8d8d;
-  padding: 12px 20px;
-  letter-spacing: 0.06rem;
-  border-radius: 3px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  align-items: end;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.registrar.form-login-section #emailRegister > div:hover {
-  background-color: #dfdfdf;
-  box-shadow: 0px 0px 3px #7c7c7c;
-}
-#thirdPartyLogin iframe {
-  margin: 0px auto !important;
-  display: flex;
-  justify-content: center;
-}
-#thirdPartyLogin iframe #container {
-  width: 100%;
-}
-form.register {
-  display: none;
-  padding: 10px 0;
-}
+
 .reg_username i {
   font-size: 0.725rem;
   position: relative;
@@ -108,16 +185,6 @@ form.register {
   -webkit-appearance: none;
   margin: 0;
 }
-
 .woocommerce-form span.required {
   display: none;
-}
-@media (max-width: 768px) {
-  #customer_login .form-login-section input.input-text,
-  #form-login .mostra-senha {
-    width: 85%;
-  }
-  #form-login #customer_login {
-    gap: 12px;
-  }
 }
