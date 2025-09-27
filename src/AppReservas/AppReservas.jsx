@@ -25,6 +25,7 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
   const [precoUnitario, setPrecoUnitario] = React.useState(0);
   const [taxa, setTaxa] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const [excursaoEncerrada, setExcursaoEncerrada] = React.useState(false);
   const botaoContinuarRef = React.useRef();
   const dataBoxRef = React.useRef();
   const embarqueBoxRef = React.useRef();
@@ -58,14 +59,22 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
 
   React.useEffect(() => {
     if (variacoes.length == 1) {
-      const singleVarId = variacoes[0].variation_id;
-      const dataPayload = [
-        variacoes[0].attributes.attribute_dia,
-        singleVarId,
-        getAvailabilityById(singleVarId),
-      ];
+      if (variacoes[0].encerrar_vendas) setExcursaoEncerrada(true);
+      else {
+        const singleVarId = variacoes[0].variation_id;
+        const dataPayload = [
+          variacoes[0].attributes.attribute_dia,
+          singleVarId,
+          getAvailabilityById(singleVarId),
+        ];
 
-      toggleDate([dataPayload]);
+        toggleDate([dataPayload]);
+      }
+    } else if (variacoes.length > 1) {
+      const todasEncerradas = variacoes.every(
+        (variacao) => variacao.encerrar_vendas,
+      );
+      if (todasEncerradas) setExcursaoEncerrada(true);
     }
   }, []);
 
@@ -73,8 +82,8 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
     if (!loading) setLoading(true);
     if (index >= selectedDates.length) {
       botaoContinuarRef.current.innerHTML = 'Redirecionando para o carrinho...';
-      window.location.href = 'http://localhost/aerotour-site/carrinho/';
-      // window.location.href = 'http://aerotour.com.br/carrinho/';
+      // window.location.href = 'http://localhost/aerotour-site/carrinho/';
+      window.location.href = 'http://aerotour.com.br/carrinho/';
 
       return;
     }
@@ -205,208 +214,217 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
     <>
       <div id="newReservasContainer">
         <p className="main-title">Faça aqui sua reserva</p>
-        <p className="section-title">Data e local de embarque</p>
 
-        <div className="grid-row">
-          {/* datas */}
-          <div
-            className="grid-item clickable grid-dates"
-            data-fill={selectedDates.length < 1 ? 'false' : 'true'}
-            onClick={openDateModal}
-            ref={dataBoxRef}
-          >
-            <div className="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="bi bi-calendar2-event"
-                viewBox="0 0 16 16"
+        {!excursaoEncerrada ? (
+          <>
+            <p className="section-title">Data e local de embarque</p>
+
+            <div className="grid-row">
+              {/* datas */}
+              <div
+                className="grid-item clickable grid-dates"
+                data-fill={selectedDates.length < 1 ? 'false' : 'true'}
+                onClick={openDateModal}
+                ref={dataBoxRef}
               >
-                <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
-                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
-                <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z" />
-              </svg>
-            </div>
-            <div className="text">
-              {selectedDates.length === 0 ? (
-                <span className="empty-text-placeholder">
-                  Selecionar
-                  <br /> data...
-                </span>
-              ) : (
-                <>
-                  <span className="box-title">
-                    {selectedDates.length > 1
-                      ? 'Datas selecionadas'
-                      : 'Data selecionada'}
-                    :{' '}
-                  </span>
-                  <ul className={selectedDates.length > 1 ? 'multi' : ''}>
-                    {selectedDates.map((d, i) => (
-                      <li key={i}>{d}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-            <div className="edit-icon">✏️</div>
-          </div>
-
-          {/* embarque */}
-          <div
-            className="grid-item clickable grid-embarque"
-            data-fill={embarque.length < 1 ? 'false' : 'true'}
-            onClick={openEmbarqueModal}
-            ref={embarqueBoxRef}
-          >
-            <div className="sub-embarque d-flex">
-              <div className="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="bi bi-geo-alt-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
-                </svg>
+                <div className="icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="bi bi-calendar2-event"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
+                    <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z" />
+                  </svg>
+                </div>
+                <div className="text">
+                  {selectedDates.length === 0 ? (
+                    <span className="empty-text-placeholder">
+                      Selecionar
+                      <br /> data...
+                    </span>
+                  ) : (
+                    <>
+                      <span className="box-title">
+                        {selectedDates.length > 1
+                          ? 'Datas selecionadas'
+                          : 'Data selecionada'}
+                        :{' '}
+                      </span>
+                      <ul className={selectedDates.length > 1 ? 'multi' : ''}>
+                        {selectedDates.map((d, i) => (
+                          <li key={i}>{d}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </div>
+                <div className="edit-icon">✏️</div>
               </div>
-              <div className="text">
-                {embarque.length === 0 ? (
-                  <span className="empty-text-placeholder">
-                    Selecionar <br />
-                    embarque...
-                  </span>
-                ) : (
+
+              {/* embarque */}
+              <div
+                className="grid-item clickable grid-embarque"
+                data-fill={embarque.length < 1 ? 'false' : 'true'}
+                onClick={openEmbarqueModal}
+                ref={embarqueBoxRef}
+              >
+                <div className="sub-embarque d-flex">
+                  <div className="icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="bi bi-geo-alt-fill"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+                    </svg>
+                  </div>
+                  <div className="text">
+                    {embarque.length === 0 ? (
+                      <span className="empty-text-placeholder">
+                        Selecionar <br />
+                        embarque...
+                      </span>
+                    ) : (
+                      <>
+                        <span className="box-title">Embarque</span>
+                        <span>{embarque && embarque[0].nome}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                {embarque.length > 0 && (
                   <>
-                    <span className="box-title">Embarque</span>
-                    <span>{embarque && embarque[0].nome}</span>
+                    <div className="sub-horario d-flex mt-2">
+                      <div className="icon">🕙</div>
+                      <span>{horario ? horario : '--:--'}</span>
+
+                      <div className="text"> </div>
+                    </div>
                   </>
                 )}
+
+                <div className="edit-icon">✏️</div>
               </div>
             </div>
-            {embarque.length > 0 && (
-              <>
-                <div className="sub-horario d-flex mt-2">
-                  <div className="icon">🕙</div>
-                  <span>{horario ? horario : '--:--'}</span>
 
-                  <div className="text"> </div>
+            <p className="section-title">Passageiros</p>
+            <div className="passenger-list">
+              {passageiros.length > 0 ? (
+                <>
+                  {passageiros.map((_pax, index) => {
+                    return (
+                      <PaxCard
+                        pax={_pax}
+                        key={_pax.cpf}
+                        index={index}
+                        setPassageiros={setPassageiros}
+                        openPaxModal={openPaxModal}
+                      />
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  <div className="placeholder-container mt-1">
+                    Nenhum passageiro adicionado. Clique em &quot;Adicionar novo
+                    passageiro&quot; para começar.
+                  </div>
+                </>
+              )}
+
+              {/* Botao Adicionar passageiro */}
+              <div
+                className="passenger-card add-passenger"
+                onClick={() => openPaxModal('add')}
+              >
+                <div className="avatar">➕</div>
+                <div className="info">
+                  <div className="top-row">
+                    <div className="name">Adicionar novo passageiro</div>
+                  </div>
                 </div>
-              </>
+              </div>
+            </div>
+
+            <PrecoReservas
+              passageiros={passageiros}
+              selectedDates={selectedDates}
+              precoUnitario={precoUnitario}
+              totalCost={totalCost}
+            />
+
+            <button
+              id="reservasContinuar"
+              ref={botaoContinuarRef}
+              className="main-btn single_add_to_cart_button"
+              // disabled={!(passengers.length > 0 && termsChecked)}
+              onClick={() => submitToCart()}
+            >
+              Continuar
+            </button>
+
+            {/* Modal de embarque */}
+            {embarqueModalOpen && (
+              <EmbarqueModal
+                setEmbarqueModalOpen={setEmbarqueModalOpen}
+                toggleEmbarque={toggleEmbarque}
+                embarques={embarques}
+                embarque={embarque}
+                setEmbarque={setEmbarque}
+                selectedDates={selectedDates}
+                variacoes={variacoes}
+                getVarIdByDate={getVarIdByDate}
+                setHorario={setHorario}
+                variacoesSelecionadas={variacoesSelecionadas}
+                setPrecoUnitario={setPrecoUnitario}
+                setTaxa={setTaxa}
+              />
             )}
 
-            <div className="edit-icon">✏️</div>
-          </div>
-        </div>
+            {/* Modal de datas */}
+            {dateModalOpen && (
+              <DatesModal
+                setDateModalOpen={setDateModalOpen}
+                availableDates={availableDates}
+                selectedDates={selectedDates}
+                toggleDate={toggleDate}
+                getVarIdByDate={getVarIdByDate}
+                getAvailabilityById={getAvailabilityById}
+                passageiros={passageiros}
+              />
+            )}
 
-        <p className="section-title">Passageiros</p>
-        <div className="passenger-list">
-          {passageiros.length > 0 ? (
-            <>
-              {passageiros.map((_pax, index) => {
-                return (
-                  <PaxCard
-                    pax={_pax}
-                    key={_pax.cpf}
-                    index={index}
-                    setPassageiros={setPassageiros}
-                    openPaxModal={openPaxModal}
-                  />
-                );
-              })}
-            </>
-          ) : (
-            <>
-              <div className="placeholder-container mt-1">
-                Nenhum passageiro adicionado. Clique em &quot;Adicionar novo
-                passageiro&quot; para começar.
-              </div>
-            </>
-          )}
+            {/* Modal de passageiro */}
+            {paxModalOpen != false && (
+              <PaxModal
+                setPaxModalOpen={setPaxModalOpen}
+                paxModalOpen={paxModalOpen}
+                selectedDates={selectedDates}
+                setPassageiros={setPassageiros}
+                convertDate={convertDate}
+              />
+            )}
 
-          {/* Botao Adicionar passageiro */}
-          <div
-            className="passenger-card add-passenger"
-            onClick={() => openPaxModal('add')}
-          >
-            <div className="avatar">➕</div>
-            <div className="info">
-              <div className="top-row">
-                <div className="name">Adicionar novo passageiro</div>
-              </div>
+            {/* Modal de avisos */}
+            {avisosModalOpen && (
+              <AvisosModal
+                alertType={avisosModalOpen}
+                setAvisosModalOpen={setAvisosModalOpen}
+                openDateModal={openDateModal}
+                openEmbarqueModal={openEmbarqueModal}
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <div className="mensagem-encerrada">
+              Reservas encerradas para essa excursão.
             </div>
-          </div>
-        </div>
-
-        <PrecoReservas
-          passageiros={passageiros}
-          selectedDates={selectedDates}
-          precoUnitario={precoUnitario}
-          totalCost={totalCost}
-        />
-
-        <button
-          id="reservasContinuar"
-          ref={botaoContinuarRef}
-          className="main-btn single_add_to_cart_button"
-          // disabled={!(passengers.length > 0 && termsChecked)}
-          onClick={() => submitToCart()}
-        >
-          Continuar
-        </button>
-
-        {/* Modal de embarque */}
-        {embarqueModalOpen && (
-          <EmbarqueModal
-            setEmbarqueModalOpen={setEmbarqueModalOpen}
-            toggleEmbarque={toggleEmbarque}
-            embarques={embarques}
-            embarque={embarque}
-            setEmbarque={setEmbarque}
-            selectedDates={selectedDates}
-            variacoes={variacoes}
-            getVarIdByDate={getVarIdByDate}
-            setHorario={setHorario}
-            variacoesSelecionadas={variacoesSelecionadas}
-            setPrecoUnitario={setPrecoUnitario}
-            setTaxa={setTaxa}
-          />
-        )}
-
-        {/* Modal de datas */}
-        {dateModalOpen && (
-          <DatesModal
-            setDateModalOpen={setDateModalOpen}
-            availableDates={availableDates}
-            selectedDates={selectedDates}
-            toggleDate={toggleDate}
-            getVarIdByDate={getVarIdByDate}
-            getAvailabilityById={getAvailabilityById}
-            passageiros={passageiros}
-          />
-        )}
-
-        {/* Modal de passageiro */}
-        {paxModalOpen != false && (
-          <PaxModal
-            setPaxModalOpen={setPaxModalOpen}
-            paxModalOpen={paxModalOpen}
-            selectedDates={selectedDates}
-            setPassageiros={setPassageiros}
-            convertDate={convertDate}
-          />
-        )}
-
-        {/* Modal de avisos */}
-        {avisosModalOpen && (
-          <AvisosModal
-            alertType={avisosModalOpen}
-            setAvisosModalOpen={setAvisosModalOpen}
-            openDateModal={openDateModal}
-            openEmbarqueModal={openEmbarqueModal}
-          />
+          </>
         )}
       </div>
-
-      {/* BARREIRA */}
     </>
   );
 }

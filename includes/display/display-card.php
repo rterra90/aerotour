@@ -57,7 +57,6 @@ if(count($exc_variacoes) > 0){
             <div class="a-definir">A definir</div>
             <?php
           }
-            
           ?>
 
           </div>

@@ -18,6 +18,20 @@
   font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial;
 }
+#newReservasContainer .mensagem-encerrada {
+  background-color: #f2f2f2; /* cinza claro de fundo */
+  color: #666666; /* texto em cinza médio */
+  border: 2px solid #cccccc; /* borda em cinza claro */
+  padding: 20px;
+  margin: 50px auto;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* sombra bem suave */
+}
 #newReservasContainer .main-title {
   background-color: var(--aer-accent);
   box-shadow: 0 0 3px 0 #a1a1a1;
