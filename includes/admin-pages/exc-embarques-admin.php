@@ -11,6 +11,18 @@ function painel_exc_embarques() {
   $embarques_db = $wpdb -> get_results("SELECT * from $nome_tabela");
   $embarques_exc = json_decode(get_post_meta($post -> ID, 'embarques', true));
   $embarques_exc_bot = json_decode(get_post_meta($post -> ID, 'exc_embarques', true));
+  
+  //ALTERA A DATA 31/12/2026 PARA A DEFINIR (AVENGED SEVENFOLD)
+  foreach ($embarques_exc_bot as $_embarque) {
+    foreach ($_embarque -> opcoes as $opcao) {
+        if ($opcao -> dia === '31/12/2026') {
+            $opcao -> dia = 'A definir...';
+        }
+
+    }
+  }
+  
+  
 
   $exc_variacoes = wc_get_product($post -> ID) -> status !== 'auto-draft' ? wc_get_product($post -> ID)->get_available_variations() : null;
 

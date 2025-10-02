@@ -17,17 +17,18 @@
 .aer-cards-slider .slider-frame .controls-wrapper {
   position: absolute;
   top: 50%;
-  left: -24px;
+  left: -18px;
   transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  width: 104%;
+  width: 103%;
   z-index: 99;
 }
 .aer-cards-slider .slider {
   flex-wrap: nowrap;
   transition: 0.3s;
   transform: translateX(0%);
+  display: flex;
 }
 
 .aer-cards-slider .controls-wrapper span {
@@ -71,7 +72,7 @@
     overflow-x: scroll;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
-    gap: 8px;
+    /* gap: 8px; */
   }
   .aer-cards-slider .row.slider::-webkit-scrollbar {
     display: none;

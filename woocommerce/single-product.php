@@ -63,7 +63,7 @@ if ( is_product() && $product->get_id() == 3793 ) :
 }
 #avisoModalContent p {
   margin-bottom: 25px;
-  font-size: 16px;
+  font-size: 1.075rem!important;
   line-height: 1.5;
 }
 #avisoModalContent a.whatsapp-btn {
@@ -94,9 +94,10 @@ if ( is_product() && $product->get_id() == 3793 ) :
   <div id="avisoModalContent">
     <button id="closeModalBtn" aria-label="Fechar modal">&times;</button>
     <h2>Atenção</h2>
-    <p>Se você tiver uma reserva e quiser tratar sobre o adiamento da data do show do Avenged Sevenfold, encaminhe mensagem no WhatsApp e solicite atendimento humano caso a mensagem automática seja ativada. As demandas serão atendidas a partir de segunda-feira, dia, 29/09, conforme ordem que foram recebidas.</p>
-    <p>Agradecemos a todos pela compreensão.</p>
-    <a class="whatsapp-btn" href="https://wa.me/5519997477465" target="_blank">Falar no WhatsApp</a>
+    <p class="mb-3">As reservas para a excursão Avenged Sevenfold em SP permanecem válidas e serão automaticamente transferidas para a nova data assim que for divulgada.</p>
+    <p class="mb-3">Não é necessário realizar nenhuma ação para manter sua reserva ativa.</p>
+    
+    <a class="whatsapp-btn main-close-btn" href="#"">Fechar</a>
   </div>
 </div>
 
@@ -104,7 +105,7 @@ if ( is_product() && $product->get_id() == 3793 ) :
 document.addEventListener("DOMContentLoaded", function() {
   const modal = document.getElementById("avisoModal");
   const closeBtn = document.getElementById("closeModalBtn");
-
+  const closeMainBtn = document.querySelector(".main-close-btn");
   // Exibe o modal com pequeno delay
   setTimeout(() => {
     modal.style.display = "flex";
@@ -114,7 +115,9 @@ document.addEventListener("DOMContentLoaded", function() {
   closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
-
+  closeMainBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
   // Fecha ao clicar fora do conteúdo
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
@@ -129,6 +132,7 @@ function excursao_formatada($id){
   $_excursao = wc_get_product($id);
   $_excursao_img = wp_get_attachment_image_src($_excursao->get_image_id(), 'full');
   $locais_embarque = json_decode(get_post_meta($id, 'embarques', true), true);
+    $exc_embarques = json_decode(get_post_meta($id, 'exc_embarques', true), true);
   
   if($locais_embarque !== null){
     $ids_embarques = array_map(function($_emb){
@@ -173,6 +177,7 @@ function excursao_formatada($id){
     'variacoes' => $_excursao->get_available_variations(),
     'atributos' => $_excursao->get_attributes(),
     'embarques' => $locais_embarque ? $locais_embarque : null,
+    'exc_embarques' => json_encode($exc_embarques, JSON_UNESCAPED_UNICODE),
     // 'data_final' => $data_final,
     // 'disp_vagas' => disp_vagas($_excursao),
   ];
@@ -285,7 +290,7 @@ usort($datas, function($a, $b) {
                     }else if(count($datas) <= 2){
                       foreach($datas as $data){
                         ?>
-                        <div class="value"><?= $data; ?></div>
+                        <div class="value"><?= $data === "31/12/2026" ? "A definir..." : $data; ?></div>
                         <?php
                       }
                     }
@@ -324,7 +329,11 @@ usort($datas, function($a, $b) {
             </section>
 
             <!-- cta button -->
-            <a href="#reservaBox" class="cta-button" aria-label="Reservar lugar na excursão <?= $excursao['nome']; ?>">
+            <a href="#reservaBox" class="cta-button" aria-label="Reservar lugar na excursão <?= $excursao['nome']; ?>" onclick="gtag('event', 'clique_reservar_cta', {
+                  'event_category': 'ads',
+                  'event_label': 'clique_reservar_cta',
+                  'value': 1
+                })">
               <?= aer_icons('bookmark-light', 16, 16, '.webp'); ?> Reservar agora
             </a>
 
@@ -334,9 +343,21 @@ usort($datas, function($a, $b) {
             <!-- TABS NAVIGATION -->
             <div class="tab-container">
               <div class="tab-nav">
-                <button class="tab-btn active" data-tab="tab1">Como funciona</button>
-                <button class="tab-btn" data-tab="tab2">Locais de embarque</button>
-                <button class="tab-btn" data-tab="tab3">Principais dúvidas</button>
+                <button class="tab-btn active" data-tab="tab1" onclick="gtag('event', 'tab_como_funciona', {
+                  'event_category': 'ads',
+                  'event_label': 'tab_como_funciona',
+                  'value': 1
+                })">Como funciona</button>
+                <button class="tab-btn" data-tab="tab2" onclick="gtag('event', 'tab_locais_embarque', {
+                  'event_category': 'ads',
+                  'event_label': 'tab_locais_embarque',
+                  'value': 1
+                })">Locais de embarque</button>
+                <button class="tab-btn" data-tab="tab3" onclick="gtag('event', 'tab_principais_duvidas', {
+                  'event_category': 'ads',
+                  'event_label': 'tab_principais_duvidas',
+                  'value': 1
+                })">Principais dúvidas</button>
               </div>
 
               <!-- TAB CONTENT COMO FUNCIONA -->
@@ -456,7 +477,7 @@ usort($datas, function($a, $b) {
             <!-- <h2 class="mb-4">Faça aqui sua reserva</h2> -->
 
             <!-- RESERVA APP - REACT  -->
-            <div id="reserva_app" data-cart-url='<?= wc_get_cart_url(); ?>' data-ajax-url='<?php echo admin_url( 'admin-ajax.php' ); ?>' data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE); ?>' data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE); ?>' data-product-id='<?= $excursao['id']; ?>'></div>
+            <div id="reserva_app" data-cart-url='<?= wc_get_cart_url(); ?>' data-ajax-url='<?php echo admin_url( 'admin-ajax.php' ); ?>' data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE); ?>' data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE); ?>' data-product-id='<?= $excursao['id']; ?>' data-exc-embarques='<?= json_encode($excursao['exc_embarques'], JSON_UNESCAPED_UNICODE); ?>'></div>
             <!-- FIM RESERVA APP - REACT  -->
           
 

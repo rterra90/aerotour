@@ -3702,7 +3702,7 @@
                             onChange: ({ target }) => changeCheckbox(dateObj, target)
                           }
                         ),
-                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: dateObj.dia })
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: dateObj.dia === "31/12/2026" ? "A definir..." : dateObj.dia })
                       ]
                     },
                     dateObj.dia
@@ -5036,7 +5036,7 @@
                     ":",
                     " "
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("ul", { className: selectedDates.length > 1 ? "multi" : "", children: selectedDates.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("li", { children: d }, i)) })
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("ul", { className: selectedDates.length > 1 ? "multi" : "", children: selectedDates.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("li", { children: d === "31/12/2026" ? "A definir..." : d }, i)) })
                 ] }) }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
               ]

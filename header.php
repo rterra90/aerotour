@@ -121,7 +121,7 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
 </head>
 
 <body <?php body_class(); ?>>
-          <img src="<?= esc_url($background_img); ?>" fetchpriority="high" decoding="async" alt="" style="display:none;" />
+
 
   <?php
     if(!is_user_logged_in() && get_option('new_register_coupon_status') && get_option('new_register_coupon_status')['status'] === 'ativado'){
@@ -233,4 +233,5 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
       });
       
     </script>
+    <img src="<?= esc_url($background_img); ?>" fetchpriority="high" decoding="async" alt="" style="display:none;" />
   </header>

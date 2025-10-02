@@ -62,6 +62,13 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
       if (variacoes[0].encerrar_vendas) setExcursaoEncerrada(true);
       else {
         const singleVarId = variacoes[0].variation_id;
+        // let payloadDia;
+        // if(variacoes[0].attributes.attribute_dia == "31/12/2026"){
+        //   payloadDia = "A definir...";
+        // }else{
+        //   payloadDia = variacoes[0].attributes.attribute_dia;
+        // }
+
         const dataPayload = [
           variacoes[0].attributes.attribute_dia,
           singleVarId,
@@ -254,7 +261,9 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
                       </span>
                       <ul className={selectedDates.length > 1 ? 'multi' : ''}>
                         {selectedDates.map((d, i) => (
-                          <li key={i}>{d}</li>
+                          <li key={i}>
+                            {d === '31/12/2026' ? 'A definir...' : d}
+                          </li>
                         ))}
                       </ul>
                     </>

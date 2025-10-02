@@ -4,7 +4,7 @@ function handleSlider(sliderRef, action, qtyPage) {
   );
   const sliderWrapper = sliderRefComponent.querySelector(`.slider-wrapper`);
   const slider = sliderRefComponent.querySelector('.slider');
-  const totalCards = slider.querySelectorAll('.display-card').length;
+  const totalCards = slider.querySelectorAll('.excursion-card').length;
   const controls = sliderRefComponent.querySelectorAll(
     `.controls-wrapper span`,
   );

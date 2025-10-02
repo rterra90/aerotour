@@ -4,6 +4,7 @@
 }
 #content-home > section {
   margin-top: 60px;
+  max-width: 1320px !important;
 }
 #content-home h2 {
   color: var(--aer-light-text);

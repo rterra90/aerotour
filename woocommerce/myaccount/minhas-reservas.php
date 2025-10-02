@@ -225,70 +225,71 @@ $customer_reservas_cancel = array_filter($customer_reservas_final, function($c_r
                 foreach($customer_reservas_ativas as $reserva){
 
 
-if ( $reserva['variation_id'] == 3794 ) :
+if ( $reserva['variation_id'] == 5302 ) : //5302
 ?>
 <style>
-#avisoModal {
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#avisoModalContent {
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 8px;
-  max-width: 500px;
-  text-align: center;
-  position: relative;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-#avisoModalContent h2 {
-  color: #c00;
-  margin-bottom: 20px;
-}
-#avisoModalContent p {
-  margin-bottom: 25px;
-  font-size: 16px;
-  line-height: 1.5;
-}
-#avisoModalContent a.whatsapp-btn {
-  background-color: #25D366;
-  color: white;
-  padding: 12px 20px;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  display: inline-block;
-}
-#closeModalBtn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: #999;
-}
-#closeModalBtn:hover {
-  color: #333;
-}
+  #avisoModal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #avisoModalContent {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+  #avisoModalContent h2 {
+    color: #c00;
+    margin-bottom: 20px;
+  }
+  #avisoModalContent p {
+    margin-bottom: 25px;
+    font-size: 1.075rem!important;
+    line-height: 1.5;
+  }
+  #avisoModalContent a.whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+  }
+  #closeModalBtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #999;
+  }
+  #closeModalBtn:hover {
+    color: #333;
+  }
 </style>
 
 <div id="avisoModal">
   <div id="avisoModalContent">
     <button id="closeModalBtn" aria-label="Fechar modal">&times;</button>
     <h2>Atenção</h2>
-    <p>Se você tiver uma reserva e quiser tratar sobre o adiamento da data do show do Avenged Sevenfold, encaminhe mensagem no WhatsApp e solicite atendimento humano caso a mensagem automática seja ativada. As demandas serão atendidas a partir de segunda-feira, dia, 29/09, conforme ordem que foram recebidas.</p>
-    <p>Agradecemos a todos pela compreensão.</p>
-    <a class="whatsapp-btn" href="https://wa.me/5519997477465" target="_blank">Falar no WhatsApp</a>
+    <p class="mb-3">As reservas para a excursão Avenged Sevenfold em SP permanecem válidas e serão automaticamente transferidas para a nova data assim que for divulgada.</p>
+    <p class="mb-3">Não é necessário realizar nenhuma ação para manter sua reserva ativa.</p>
+    
+    <a class="whatsapp-btn main-close-btn" href="#"">Fechar</a>
   </div>
 </div>
 
@@ -296,6 +297,7 @@ if ( $reserva['variation_id'] == 3794 ) :
 document.addEventListener("DOMContentLoaded", function() {
   const modal = document.getElementById("avisoModal");
   const closeBtn = document.getElementById("closeModalBtn");
+  const closeMainBtn = document.querySelector(".main-close-btn");
 
   // Exibe o modal com pequeno delay
   setTimeout(() => {
@@ -304,6 +306,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Fecha ao clicar no botão
   closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  closeMainBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
 
@@ -332,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function() {
                       <div class="card-img"><?= $reserva['img']; ?></div>
                       
                       <div class="card-body">
-                        <p>Data: <?= $reserva['data']; ?></p>
+                        <p>Data: <?= $reserva['data'] === "31/12/2026" ? "A definir..." : $reserva['data']; ?></p>
                         <p>Embarque: <?= $reserva['local_embarque']; ?></p>
                         <p>Horário: <?= substr($reserva['horario'], 0, -3); ?></p>
                         <p>Local do evento: <?= $reserva['local_evento']; ?></p>

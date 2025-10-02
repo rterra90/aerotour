@@ -200,6 +200,12 @@ function painel_exc_embarques() {
           'id'      => 'meta_exc_embarques',
           'value'   => $embarques_exc_bot ? json_encode($embarques_exc_bot, JSON_UNESCAPED_UNICODE) : '',
         ));
+
+
+        // woocommerce_wp_textarea_input(array(
+        //   'id'      => 'meta_exc_embarques',
+        //   'value'   => $embarques_exc_bot ? json_encode($embarques_exc_bot, JSON_UNESCAPED_UNICODE) : '',
+        // ));
       ?>
         
       <script>
@@ -413,7 +419,7 @@ function painel_exc_embarques() {
 
 
             novo_exc_embs.push(_exc_emb_return);
-            console.log(novo_exc_embs);
+            // console.log(novo_exc_embs);
             document.querySelector('input#meta_exc_embarques[type="hidden"]').setAttribute('value', JSON.stringify(novo_exc_embs));
             // FIM PREPARA O EXC_EMBARQUES          
 
@@ -433,9 +439,9 @@ function painel_exc_embarques() {
 
       
     </div>
-    <dic class="section-hide">
+    <div class="section-hide">
       <p>Defina primeiro as datas!</p>
-    </dic>
+    </div>
  
   </div>
 <?php

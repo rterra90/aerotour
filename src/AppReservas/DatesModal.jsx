@@ -114,7 +114,9 @@ const DatesModal = ({
                   onChange={({ target }) => changeCheckbox(dateObj, target)}
                 />
               )}
-              <span>{dateObj.dia}</span>
+              <span>
+                {dateObj.dia === '31/12/2026' ? 'A definir...' : dateObj.dia}
+              </span>
             </label>
           ))}
         </form>

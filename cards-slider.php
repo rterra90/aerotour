@@ -15,7 +15,7 @@ function aer_cards_slider($excursoes_src, $section_title){
       </div>
 
       <div class="slider-wrapper">
-        <div class="slider" data-page=1 data-scroll=0>
+        <div class="row slider" data-page=1 data-scroll=0>
           <?php
             foreach($excursoes_src as $index => $excursao){
               $is_slider = true;
