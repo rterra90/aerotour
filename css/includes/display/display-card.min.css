@@ -1,0 +1,132 @@
+body {
+  background-color: #111;
+}
+.display-flex-child {
+  padding: 0 6px;
+}
+.excursion-card {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 14px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.excursion-card .image-container {
+  max-width: 95%;
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 8px auto 0;
+  max-height: 120px;
+  position: relative;
+}
+.excursion-card .image-container img {
+  width: 100%;
+}
+.excursion-card .title {
+  padding: 8px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 4px;
+  line-height: 1.15;
+}
+.excursion-card .title span {
+  color: #e7e7e7;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: #400f0f;
+  width: fit-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+}
+.excursion-card .badge {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: #797e08;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.excursion-card .info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 16px;
+  text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+}
+.excursion-card .info .location p {
+  margin-bottom: -4px;
+}
+.excursion-card .info .location span {
+  font-size: 0.825rem;
+}
+.excursion-card .info .dates,
+.excursion-card .info .location {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+.excursion-card .cta {
+  background-color: #400f0f;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 12px auto 2px;
+  transition: background-color 0.3s;
+  display: block;
+  width: 100%;
+}
+.excursion-card .cta:hover {
+  background-color: #5a1a1a;
+}
+.excursion-card.dark {
+  background-color: #161616;
+  color: #c7c7c7;
+  border: 2px solid #202020;
+}
+.excursion-card.light {
+  background-color: #e7e7e7;
+  color: #111;
+  border: 2px solid #202020;
+}
+.excursion-card.light .title-overlay {
+  background-color: rgba(231, 231, 231, 0.6);
+  color: #111;
+}
+.excursion-card.light .badge,
+.excursion-card.light .cta {
+  background-color: #400f0f;
+  color: #fff;
+}
+@media (max-width: 576px) {
+  .excursion-card .info {
+    padding: 8px;
+  }
+}
+@media (max-width: 460px) {
+  .display-flex-child {
+    display: flex;
+    justify-content: center;
+  }
+  .excursion-card {
+    max-width: unset;
+  }
+  .excursion-card .image-container {
+    margin: 0 auto;
+    max-width: unset;
+    width: 100%;
+    max-height: unset;
+  }
+}

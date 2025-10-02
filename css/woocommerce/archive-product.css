@@ -169,12 +169,11 @@
   .archive-container .content-area ul.products .row {
     padding: 0 10px;
     justify-content: space-between;
-    flex-direction: column;
+    gap: 2%;
   }
   #archive-product .archive-container .content-area ul.products .row > div {
-    width: 100%;
+    width: 49%;
     padding: 0;
-    box-shadow: 0 0 0 2px #2b2b2b;
   }
   #archive-product-sidebar {
     overflow-x: auto;
@@ -183,5 +182,11 @@
   }
   #archive-product .woocommerce-breadcrumb {
     margin-bottom: 12px;
+  }
+}
+@media (max-width: 460px) {
+  #archive-product .archive-container .content-area ul.products .row > div {
+    width: 100%;
+    padding: 0 12px;
   }
 }

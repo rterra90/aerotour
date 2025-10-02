@@ -22,7 +22,7 @@ Description: Tema criado para o site da Aerotour Caravanas
 @import url(css/includes/main-carousel.css);
 @import url(css/includes/cards-slider.css);
 @import url(css/includes/cards.css);
-@import url(css/includes/display/display-card.css);
+@import url(css/includes/display/display-card.min.css);
 @import url(css/includes/parceiros.css);
 @import url(css/includes/qr-event-modal.css);
 @import url(css/thankyou.css);
@@ -316,7 +316,7 @@ form#searchform input#s::after {
   .aer-search-input {
     font-size: 0.8rem;
     letter-spacing: 0.03rem;
-    padding: 4px 14px;
+    padding: 10px 16px;
   }
   .aer-search-wrapper > span {
     right: 6px;
