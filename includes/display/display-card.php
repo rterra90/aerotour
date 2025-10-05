@@ -53,9 +53,10 @@ if(count($exc_variacoes) > 0){
 ?>
 <div class="col-lg-3 col-md-4 col-sm-5 col-8 display-flex-child" data-nome="<?= $excursao -> name; ?>" data-id="<?= $excursao -> get_id(); ?>">
 
-  <div class="excursion-card dark">
+  <div class="excursion-card <?= isset($color_scheme) ? $color_scheme : 'dark' ?>">
     <div class="image-container">
-      <img loading="lazy" src="<?= $img[0]; ?>" alt="<?= $excursao -> name; ?>">
+      <a href="<?= $excursao->get_permalink(); ?>"><img loading="lazy" src="<?= $img[0]; ?>" alt="<?= $excursao -> name; ?>"></a>
+      
       <!-- <div class="badge">Últimas vagas</div> -->
 
     </div>

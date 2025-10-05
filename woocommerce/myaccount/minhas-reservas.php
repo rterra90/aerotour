@@ -225,7 +225,7 @@ $customer_reservas_cancel = array_filter($customer_reservas_final, function($c_r
                 foreach($customer_reservas_ativas as $reserva){
 
 
-if ( $reserva['variation_id'] == 5302 ) : //5302
+if ( $reserva['variation_id'] == 5330 ) : //5302
 ?>
 <style>
   #avisoModal {
@@ -250,7 +250,7 @@ if ( $reserva['variation_id'] == 5302 ) : //5302
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
   }
   #avisoModalContent h2 {
-    color: #c00;
+    color: #424d6d;
     margin-bottom: 20px;
   }
   #avisoModalContent p {
@@ -285,9 +285,8 @@ if ( $reserva['variation_id'] == 5302 ) : //5302
 <div id="avisoModal">
   <div id="avisoModalContent">
     <button id="closeModalBtn" aria-label="Fechar modal">&times;</button>
-    <h2>Atenção</h2>
-    <p class="mb-3">As reservas para a excursão Avenged Sevenfold em SP permanecem válidas e serão automaticamente transferidas para a nova data assim que for divulgada.</p>
-    <p class="mb-3">Não é necessário realizar nenhuma ação para manter sua reserva ativa.</p>
+    <h2>Nova data show Avenged Sevenfold</h2>
+    <p class="mb-3">Sua reserva já foi transferida para a nova data divulgada para o show em SP, que será em 31/01/2026.</p>
     
     <a class="whatsapp-btn main-close-btn" href="#"">Fechar</a>
   </div>

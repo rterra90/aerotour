@@ -51,7 +51,6 @@
 <script src="<?php echo get_stylesheet_directory_uri() ?>/js/main.js"></script>
 
 <script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/modal.js"></script>
-<!-- <script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js"></script> -->
 <script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/btn-reactive-loading.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 <script src="<?php echo get_stylesheet_directory_uri() ?>/js/react_apps/app_reservas_usuario.js?ver=<?= time(); ?>"></script>

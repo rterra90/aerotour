@@ -63,7 +63,7 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
   <script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/style-selected-element.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
 
-<script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js"></script>
+<script src="<?php echo get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js?ver=<?= time(); ?>"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

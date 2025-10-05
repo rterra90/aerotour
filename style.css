@@ -20,7 +20,7 @@ Description: Tema criado para o site da Aerotour Caravanas
 @import url(css/contato.css);
 @import url(css/includes/sugestao.css);
 @import url(css/includes/main-carousel.css);
-@import url(css/includes/cards-slider.css);
+@import url(css/includes/cards-slider.min.css);
 @import url(css/includes/cards.css);
 @import url(css/includes/display/display-card.min.css);
 @import url(css/includes/parceiros.css);
@@ -271,8 +271,8 @@ form#searchform input#s::after {
 .aer-search-wrapper::after {
   content: url('./assets/icons/search.svg');
   position: absolute;
-  right: 12px;
-  top: 6px;
+  right: 16px;
+  top: 12px;
 }
 .aer-search-wrapper.active::after {
   content: url('./assets/icons/Cancelar.svg');
@@ -287,7 +287,7 @@ form#searchform input#s::after {
   border-radius: 2rem;
   font-size: 0.925rem;
   letter-spacing: 0.04rem;
-  padding: 4px 14px;
+  padding: 10px 16px;
   font-weight: 500;
   color: #c3c3c3;
   text-transform: uppercase;
@@ -314,7 +314,6 @@ form#searchform input#s::after {
     top: 5px;
   }
   .aer-search-input {
-    font-size: 0.8rem;
     letter-spacing: 0.03rem;
     padding: 10px 16px;
   }

@@ -32,12 +32,6 @@ get_header( 'shop' );
        * @hooked woocommerce_product_archive_description - 10
        */
       do_action( 'woocommerce_archive_description' );
-
-      if(strtolower(single_term_title( '', false )) === 'rodeios'){
-        ?>
-        <!-- <div class="archive-promo-banner mb-3 d-flex justify-content-center"><img src="<?= get_stylesheet_directory_uri()?>/assets/banners/aerotour-rodeio10.webp" alt="Banner promoção cupom RODEIO10"></div> -->
-        <?php
-      }
       ?>
       <div class="exc-archive-search aer-search-wrapper mb-3">
         <span data-role="button"></span>
@@ -62,13 +56,11 @@ get_header( 'shop' );
 
       woocommerce_product_loop_start();
       echo '<div class="row">';
-      if ( wc_get_loop_prop( 'total' ) ) {
-        $archive_products = array();
-        while ( have_posts() ) {
-          ?>
-          <?php
-          the_post();
 
+      $archive_products = array();
+      while ( have_posts() ) {
+          the_post();
+          
           /**
            * Hook: woocommerce_shop_loop.
            */
@@ -78,6 +70,8 @@ get_header( 'shop' );
           
         
         };
+      if ( wc_get_loop_prop( 'total' ) ) {
+        
         // print_r($archive_products);
         foreach(aer_proximas_excursoes($archive_products, 'galeria') as $excursao){
           include __DIR__ . '/../includes/display/display-card.php';
@@ -87,7 +81,12 @@ get_header( 'shop' );
         
         
       } else {
-        echo 'todos';
+        //Está caindo aqui quando na página de galeria geral
+
+        wp_redirect( 'https://aerotour.com.br/excursoes/categoria/shows/');
+        ?>
+        <p>Oops, parece que houve um erro ao obter as informações...</p>
+        <?php
       }
       echo '</div>';
       woocommerce_product_loop_end();

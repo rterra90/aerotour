@@ -39,7 +39,7 @@
 }
 #archive-product-sidebar .sidebar_categorias-nav li:hover,
 #archive-product-sidebar .sidebar_categorias-nav li.current-menu-item {
-  background-color: #060606;
+  background-color: var(--aer-accent);
 }
 #archive-product .content-area {
   flex-grow: 1;

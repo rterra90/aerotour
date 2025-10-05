@@ -1,5 +1,5 @@
 <?php
-function aer_cards_slider($excursoes_src, $section_title){
+function aer_cards_slider($excursoes_src, $section_title, $color_scheme = 'dark'){
   $slider_ref = slugify($section_title);
   ?>
   <section id="<?= $slider_ref; ?>"class="container-md aer-cards-slider">

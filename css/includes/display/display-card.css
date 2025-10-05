@@ -111,7 +111,7 @@ body {
 .excursion-card.light {
   background-color: #e7e7e7;
   color: #111;
-  border: 2px solid #202020;
+  border: 2px solid #d9d9d9;
 }
 
 .excursion-card.light .title-overlay {
@@ -119,14 +119,15 @@ body {
   color: #111;
 }
 
-.excursion-card.light .badge {
+.excursion-cd.light .badge {
   background-color: #400f0f;
   color: #fff;
 }
 
 .excursion-card.light .cta {
-  background-color: #400f0f;
-  color: #fff;
+  box-shadow: inset 0px 0px 1px 1px var(--aer-accent);
+  color: var(--aer-accent);
+  background-color: unset;
 }
 @media (max-width: 576px) {
   .excursion-card .info {
@@ -147,4 +148,12 @@ body {
     width: 100%;
     max-height: unset;
   }
+}
+
+/* ESPECÍFICO PARA ARQUIVO */
+#archive-product .excursion-card .info {
+  text-align: center;
+}
+#archive-product .excursion-card .title span {
+  margin: 0 auto 3px;
 }
