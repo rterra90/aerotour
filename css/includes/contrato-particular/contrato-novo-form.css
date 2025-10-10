@@ -1,0 +1,136 @@
+#novoContratoForm .tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+#novoContratoForm .tab-button {
+  flex: 1;
+  padding: 10px;
+  cursor: pointer;
+  background: #ddd;
+  border: none;
+  font-weight: bold;
+}
+
+#novoContratoForm .tab-button.active {
+  background: #bbb;
+}
+
+#novoContratoForm .tab-content {
+  display: none;
+}
+
+#novoContratoForm .tab-content.active {
+  display: block;
+}
+
+#novoContratoForm .form-group {
+  margin-bottom: 15px;
+}
+
+/* Tela de confirmação de envio */
+.contrato-novo-success {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 30px 40px;
+  background-color: #f0f9f5;
+  border: 1px solid #cce5d4;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2f4f4f;
+}
+
+.novo-contrato-id {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2e7d32;
+  margin-bottom: 20px;
+}
+
+.contrato-novo-success p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.contrato-novo-success a {
+  color: #00796b;
+  text-decoration: underline;
+}
+.botoes-footer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.botoes-footer button {
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #2e7d32;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botoes-footer button:hover {
+  background-color: #1b5e20;
+}
+
+.botoes-footer button:active {
+  background-color: #144d17;
+}
+
+@media (max-width: 600px) {
+  .contrato-novo-success {
+    padding: 20px;
+    margin: 40px 20px;
+  }
+
+  .novo-contrato-id {
+    font-size: 18px;
+  }
+
+  .contrato-novo-success p {
+    font-size: 15px;
+  }
+  .botoes-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .botoes-footer button {
+    width: 100%;
+  }
+}
+
+/* CSS Simples para o Spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-loading {
+  cursor: not-allowed !important;
+  opacity: 0.8;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 0.5em;
+  vertical-align: middle;
+}

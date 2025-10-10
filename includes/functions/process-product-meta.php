@@ -103,6 +103,84 @@
           </div>
         </div>
       </div>
+
+      <!-- Define se exibirá lugares vendidos -->
+      <div class="options_group options_group_vendidos">
+        <?php
+          woocommerce_wp_checkbox(
+            array(
+              'id'      => 'meta_show_vendidos',
+              'value'   => get_post_meta( get_the_ID(), 'show_vendidos', true ),
+              'label'   => 'Mostrar lugares vendidos',
+              'desc_tip' => true,
+              'description' => 'O número de lugares vendidos será exibido na página',
+            )
+          );
+
+          woocommerce_wp_text_input( 
+            array(
+              'id'                => 'meta_vendidos_inc',
+              'value'             => get_post_meta( get_the_ID(), 'vendidos_inc', true ),
+              'label'             => 'Incremento',
+              'desc_tip'          => 'true',
+              'description'       => 'Digite apenas números.',
+              'type'              => 'number',
+              'custom_attributes' => array(
+                  'min'  => '0',           // valor mínimo permitido
+                  'step' => '1',           // incrementos permitidos
+                  'pattern' => '\d*',      // regex para números
+                  'inputmode' => 'numeric' // sugere teclado numérico em dispositivos móveis
+              )
+            )   
+          );
+        ?>
+      </div>
+      <!-- Redirecionamento para excursões passadas -->
+      <div class="options_group options_group_redirect">
+        <?php
+          // 1. Obter a instância do objeto do produto
+          $product = wc_get_product( get_the_ID() );
+
+          // 2. Obter o valor do atributo
+          $valor_atributo_string = $product->get_attribute( 'Dia' );
+
+          // 3. Transforma em array de datas "dd/mm/yyyy"
+          $dates_array = array_map( 'trim', explode( '|', $valor_atributo_string ) );
+
+          // 4. Itera sobre as datas para encontrar a mais recente em Unix
+          $latest_date_object = null;
+          foreach ( $dates_array as $date_str ) {
+
+            $current_date = DateTime::createFromFormat( 'd/m/Y', $date_str );
+
+            if ( $current_date instanceof DateTime ) {
+                if ( $latest_date_object === null || $current_date > $latest_date_object ) {
+                    $latest_date_object = $current_date;
+                }
+            }
+          }
+        
+          // 5. Compara se a data atual é maior do que a última data da excursão
+          if($latest_date_object -> getTimestamp() < time()){
+            ?>
+              <div>
+                <p>Redirecionar para...</p>
+                <?php
+                woocommerce_wp_text_input(
+                  array(
+                    'id'      => 'meta_redirect_link',
+                    'value'   => get_post_meta( get_the_ID(), 'redirect_link', true ),
+                    'label'   => 'Link',
+                  )
+                );
+
+                ?>
+              </div>
+            <?php
+          }
+        
+        ?>
+      </div>
       <?php
     }
 

@@ -1,3 +1,6 @@
+#contato {
+  background-color: var(--aer-bg-light);
+}
 #contato h1 {
   text-align: center;
 }
@@ -6,7 +9,7 @@ div.contato-inner {
   flex-wrap: nowrap;
 }
 .contato-inner > div {
-  background-color: var(--aer-bg-light);
+  background-color: var(--aer-box-light);
   border-radius: 0.3rem;
   padding: 20px;
   flex-shrink: 1;

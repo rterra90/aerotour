@@ -1,0 +1,112 @@
+#contratoParticular .container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+#contratoParticular .opcoes {
+  margin-bottom: 2rem;
+  width: fit-content;
+}
+
+#contratoParticular .opcoes h1 {
+  font-size: 1.8rem;
+  display: block;
+}
+
+#contratoParticular .btn-nova {
+  margin-top: 12px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#contratoParticular .btn-nova:hover {
+  background-color: #005fa3;
+}
+
+#contratoParticular .consulta {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  min-width: 320px;
+  flex-basis: 400px;
+  flex-shrink: 1;
+}
+
+#contratoParticular .consulta label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+#contratoParticular .consulta input {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+#contratoParticular .senha-input {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+#contratoParticular .senha-input.visible {
+  opacity: 1;
+  max-height: 100px;
+}
+
+#contratoParticular table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+#contratoParticular th,
+#contratoParticular td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+#contratoParticular th {
+  background-color: #f0f2f5;
+  font-weight: 600;
+}
+
+#contratoParticular tr:hover {
+  background-color: #f9fbfd;
+}
+#contratoParticular table .icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #0078d4;
+}
+
+#contratoHome .row {
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+@media (max-width: 767px) {
+  #contratoHome .row {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}

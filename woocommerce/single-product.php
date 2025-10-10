@@ -108,8 +108,108 @@ usort($datas, function($a, $b) {
     return $dataA <=> $dataB;
 })
 ?>
+<style>
+  #avisoModal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #avisoModalContent {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+  #avisoModalContent h2 {
+    color: #424d6d;
+    margin-bottom: 20px;
+  }
+  #avisoModalContent p {
+    margin-bottom: 25px;
+    font-size: 1.075rem!important;
+    line-height: 1.5;
+  }
+  #avisoModalContent a.whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+  }
+  #closeModalBtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #999;
+  }
+  #closeModalBtn:hover {
+    color: #333;
+  }
+</style>
 	<link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/woocommerce/single-product.min.css?ver=<?= time(); ?>">
+  <?php
+  $redirect_link = get_post_meta(get_the_ID(), 'redirect_link', true);
+  if($redirect_link){
+    ?>
+    <div id="avisoModal">
+      <div id="avisoModalContent">
+        <button id="closeModalBtn" aria-label="Fechar modal">&times;</button>
+        <h2>Atenção</h2>
+        <p class="mb-3">Essa página é de uma excursão passada. </p>
+        <a class="d-block" style="text-decoration:underline" href="<?= $redirect_link; ?>">Clique aqui para acessar a página atual para a excursão Ensaios da Anitta Campinas 2026.</a>
+        
+        <a class="whatsapp-btn main-close-btn mt-3" href="#">Fechar</a>
+      </div>
+    </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const modal = document.getElementById("avisoModal");
+      const closeBtn = document.getElementById("closeModalBtn");
+      const closeMainBtn = document.querySelector(".main-close-btn");
 
+      // Exibe o modal com pequeno delay
+      setTimeout(() => {
+        modal.style.display = "flex";
+      }, 500);
+
+      // Fecha ao clicar no botão
+      closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+      closeMainBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+      // Fecha ao clicar fora do conteúdo
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+    });
+    </script>
+
+    <?php
+  }
+  
+  ?>
   <section id="content-event" class="pb-5 aer-bg-light">
 
     <script>

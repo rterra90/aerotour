@@ -39,6 +39,7 @@ include 'exc-passageiros-admin.php';
 include 'includes/functions/login-functions.php';
 include 'includes/functions/refunds-functions.php';
 include 'includes/cards-slider.php';
+include 'includes/functions/contrato.php';
 include 'includes/functions/sort-excursoes.php';
 include 'includes/functions/coupons-functions.php';
 include 'includes/functions/blog.php';
@@ -565,6 +566,7 @@ require_once(get_template_directory() . '/endpoints/cupom_update.php');
 require_once(get_template_directory() . '/endpoints/api_campanhas_get.php');
 require_once(get_template_directory() . '/endpoints/participantes_roleta_put.php');
 require_once(get_template_directory() . '/endpoints/api_user_get.php');
+require_once(get_template_directory() . '/endpoints/api_contratos_post.php');
 
 
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN

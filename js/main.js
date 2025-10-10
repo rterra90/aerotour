@@ -17,3 +17,16 @@ function celularMask({ target }) {
   masked = masked.replace(/(\d)(\d{4})$/, '$1-$2');
   target.value = masked;
 }
+function CPFMask(value) {
+  value = value.replace(/\D/g, ''); // Remove tudo que não for dígito
+  // CPF
+  return value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
+function CNPJMask(value) {
+  value = value.replace(/\D/g, ''); // Remove tudo que não for dígito
+  // CNPJ
+  return value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+}
+function cleanMask(value) {
+  return value ? value.replace(/\D/g, '') : '';
+}
