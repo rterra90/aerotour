@@ -122,6 +122,24 @@
   margin-bottom: 4px;
   position: relative;
 }
+.modal-content .date-list label[data-desconto-antecipado='true']::after {
+  content: '5% OFF';
+  background-color: var(--aer-accent);
+  color: var(--aer-text-light);
+  position: absolute;
+  right: 12px;
+  bottom: -7px;
+  padding: 1px 6px;
+  font-weight: 500;
+  font-size: 0.575rem;
+  border-radius: 0.25rem;
+}
+.modal-content .desconto-data-limite p {
+  text-align: center;
+  margin: -10px 0 0 0;
+  font-size: 0.875rem;
+  color: #4f3939;
+}
 .modal-content[data-modal='dates'] .date-list label.disabled {
   cursor: not-allowed;
   color: #737373;

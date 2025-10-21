@@ -265,3 +265,37 @@
   color: #31416f;
   white-space: nowrap;
 }
+
+.coluna-direita .discount-price-container {
+  position: relative;
+}
+.coluna-direita .discount-price-container::after {
+  content: '5% OFF';
+  position: absolute;
+  top: 1px;
+  right: 40px;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+  font-size: 0.7rem;
+  font-weight: 500;
+  background: #400f0f;
+  padding: 0px 12px;
+  color: var(--aer-text-light);
+}
+.coluna-direita .discount-price-container .total {
+  font-size: 0.8rem;
+}
+.coluna-direita .discount-price-container .values-comp {
+  position: relative;
+  top: -2px;
+}
+.coluna-direita .values-comp > span:nth-child(2) {
+  font-size: 1.125rem;
+}
+.coluna-direita .discount-price-container .values-comp .original-price {
+  text-decoration: line-through;
+  color: #9695a1;
+  font-size: 0.725rem;
+  display: inline-block;
+  margin-right: 8px;
+}

@@ -1,6 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import PropTypes from 'prop-types';
+import {
+  convertDate,
+  dataTrintaDiasAntes,
+  dataTemDescontoHoje,
+} from '../Utilities';
 
 const DatesModal = ({
   setDateModalOpen,
@@ -10,6 +15,8 @@ const DatesModal = ({
   getVarIdByDate,
   getAvailabilityById,
   passageiros,
+  setDataLimiteDesconto,
+  dataLimiteDesconto,
 }) => {
   const [preData, setPreData] = React.useState([]);
   const [visible, setVisible] = React.useState(false);
@@ -36,6 +43,15 @@ const DatesModal = ({
       );
 
       if (dataJaSelecionada) {
+        //Remove a data limite de desconto se necessário
+        setDataLimiteDesconto((prev) => {
+          const arr = Array.isArray(prev) ? [...prev] : [];
+          const prev_index = arr.indexOf(_dateObj.desconto_antecipado_val);
+          if (prev_index !== -1) arr.splice(prev_index, 1);
+          arr.sort((a, b) => new Date(b) - new Date(a));
+          return arr;
+        });
+
         return preData.filter((_item) => _item[0] !== _dateObj.dia);
       } else {
         if (_dateObj.disponiveis < passageiros.length) {
@@ -46,6 +62,27 @@ const DatesModal = ({
           console.log('aviso de vagas insuficientes');
           return preData;
         }
+
+        // Altera a data limite de desconto se necessário
+        setDataLimiteDesconto((prev) => {
+          const arr = Array.isArray(prev) ? [...prev] : [];
+          const novaData = _dateObj.desconto_antecipado_val;
+
+          // só adiciona se houver valor e ainda não existir no array
+          if (
+            novaData &&
+            !arr.includes(novaData) &&
+            _dateObj.desconto_antecipado === true
+          ) {
+            arr.push(novaData);
+          }
+
+          // ordena da mais recente para a mais antiga
+          arr.sort((a, b) => new Date(b) - new Date(a));
+
+          return arr;
+        });
+
         return [
           ...preData,
           [_dateObj.dia, getVarIdByDate(_dateObj.dia), _dateObj.disponiveis],
@@ -62,6 +99,7 @@ const DatesModal = ({
 
   React.useEffect(() => {
     setVisible(true);
+    setDataLimiteDesconto([]);
     /* Preenche preData com as datas já selecionadas */
     if (selectedDates.length > 0) {
       const mapped = selectedDates.map((date) => [
@@ -69,6 +107,14 @@ const DatesModal = ({
         getVarIdByDate(date),
         getAvailabilityById(getVarIdByDate(date)),
       ]);
+      selectedDates.forEach((date) => {
+        if (dataTemDescontoHoje(convertDate(date, 'iso'))) {
+          setDataLimiteDesconto((_prev) => [
+            dataTrintaDiasAntes(convertDate(date, 'iso')),
+            ..._prev,
+          ]);
+        }
+      });
 
       setPreData((prev) => {
         if (!initial) setInitial(() => [...prev, ...mapped]);
@@ -104,6 +150,7 @@ const DatesModal = ({
                   : 'false'
               }
               data-esgotado={dateObj.disponiveis === 0 ? 'true' : 'false'}
+              data-desconto-antecipado={dateObj.desconto_antecipado}
             >
               {dateObj.encerrado || dateObj.disponiveis === 0 ? (
                 <input type="checkbox" disabled />
@@ -120,6 +167,15 @@ const DatesModal = ({
             </label>
           ))}
         </form>
+
+        <div className="desconto-data-limite">
+          {dataLimiteDesconto.length > 0 && preData.length > 0 ? (
+            <p>
+              5% off válido até {convertDate(dataLimiteDesconto[0], 'dmy')} para
+              a data selecionada
+            </p>
+          ) : null}
+        </div>
         <div className="modal-buttons">
           <button
             type="button"
@@ -144,4 +200,6 @@ DatesModal.propTypes = {
   toggleDate: PropTypes.func.isRequired,
   getVarIdByDate: PropTypes.func.isRequired,
   getAvailabilityById: PropTypes.func.isRequired,
+  setDataLimiteDesconto: PropTypes.func.isRequired,
+  dataLimiteDesconto: PropTypes.array.isRequired,
 };

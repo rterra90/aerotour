@@ -300,6 +300,38 @@ input#coupon_code {
 .empty-cart a:hover {
   text-decoration: underline;
 }
+a.remove-coupon-link {
+  display: inline-block;
+  margin-left: 8px;
+  color: #a52626;
+  border: 1px solid #a52626;
+  width: 16px;
+  height: 16px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 0.65rem;
+}
+#carrinho-container .preco-original {
+  margin: 0 10px 0 0;
+  font-size: 0.8rem;
+  text-decoration: line-through;
+  color: #7d7d7d;
+}
+#carrinho-container .preco-original + span.woocommerce-Price-amount.amount {
+  font-weight: 600;
+}
+#carrinho-container .desconto-antecipado-alert {
+  font-size: 0.675rem;
+  font-weight: 600;
+  border: 1px solid var(--aer-accent);
+  width: fit-content;
+  padding: 1px 12px;
+  border-radius: 0.35rem;
+  margin-top: 10px;
+  /* opacity: .75; */
+  color: var(--aer-accent);
+  background: #400f0f08;
+}
 @media (max-width: 768px) {
   .woocommerce-cart-form__cart-item.cart_item .product-remove a {
     width: 13px;

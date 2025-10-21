@@ -54,6 +54,7 @@ defined( 'ABSPATH' ) || exit;
 							</ul>
 						</div>
 						<div class="subtotal">
+							<p>teste aqui</p>
 							<strong class="d-block text-end px-4 pt-2">Subtotal: <span><?php echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); ?></span></strong>
 						</div>
 					</div>

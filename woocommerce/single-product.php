@@ -224,12 +224,28 @@ usort($datas, function($a, $b) {
       <img class="main-image" src="<?= $excursao['img'] ?>" alt="Imagem representativa da excursão <?= $excursao['nome'] ?> da Aerotour" width="100%" height="100%">
     </div>
 
-    <div class="container-xxl py-md-5 py-3 excursao-wrapper">
+    <!-- quando houver banner: py-md-3 -->
+    <!-- quando NÃO houver banner: py-md-5 -->
+    <div class="container-xxl py-md-3 py-3 excursao-wrapper"> 
       <div class="notices">
         <?php wc_print_notices(); ?>
       </div>
+
+      <!-- BANNER ARTECULT -->
+       <div id="topAdBanner">
+        <small>PARCEIRO</small>
+        <?php
+        // Insere o banner ArteCult
+          get_template_part('assets/banners/banner-artecult', null);
+
+        // Insere o modal
+          get_template_part('includes/modals/modal', null);
+        ?>
+       </div>
+       
       
-      <section class="row product-body">
+      <!-- quando houver banner: mt-md-3 -->
+      <section class="row product-body mt-3">
 
         <!-- INFORMAÇÕES -->
         <div id="info-body" class="col-md-7 col">

@@ -8,9 +8,13 @@ import PropTypes from 'prop-types';
 import PaxCard from './PaxCard.jsx';
 import AvisosModal from './AvisosModal.jsx'; // Ensure this path is correct
 import PrecoReservas from './PrecoReservas.jsx'; // Ensure this path is correct
-import { convertDate } from '../Utilities';
+import {
+  convertDate,
+  dataTrintaDiasAntes,
+  dataTemDescontoHoje,
+} from '../Utilities';
 
-function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
+function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
   const [availableDates, setAvailableDates] = React.useState([]);
   const [selectedDates, setSelectedDates] = React.useState([]);
   const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -26,11 +30,38 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
   const [taxa, setTaxa] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [excursaoEncerrada, setExcursaoEncerrada] = React.useState(false);
+  const [totalCost, setTotalCost] = React.useState('R$ 0,00');
+  const [discountCost, setDiscountCost] = React.useState(false);
+  const [dataLimiteDesconto, setDataLimiteDesconto] = React.useState([]);
+
   const botaoContinuarRef = React.useRef();
   const dataBoxRef = React.useRef();
   const embarqueBoxRef = React.useRef();
 
-  const totalCost = precoUnitario * passageiros.length * selectedDates.length;
+  // const totalCost = precoUnitario * passageiros.length * selectedDates.length;
+
+  function calculaValorTotal() {
+    const total = precoUnitario * passageiros.length * selectedDates.length;
+    // formata o valor como moeda BRL
+    const formatar = (valor) =>
+      valor.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+      });
+    setTotalCost(formatar(total));
+
+    if (!total) return setDiscountCost(false);
+    // verifica se alguma data tem desconto antecipado
+    const temDesconto = selectedDates.some((data) =>
+      availableDates.find((d) => d.dia === data && d.desconto_antecipado),
+    );
+    if (total > 0) {
+      setDiscountCost(temDesconto ? formatar(total * 0.95) : false);
+    } else {
+      setDiscountCost(false);
+    }
+  }
 
   React.useEffect(() => {
     const temData = selectedDates.length > 0;
@@ -38,14 +69,13 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
     const temHorario = horario && horario.length > 0;
     const temPassageiros = passageiros.length > 0;
 
-    // if (temData) dataBoxRef.current.classList.add('completed');
-    // if (temEmbarque) embarqueBoxRef.current.classList.add('completed');
-
     if (temData && temEmbarque && temHorario && temPassageiros) {
       botaoContinuarRef.current.removeAttribute('disabled');
     } else {
       botaoContinuarRef.current.setAttribute('disabled', '');
     }
+
+    calculaValorTotal();
   }, [selectedDates, embarque, horario, passageiros]);
 
   React.useEffect(() => {
@@ -69,6 +99,8 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
         //   payloadDia = variacoes[0].attributes.attribute_dia;
         // }
 
+        // const dataIso = convertDate(variacoes[0].attributes.attribute_dia, 'iso');
+
         const dataPayload = [
           variacoes[0].attributes.attribute_dia,
           singleVarId,
@@ -83,6 +115,36 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
       );
       if (todasEncerradas) setExcursaoEncerrada(true);
     }
+
+    //obter as datas do evento
+    variacoes.map((variacao) => {
+      let _dia = variacao.attributes.attribute_dia;
+      let _dia_iso = convertDate(_dia, 'iso');
+      let _disponiveis = getAvailabilityById(variacao.variation_id);
+      let _i = 0;
+
+      setAvailableDates((_previous) => {
+        const dataLimiteDesconto = dataTrintaDiasAntes(_dia_iso);
+        const temDescontoAntecipado = dataTemDescontoHoje(_dia_iso);
+
+        // apenas de estiver na primeira iteração e se variacoes.length === 1, seta o estado
+        if (variacoes.length === 1 && _i === 0) {
+          setDataLimiteDesconto([dataLimiteDesconto]);
+        }
+        _i++;
+
+        _previous.push({
+          dia: _dia,
+          disponiveis: _disponiveis,
+          encerrado: variacao.encerrar_vendas,
+          variacao: variacao.variation_id,
+          desconto_antecipado: temDescontoAntecipado,
+          desconto_antecipado_val: dataLimiteDesconto,
+        });
+
+        return _previous;
+      });
+    });
   }, []);
 
   function submitToCart(index = 0) {
@@ -105,6 +167,11 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
     const _date = selectedDates[index];
     const submitVarId = getVarIdByDate(_date);
 
+    const lastSelectedDate = selectedDates[selectedDates.length - 1];
+    const hasDiscount = discountCost
+      ? convertDate(lastSelectedDate, 'iso')
+      : false;
+
     $.ajax({
       type: 'POST',
       url: ajaxUrl,
@@ -117,6 +184,7 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
         embarque: submitEmbarque,
         horario: submitHorario,
         passageiros: submitPax,
+        desconto_antecipado: hasDiscount,
       },
       success: function () {
         console.log(`Variação ${submitVarId} adicionada`);
@@ -131,23 +199,6 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
 
   function openDateModal() {
     setDateModalOpen(true);
-    setAvailableDates([]);
-
-    //obter as datas
-    variacoes.map((variacao) => {
-      let _dia = variacao.attributes.attribute_dia;
-      let _disponiveis = getAvailabilityById(variacao.variation_id);
-
-      setAvailableDates((_previous) => {
-        _previous.push({
-          dia: _dia,
-          disponiveis: _disponiveis,
-          encerrado: variacao.encerrar_vendas,
-          variacao: variacao.variation_id,
-        });
-        return _previous;
-      });
-    });
   }
 
   function openEmbarqueModal() {
@@ -362,6 +413,8 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
               selectedDates={selectedDates}
               precoUnitario={precoUnitario}
               totalCost={totalCost}
+              discountCost={discountCost}
+              dataLimiteDesconto={dataLimiteDesconto}
             />
 
             <button
@@ -402,6 +455,8 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
                 getVarIdByDate={getVarIdByDate}
                 getAvailabilityById={getAvailabilityById}
                 passageiros={passageiros}
+                dataLimiteDesconto={dataLimiteDesconto}
+                setDataLimiteDesconto={setDataLimiteDesconto}
               />
             )}
 

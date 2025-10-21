@@ -41,3 +41,25 @@ export function convertDate(inputDate, action) {
       );
   }
 }
+
+// Função que obtém o dia 30 dias antes da data da excursão
+export function dataTrintaDiasAntes(data_excursao_iso) {
+  // calcular a data limite do desconto (30 dias antes do evento)
+  const dataEvento = new Date(data_excursao_iso);
+  const dataLimite = new Date(dataEvento);
+  dataLimite.setDate(dataEvento.getDate() - 30);
+
+  // formatar no padrão yyyy-mm-dd
+  const dataLimiteDesconto = dataLimite.toISOString().split('T')[0];
+
+  return dataLimiteDesconto;
+}
+
+export function dataTemDescontoHoje(data_excursao_iso) {
+  // obter diferença em dias
+  const agora = new Date();
+  const diffEmMs = new Date(data_excursao_iso) - agora;
+  const diffEmDias = diffEmMs / (1000 * 60 * 60 * 24);
+
+  return diffEmDias > 29; // deve ser 29 para 30 dias ou mais
+}

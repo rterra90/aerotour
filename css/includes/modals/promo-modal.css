@@ -1,0 +1,130 @@
+/* ====== ESTILO DO CONTAINER ====== */
+.modal-content-body .artecult-promo {
+  text-align: left;
+  max-width: 500px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* ====== TÍTULO E TEXTO ====== */
+.artecult-promo .modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2b2b2b;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+#generalModalContent .artecult-promo p {
+  color: #555;
+  text-align: center;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* ====== LISTA DE PASSOS ====== */
+.artecult-promo ul {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+}
+
+.artecult-promo ul li {
+  counter-increment: step;
+  position: relative;
+  margin-bottom: 1rem;
+  background: #db972947;
+  padding-left: 3.6rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  color: #333;
+  transition: transform 0.2s ease;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  font-size: 0.825rem;
+  letter-spacing: 0.01rem;
+}
+
+.artecult-promo ul a {
+  font-weight: 600;
+}
+
+/* NÚMEROS DOS PASSOS */
+.artecult-promo ul li::before {
+  content: counter(step);
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #db9729;
+  color: #fff;
+  font-weight: bold;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+.artecult-promo .promo-email-cta {
+  text-align: center;
+  margin: 1.5rem 0 1rem;
+}
+
+.artecult-promo .promo-email-cta a {
+  color: #272727;
+  text-decoration: underline;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+/* ====== BOTÃO ====== */
+.artecult-promo .modal-button-ok {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.25rem;
+  border: 2px solid #db9729;
+  color: #db9729;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  background-color: white;
+}
+
+.artecult-promo .modal-button-ok:hover a {
+  text-decoration: underline;
+}
+
+/* ====== RESPONSIVIDADE ====== */
+@media (max-width: 480px) {
+  .artecult-promo h3.modal-title {
+    font-size: 1.1rem !important;
+  }
+  #generalModalContent .artecult-promo p {
+    font-size: 0.95rem !important;
+  }
+
+  .artecult-promo ul li {
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    font-size: 0.825rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .artecult-promo ul li::before {
+    left: 0.6rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.8rem;
+  }
+}

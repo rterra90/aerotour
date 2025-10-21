@@ -3596,6 +3596,60 @@
 
   // src/AppReservas/DatesModal.jsx
   var import_prop_types = __toESM(require_prop_types());
+
+  // src/Utilities.jsx
+  function convertDate(inputDate, action) {
+    function detectFormat(dateStr) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr))
+        return "ISO";
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr))
+        return "DMY";
+      return "UNKNOWN";
+    }
+    function dmyToIso(dmy) {
+      const [day, month, year] = dmy.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
+    function isoToDmy(iso) {
+      const [year, month, day] = iso.split("-");
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+    }
+    const format = detectFormat(inputDate);
+    if (format === "UNKNOWN") {
+      throw new Error(
+        'Formato de data n\xE3o reconhecido. Use "dd/mm/aaaa" ou "aaaa-mm-dd".'
+      );
+    }
+    switch (action.toLowerCase()) {
+      case "iso":
+        return format === "ISO" ? inputDate : dmyToIso(inputDate);
+      case "dmy":
+        return format === "DMY" ? inputDate : isoToDmy(inputDate);
+      case "dateobject": {
+        const isoDate = format === "ISO" ? inputDate : dmyToIso(inputDate);
+        return new Date(isoDate);
+      }
+      default:
+        throw new Error(
+          `A\xE7\xE3o "${action}" n\xE3o reconhecida. Use "iso", "dmy" ou "dateObject".`
+        );
+    }
+  }
+  function dataTrintaDiasAntes(data_excursao_iso) {
+    const dataEvento = new Date(data_excursao_iso);
+    const dataLimite = new Date(dataEvento);
+    dataLimite.setDate(dataEvento.getDate() - 30);
+    const dataLimiteDesconto = dataLimite.toISOString().split("T")[0];
+    return dataLimiteDesconto;
+  }
+  function dataTemDescontoHoje(data_excursao_iso) {
+    const agora = /* @__PURE__ */ new Date();
+    const diffEmMs = new Date(data_excursao_iso) - agora;
+    const diffEmDias = diffEmMs / (1e3 * 60 * 60 * 24);
+    return diffEmDias > 29;
+  }
+
+  // src/AppReservas/DatesModal.jsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var DatesModal = ({
     setDateModalOpen,
@@ -3604,7 +3658,9 @@
     toggleDate,
     getVarIdByDate,
     getAvailabilityById,
-    passageiros
+    passageiros,
+    setDataLimiteDesconto,
+    dataLimiteDesconto
   }) => {
     const [preData, setPreData] = React.useState([]);
     const [visible, setVisible] = React.useState(false);
@@ -3630,6 +3686,14 @@
           (_item) => _item[0] == _dateObj.dia
         );
         if (dataJaSelecionada) {
+          setDataLimiteDesconto((prev) => {
+            const arr = Array.isArray(prev) ? [...prev] : [];
+            const prev_index = arr.indexOf(_dateObj.desconto_antecipado_val);
+            if (prev_index !== -1)
+              arr.splice(prev_index, 1);
+            arr.sort((a, b) => new Date(b) - new Date(a));
+            return arr;
+          });
           return preData.filter((_item) => _item[0] !== _dateObj.dia);
         } else {
           if (_dateObj.disponiveis < passageiros.length) {
@@ -3640,6 +3704,15 @@
             console.log("aviso de vagas insuficientes");
             return preData;
           }
+          setDataLimiteDesconto((prev) => {
+            const arr = Array.isArray(prev) ? [...prev] : [];
+            const novaData = _dateObj.desconto_antecipado_val;
+            if (novaData && !arr.includes(novaData) && _dateObj.desconto_antecipado === true) {
+              arr.push(novaData);
+            }
+            arr.sort((a, b) => new Date(b) - new Date(a));
+            return arr;
+          });
           return [
             ...preData,
             [_dateObj.dia, getVarIdByDate(_dateObj.dia), _dateObj.disponiveis]
@@ -3656,12 +3729,21 @@
     }, [preData]);
     React.useEffect(() => {
       setVisible(true);
+      setDataLimiteDesconto([]);
       if (selectedDates.length > 0) {
         const mapped = selectedDates.map((date) => [
           date,
           getVarIdByDate(date),
           getAvailabilityById(getVarIdByDate(date))
         ]);
+        selectedDates.forEach((date) => {
+          if (dataTemDescontoHoje(convertDate(date, "iso"))) {
+            setDataLimiteDesconto((_prev) => [
+              dataTrintaDiasAntes(convertDate(date, "iso")),
+              ..._prev
+            ]);
+          }
+        });
         setPreData((prev) => {
           if (!initial)
             setInitial(() => [...prev, ...mapped]);
@@ -3693,6 +3775,7 @@
                       "data-ultimas": dateObj.disponiveis < 10 ? "true" : "false",
                       "data-ultimas-vagas": dateObj.disponiveis < 10 ? dateObj.disponiveis + " vagas restantes" : "false",
                       "data-esgotado": dateObj.disponiveis === 0 ? "true" : "false",
+                      "data-desconto-antecipado": dateObj.desconto_antecipado,
                       children: [
                         dateObj.encerrado || dateObj.disponiveis === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "checkbox", disabled: true }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                           "input",
@@ -3709,6 +3792,11 @@
                   ))
                 }
               ),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "desconto-data-limite", children: dataLimiteDesconto.length > 0 && preData.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+                "5% off v\xE1lido at\xE9 ",
+                convertDate(dataLimiteDesconto[0], "dmy"),
+                " para a data selecionada"
+              ] }) : null }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "modal-buttons", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                 "button",
                 {
@@ -3733,7 +3821,9 @@
     passageiros: import_prop_types.default.array.isRequired,
     toggleDate: import_prop_types.default.func.isRequired,
     getVarIdByDate: import_prop_types.default.func.isRequired,
-    getAvailabilityById: import_prop_types.default.func.isRequired
+    getAvailabilityById: import_prop_types.default.func.isRequired,
+    setDataLimiteDesconto: import_prop_types.default.func.isRequired,
+    dataLimiteDesconto: import_prop_types.default.array.isRequired
   };
 
   // src/AppReservas/EmbarqueModal.jsx
@@ -4499,47 +4589,6 @@
 
   // src/AppReservas/PaxCard.jsx
   var import_prop_types5 = __toESM(require_prop_types());
-
-  // src/Utilities.jsx
-  function convertDate(inputDate, action) {
-    function detectFormat(dateStr) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr))
-        return "ISO";
-      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr))
-        return "DMY";
-      return "UNKNOWN";
-    }
-    function dmyToIso(dmy) {
-      const [day, month, year] = dmy.split("/");
-      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-    }
-    function isoToDmy(iso) {
-      const [year, month, day] = iso.split("-");
-      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-    }
-    const format = detectFormat(inputDate);
-    if (format === "UNKNOWN") {
-      throw new Error(
-        'Formato de data n\xE3o reconhecido. Use "dd/mm/aaaa" ou "aaaa-mm-dd".'
-      );
-    }
-    switch (action.toLowerCase()) {
-      case "iso":
-        return format === "ISO" ? inputDate : dmyToIso(inputDate);
-      case "dmy":
-        return format === "DMY" ? inputDate : isoToDmy(inputDate);
-      case "dateobject": {
-        const isoDate = format === "ISO" ? inputDate : dmyToIso(inputDate);
-        return new Date(isoDate);
-      }
-      default:
-        throw new Error(
-          `A\xE7\xE3o "${action}" n\xE3o reconhecida. Use "iso", "dmy" ou "dateObject".`
-        );
-    }
-  }
-
-  // src/AppReservas/PaxCard.jsx
   var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var PaxCard = ({ pax, index, setPassageiros, openPaxModal }) => {
     const cardRef = React.useRef(null);
@@ -4765,7 +4814,9 @@
     passageiros,
     selectedDates,
     precoUnitario,
-    totalCost
+    totalCost,
+    discountCost,
+    dataLimiteDesconto
   }) => {
     return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: passageiros.length > 0 && precoUnitario > 0 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "passenger-card total-reservation", children: [
       /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "coluna-esquerda", children: [
@@ -4808,27 +4859,46 @@
           ] })
         ] }) : null
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "coluna-direita", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "coluna-direita", children: discountCost ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+        "div",
+        {
+          className: "discount-price-container",
+          onClick: () => {
+            const descontoAntModal = new Modal(
+              "generalModal",
+              ".modal-content-body"
+            );
+            descontoAntModal.open("desconto_antecipado", {
+              data_limite: convertDate(dataLimiteDesconto[0], "dmy")
+            });
+          },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "total", children: "Total" }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "total values-comp", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "original-price", children: totalCost }),
+              /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { children: discountCost })
+            ] })
+          ]
+        }
+      ) }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
         passageiros.length > 1 || selectedDates.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "total", children: "Total" }) : null,
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "total", children: [
-          "R$",
-          totalCost,
-          ",00"
-        ] })
-      ] })
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "total", children: totalCost })
+      ] }) })
     ] }) : null });
   };
   PrecoReservas.propTypes = {
     passageiros: import_prop_types7.default.array.isRequired,
     selectedDates: import_prop_types7.default.array.isRequired,
     precoUnitario: import_prop_types7.default.number.isRequired,
-    totalCost: import_prop_types7.default.number.isRequired
+    totalCost: import_prop_types7.default.string.isRequired,
+    dataLimiteDesconto: import_prop_types7.default.string.isRequired,
+    discountCost: import_prop_types7.default.oneOfType([import_prop_types7.default.string, import_prop_types7.default.bool]).isRequired
   };
   var PrecoReservas_default = PrecoReservas;
 
   // src/AppReservas/AppReservas.jsx
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
-  function AppReservas({ variacoes, embarques, productId, ajaxUrl, cartUrl }) {
+  function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
     const [availableDates, setAvailableDates] = React.useState([]);
     const [selectedDates, setSelectedDates] = React.useState([]);
     const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -4844,10 +4914,31 @@
     const [taxa, setTaxa] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const [excursaoEncerrada, setExcursaoEncerrada] = React.useState(false);
+    const [totalCost, setTotalCost] = React.useState("R$ 0,00");
+    const [discountCost, setDiscountCost] = React.useState(false);
+    const [dataLimiteDesconto, setDataLimiteDesconto] = React.useState([]);
     const botaoContinuarRef = React.useRef();
     const dataBoxRef = React.useRef();
     const embarqueBoxRef = React.useRef();
-    const totalCost = precoUnitario * passageiros.length * selectedDates.length;
+    function calculaValorTotal() {
+      const total = precoUnitario * passageiros.length * selectedDates.length;
+      const formatar = (valor) => valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 2
+      });
+      setTotalCost(formatar(total));
+      if (!total)
+        return setDiscountCost(false);
+      const temDesconto = selectedDates.some(
+        (data) => availableDates.find((d) => d.dia === data && d.desconto_antecipado)
+      );
+      if (total > 0) {
+        setDiscountCost(temDesconto ? formatar(total * 0.95) : false);
+      } else {
+        setDiscountCost(false);
+      }
+    }
     React.useEffect(() => {
       const temData = selectedDates.length > 0;
       const temEmbarque = embarque.length > 0;
@@ -4858,6 +4949,7 @@
       } else {
         botaoContinuarRef.current.setAttribute("disabled", "");
       }
+      calculaValorTotal();
     }, [selectedDates, embarque, horario, passageiros]);
     React.useEffect(() => {
       if (loading) {
@@ -4886,6 +4978,29 @@
         if (todasEncerradas)
           setExcursaoEncerrada(true);
       }
+      variacoes.map((variacao) => {
+        let _dia = variacao.attributes.attribute_dia;
+        let _dia_iso = convertDate(_dia, "iso");
+        let _disponiveis = getAvailabilityById(variacao.variation_id);
+        let _i = 0;
+        setAvailableDates((_previous) => {
+          const dataLimiteDesconto2 = dataTrintaDiasAntes(_dia_iso);
+          const temDescontoAntecipado = dataTemDescontoHoje(_dia_iso);
+          if (variacoes.length === 1 && _i === 0) {
+            setDataLimiteDesconto([dataLimiteDesconto2]);
+          }
+          _i++;
+          _previous.push({
+            dia: _dia,
+            disponiveis: _disponiveis,
+            encerrado: variacao.encerrar_vendas,
+            variacao: variacao.variation_id,
+            desconto_antecipado: temDescontoAntecipado,
+            desconto_antecipado_val: dataLimiteDesconto2
+          });
+          return _previous;
+        });
+      });
     }, []);
     function submitToCart(index = 0) {
       if (!loading)
@@ -4902,6 +5017,8 @@
       const submitPax = passageiros.length > 0 ? JSON.stringify(passageiros) : null;
       const _date = selectedDates[index];
       const submitVarId = getVarIdByDate(_date);
+      const lastSelectedDate = selectedDates[selectedDates.length - 1];
+      const hasDiscount = discountCost ? convertDate(lastSelectedDate, "iso") : false;
       $.ajax({
         type: "POST",
         url: ajaxUrl,
@@ -4913,7 +5030,8 @@
           taxa: submitTaxa,
           embarque: submitEmbarque,
           horario: submitHorario,
-          passageiros: submitPax
+          passageiros: submitPax,
+          desconto_antecipado: hasDiscount
         },
         success: function() {
           console.log(`Varia\xE7\xE3o ${submitVarId} adicionada`);
@@ -4927,20 +5045,6 @@
     }
     function openDateModal() {
       setDateModalOpen(true);
-      setAvailableDates([]);
-      variacoes.map((variacao) => {
-        let _dia = variacao.attributes.attribute_dia;
-        let _disponiveis = getAvailabilityById(variacao.variation_id);
-        setAvailableDates((_previous) => {
-          _previous.push({
-            dia: _dia,
-            disponiveis: _disponiveis,
-            encerrado: variacao.encerrar_vendas,
-            variacao: variacao.variation_id
-          });
-          return _previous;
-        });
-      });
     }
     function openEmbarqueModal() {
       if (selectedDates.length > 0)
@@ -5111,7 +5215,9 @@
             passageiros,
             selectedDates,
             precoUnitario,
-            totalCost
+            totalCost,
+            discountCost,
+            dataLimiteDesconto
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
@@ -5150,7 +5256,9 @@
             toggleDate,
             getVarIdByDate,
             getAvailabilityById,
-            passageiros
+            passageiros,
+            dataLimiteDesconto,
+            setDataLimiteDesconto
           }
         ),
         paxModalOpen != false && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(

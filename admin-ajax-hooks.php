@@ -13,7 +13,7 @@ function ajax_add_variation_to_cart() {
     $passageiros     = $_POST['passageiros'];
 
     $cart_item_data = array(
-        'mensagem_personalizada' => $mensagem
+        'desconto_antecipado' => $_POST['desconto_antecipado'],
     );
 
     WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, array(), $cart_item_data );

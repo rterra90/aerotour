@@ -1,0 +1,65 @@
+#descontoAntecipadoModal {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+#descontoAntecipadoModal .modal-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  color: #222;
+  line-height: 1.075;
+}
+
+.modal-content-body #descontoAntecipadoModal p {
+  margin-bottom: 0.75rem;
+  text-align: center;
+  font-size: 0.9rem !important;
+}
+
+/* Seção de regras */
+#descontoAntecipadoModal .desconto-regras {
+  background-color: #f6f6f6;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: #555;
+  line-height: 1.4;
+  margin-top: 1rem;
+}
+
+#descontoAntecipadoModal .desconto-regras ul {
+  list-style: disc;
+  margin-left: 0.75rem !important;
+  padding-left: 0.5rem;
+}
+
+#descontoAntecipadoModal .desconto-regras li {
+  margin-bottom: 0.4rem;
+  font-size: 0.65rem;
+  text-align: left;
+}
+
+/* Ações do modal */
+#descontoAntecipadoModal .modal-actions {
+  margin-top: 1.2rem;
+  text-align: center;
+}
+
+#descontoAntecipadoModal .modal-button {
+  background-color: #0077cc;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#descontoAntecipadoModal .modal-button:hover {
+  background-color: #005fa3;
+}

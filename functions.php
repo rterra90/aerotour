@@ -48,6 +48,7 @@ include 'includes/functions/process-product-meta.php';
 
 
 
+
 function remover_breadcrumb_em_arquivos_woocommerce() {
   if ( is_product_category() || is_shop() || is_product_tag() ) remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
 }
@@ -535,20 +536,43 @@ function custom_checkout_must_be_logged_in_message(){
   <?php
 }
 
-
+//ANTES DE CALCULAR O TOTAL DO CARRINHO
 add_action('woocommerce_before_calculate_totals', 'aer_fees');
 function aer_fees($cart_items){
   foreach($cart_items -> get_cart() as $item){
-    $item_fee = 0;
-    if(isset($item['taxa'])){
-      if($item['taxa'] != 'unset' && $item['taxa'] != 0){
-        $item_fee = (int) $item['taxa'];
+    $item_fee = (isset($item['taxa']) && $item['taxa'] !== 'unset' && $item['taxa'] != 0)
+  ? (int) $item['taxa']
+  : 0;
+    $final_price = $item['data'] -> regular_price + $item_fee;
+
+    // Verifica se há desconto antecipado quando foi adicionado ao carrinho (1ª verificação)
+    $desconto_antecipado = $item['desconto_antecipado'];
+    if($desconto_antecipado !== false){
+      $data_evento = new DateTime($desconto_antecipado); //yyyy-mm-dd
+      $hoje = new DateTime(); // data e hora atuais
+
+      // calcula a diferença de dias
+      $intervalo = $hoje->diff($data_evento);
+      $dias_ate_evento = (int) $intervalo->format('%r%a'); // %r mantém o sinal
+
+      // data quando faltarão 30 dias para exibir no aviso
+      $data_limite_desconto = (clone $data_evento)->modify('-30 days');
+
+      $item['data']->update_meta_data('data_limite_desconto', $data_limite_desconto->format('Y-m-d'));
+      $item['data']->update_meta_data('preco_original', $final_price);
+
+      if($dias_ate_evento >= 29) { //30 dias ou mais, concede o desconto
+        $final_price = $final_price * 0.95;
+        $item['data']->update_meta_data('desconto_antecipado_rev', true);
+      }else{
+        $item['data']->update_meta_data('desconto_antecipado_rev', false);
       }
     }
-    
-    $price_with_fee = $item['data'] -> regular_price + $item_fee;
-    $item['data']->set_price($price_with_fee);
-    } 
+
+    //Define o preço do item
+    $item['data']->set_price($final_price);
+
+  } 
 }
 
 add_filter( 'wp_title', 'filter_function_name', 10, 3 );

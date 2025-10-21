@@ -33,6 +33,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						$passageiros = array_filter($passageiros, function($p) {if($p !== false) return $p; });
 						$embarque = $nome_embarque[0] -> nome;
 						$horario = $cart_item['horario'];
+						$desconto_antecipado = $cart_item['desconto_antecipado'];
 						// $aer_qty = $cart_item['aer_qty'];
 						$_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 						$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
@@ -79,8 +80,20 @@ do_action( 'woocommerce_before_cart' ); ?>
 										<?php if ($embarque) : ?>
 											<p><strong>Embarque:</strong> <?php echo esc_html($embarque); ?></p>
 										<?php endif; ?>
-											<p><strong>Valor:</strong> <?php echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); ?></p>
-								
+											<p><strong>Valor:</strong> <?php
+											
+											if(null !== $cart_item['data']->get_meta('preco_original') && $cart_item['data']->get_meta('desconto_antecipado_rev') !== false){
+												$preco_original = $cart_item['data']->get_meta('preco_original');
+												echo '<span class="preco-original">R$ '.$preco_original.'</span>';
+											}
+											echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); ?></p>
+									<?php
+
+
+									if ( isset( $cart_item['desconto_antecipado'] ) && $cart_item['data']->get_meta('desconto_antecipado_rev') === true) {
+										echo '<p class="desconto-antecipado-alert">Desconto de 5% válido até '.esc_html(data_to_dmy($cart_item['data']->get_meta('data_limite_desconto'))).'</p>';
+									}
+									?>
 								</div>
 
 								<!-- Passageiros -->

@@ -11,6 +11,13 @@
 .tab-nav button.active {
   background-color: var(--aer-accent);
 }
+#topAdBanner {
+  width: fit-content;
+  margin: 0 auto;
+}
+#topAdBanner small {
+  font-size: 0.575rem;
+}
 .box1,
 .box2 {
   grid-row: span 2;
