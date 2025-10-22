@@ -39,7 +39,7 @@ include 'exc-passageiros-admin.php';
 include 'includes/functions/login-functions.php';
 include 'includes/functions/refunds-functions.php';
 include 'includes/cards-slider.php';
-include 'includes/functions/contrato.php';
+// include 'includes/functions/contrato.php';
 include 'includes/functions/sort-excursoes.php';
 include 'includes/functions/coupons-functions.php';
 include 'includes/functions/blog.php';
@@ -547,7 +547,7 @@ function aer_fees($cart_items){
 
     // Verifica se há desconto antecipado quando foi adicionado ao carrinho (1ª verificação)
     $desconto_antecipado = $item['desconto_antecipado'];
-    if($desconto_antecipado !== false){
+    if($desconto_antecipado !== false && $desconto_antecipado !== "false"){
       $data_evento = new DateTime($desconto_antecipado); //yyyy-mm-dd
       $hoje = new DateTime(); // data e hora atuais
 
@@ -590,7 +590,7 @@ require_once(get_template_directory() . '/endpoints/cupom_update.php');
 require_once(get_template_directory() . '/endpoints/api_campanhas_get.php');
 require_once(get_template_directory() . '/endpoints/participantes_roleta_put.php');
 require_once(get_template_directory() . '/endpoints/api_user_get.php');
-require_once(get_template_directory() . '/endpoints/api_contratos_post.php');
+// require_once(get_template_directory() . '/endpoints/api_contratos_post.php');
 
 
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN

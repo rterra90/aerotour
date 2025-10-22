@@ -80,9 +80,10 @@ do_action( 'woocommerce_before_cart' ); ?>
 										<?php if ($embarque) : ?>
 											<p><strong>Embarque:</strong> <?php echo esc_html($embarque); ?></p>
 										<?php endif; ?>
+
 											<p><strong>Valor:</strong> <?php
 											
-											if(null !== $cart_item['data']->get_meta('preco_original') && $cart_item['data']->get_meta('desconto_antecipado_rev') !== false){
+											if($cart_item['data']->get_meta('preco_original') && $cart_item['data']->get_meta('desconto_antecipado_rev') !== false){
 												$preco_original = $cart_item['data']->get_meta('preco_original');
 												echo '<span class="preco-original">R$ '.$preco_original.'</span>';
 											}

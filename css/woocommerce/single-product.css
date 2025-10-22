@@ -9,6 +9,20 @@
 #topAdBanner small {
   font-size: 0.575rem;
 }
+.aviso-ultimas-vagas {
+  background-color: #fff8cc;
+  border: 1px solid #ffd700;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  width: fit-content;
+  color: #a67c00;
+  margin: unset;
+  font-size: 0.775rem;
+}
+.aviso-ultimas-vagas strong {
+  font-size: 0.85rem;
+}
 .box1,
 .box2 {
   grid-row: span 2;
@@ -487,6 +501,11 @@ dl#principaisDuvidasContent .resposta {
   padding: 0;
 }
 @media (max-width: 768px) {
+  .aviso-ultimas-vagas {
+    margin: 0 auto;
+    font-size: 0.725rem;
+    text-align: center;
+  }
   #info-body h1 {
     font-size: 1.4rem;
     width: 100%;

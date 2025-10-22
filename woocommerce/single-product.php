@@ -288,6 +288,30 @@ usort($datas, function($a, $b) {
             }
           ?>
           <!-- FIM CONTADOR DE RESERVAS -->
+
+          <!-- Aviso de últimas vagas -->
+           <!-- se houver apenas uma variação e ela tiver menos de 10 vagas disponíveis -->
+          <?php 
+            $variacoes_disp = array_filter($excursao['variacoes'], function($_var){
+              return get_post_meta($_var['variation_id'], 'encerrar_vendas', true) !== 'yes';
+            });
+            
+            if(count($variacoes_disp) == 1){
+              $vaga_var = $variacoes_disp[0];
+              $disponibilidade_html = $vaga_var['availability_html'];
+              preg_match('/\d+/', strip_tags($disponibilidade_html), $matches);
+              $vagas_disponiveis = isset($matches[0]) ? (int)$matches[0] : 0;
+
+              if($vagas_disponiveis > 0 && $vagas_disponiveis <= 10){
+                ?>
+                <div class="aviso-ultimas-vagas">
+                  <strong class="d-block">Últimos lugares!</strong> Restam <?= $vagas_disponiveis; ?> vagas disponíveis para essa excursão!
+                </div>
+                <?php
+              }
+            }
+            
+          ?>
           
           <!-- info inner -->
           <div class="info">

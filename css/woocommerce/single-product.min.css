@@ -6,17 +6,30 @@
 .tab-nav button {
   transition: background-color 0.3s;
 }
-.cta-button,
-.info > .grid-container .box::before,
-.tab-nav button.active {
-  background-color: var(--aer-accent);
-}
 #topAdBanner {
   width: fit-content;
   margin: 0 auto;
 }
 #topAdBanner small {
   font-size: 0.575rem;
+}
+.aviso-ultimas-vagas {
+  background-color: #fff8cc;
+  border: 1px solid gold;
+  padding: 8px 12px;
+  border-radius: 6px;
+  width: fit-content;
+  color: #a67c00;
+  margin: unset;
+  font-size: 0.775rem;
+}
+.cta-button,
+.info > .grid-container .box::before,
+.tab-nav button.active {
+  background-color: var(--aer-accent);
+}
+.aviso-ultimas-vagas strong {
+  font-size: 0.85rem;
 }
 .box1,
 .box2 {
@@ -464,6 +477,11 @@ dl#principaisDuvidasContent {
   #content-event .variacao-info,
   #info-body h1,
   #info-placeholder p {
+    text-align: center;
+  }
+  .aviso-ultimas-vagas {
+    margin: 0 auto;
+    font-size: 0.725rem;
     text-align: center;
   }
   #info-body h1 {
