@@ -1,0 +1,29 @@
+ul#listaExcursoesCheckIn li {
+  display: flex;
+  margin-bottom: 0px;
+  padding: 5px 0 5px 3px;
+}
+ul#listaExcursoesCheckIn li:nth-child(even) {
+  background-color: #e3e3e3;
+}
+ul#listaExcursoesCheckIn li a {
+  color: unset;
+}
+ul#listaExcursoesCheckIn li a:hover {
+  text-decoration: underline;
+}
+ul#listaExcursoesCheckIn li .exc_name {
+  flex-grow: 1;
+  margin-right: 12px;
+}
+ul#listaExcursoesCheckIn li .exc_total_passageiros {
+  text-align: center;
+}
+ul#listaExcursoesCheckIn li .icone {
+  width: 64px;
+  text-align: center;
+  cursor: pointer;
+}
+ul#listaExcursoesCheckIn li:first-of-type {
+  margin-bottom: 15px;
+}

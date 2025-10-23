@@ -596,6 +596,7 @@ require_once(get_template_directory() . '/endpoints/api_user_get.php');
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN
 if (is_admin()) {
   include_once get_template_directory() . '/includes/admin-pages/panel-widgets/gerenciar-exc-widgets.php'; // widget check-in
+  include_once get_template_directory() . '/includes/admin-pages/panel-widgets/check-in/check-in-widget.php'; // widget check-in
   include_once get_template_directory() . '/includes/admin-pages/reservas-admin.php'; //página Reservas
   include_once get_template_directory() . '/includes/admin-pages/embarques/embarques-admin.php'; //página Embarques
   include_once get_template_directory() . '/includes/admin-pages/panel-widgets/home-cards-widget.php'; // widget home cards
@@ -612,6 +613,10 @@ if (is_admin()) {
     wp_enqueue_script('fetch-admin-api', get_template_directory_uri() . '/js/fetch-admin-api.js', array('jquery'), null, true);
     wp_localize_script('fetch-admin-api', 'ajax_url', admin_url( 'admin-ajax.php' ));
     wp_enqueue_script('sortable-js', 'https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js', array(), '1.14.0', true);
+
+    wp_enqueue_script('home-galerias-widget', get_template_directory_uri() . '/js/admin-panel-widgets/home-galerias-widget/home-galerias-widget.js', array('jquery'), null, true);
+
+    wp_enqueue_script('check-in-widget', get_template_directory_uri() . '/js/admin-panel-widgets/check-in-widget/check-in-widget.js', array('jquery'), null, true);
 
   }
   add_action( 'admin_enqueue_scripts', 'admin_custom_scripts' );
@@ -630,6 +635,7 @@ if (is_admin()) {
   function aer_dashboard_widgets(){ 
     wp_add_dashboard_widget('manage_coupons', 'Gerenciar cupons', 'manage_coupons_widget');
     wp_add_dashboard_widget('aer_check_in', 'Check-in', 'aer_check_in_widget');
+    wp_add_dashboard_widget('check_in', 'Novo Check-in', 'check_in_widget');
     wp_add_dashboard_widget('cards_home', 'Excursões da página inicial', 'home_cards_widget');
     wp_add_dashboard_widget('campanhas_cupons_widget', 'Campanhas de cupons', 'campanhas_cupons_widget');
   }

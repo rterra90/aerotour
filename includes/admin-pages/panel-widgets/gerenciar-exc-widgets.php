@@ -30,6 +30,7 @@ function aer_check_in_widget(){
 
     <script>
       window.onload = () => document.querySelectorAll('#manage_exc_widget_list .dashicons-clipboard').forEach(icon => icon.addEventListener('click', openCheckInModal));
+      
 
       function closeCheckInModal(){
         document.querySelector('#check-in-modal').remove();

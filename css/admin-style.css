@@ -1,13 +1,12 @@
 @import './admin/embarques-admin.css';
 @import './admin/reservas-admin.css';
 @import './admin/panel-widgets.css';
+@import './admin/panel-widgets/check-in-widget.css';
 @import './admin/coupons-create.css';
 @import './admin/user-search.css';
 @import './admin/check-in-modal.css';
 @import './admin/buttons.css';
 @import './admin/product_post/meta-pontos-embarque-exc.css';
-
-
 
 /* Input de texto estilizado */
 input.merged-text-input {

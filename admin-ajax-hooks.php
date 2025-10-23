@@ -1,6 +1,5 @@
 <?php
-add_action('wp_ajax_update_reserva', 'ajax_update_reserva');
-
+//ADICIONA VARIAÇÃO AO CARRINHO VIA AJAX
 add_action( 'wp_ajax_add_variation_to_cart', 'ajax_add_variation_to_cart' );
 add_action( 'wp_ajax_nopriv_add_variation_to_cart', 'ajax_add_variation_to_cart' );
 function ajax_add_variation_to_cart() {
@@ -23,9 +22,8 @@ function ajax_add_variation_to_cart() {
     wp_die();
 }
 
-
-
-
+//ATUALIZA UMA RESERVA VIA AJAX
+add_action('wp_ajax_update_reserva', 'ajax_update_reserva');
 function ajax_update_reserva(){
   global $wpdb;
   $acao = $_POST['to'];
