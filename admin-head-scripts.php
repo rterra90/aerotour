@@ -184,46 +184,6 @@ function admin_head_scripts() {
       console.log(user_to_add);
     }
 
-    /* CHECK-IN */
-    function aerCheckIn(var_id, nome, doc, sentido, targetBox){
-        event.stopPropagation();
-        let lista_passageiros_filtered = 'lista_passageiros_alfa';
-        if(!nome) document.querySelector('ul.lista-check-in').innerHTML = 'Aguarde...'
-        if(!nome && targetBox) lista_passageiros_filtered = `lista_passageiros_${targetBox.dataset.filter}`;
-
-      jQuery(function($) {
-        $.ajax({
-          url:  '<?php echo admin_url( 'admin-ajax.php' ); ?>',
-          type: 'POST',
-          data: {
-              'action': 'check_in',
-              'variation_id': var_id,
-              'nome': nome || null,
-              'doc': doc || null,
-              'sentido': sentido || null
-          },
-          success: async function(response) {
-
-            if(response.data.length === 3){
-              document.querySelector('ul.lista-check-in').innerHTML = '';
-              updateReactiveValues(lista_passageiros_filtered, response.data)
-            }else{
-              if(response.data.saida === true) targetBox.parentElement.children[0].classList.add('ok');
-              else targetBox.parentElement.children[0].classList.remove('ok');
- 
-              if(response.data.volta === true) targetBox.parentElement.children[1].classList.add('ok');
-              else targetBox.parentElement.children[1].classList.remove('ok');
-            }
-            
-          },
-          error: function(error) {
-            console.dir(error);
-          }
-        });
-      })
-    }
-
-
     /* REACTIVE ELEMENTS */
     function updateReactiveValues(query_type, obj = null){
       let parsedObj = typeof obj === 'string' ? JSON.parse(obj) : obj;
@@ -423,9 +383,6 @@ function admin_head_scripts() {
           })
 
         }
-
-        const checkInBoxes = document.querySelectorAll('span[data-sentido]');
-        checkInBoxes.forEach(box => box.addEventListener('click', ({target}) => aerCheckIn(variation_id, target.parentElement.dataset.nome, target.parentElement.dataset.doc, target.dataset.sentido, target)));
         
       }
     }

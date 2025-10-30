@@ -1,4 +1,61 @@
 <?php
+//GET EM EXCURSÕES
+add_action( 'wp_ajax_get_excursoes', 'ajax_get_excursoes' );
+function ajax_get_excursoes(){
+  global $wpdb;
+  // Verifica permissão — só admin ou editor, por exemplo
+  if (!current_user_can('manage_woocommerce')) {
+      wp_send_json_error('Permissão negada', 403);
+  }
+
+  // Busca todos os produtos publicados
+  $products = wc_get_products([
+      'status' => 'publish',
+      'limit'  => -1,
+  ]);
+
+  // Transforma em formato legível para o JS
+    $vars_atuais = array();
+    $vars_passadas = array();
+
+    foreach ($products as $product) {
+      $variacoes = $product -> get_available_variations();
+      foreach($variacoes as $var){
+        $this_var = array();
+        $dia_var_dmy = $var['attributes']['attribute_dia']; // ex: '15/08/2025'
+        $dia_var_iso = data_to_iso($dia_var_dmy); // ex: '2025-08-15'
+
+        //adicionar a chave "dia" ao $this_var, preenchendo seu valor com $dia_var_iso
+        $this_var['dia'] = $dia_var_iso;
+        $this_var['nome'] = $product->get_name();
+        $this_var['variation_id'] = $var['variation_id'];
+        $this_var['parent_id'] = $product->get_id();
+
+        //se $dia_var_iso for maior ou igual a hoje + 2 dias, adiciona em $vars_atuais, senão em $vars_passadas
+        if((int)strtotime('now') < (int)strtotime($dia_var_iso) + (3600 * 48)) {
+          //Adiciona quantidade de passageiros
+          $_v_id = $var['variation_id'];
+          $pax_qty = $wpdb->get_var("SELECT COUNT(*) FROM aer_reservas WHERE variation_id = $_v_id AND status = 'normal'");
+          $this_var['pax_qty'] = intval($pax_qty);
+
+          $vars_atuais[] = $this_var;
+        } else $vars_passadas[] = $this_var;
+      }
+    }
+
+    //ordenar $vars_atuais por data crescente, com base na chave 'dia'
+    usort($vars_atuais, function($a, $b) {
+      return strtotime($a['dia']) - strtotime($b['dia']);
+    });
+
+    //ordenar $vars_passadas por data decrescente, com base na chave 'dia'
+    usort($vars_passadas, function($a, $b) {
+      return strtotime($b['dia']) - strtotime($a['dia']);
+    });
+
+    // Retorna em JSON
+    wp_send_json_success(array('atuais' => $vars_atuais, 'passadas' => $vars_passadas));
+} 
 //ADICIONA VARIAÇÃO AO CARRINHO VIA AJAX
 add_action( 'wp_ajax_add_variation_to_cart', 'ajax_add_variation_to_cart' );
 add_action( 'wp_ajax_nopriv_add_variation_to_cart', 'ajax_add_variation_to_cart' );
@@ -626,34 +683,16 @@ function ajax_toggle_new_register_coupon(){
 /* CHECK-IN */
 add_action('wp_ajax_check_in', 'ajax_check_in');
 function ajax_check_in(){
-  // $passageiros = json_decode(get_post_meta($_POST['variation_id'], 'passageiros', true));
   global $wpdb;
-  $variation_id = $_POST['variation_id'];
-  $passageiros = $wpdb->get_results("SELECT * FROM aer_reservas WHERE variation_id = $variation_id");
+  $pax_id  = intval($_POST['pax_id'] ?? 0);
+  $valor   = intval($_POST['valor'] ?? 0);
+  $sentido = sanitize_text_field($_POST['sentido'] ?? '');
 
-  if($_POST['nome'] === ''){
-    $response = [$passageiros, $tem_linhas === '' ? false : $tem_linhas, $_POST['variation_id']];
-    wp_send_json_success($response);
-  }else{
-    //tem nome, faz check-in
-    $key = $_POST['sentido'];
-    $response = '';
-    foreach($passageiros as $passageiro){
+  //na tabela aer_reservas, atualiza o campo 'saida' ou 'volta', conforme o sentido
+  $response = $wpdb->query("UPDATE `aer_reservas` SET $sentido = $valor WHERE ID = $pax_id");
 
-      if($passageiro -> p_cpf == $_POST['doc']){
-        $new_check_in_status = $passageiro -> $key == 0 ? 1 : 0;
-        $p_cpf = $passageiro -> p_cpf;
-        $wpdb->query("UPDATE `aer_reservas` SET $key = $new_check_in_status WHERE p_cpf = $p_cpf AND variation_id = $variation_id");
-
-        $check_in_saida = $wpdb->get_results("SELECT saida from aer_reservas WHERE p_cpf = $p_cpf AND variation_id = $variation_id")[0] -> saida == 1 ? true : false;
-        $check_in_volta = $wpdb->get_results("SELECT volta from aer_reservas WHERE p_cpf = $p_cpf AND variation_id = $variation_id")[0] -> volta == 1 ? true : false;
-        
-        $response = array('saida' => $check_in_saida, 'volta' => $check_in_volta);
-        wp_send_json_success($response);
-      }
-    }    
-    wp_send_json_success([$response, [$passageiros]]);
-  }
+  if ($response === false) wp_send_json_error('Erro ao atualizar o banco de dados.');
+  else wp_send_json_success($response);
 }
 
 add_action('wp_ajax_criar_campanha_cupons', 'criar_campanha_cupons');

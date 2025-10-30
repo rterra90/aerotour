@@ -19,18 +19,41 @@ function fetchAdminAPI(action, _data, _success, type = 'POST') {
   });
 }
 
-function adminApiFetch(action, _data, _success, type = 'POST') {
+//FUNÇÃO APRIMORADA
+function adminApiFetch(action, data = {}, callback = () => {}, type = 'POST') {
+  // Garantir que o jQuery já esteja disponível
+  if (typeof jQuery === 'undefined') {
+    console.error('jQuery não carregado.');
+    callback(false, { message: 'Erro interno: jQuery não disponível.' });
+    return;
+  }
+
   jQuery(function ($) {
     $.ajax({
       url: ajax_url,
       type: type,
-      data: { action: action, ..._data },
-      success: async function ({ success, data }) {
-        _success(success, data);
+      dataType: 'json',
+      data: {
+        action,
+        _ajax_nonce: window?.wpApiSettings?.nonce || null, // inclui nonce se disponível
+        ...data,
       },
-      error: async function (error) {
-        console.log(error);
+      success: function (response) {
+        // Garante estrutura esperada do retorno
+        const isSuccess = !!response?.success;
+        const payload = response?.data || null;
+        callback(isSuccess, payload);
       },
+      error: function (xhr, status, errorThrown) {
+        console.error('Erro na requisição AJAX:', status, errorThrown);
+        callback(false, {
+          message: 'Erro de comunicação com o servidor.',
+          status,
+          errorThrown,
+          responseText: xhr?.responseText || null,
+        });
+      },
+      timeout: 15000, // 15 segundos de limite (evita hang)
     });
   });
 }

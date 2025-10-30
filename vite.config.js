@@ -9,7 +9,10 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        checkin_widget: path.resolve(__dirname, 'js/admin-panel-widgets/check-in-widget/check-in-widget.js'),
+        checkin_widget: path.resolve(
+          __dirname,
+          'js/admin-panel-widgets/check-in-widget/check-in-widget.js',
+        ),
       },
       output: {
         entryFileNames: 'assets/[name].js',

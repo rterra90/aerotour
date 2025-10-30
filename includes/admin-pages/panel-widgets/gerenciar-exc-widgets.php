@@ -70,7 +70,7 @@ function aer_check_in_widget(){
           }))
 
       //   //Busca passageiros da excursão
-        aerCheckIn(check_in_variation_id);
+        // aerCheckIn(check_in_variation_id);
 
       }
     </script>

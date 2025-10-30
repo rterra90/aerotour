@@ -1,4 +1,9 @@
 /* eslint-disable no-undef */
+
+//SERÁ SUBSTITUIDO POR REACT
+
+import { mountCheckInModal } from '@/AppCheckInModal/rootAppCheckInModal';
+
 class CheckInModal {
   constructor(varId) {
     this.variation_id = varId;
@@ -30,12 +35,12 @@ class CheckInModal {
     modalElement.id = 'check-in-modal';
     modalElement.innerHTML = `<div id="checkInModalApp"></div>`;
     parent.insertBefore(modalElement, document.querySelector('#adminmenumain'));
-    
 
-    const checkinmodal_app_root = document.getElementById('checkInModalApp');
-    if (checkinmodal_app_root) {
-      ReactDOM.createRoot(checkinmodal_app_root).render(<AppCheckInModal />);
-    }
+    mountCheckInModal();
+    // const checkinmodal_app_root = document.getElementById('checkInModalApp');
+    // if (checkinmodal_app_root) {
+    //   ReactDOM.createRoot(checkinmodal_app_root).render(<AppCheckInModal />);
+    // }
   }
 
   open() {
@@ -43,3 +48,5 @@ class CheckInModal {
     this.#getPassageiros(this.variation_id);
   }
 }
+
+window.CheckInModal = CheckInModal;

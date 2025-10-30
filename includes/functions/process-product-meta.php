@@ -261,4 +261,31 @@
       // $embarques_exc_string = json_encode($embarques_exc, JSON_UNESCAPED_UNICODE);
       // if(sizeof($embarques_exc) > 0) update_post_meta($id, 'exc_embarques', $embarques_exc_string);
     }
+
+
+    // Atualiza o meta '_dia_iso' automaticamente quando uma variação é salva
+add_action('woocommerce_save_product_variation', 'aer_save_dia_iso_meta', 10, 2);
+
+add_action('woocommerce_save_product_variation', 'aer_save_dia_iso_meta', 10, 2);
+
+function aer_save_dia_iso_meta($variation_id, $i) {
+    // Obtém o valor do atributo 'dia' enviado no formulário da variação
+    $dia_dmy = $_POST['attribute_dia'][$i] ?? '';
+
+    if (!$dia_dmy) return;
+
+    // Converte para ISO (yyyy-mm-dd)
+    $dia_iso = int_data_to_iso($dia_dmy);
+
+    // Salva como meta para consulta otimizada
+    update_post_meta($variation_id, '_dia_iso', $dia_iso);
+}
+
+// Função auxiliar para converter dd/mm/yyyy → yyyy-mm-dd
+function int_data_to_iso($data_dmy) {
+    $partes = explode('/', $data_dmy);
+    if (count($partes) !== 3) return null;
+    list($dia, $mes, $ano) = $partes;
+    return sprintf('%04d-%02d-%02d', $ano, $mes, $dia);
+}
   ?>

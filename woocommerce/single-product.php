@@ -96,7 +96,6 @@ $excursao = excursao_formatada(get_the_ID());
 //Define a propriedade 'encerrar_vendas' em cada variação
 foreach($excursao['variacoes'] as $i => $var){
   $excursao['variacoes'][$i]['encerrar_vendas'] = get_post_meta($var['variation_id'], 'encerrar_vendas', true) === 'yes' ? true : false;
-
 }
 //Define e ordena a array de datas
 $datas = array_map(function($_var){

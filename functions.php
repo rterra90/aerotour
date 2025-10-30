@@ -49,6 +49,8 @@ include 'includes/functions/process-product-meta.php';
 
 
 
+
+
 function remover_breadcrumb_em_arquivos_woocommerce() {
   if ( is_product_category() || is_shop() || is_product_tag() ) remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
 }
@@ -616,8 +618,13 @@ if (is_admin()) {
 
     wp_enqueue_script('home-galerias-widget', get_template_directory_uri() . '/js/admin-panel-widgets/home-galerias-widget/home-galerias-widget.js', array('jquery'), null, true);
 
-    wp_enqueue_script('check-in-widget', get_template_directory_uri() . '/js/admin-panel-widgets/check-in-widget/check-in-widget.js', array('jquery'), null, true);
+    //CLASSE CHECK IN WIDGET SEM REACT
+    // wp_enqueue_script('check-in-widget', get_template_directory_uri() . '/js/admin-panel-widgets/check-in-widget/check-in-widget.js', array('jquery'), null, true);
 
+    //CLASSE CHECK IN WIDGET COM REACT
+    // wp_enqueue_script('checkin-modal', get_template_directory_uri() . 'dist/assets/checkin_widget.js',['wp-element'], filemtime(plugin_dir_path(__FILE__) . 'dist/assets/checkin_widget.js'), true);
+  
+    // wp_add_inline_script('checkin-widget', 'new CheckInModal();', 'after');
   }
   add_action( 'admin_enqueue_scripts', 'admin_custom_scripts' );
 

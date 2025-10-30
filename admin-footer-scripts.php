@@ -23,9 +23,8 @@ function admin_footer_scripts() {
 
 function admin_custom_js() {
   wp_enqueue_script('react-reservas', get_template_directory_uri() . '/js/react_apps/app_reservas_admin.js?ver=' . time());
-  wp_enqueue_script('fetch-admin-api', function(){
-    
-  });
+  
+  wp_enqueue_script('react-checkin-modal', get_template_directory_uri() . '/js/react_apps/app_checkin.js?ver=' . time());
 
 }
 add_action( 'admin_footer', 'admin_custom_js' );
