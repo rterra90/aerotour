@@ -1,21 +1,24 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import AppCheckInModal from './AppCheckInModal';
+import { convertDate } from '../Utilities';
 
 const AppCheckIn = () => {
   const [loading, setLoading] = React.useState(false);
   const [excursoes, setExcursoes] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const listaExcursoesElement = React.useRef(null);
 
   function openCheckInModal(variation_id, data) {
     if (modalOpen) return; // já aberto
-    setModalOpen([variation_id, data]);
+    listaExcursoesElement.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+    listaExcursoesElement.current.style.display = 'none';
 
-    // document
-    //   .querySelector('#wpwrap')
-    //   .insertBefore(modalElement, document.querySelector('#adminmenumain'));
-    // window.scrollTo(0, 0);
+    setModalOpen([variation_id, data]);
   }
 
   React.useEffect(() => {
@@ -47,14 +50,14 @@ const AppCheckIn = () => {
   return (
     <div className="check-in-app-inner">
       {loading && (
-        <div>
+        <div className="loading-indicator">
           <span className="spinner is-active"></span>
           <p>Carregando...</p>
         </div>
       )}
 
       {Array.isArray(excursoes) && excursoes.length > 0 && (
-        <ul id="listaExcursoesCheckIn">
+        <ul id="listaExcursoesCheckIn" ref={listaExcursoesElement}>
           <li>
             <span className="exc_name">Excursão</span>
             <span className="exc_total_passageiros">Passageiros</span>
@@ -64,7 +67,7 @@ const AppCheckIn = () => {
             <li key={_excursao.variation_id}>
               <span className="exc_name">
                 <a href="#" onClick={(e) => e.preventDefault()}>
-                  {_excursao.nome} - {_excursao.dia}
+                  {_excursao.nome} - {convertDate(_excursao.dia, 'dmy')}
                 </a>
               </span>
               <span className="exc_total_passageiros">{_excursao.pax_qty}</span>
@@ -89,7 +92,11 @@ const AppCheckIn = () => {
       {error && <p>Erro ao obter as excursões...</p>}
 
       {modalOpen && Array.isArray(modalOpen) ? (
-        <AppCheckInModal setModalOpen={setModalOpen} modalOpen={modalOpen} />
+        <AppCheckInModal
+          setModalOpen={setModalOpen}
+          modalOpen={modalOpen}
+          listaExcursoesElement={listaExcursoesElement}
+        />
       ) : null}
     </div>
   );

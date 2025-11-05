@@ -1,14 +1,71 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import PropTypes from 'prop-types';
-import { Check } from 'lucide-react';
 import AppCheckInModalPax from './AppCheckInModalPax';
+import AppCheckInPaxLi from './AppCheckInPaxLi';
+import { convertDate } from '../Utilities';
 
-const AppCheckInModal = ({ setModalOpen, modalOpen }) => {
+const AppCheckInModal = ({
+  setModalOpen,
+  modalOpen,
+  listaExcursoesElement,
+}) => {
   const [variationId, excDetalhes] = modalOpen;
   const [modalLoading, setModalLoading] = React.useState(true);
   const [passageiros, setPassageiros] = React.useState([]);
   const [modalPax, setModalPax] = React.useState(null);
+  const [sortType, setSortType] = React.useState('alphabetical');
+  const [filterType, setFilterType] = React.useState('all');
+  const modalElement = React.useRef(null);
+
+  // 🔹 Função de ordenação
+  const sortPassageiros = (list, _type = null) => {
+    const _sortType = _type || sortType;
+    setSortType(_sortType);
+
+    if (_sortType === 'alphabetical') {
+      return [...list].sort((a, b) =>
+        a.p_nome.localeCompare(b.p_nome, 'pt-BR', { sensitivity: 'base' }),
+      );
+    }
+
+    if (_sortType === 'boarding') {
+      // cria um objeto agrupado por embarque
+      const agrupado = list.reduce((acc, pax) => {
+        const embarque = pax.embarque || 'Sem embarque';
+        if (!acc[embarque]) acc[embarque] = [];
+        acc[embarque].push(pax);
+        return acc;
+      }, {});
+
+      // transforma em uma lista ordenada por nome do ponto de embarque
+      const embarquesOrdenados = Object.keys(agrupado)
+        .sort((a, b) => a.localeCompare(b, 'pt-BR'))
+        .map((ponto) => ({
+          embarque: ponto,
+          passageiros: agrupado[ponto].sort((a, b) =>
+            a.p_nome.localeCompare(b.p_nome, 'pt-BR'),
+          ),
+        }));
+      return embarquesOrdenados;
+    }
+
+    return list;
+  };
+
+  // 🔹 Função de filtro
+  const filterPassageiros = (list) => {
+    if (filterType === 'sem-ida') return list.filter((p) => !p.saida);
+    if (filterType === 'sem-volta') return list.filter((p) => !p.volta);
+    return list;
+  };
+
+  // 🔹 Aplicar filtro + ordenação combinados
+  const passageirosProcessados = React.useMemo(() => {
+    const filtrados = filterPassageiros(passageiros);
+    console.log(sortPassageiros(filtrados));
+    return sortPassageiros(filtrados);
+  }, [passageiros, sortType, filterType]);
 
   React.useEffect(() => {
     //utilizar adminApiFetch para pegar as reservas da excursão de id variationId
@@ -32,6 +89,7 @@ const AppCheckInModal = ({ setModalOpen, modalOpen }) => {
       //limpeza se necessário
       setPassageiros([]);
       setModalLoading(true);
+      listaExcursoesElement.current.style.display = 'block';
     };
   }, []);
 
@@ -58,69 +116,121 @@ const AppCheckInModal = ({ setModalOpen, modalOpen }) => {
     );
   }
   return (
-    <div id="checkInModal">
+    <div id="checkInModal" ref={modalElement}>
       <div className="check-in-modal-inner">
         <span className="close" onClick={() => setModalOpen(false)}>
           Fechar
         </span>
         <h1>Check-in</h1>
         <h2>
-          {excDetalhes.nome} - {excDetalhes.dia}
+          {excDetalhes.nome} -{' '}
+          {convertDate(excDetalhes.dia, 'dmy').slice(0, -5)}
         </h2>
-        {modalLoading && <p>Carregando...</p>}
+        {modalLoading && (
+          <div>
+            <span className="spinner is-active"></span>
+          </div>
+        )}
 
         {passageiros.length > 0 && !modalLoading && (
           <>
+            <div className="check-in-header">
+              <div className="header-options">
+                <div>
+                  <div className="option-wrapper">
+                    <label htmlFor="sortSelect">Ordenar por:</label>
+                    <select
+                      id="sortSelect"
+                      name="sortSelect"
+                      value={sortType}
+                      onChange={(e) =>
+                        sortPassageiros(passageiros, e.target.value)
+                      }
+                    >
+                      <option value="alphabetical">Ordem alfabética</option>
+                      <option value="boarding">Embarque</option>
+                    </select>
+                  </div>
+
+                  <div className="option-wrapper">
+                    <label htmlFor="filterSelect">Filtrar:</label>
+                    <select
+                      id="filterSelect"
+                      name="filterSelect"
+                      value={filterType}
+                      onChange={(e) => setFilterType(e.target.value)}
+                    >
+                      <option value="all">Todos</option>
+                      <option value="sem-ida">Sem IDA</option>
+                      <option value="sem-volta">Sem VOLTA</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className="header-resume">
+                <span>Passageiros: {passageiros.length}</span>
+                <span>
+                  Check ida: {passageiros.filter((pax) => pax.saida).length}
+                </span>
+                <span>
+                  Check volta: {passageiros.filter((pax) => pax.volta).length}
+                </span>
+              </div>
+            </div>
             <div className="check_in_lista_wrapper">
               <ul className="lista-check-in">
-                {passageiros.map((pax) => {
-                  return (
-                    <li key={pax.ID} className="pax-item">
-                      <span
-                        className="pax-nome"
-                        onClick={() => setModalPax(pax)}
-                        title="Ver detalhes"
-                      >
-                        {pax.p_nome}
-                      </span>
-
-                      <div className="check-group">
-                        <button
-                          className={`check-box ${pax.saida ? 'checked' : ''} ${
-                            pax.ida_desativado ? 'disabled' : ''
-                          }`}
-                          onClick={({ currentTarget }) =>
-                            !pax.ida_desativado &&
-                            toggleCheck(
-                              pax.ID,
-                              'saida',
-                              !pax.saida,
-                              currentTarget,
-                            )
-                          }
-                        >
-                          {pax.saida && <Check size={14} strokeWidth={7} />}
-                        </button>
-                        <button
-                          className={`check-box ${pax.volta ? 'checked' : ''} ${
-                            pax.volta_desativado ? 'disabled' : ''
-                          }`}
-                          onClick={({ currentTarget }) =>
-                            !pax.volta_desativado &&
-                            toggleCheck(
-                              pax.ID,
-                              'volta',
-                              !pax.volta,
-                              currentTarget,
-                            )
-                          }
-                        >
-                          {pax.volta && <Check size={14} strokeWidth={7} />}
-                        </button>
+                {sortType === 'boarding' ? (
+                  <>
+                    {passageirosProcessados.map((grupo) => (
+                      <div key={grupo.embarque} className="embarque-grupo">
+                        <h4>
+                          <div>
+                            {grupo.embarque} &nbsp; {grupo.passageiros.length}
+                          </div>
+                          <span
+                            onClick={({ target }) => {
+                              const ul = target
+                                .closest('.embarque-grupo')
+                                .querySelector('ul');
+                              if (ul.style.display === 'none') {
+                                ul.style.display = 'block';
+                                target.innerHTML = '-';
+                              } else {
+                                ul.style.display = 'none';
+                                target.innerHTML = '+';
+                              }
+                            }}
+                          >
+                            -
+                          </span>
+                        </h4>
+                        <ul>
+                          {grupo.passageiros.map((pax) => (
+                            <AppCheckInPaxLi
+                              key={pax.ID}
+                              pax={pax}
+                              setModalPax={setModalPax}
+                              toggleCheck={toggleCheck}
+                            />
+                          ))}
+                        </ul>
                       </div>
-                    </li>
-                  );
-                })}
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {passageirosProcessados.map((pax) => {
+                      return (
+                        <AppCheckInPaxLi
+                          key={pax.ID}
+                          pax={pax}
+                          setModalPax={setModalPax}
+                          toggleCheck={toggleCheck}
+                        />
+                      );
+                    })}
+                  </>
+                )}
               </ul>
             </div>
           </>
@@ -137,6 +247,7 @@ const AppCheckInModal = ({ setModalOpen, modalOpen }) => {
 AppCheckInModal.propTypes = {
   setModalOpen: PropTypes.func.isRequired,
   modalOpen: PropTypes.oneOfType([PropTypes.bool, PropTypes.array]).isRequired,
+  listaExcursoesElement: PropTypes.object.isRequired,
 };
 
 export default AppCheckInModal;

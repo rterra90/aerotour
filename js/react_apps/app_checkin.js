@@ -3572,11 +3572,11 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx4 = jsxWithValidationDynamic;
-          var jsxs4 = jsxWithValidationStatic;
+          var jsx5 = jsxWithValidationDynamic;
+          var jsxs5 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx4;
-          exports.jsxs = jsxs4;
+          exports.jsx = jsx5;
+          exports.jsxs = jsxs5;
         })();
       }
     }
@@ -3595,7 +3595,10 @@
   });
 
   // src/AppCheckIn/AppCheckInModal.jsx
-  var import_prop_types2 = __toESM(require_prop_types());
+  var import_prop_types3 = __toESM(require_prop_types());
+
+  // src/AppCheckIn/AppCheckInModalPax.jsx
+  var import_prop_types = __toESM(require_prop_types());
 
   // node_modules/lucide-react/dist/esm/createLucideIcon.js
   var import_react2 = __toESM(require_react());
@@ -3690,8 +3693,32 @@
   var __iconNode = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
   var Check = createLucideIcon("check", __iconNode);
 
+  // node_modules/lucide-react/dist/esm/icons/phone.js
+  var __iconNode2 = [
+    [
+      "path",
+      {
+        d: "M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384",
+        key: "9njp5v"
+      }
+    ]
+  ];
+  var Phone = createLucideIcon("phone", __iconNode2);
+
+  // node_modules/lucide-react/dist/esm/icons/send.js
+  var __iconNode3 = [
+    [
+      "path",
+      {
+        d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+        key: "1ffxy3"
+      }
+    ],
+    ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+  ];
+  var Send = createLucideIcon("send", __iconNode3);
+
   // src/AppCheckIn/AppCheckInModalPax.jsx
-  var import_prop_types = __toESM(require_prop_types());
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var AppCheckInModalPax = ({ setModalPax, modalPax }) => {
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pax-modal-backdrop", onClick: () => setModalPax(null), children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
@@ -3707,21 +3734,29 @@
             modalPax.p_cpf
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "pax-telefone", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Celular:" }),
-            " ",
-            modalPax.p_telefone,
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Celular:" }),
+              " ",
+              modalPax.p_telefone
+            ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "pax-btns", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
                 "a",
                 {
                   href: `https://wa.me/${modalPax.p_telefone.replace(/\D/g, "")}`,
                   target: "_blank",
                   rel: "noopener noreferrer",
                   title: "Abrir no WhatsApp",
-                  children: "\u{1F4AC}"
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Send, { size: 26 }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "WhatsApp" })
+                  ]
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: `tel:${modalPax.p_telefone}`, title: "Ligar", children: "\u{1F4DE}" })
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", { href: `tel:${modalPax.p_telefone}`, title: "Ligar", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { size: 26 }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Ligar" })
+              ] })
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
@@ -3740,13 +3775,138 @@
   };
   var AppCheckInModalPax_default = AppCheckInModalPax;
 
-  // src/AppCheckIn/AppCheckInModal.jsx
+  // src/AppCheckIn/AppCheckInPaxLi.jsx
+  var import_prop_types2 = __toESM(require_prop_types());
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
-  var AppCheckInModal = ({ setModalOpen, modalOpen }) => {
+  var AppCheckInPaxLi = ({ pax, setModalPax, toggleCheck }) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("li", { className: "pax-item", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        "span",
+        {
+          className: "pax-nome",
+          onClick: () => setModalPax(pax),
+          title: "Ver detalhes",
+          children: pax.p_nome
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "check-group", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "button",
+          {
+            className: `check-box ${pax.saida ? "checked" : ""} ${pax.ida_desativado ? "disabled" : ""}`,
+            onClick: ({ currentTarget }) => !pax.ida_desativado && toggleCheck(pax.ID, "saida", !pax.saida, currentTarget),
+            children: pax.saida && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 5 })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "button",
+          {
+            className: `check-box ${pax.volta ? "checked" : ""} ${pax.volta_desativado ? "disabled" : ""}`,
+            onClick: ({ currentTarget }) => !pax.volta_desativado && toggleCheck(pax.ID, "volta", !pax.volta, currentTarget),
+            children: pax.volta && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 5 })
+          }
+        )
+      ] })
+    ] }, pax.ID);
+  };
+  AppCheckInPaxLi.propTypes = {
+    pax: import_prop_types2.default.object.isRequired,
+    setModalPax: import_prop_types2.default.func.isRequired,
+    toggleCheck: import_prop_types2.default.func.isRequired
+  };
+  var AppCheckInPaxLi_default = AppCheckInPaxLi;
+
+  // src/Utilities.jsx
+  function convertDate(inputDate, action) {
+    function detectFormat(dateStr) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr))
+        return "ISO";
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr))
+        return "DMY";
+      return "UNKNOWN";
+    }
+    function dmyToIso(dmy) {
+      const [day, month, year] = dmy.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
+    function isoToDmy(iso) {
+      const [year, month, day] = iso.split("-");
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+    }
+    const format = detectFormat(inputDate);
+    if (format === "UNKNOWN") {
+      throw new Error(
+        'Formato de data n\xE3o reconhecido. Use "dd/mm/aaaa" ou "aaaa-mm-dd".'
+      );
+    }
+    switch (action.toLowerCase()) {
+      case "iso":
+        return format === "ISO" ? inputDate : dmyToIso(inputDate);
+      case "dmy":
+        return format === "DMY" ? inputDate : isoToDmy(inputDate);
+      case "dateobject": {
+        const isoDate = format === "ISO" ? inputDate : dmyToIso(inputDate);
+        return new Date(isoDate);
+      }
+      default:
+        throw new Error(
+          `A\xE7\xE3o "${action}" n\xE3o reconhecida. Use "iso", "dmy" ou "dateObject".`
+        );
+    }
+  }
+
+  // src/AppCheckIn/AppCheckInModal.jsx
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  var AppCheckInModal = ({
+    setModalOpen,
+    modalOpen,
+    listaExcursoesElement
+  }) => {
     const [variationId, excDetalhes] = modalOpen;
     const [modalLoading, setModalLoading] = React.useState(true);
     const [passageiros, setPassageiros] = React.useState([]);
     const [modalPax, setModalPax] = React.useState(null);
+    const [sortType, setSortType] = React.useState("alphabetical");
+    const [filterType, setFilterType] = React.useState("all");
+    const modalElement = React.useRef(null);
+    const sortPassageiros = (list, _type = null) => {
+      const _sortType = _type || sortType;
+      setSortType(_sortType);
+      if (_sortType === "alphabetical") {
+        return [...list].sort(
+          (a, b) => a.p_nome.localeCompare(b.p_nome, "pt-BR", { sensitivity: "base" })
+        );
+      }
+      if (_sortType === "boarding") {
+        const agrupado = list.reduce((acc, pax) => {
+          const embarque = pax.embarque || "Sem embarque";
+          if (!acc[embarque])
+            acc[embarque] = [];
+          acc[embarque].push(pax);
+          return acc;
+        }, {});
+        const embarquesOrdenados = Object.keys(agrupado).sort((a, b) => a.localeCompare(b, "pt-BR")).map((ponto) => ({
+          embarque: ponto,
+          passageiros: agrupado[ponto].sort(
+            (a, b) => a.p_nome.localeCompare(b.p_nome, "pt-BR")
+          )
+        }));
+        return embarquesOrdenados;
+      }
+      return list;
+    };
+    const filterPassageiros = (list) => {
+      if (filterType === "sem-ida")
+        return list.filter((p) => !p.saida);
+      if (filterType === "sem-volta")
+        return list.filter((p) => !p.volta);
+      return list;
+    };
+    const passageirosProcessados = React.useMemo(() => {
+      const filtrados = filterPassageiros(passageiros);
+      console.log(sortPassageiros(filtrados));
+      return sortPassageiros(filtrados);
+    }, [passageiros, sortType, filterType]);
     React.useEffect(() => {
       adminApiFetch(
         "get_reservas",
@@ -3766,6 +3926,7 @@
       return () => {
         setPassageiros([]);
         setModalLoading(true);
+        listaExcursoesElement.current.style.display = "block";
       };
     }, []);
     const toggleCheck = (paxId, sentido, valor, element) => {
@@ -3790,77 +3951,141 @@
         (prev) => prev.map((p) => p.ID === paxId ? { ...p, [sentido]: valor } : p)
       );
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { id: "checkInModal", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "check-in-modal-inner", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "close", onClick: () => setModalOpen(false), children: "Fechar" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h1", { children: "Check-in" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("h2", { children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { id: "checkInModal", ref: modalElement, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "check-in-modal-inner", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "close", onClick: () => setModalOpen(false), children: "Fechar" }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h1", { children: "Check-in" }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("h2", { children: [
           excDetalhes.nome,
-          " - ",
-          excDetalhes.dia
+          " -",
+          " ",
+          convertDate(excDetalhes.dia, "dmy").slice(0, -5)
         ] }),
-        modalLoading && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { children: "Carregando..." }),
-        passageiros.length > 0 && !modalLoading && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_jsx_runtime2.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "check_in_lista_wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("ul", { className: "lista-check-in", children: passageiros.map((pax) => {
-          return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("li", { className: "pax-item", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-              "span",
-              {
-                className: "pax-nome",
-                onClick: () => setModalPax(pax),
-                title: "Ver detalhes",
-                children: pax.p_nome
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "check-group", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-                "button",
+        modalLoading && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "spinner is-active" }) }),
+        passageiros.length > 0 && !modalLoading && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "check-in-header", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "header-options", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "option-wrapper", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("label", { htmlFor: "sortSelect", children: "Ordenar por:" }),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+                  "select",
+                  {
+                    id: "sortSelect",
+                    name: "sortSelect",
+                    value: sortType,
+                    onChange: (e) => sortPassageiros(passageiros, e.target.value),
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "alphabetical", children: "Ordem alfab\xE9tica" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "boarding", children: "Embarque" })
+                    ]
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "option-wrapper", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("label", { htmlFor: "filterSelect", children: "Filtrar:" }),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+                  "select",
+                  {
+                    id: "filterSelect",
+                    name: "filterSelect",
+                    value: filterType,
+                    onChange: (e) => setFilterType(e.target.value),
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "all", children: "Todos" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "sem-ida", children: "Sem IDA" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("option", { value: "sem-volta", children: "Sem VOLTA" })
+                    ]
+                  }
+                )
+              ] })
+            ] }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "header-resume", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                "Passageiros: ",
+                passageiros.length
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                "Check ida: ",
+                passageiros.filter((pax) => pax.saida).length
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                "Check volta: ",
+                passageiros.filter((pax) => pax.volta).length
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "check_in_lista_wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("ul", { className: "lista-check-in", children: sortType === "boarding" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: passageirosProcessados.map((grupo) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "embarque-grupo", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("h4", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
+                grupo.embarque,
+                " \xA0 ",
+                grupo.passageiros.length
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                "span",
                 {
-                  className: `check-box ${pax.saida ? "checked" : ""} ${pax.ida_desativado ? "disabled" : ""}`,
-                  onClick: ({ currentTarget }) => !pax.ida_desativado && toggleCheck(
-                    pax.ID,
-                    "saida",
-                    !pax.saida,
-                    currentTarget
-                  ),
-                  children: pax.saida && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 7 })
-                }
-              ),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-                "button",
-                {
-                  className: `check-box ${pax.volta ? "checked" : ""} ${pax.volta_desativado ? "disabled" : ""}`,
-                  onClick: ({ currentTarget }) => !pax.volta_desativado && toggleCheck(
-                    pax.ID,
-                    "volta",
-                    !pax.volta,
-                    currentTarget
-                  ),
-                  children: pax.volta && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 7 })
+                  onClick: ({ target }) => {
+                    const ul = target.closest(".embarque-grupo").querySelector("ul");
+                    if (ul.style.display === "none") {
+                      ul.style.display = "block";
+                      target.innerHTML = "-";
+                    } else {
+                      ul.style.display = "none";
+                      target.innerHTML = "+";
+                    }
+                  },
+                  children: "-"
                 }
               )
-            ] })
-          ] }, pax.ID);
-        }) }) }) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("ul", { children: grupo.passageiros.map((pax) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              AppCheckInPaxLi_default,
+              {
+                pax,
+                setModalPax,
+                toggleCheck
+              },
+              pax.ID
+            )) })
+          ] }, grupo.embarque)) }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: passageirosProcessados.map((pax) => {
+            return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              AppCheckInPaxLi_default,
+              {
+                pax,
+                setModalPax,
+                toggleCheck
+              },
+              pax.ID
+            );
+          }) }) }) })
+        ] })
       ] }),
-      modalPax && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AppCheckInModalPax_default, { setModalPax, modalPax })
+      modalPax && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(AppCheckInModalPax_default, { setModalPax, modalPax })
     ] });
   };
   AppCheckInModal.propTypes = {
-    setModalOpen: import_prop_types2.default.func.isRequired,
-    modalOpen: import_prop_types2.default.oneOfType([import_prop_types2.default.bool, import_prop_types2.default.array]).isRequired
+    setModalOpen: import_prop_types3.default.func.isRequired,
+    modalOpen: import_prop_types3.default.oneOfType([import_prop_types3.default.bool, import_prop_types3.default.array]).isRequired,
+    listaExcursoesElement: import_prop_types3.default.object.isRequired
   };
   var AppCheckInModal_default = AppCheckInModal;
 
   // src/AppCheckIn/AppCheckIn.jsx
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var AppCheckIn = () => {
     const [loading, setLoading] = React.useState(false);
     const [excursoes, setExcursoes] = React.useState(null);
     const [error, setError] = React.useState(null);
     const [modalOpen, setModalOpen] = React.useState(false);
+    const listaExcursoesElement = React.useRef(null);
     function openCheckInModal(variation_id, data) {
       if (modalOpen)
         return;
+      listaExcursoesElement.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+      listaExcursoesElement.current.style.display = "none";
       setModalOpen([variation_id, data]);
     }
     React.useEffect(() => {
@@ -3888,25 +4113,25 @@
         cancelled = true;
       };
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "check-in-app-inner", children: [
-      loading && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "spinner is-active" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Carregando..." })
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "check-in-app-inner", children: [
+      loading && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "loading-indicator", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "spinner is-active" }),
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: "Carregando..." })
       ] }),
-      Array.isArray(excursoes) && excursoes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("ul", { id: "listaExcursoesCheckIn", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("li", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "exc_name", children: "Excurs\xE3o" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "exc_total_passageiros", children: "Passageiros" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "icone", children: "Check-in" })
+      Array.isArray(excursoes) && excursoes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("ul", { id: "listaExcursoesCheckIn", ref: listaExcursoesElement, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("li", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_name", children: "Excurs\xE3o" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_total_passageiros", children: "Passageiros" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "icone", children: "Check-in" })
         ] }),
-        excursoes.map((_excursao) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("li", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "exc_name", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("a", { href: "#", onClick: (e) => e.preventDefault(), children: [
+        excursoes.map((_excursao) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("li", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_name", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("a", { href: "#", onClick: (e) => e.preventDefault(), children: [
             _excursao.nome,
             " - ",
-            _excursao.dia
+            convertDate(_excursao.dia, "dmy")
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "exc_total_passageiros", children: _excursao.pax_qty }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_total_passageiros", children: _excursao.pax_qty }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
             "span",
             {
               className: "icone dashicons dashicons-clipboard",
@@ -3918,15 +4143,22 @@
           )
         ] }, _excursao.variation_id))
       ] }),
-      Array.isArray(excursoes) && excursoes.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Nenhuma excurs\xE3o dispon\xEDvel para check-in." }),
-      error && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Erro ao obter as excurs\xF5es..." }),
-      modalOpen && Array.isArray(modalOpen) ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(AppCheckInModal_default, { setModalOpen, modalOpen }) : null
+      Array.isArray(excursoes) && excursoes.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: "Nenhuma excurs\xE3o dispon\xEDvel para check-in." }),
+      error && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: "Erro ao obter as excurs\xF5es..." }),
+      modalOpen && Array.isArray(modalOpen) ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+        AppCheckInModal_default,
+        {
+          setModalOpen,
+          modalOpen,
+          listaExcursoesElement
+        }
+      ) : null
     ] });
   };
   var checkin_app_root = document.getElementById("checkInWidget");
   if (checkin_app_root) {
     ReactDOM.createRoot(checkin_app_root).render(
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(AppCheckIn, { ajaxUrl: checkin_app_root.dataset.ajaxUrl })
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(AppCheckIn, { ajaxUrl: checkin_app_root.dataset.ajaxUrl })
     );
   }
 })();
@@ -4004,6 +4236,22 @@ lucide-react/dist/esm/createLucideIcon.js:
    *)
 
 lucide-react/dist/esm/icons/check.js:
+  (**
+   * @license lucide-react v0.548.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/phone.js:
+  (**
+   * @license lucide-react v0.548.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/send.js:
   (**
    * @license lucide-react v0.548.0 - ISC
    *

@@ -471,7 +471,7 @@ usort($datas, function($a, $b) {
                         </div>
                         <div class="detalhes">
                           <div class="horario"><?= $horarios_simples[0]; ?></div>
-                          <div class="mapa"><a href="<?= $embarque['link_mapa']; ?>" target="_blank"></a>Ver no mapa</div>
+                          <div class="mapa"><a href="<?= $embarque['link_mapa']; ?>" target="_blank">Ver no mapa</a></div>
                         </div>
                       </div>
 

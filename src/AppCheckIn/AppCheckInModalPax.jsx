@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import PropTypes from 'prop-types';
+import { Phone, Send } from 'lucide-react';
 
 const AppCheckInModalPax = ({ setModalPax, modalPax }) => {
   return (
@@ -14,7 +15,9 @@ const AppCheckInModalPax = ({ setModalPax, modalPax }) => {
           <strong>CPF:</strong> {modalPax.p_cpf}
         </p>
         <p className="pax-telefone">
-          <strong>Celular:</strong> {modalPax.p_telefone}
+          <span>
+            <strong>Celular:</strong> {modalPax.p_telefone}
+          </span>
           <span className="pax-btns">
             <a
               href={`https://wa.me/${modalPax.p_telefone.replace(/\D/g, '')}`}
@@ -22,10 +25,12 @@ const AppCheckInModalPax = ({ setModalPax, modalPax }) => {
               rel="noopener noreferrer"
               title="Abrir no WhatsApp"
             >
-              💬
+              <Send size={26} />
+              <div>WhatsApp</div>
             </a>
             <a href={`tel:${modalPax.p_telefone}`} title="Ligar">
-              📞
+              <Phone size={26} />
+              <div>Ligar</div>
             </a>
           </span>
         </p>

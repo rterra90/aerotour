@@ -1,0 +1,266 @@
+#checkInModal {
+}
+.check-in-modal-inner {
+  background-color: #d1cdcd;
+  max-width: 720px;
+  margin: 0px auto;
+  padding: 12px;
+  position: relative;
+}
+.check-in-modal-inner .close {
+  display: block;
+  width: fit-content;
+  margin: 0 0 0 auto;
+  border: 1px solid;
+  color: black;
+  padding: 1px 4px;
+  cursor: pointer;
+}
+.check-in-modal-inner h1,
+.check-in-modal-inner h2 {
+  text-align: center;
+}
+.check-in-modal-inner h2 {
+  font-size: 1rem !important;
+}
+/* LISTA DE PASSAGEIROS */
+.check_in_lista_wrapper {
+  margin-top: 0.5rem;
+}
+
+.check-in-modal-inner .lista-check-in {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.check-in-modal-inner .pax-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #535353;
+  font-size: 0.875rem;
+}
+.check-in-modal-inner .pax-item svg {
+  transform: scale(1.6);
+}
+
+.check-in-modal-inner .pax-nome {
+  flex: 1;
+  cursor: pointer;
+  color: #333;
+}
+
+.check-in-modal-inner .pax-nome:hover {
+  text-decoration: underline;
+}
+
+.check-in-modal-inner .check-group {
+  display: flex;
+  gap: 4px;
+}
+
+.check-in-modal-inner .check-box {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid #bbb;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.check-in-modal-inner .check-box.checked {
+  background: #4caf50;
+  border-color: #4caf50;
+  color: white;
+}
+
+.check-in-modal-inner .check-box.disabled {
+  background: #5b5b5b;
+  border-color: #474747;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+/* Estado de loading */
+.check-in-modal-inner .check-box.loading {
+  border-color: #767676;
+  background: #b8b8b8;
+  cursor: wait;
+  pointer-events: none;
+  position: relative;
+}
+
+/* Animação com pseudoelemento */
+.check-in-modal-inner .check-box.loading::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #818181;
+  border-right-color: #818181;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+#checkInModal .pax-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#checkInModal .pax-modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  width: 80%;
+  max-width: 350px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+#checkInModal .pax-modal h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+#checkInModal .pax-telefone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#checkInModal .pax-btns {
+  display: flex;
+}
+#checkInModal .pax-btns a {
+  margin-left: 6px;
+  font-size: 1.1rem;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#checkInModal .pax-btns a:first-of-type {
+  margin-right: 18px;
+}
+#checkInModal .pax-btns a div {
+  font-size: 0.6rem;
+}
+.modal-close-btn {
+  margin-top: 1rem;
+  background: #eee;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.modal-close-btn:hover {
+  background: #ddd;
+}
+
+/* Header Options */
+.check-in-header {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+  justify-content: space-between;
+}
+.check-in-header .option-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.header-options label {
+  font-weight: 500;
+  margin-right: 0.3rem;
+}
+
+.header-options select {
+  margin-right: 0.8rem;
+  padding: unset;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  text-decoration: underline;
+  min-height: 26px;
+}
+.header-options select#sortSelect {
+  margin-bottom: 10px;
+}
+/* agrupar selects lado a lado, mas empilhar em telas pequenas */
+.header-options div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* resumo de quantidades */
+.header-resume {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  color: #555;
+  font-size: 0.725rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-resume span {
+  background: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #e3e3e3;
+  white-space: nowrap;
+  text-align: end;
+}
+
+/* agrupamento por embarque */
+.embarque-lista {
+  margin-top: 0.8rem;
+}
+
+.lista-check-in .embarque-grupo h4 {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+  background: #f1f1f1;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px !important;
+  align-items: center;
+  font-weight: 600 !important;
+}
+.embarque-grupo h4 span {
+  font-family: fantasy;
+  font-size: 1.25rem;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+.embarque-grupo ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 3px;
+}
+
+.embarque-grupo li {
+  padding: 3px 0;
+  border-bottom: 1px solid #eee;
+}

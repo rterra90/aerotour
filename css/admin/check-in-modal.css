@@ -10,13 +10,13 @@
   padding: 0 10px;
   box-sizing: border-box;
 }
-.check-in-modal-inner {
+/* .check-in-modal-inner {
   background-color: black;
   max-width: 720px;
   margin: 0px auto;
   padding: 12px;
   position: relative;
-}
+} */
 
 #check-in-modal .close {
   position: absolute;
