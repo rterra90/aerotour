@@ -54,7 +54,7 @@ function aer_check_in_widget(){
                                           <span data-filter='embarque' onclick="aerCheckIn(${check_in_variation_id}, null, null, null, this)">Embarque</span>
                                         </div>
                                       </div>
-                                      <ul data-react="lista_passageiros" class="lista-check-in">
+                                      <ul data-react="  " class="lista-check-in">
                                         
                                       </ul>
                                     </div>

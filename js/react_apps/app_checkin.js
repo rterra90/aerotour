@@ -3865,6 +3865,7 @@
     const [variationId, excDetalhes] = modalOpen;
     const [modalLoading, setModalLoading] = React.useState(true);
     const [passageiros, setPassageiros] = React.useState([]);
+    const [passageirosCancelados, setPassageirosCancelados] = React.useState([]);
     const [modalPax, setModalPax] = React.useState(null);
     const [sortType, setSortType] = React.useState("alphabetical");
     const [filterType, setFilterType] = React.useState("all");
@@ -3918,7 +3919,18 @@
             passageiro.saida = passageiro.saida === "1";
             passageiro.volta = passageiro.volta === "1";
           });
-          setPassageiros(success && Array.isArray(data) ? data[0] : []);
+          const passageirosNormais = _passageiros.filter(
+            (p) => p.status === "normal"
+          );
+          const passageirosCancelados2 = _passageiros.filter(
+            (p) => p.status === "cancel"
+          );
+          setPassageiros(
+            success && Array.isArray(data) ? passageirosNormais : []
+          );
+          setPassageirosCancelados(
+            success && Array.isArray(data) ? passageirosCancelados2 : []
+          );
           setModalLoading(false);
         },
         "GET"
@@ -4125,11 +4137,17 @@
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "icone", children: "Check-in" })
         ] }),
         excursoes.map((_excursao) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("li", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_name", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("a", { href: "#", onClick: (e) => e.preventDefault(), children: [
-            _excursao.nome,
-            " - ",
-            convertDate(_excursao.dia, "dmy")
-          ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_name", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+            "a",
+            {
+              href: `https://aerotour.com.br/wp-admin/post.php?post=${_excursao.parent_id}&action=edit`,
+              children: [
+                _excursao.nome,
+                " - ",
+                convertDate(_excursao.dia, "dmy")
+              ]
+            }
+          ) }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_total_passageiros", children: _excursao.pax_qty }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
             "span",

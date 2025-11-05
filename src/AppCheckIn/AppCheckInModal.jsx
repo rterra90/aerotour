@@ -13,6 +13,7 @@ const AppCheckInModal = ({
   const [variationId, excDetalhes] = modalOpen;
   const [modalLoading, setModalLoading] = React.useState(true);
   const [passageiros, setPassageiros] = React.useState([]);
+  const [passageirosCancelados, setPassageirosCancelados] = React.useState([]);
   const [modalPax, setModalPax] = React.useState(null);
   const [sortType, setSortType] = React.useState('alphabetical');
   const [filterType, setFilterType] = React.useState('all');
@@ -80,7 +81,20 @@ const AppCheckInModal = ({
           passageiro.volta = passageiro.volta === '1';
         });
 
-        setPassageiros(success && Array.isArray(data) ? data[0] : []);
+        // separa por status
+        const passageirosNormais = _passageiros.filter(
+          (p) => p.status === 'normal',
+        );
+        const passageirosCancelados = _passageiros.filter(
+          (p) => p.status === 'cancel',
+        );
+
+        setPassageiros(
+          success && Array.isArray(data) ? passageirosNormais : [],
+        );
+        setPassageirosCancelados(
+          success && Array.isArray(data) ? passageirosCancelados : [],
+        );
         setModalLoading(false);
       },
       'GET',

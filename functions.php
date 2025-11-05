@@ -597,7 +597,7 @@ require_once(get_template_directory() . '/endpoints/api_user_get.php');
 
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN
 if (is_admin()) {
-  include_once get_template_directory() . '/includes/admin-pages/panel-widgets/gerenciar-exc-widgets.php'; // widget check-in
+  // include_once get_template_directory() . '/includes/admin-pages/panel-widgets/gerenciar-exc-widgets.php'; // widget check-in
   include_once get_template_directory() . '/includes/admin-pages/panel-widgets/check-in/check-in-widget.php'; // widget check-in
   include_once get_template_directory() . '/includes/admin-pages/reservas-admin.php'; //página Reservas
   include_once get_template_directory() . '/includes/admin-pages/embarques/embarques-admin.php'; //página Embarques
@@ -641,7 +641,7 @@ if (is_admin()) {
   add_action('wp_dashboard_setup', 'aer_dashboard_widgets');
   function aer_dashboard_widgets(){ 
     wp_add_dashboard_widget('manage_coupons', 'Gerenciar cupons', 'manage_coupons_widget');
-    wp_add_dashboard_widget('aer_check_in', 'Check-in', 'aer_check_in_widget');
+    // wp_add_dashboard_widget('aer_check_in', 'Check-in', 'aer_check_in_widget');
     wp_add_dashboard_widget('check_in', 'Novo Check-in', 'check_in_widget');
     wp_add_dashboard_widget('cards_home', 'Excursões da página inicial', 'home_cards_widget');
     wp_add_dashboard_widget('campanhas_cupons_widget', 'Campanhas de cupons', 'campanhas_cupons_widget');

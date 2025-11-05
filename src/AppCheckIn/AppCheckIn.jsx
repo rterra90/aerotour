@@ -66,7 +66,9 @@ const AppCheckIn = () => {
           {excursoes.map((_excursao) => (
             <li key={_excursao.variation_id}>
               <span className="exc_name">
-                <a href="#" onClick={(e) => e.preventDefault()}>
+                <a
+                  href={`https://aerotour.com.br/wp-admin/post.php?post=${_excursao.parent_id}&action=edit`}
+                >
                   {_excursao.nome} - {convertDate(_excursao.dia, 'dmy')}
                 </a>
               </span>
