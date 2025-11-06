@@ -100,7 +100,7 @@ $text_align = is_rtl() ? 'right' : 'left';
       </div>
 
       <?php
-        if($link_wpp){
+        if($link_wpp && strlen($link_wpp) > 10){
           ?>
             <div class="wpp-link-container">
               <p style="text-align: center; text-transform: uppercase; letter-spacing: .04rem; font-weight: 600; font-size: 13px; margin-bottom: -2px">Grupo no WhatsApp já disponível!</p>
