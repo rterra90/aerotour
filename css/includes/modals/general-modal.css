@@ -1,5 +1,6 @@
 @import url(promo-modal.css);
 @import url(desconto-antecipado-modal.css);
+@import url(pdv-modal.css);
 
 #generalModal {
   position: fixed;

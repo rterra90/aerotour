@@ -160,11 +160,7 @@
   }
 </style>
 
-<a id="arteCultBanner" class="artecult-banner-container" onclick="gtag('event', 'click_banner_artecult', {
-      'event_category': 'ads',
-      'event_label': 'click_banner_artecult',
-      'value': 1
-    })">
+<a id="arteCultBanner" class="artecult-banner-container">
     <div class="banner-inner">
         <div class="banner-slide active banner-1" data-animation-delay="0.2s">
             <div class="banner-logo">
@@ -222,9 +218,16 @@
 
     const arteCultbanner = document.querySelector('#arteCultBanner');
     arteCultbanner.addEventListener('click', () => {
-      const modalElement = new Modal('generalModal', '.modal-content-body');
-      modalElement.open('promoArteCult', {rootUrl: '<?= get_stylesheet_directory_uri(); ?>'});
+        //Instancia um novo modal
+        const modalElement = new Modal('generalModal', '.modal-content-body');
+        modalElement.open('promoArteCult', {rootUrl: '<?= get_stylesheet_directory_uri(); ?>'});
 
+        //Registra evento no Google Analytics
+        gtag('event', 'click_banner_artecult', {
+            'event_category': 'ads',
+            'event_label': 'click_banner_artecult',
+            'value': 1
+        })
 
     })
 });

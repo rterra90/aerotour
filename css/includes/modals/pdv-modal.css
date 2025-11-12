@@ -1,0 +1,45 @@
+#parceiroPDVModal .aviso-prazo {
+  color: rgb(121 121 121);
+  background-color: rgb(243 243 243);
+  padding: 0.4rem 1.5rem;
+  border-radius: 4px;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 0.675rem;
+  letter-spacing: 0.025rem;
+  line-height: 1.15;
+}
+div#parceiroPDVModal h3 {
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  font-size: 1.075rem;
+  padding: 0 15px;
+}
+.modal-content-body div#parceiroPDVModal p {
+  font-size: 0.915rem !important;
+  line-height: 1.15;
+}
+#parceiroPDVModal strong {
+  display: block;
+  margin-top: 8px;
+}
+/* Ações do modal */
+#parceiroPDVModal .modal-actions {
+  margin-top: 1.2rem;
+  text-align: center;
+}
+
+#parceiroPDVModal .modal-button {
+  background-color: var(--aer-accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#parceiroPDVModal .modal-button:hover {
+  background-color: var(--aer-accent-hover);
+}

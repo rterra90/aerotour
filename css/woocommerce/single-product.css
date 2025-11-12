@@ -20,6 +20,11 @@
   margin: unset;
   font-size: 0.775rem;
 }
+.aviso-ultimas-vagas.aviso-esgotado {
+  background-color: #ffe5e5;
+  border: 1px solid #cc0000;
+  color: #971710;
+}
 .aviso-ultimas-vagas strong {
   font-size: 0.85rem;
 }

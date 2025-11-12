@@ -23,6 +23,11 @@
   margin: unset;
   font-size: 0.775rem;
 }
+.aviso-ultimas-vagas.aviso-esgotado {
+  background-color: #ffe5e5;
+  border: 1px solid #cc0000;
+  color: #971710;
+}
 .cta-button,
 .info > .grid-container .box::before,
 .tab-nav button.active {

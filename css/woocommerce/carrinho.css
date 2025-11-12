@@ -332,6 +332,7 @@ a.remove-coupon-link {
   color: var(--aer-accent);
   background: #400f0f08;
 }
+
 @media (max-width: 768px) {
   .woocommerce-cart-form__cart-item.cart_item .product-remove a {
     width: 13px;

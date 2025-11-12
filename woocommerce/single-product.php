@@ -238,7 +238,7 @@ usort($datas, function($a, $b) {
           get_template_part('assets/banners/banner-artecult', null);
 
         // Insere o modal
-          get_template_part('includes/modals/modal', null);
+          // get_template_part('includes/modals/modal', null);
         ?>
        </div>
        
@@ -305,6 +305,12 @@ usort($datas, function($a, $b) {
                 ?>
                 <div class="aviso-ultimas-vagas">
                   <strong class="d-block">Últimos lugares!</strong> Restam <?= $vagas_disponiveis; ?> vagas disponíveis para essa excursão!
+                </div>
+                <?php
+              }else if(!$vagas_disponiveis){
+                  ?>
+                <div class="aviso-ultimas-vagas aviso-esgotado">
+                  <strong class="d-block">Esgotado!</strong> Não temos mais lugares disponíveis...
                 </div>
                 <?php
               }

@@ -45,6 +45,7 @@ include 'includes/functions/coupons-functions.php';
 include 'includes/functions/blog.php';
 include 'includes/functions/general-customize.php';
 include 'includes/functions/process-product-meta.php';
+include 'includes/afiliados/afiliados-functions.php';
 
 
 

@@ -19,6 +19,16 @@ p.informacao-status-header[data-status='completed'] mark.order-status {
 p.informacao-status-header[data-status='cancelled'] mark.order-status {
   background-color: #e3b7b7;
 }
+p.parceiro-pedido-badge {
+  display: inline-block;
+  background-color: var(--aer-accent);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 12px;
+}
 #pedidoContent {
   display: flex;
   flex-direction: row-reverse;

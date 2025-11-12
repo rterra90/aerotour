@@ -1,5 +1,9 @@
+<!-- Insere o modal -->
+<?php get_template_part('includes/modals/modal', null); ?>
+
 <?php wp_footer(); ?>
 </body>
+
 
 <footer class="text-center" id="aer-footer">
   <div class="container-md">

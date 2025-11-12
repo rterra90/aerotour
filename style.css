@@ -295,6 +295,32 @@ form#searchform input#s::after {
 .aer-search-input:focus {
   box-shadow: none !important;
 }
+/* Ponto de venda */
+.wc-parceiro-badge {
+  margin-top: 15px;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+}
+.wc-parceiro-badge span {
+  border: 1px solid var(--aer-accent);
+  color: var(--aer-accent);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.wc-parceiro-badge div {
+  flex-grow: 1;
+  text-align: center;
+}
 @media (max-width: 576px) {
   #top-header h1 {
     font-size: 0.9rem !important;

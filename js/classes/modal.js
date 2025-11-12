@@ -10,7 +10,10 @@ class Modal {
    * @param {string} modalId - O ID do elemento HTML que serve como contêiner principal do modal.
    * @param {string} contentSelector - O seletor CSS para o elemento dentro do modal onde o conteúdo será injetado.
    */
-  constructor(modalId, contentSelector = '.modal-content-body') {
+  constructor(
+    modalId = 'generalModal',
+    contentSelector = '.modal-content-body',
+  ) {
     // Busca e armazena a referência ao elemento modal principal
     this.#modalElement = document.getElementById(modalId);
     if (!this.#modalElement) {
@@ -62,6 +65,7 @@ class Modal {
     const title = data.title || 'Título Padrão';
     const bodyText = data.body || null;
     const rootUrl = data.rootUrl || null;
+    const nomeParceiro = data.nomeParceiro || null;
 
     // Lógica de Condicionamento de Conteúdo
     switch (contentType) {
@@ -113,11 +117,21 @@ Meu%20@%20no%20Instagram%20é:%20"
                   </div>
                 `;
         break;
-      case 'info':
+      case 'parceiroPDV':
+        html = `<div id="parceiroPDVModal">
+          <h3 class="heading" role="heading">Seja bem-vindo(a) ao site da Aerotour Excursões.</h3>
+          <p>Você está acessando através do ponto de venda do nosso parceiro <strong>${nomeParceiro}</strong></p>
+          <div class="aviso-prazo">O acesso por esse ponto de venda é válido por uma hora.</div>
+          <div class="modal-actions">
+              <button class="modal-button modal-button-confirm">Entendi</button>
+          </div>
+        </div>`;
+        break;
       default:
         html = `
                     <h3 class="modal-title info-title">${title} || Informação</h3>
                     <p class="modal-body info-body">${bodyText}</p>
+                    <p class="modal-body info-body">${contentType}</p>
                     <button class="modal-button modal-button-close-info">Fechar</button>
                 `;
         break;

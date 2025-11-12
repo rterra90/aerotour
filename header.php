@@ -40,6 +40,7 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
 <!-- <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;700&display=swap" rel="stylesheet"> -->
 
 <?php
+
   $excursoes = wc_get_products(array(
       'orderby' => 'date',
       'order' => 'DESC',
@@ -111,17 +112,38 @@ else $description_content = 'Excursões para shows e eventos é com a Aerotour! 
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719"
     crossorigin="anonymous"></script>
-
-  <!-- Identifica acesso por PDV -->
-  <?php if(isset($_GET['aer_pdv']) && $_GET['aer_pdv'] === 'banca_do_rock'){ ?>
-    <script>window.sessionStorage.setItem('aer_pdv', '<?= $_GET['aer_pdv']; ?>')</script>
-  <?php 
-  } 
-    ?>
 </head>
 
 <body <?php body_class(); ?>>
 
+<?php
+ if ( isset($_COOKIE['parceiro_pdv']) ) {
+  $codigo_pdv = sanitize_text_field($_COOKIE['parceiro_pdv']);
+  $nome_pdv = obter_nome_pdv_por_codigo($codigo_pdv);
+
+  ?>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // salva em localStorace chave 'pdv_alert_popup' com valor false apenas se 'pdv_alert_popup' não estiver definido
+      if (!localStorage.getItem('pdv_alert_popup')) {
+        localStorage.setItem('pdv_alert_popup', 'checked');
+
+        //Instancia um novo modal
+        const modalElement = new Modal('generalModal', '.modal-content-body');
+        modalElement.open('parceiroPDV', {nomeParceiro: '<?= $nome_pdv; ?>'});
+      }
+    });
+  </script>
+<?php
+} else {
+  ?>
+    <script>
+      //remove a chave 'pdv_alert_popup' do localStorage
+      localStorage.removeItem('pdv_alert_popup');
+    </script>
+  <?php
+}
+?>
 
   <?php
     if(!is_user_logged_in() && get_option('new_register_coupon_status') && get_option('new_register_coupon_status')['status'] === 'ativado'){
