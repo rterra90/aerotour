@@ -1,5 +1,6 @@
 <?php
-include 'relatorios-pdv.php';
+include 'pdv-relatorios-functions.php';
+include 'pdv-email-functions.php';
 // ======================
 // RASTREAMENTO DE PARCEIRO
 // ======================
@@ -221,14 +222,24 @@ add_action('init', function () {
   register_post_type('pdv', $args);
 });
 
-// Adiciona o metabox para comissão no editor de parceiro
 add_action('add_meta_boxes', function () {
+  // Adiciona o metabox para comissão no editor de parceiro
   add_meta_box(
     'pdv_comissao',
     'Comissão do PDV',
     'render_metabox_pdv_comissao',
     'pdv',
     'side',
+    'default'
+  );
+
+  //Adiciona o metabox para informações de contato do parceiro
+  add_meta_box(
+    'pdv_contato',
+    'Informações de Contato',
+    'render_meta_box_contato_pdv',
+    'pdv',
+    'normal',
     'default'
   );
 });
@@ -243,6 +254,37 @@ function render_metabox_pdv_comissao($post)
         <small>Informe o percentual de comissão aplicado às vendas deste parceiro.</small>
     </p>
     <?php
+}
+
+//Renderiza a seção de contato do parceiro
+function render_meta_box_contato_pdv($post)
+{
+  $email = get_post_meta($post->ID, 'pdv_email', true);
+  $telefone = get_post_meta($post->ID, 'pdv_telefone', true);
+  $contato = get_post_meta($post->ID, 'pdv_nome_contato', true);
+  wp_nonce_field('salvar_pdv_contato', 'pdv_contato_nonce');
+  ?>
+  <table class="form-table">
+    <tr>
+      <th><label for="pdv_nome_contato">Nome do contato</label></th>
+      <td><input type="text" id="pdv_nome_contato" name="pdv_nome_contato" value="<?php echo esc_attr(
+        $contato
+      ); ?>" class="regular-text"></td>
+    </tr>
+    <tr>
+      <th><label for="pdv_email">E-mail</label></th>
+      <td><input type="email" id="pdv_email" name="pdv_email" value="<?php echo esc_attr(
+        $email
+      ); ?>" class="regular-text"></td>
+    </tr>
+    <tr>
+      <th><label for="pdv_telefone">Telefone</label></th>
+      <td><input type="text" id="pdv_telefone" name="pdv_telefone" value="<?php echo esc_attr(
+        $telefone
+      ); ?>" class="regular-text"></td>
+    </tr>
+  </table>
+  <?php
 }
 
 // ======================
@@ -294,7 +336,7 @@ function render_pdv_codigo_field($post)
   echo '<small>Exemplo: <code>loja_joao</code></small>';
 }
 
-// 2️⃣ Salva o slug atualizado quando o post é salvo
+// Salva os campos personalizados do parceiro
 add_action('save_post_pdv', function ($post_id) {
   // Segurança
   if (
@@ -332,6 +374,24 @@ add_action('save_post_pdv', function ($post_id) {
       floatval($_POST['pdv_comissao'])
     );
   }
+  //Salva o nome de contato
+  update_post_meta(
+    $post_id,
+    'pdv_nome_contato',
+    sanitize_text_field($_POST['pdv_nome_contato'] ?? '')
+  );
+  //Salva o e-mail
+  update_post_meta(
+    $post_id,
+    'pdv_email',
+    sanitize_email($_POST['pdv_email'] ?? '')
+  );
+  //Salva o telefone
+  update_post_meta(
+    $post_id,
+    'pdv_telefone',
+    sanitize_text_field($_POST['pdv_telefone'] ?? '')
+  );
 });
 
 // ======================
