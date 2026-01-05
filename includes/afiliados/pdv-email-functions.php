@@ -38,11 +38,11 @@ function enviar_email_venda_parceiro($order_id)
   $valor_comissao = ($valor_total * $comissao_percentual) / 100;
 
   // Caminho do template do email
-  $template_path = locate_template('woocommerce/emails/email-pdv-venda.php');
-  if (!$template_path) {
-    // fallback: se o template não existir, aborta
-    return;
-  }
+  // $template_path = locate_template('woocommerce/emails/email-pdv-venda.php');
+  // if (!$template_path) {
+  //   // fallback: se o template não existir, aborta
+  //   return;
+  // }
 
   // Buffer de saída para capturar o HTML do template
   // ob_start();
@@ -67,7 +67,7 @@ function enviar_email_venda_parceiro($order_id)
 
   // Envia o e-mail
   if ($email) {
-    // wp_mail($email, $assunto, $mensagem, $headers);
+    wp_mail($email, $assunto, $mensagem, $headers);
   }
 }
 
@@ -125,30 +125,4 @@ function montar_email_venda_parceiro($dados)
     <?php return ob_get_clean();
 }
 
-//PREVIEW EMAIL
-
-add_action('init', function () {
-  if (isset($_GET['email_preview'])) {
-    if (!current_user_can('manage_options')) {
-      wp_die('Acesso restrito.');
-    }
-
-    $dados_teste = [
-      'nome_comercial' => 'Loja Exemplo',
-      'order_id' => 1234,
-
-      'valor_total' => 458.75,
-      'comissao_percentual' => 10,
-      'valor_comissao' => 45.88
-    ];
-
-    // require_once plugin_dir_path(__FILE__) . 'email-venda-parceiro.php';
-    $html = montar_email_venda_parceiro($dados_teste);
-
-    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Prévia do E-mail</title></head><body>';
-    echo $html;
-    echo '</body></html>';
-    exit();
-  }
-});
 ?>

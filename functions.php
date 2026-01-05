@@ -56,6 +56,7 @@ include 'admin-ajax-hooks.php';
 include 'email-hooks.php';
 include 'exc-passageiros-admin.php';
 
+include 'includes/preview-emails.php';
 include 'includes/functions/login-functions.php';
 include 'includes/functions/refunds-functions.php';
 include 'includes/cards-slider.php';
