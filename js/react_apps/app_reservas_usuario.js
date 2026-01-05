@@ -5007,7 +5007,7 @@
         setLoading(true);
       if (index >= selectedDates.length) {
         botaoContinuarRef.current.innerHTML = "Redirecionando para o carrinho...";
-        window.location.href = "http://localhost/aerotour-site/carrinho/";
+        window.location.href = "http://aerotour.com.br/carrinho/";
         return;
       }
       const submitQty = passageiros.length;
