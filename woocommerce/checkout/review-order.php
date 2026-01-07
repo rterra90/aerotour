@@ -54,7 +54,6 @@ defined( 'ABSPATH' ) || exit;
 							</ul>
 						</div>
 						<div class="subtotal">
-							<!-- <p>teste aqui</p> -->
 							<strong class="d-block text-end px-4 pt-2">Subtotal: <span><?php echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); ?></span></strong>
 						</div>
 					</div>
@@ -87,20 +86,8 @@ defined( 'ABSPATH' ) || exit;
 </div>
 
 
-<div>
-	<?php
-    if ( isset($_COOKIE['parceiro_pdv']) && $_COOKIE['parceiro_pdv'] ) {
-        $codigo_pdv = sanitize_text_field($_COOKIE['parceiro_pdv']);
-        $nome_pdv = obter_nome_pdv_por_codigo($codigo_pdv);
 
-        // Renderiza o bloco visual
-        echo '<div class="wc-parceiro-badge">
-            <span>Ponto de venda</span>
-            <div>' . esc_html($nome_pdv ?: $codigo_pdv) . '</div>
-        </div>';
-    }
-	?>
-	<table class="shop_table woocommerce-checkout-review-order-table">
+<table class="shop_table woocommerce-checkout-review-order-table">
 	<thead>
 	</thead>
 	<tbody>
@@ -151,7 +138,5 @@ defined( 'ABSPATH' ) || exit;
 
 	</tfoot>
 </table>
-</div>
-
 
 

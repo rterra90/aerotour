@@ -33,18 +33,6 @@ if($order->get_status() === 'completed'){
 	<div class="mt-sm-4 mt-5 mb-5" id="meus-pedidos-cta">
 		<a href="<?= wc_get_endpoint_url( 'minhas-reservas', '', wc_get_page_permalink('myaccount')); ?>">Visualizar reserva ></a>
 	</div>
-	
-
-	<!-- Mostrar parceiro afiliado se houver -->
-	<?php
-	if($order->get_meta('parceiro_pdv')){
-		?>
-		<p class="parceiro-pedido-badge">Pedido realizado via parceiro <strong><?= esc_html( $order->get_meta('parceiro_pdv') ); ?></strong></p>
-		<?php
-	}
-	?>
-
-
 	<?php
 }else if($order->get_status() === 'pending'){
 	$actions = wc_get_account_orders_actions( $order );

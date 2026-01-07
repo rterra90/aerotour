@@ -1,68 +1,80 @@
 <?php
 get_header();
 // JSON-LD
-if($product){
-    $jsonLd = [
-    "@context" => "https://schema.org/",
-    "@type" => "Product",
-    "name" => "Excursão ".$product->get_name(),
-    "image" => wp_get_attachment_url( $product->get_image_id() ),
-    "description" => wp_strip_all_tags( $product->get_short_description() ),
-    "brand" => [
-        "@type" => "Brand",
-        "name" => "Aerotour Excursões"
+if ($product) {
+  $jsonLd = [
+    '@context' => 'https://schema.org/',
+    '@type' => 'Product',
+    'name' => 'Excursão ' . $product->get_name(),
+    'image' => wp_get_attachment_url($product->get_image_id()),
+    'description' => wp_strip_all_tags($product->get_short_description()),
+    'brand' => [
+      '@type' => 'Brand',
+      'name' => 'Aerotour Excursões'
     ],
-    "offers" => [
-        "@type" => "Offer",
-        "priceCurrency" => 'BRL',
-        "price" => $product->get_price() . '.00',
-        "availability" => $product->is_in_stock() ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-        "url" => get_permalink( $product->get_id() ),
-        "seller" => [
-            "@id" => "https://www.aerotour.com.br/",
-        ]
+    'offers' => [
+      '@type' => 'Offer',
+      'priceCurrency' => 'BRL',
+      'price' => $product->get_price() . '.00',
+      'availability' => $product->is_in_stock()
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      'url' => get_permalink($product->get_id()),
+      'seller' => [
+        '@id' => 'https://www.aerotour.com.br/'
+      ]
     ]
-    ];
+  ];
 }
-echo '<script type="application/ld+json">' . json_encode($jsonLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '</script>';
+echo '<script type="application/ld+json">' .
+  json_encode(
+    $jsonLd,
+    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+  ) .
+  '</script>';
 // FIM JSON-LD
 
 $user = wp_get_current_user();
 $user_meta = get_user_meta($user->ID);
-$user -> metafields = $user_meta;
+$user->metafields = $user_meta;
 global $wpdb;
 global $product;
 
-function excursao_formatada($id){
+function excursao_formatada($id)
+{
   global $wpdb;
   $_excursao = wc_get_product($id);
-  $_excursao_img = wp_get_attachment_image_src($_excursao->get_image_id(), 'full');
+  $_excursao_img = wp_get_attachment_image_src(
+    $_excursao->get_image_id(),
+    'full'
+  );
   $locais_embarque = json_decode(get_post_meta($id, 'embarques', true), true);
-    $exc_embarques = json_decode(get_post_meta($id, 'exc_embarques', true), true);
-  
-  if($locais_embarque !== null){
-    $ids_embarques = array_map(function($_emb){
+  $exc_embarques = json_decode(get_post_meta($id, 'exc_embarques', true), true);
+
+  if ($locais_embarque !== null) {
+    $ids_embarques = array_map(function ($_emb) {
       return $_emb['embarqueId'];
     }, $locais_embarque);
     $_ids_str = implode(',', $ids_embarques);
   }
 
-  $embarques_db = isset($_ids_str) ? $wpdb -> get_results("SELECT * from aer_embarques WHERE id IN ($_ids_str)") : [];
+  $embarques_db = isset($_ids_str)
+    ? $wpdb->get_results("SELECT * from aer_embarques WHERE id IN ($_ids_str)")
+    : [];
 
-  if(isset($locais_embarque)){
-    foreach($locais_embarque as $_index => $_emb_exc){
-      foreach($embarques_db as $_emb_db){
-        if((int)$_emb_db -> id === (int)$_emb_exc['embarqueId']){
-          $locais_embarque[$_index]['nome'] = $_emb_db -> nome;
-          $locais_embarque[$_index]['endereco'] = $_emb_db -> endereco;
-          $locais_embarque[$_index]['obs'] = $_emb_db -> obs;
-          $locais_embarque[$_index]['link_mapa'] = $_emb_db -> link_mapa;
+  if (isset($locais_embarque)) {
+    foreach ($locais_embarque as $_index => $_emb_exc) {
+      foreach ($embarques_db as $_emb_db) {
+        if ((int) $_emb_db->id === (int) $_emb_exc['embarqueId']) {
+          $locais_embarque[$_index]['nome'] = $_emb_db->nome;
+          $locais_embarque[$_index]['endereco'] = $_emb_db->endereco;
+          $locais_embarque[$_index]['obs'] = $_emb_db->obs;
+          $locais_embarque[$_index]['link_mapa'] = $_emb_db->link_mapa;
         }
       }
     }
   }
 
-  
   // function disp_vagas($_e){
   //   $_variacoes = $_e->get_available_variations();
   //   if(count($_variacoes) == 1){
@@ -71,11 +83,10 @@ function excursao_formatada($id){
   //   } else return false;
   // };
 
-  
   return [
     'id' => $id,
     'nome' => $_excursao->get_name(),
-    'price' =>$_excursao->get_price(),
+    'price' => $_excursao->get_price(),
     'on_sale' => $_excursao->is_on_sale(),
     'regular_price' => $_excursao->get_regular_price(),
     'descricao' => $_excursao->get_description(),
@@ -83,7 +94,7 @@ function excursao_formatada($id){
     'variacoes' => $_excursao->get_available_variations(),
     'atributos' => $_excursao->get_attributes(),
     'embarques' => $locais_embarque ? $locais_embarque : null,
-    'exc_embarques' => json_encode($exc_embarques, JSON_UNESCAPED_UNICODE),
+    'exc_embarques' => json_encode($exc_embarques, JSON_UNESCAPED_UNICODE)
     // 'data_final' => $data_final,
     // 'disp_vagas' => disp_vagas($_excursao),
   ];
@@ -94,18 +105,21 @@ $excursao = excursao_formatada(get_the_ID());
 // print_r($excursao);
 
 //Define a propriedade 'encerrar_vendas' em cada variação
-foreach($excursao['variacoes'] as $i => $var){
-  $excursao['variacoes'][$i]['encerrar_vendas'] = get_post_meta($var['variation_id'], 'encerrar_vendas', true) === 'yes' ? true : false;
+foreach ($excursao['variacoes'] as $i => $var) {
+  $excursao['variacoes'][$i]['encerrar_vendas'] =
+    get_post_meta($var['variation_id'], 'encerrar_vendas', true) === 'yes'
+      ? true
+      : false;
 }
 //Define e ordena a array de datas
-$datas = array_map(function($_var){
+$datas = array_map(function ($_var) {
   return $_var['attributes']['attribute_dia'];
 }, $excursao['variacoes']);
-usort($datas, function($a, $b) {
-    $dataA = DateTime::createFromFormat('d/m/Y', $a);
-    $dataB = DateTime::createFromFormat('d/m/Y', $b);
-    return $dataA <=> $dataB;
-})
+usort($datas, function ($a, $b) {
+  $dataA = DateTime::createFromFormat('d/m/Y', $a);
+  $dataB = DateTime::createFromFormat('d/m/Y', $b);
+  return $dataA <=> $dataB;
+});
 ?>
 <style>
   #avisoModal {
@@ -161,17 +175,16 @@ usort($datas, function($a, $b) {
     color: #333;
   }
 </style>
-	<link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/woocommerce/single-product.min.css?ver=<?= time(); ?>">
+	<link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/css/woocommerce/single-product.min.css?ver=<?= time() ?>">
   <?php
   $redirect_link = get_post_meta(get_the_ID(), 'redirect_link', true);
-  if($redirect_link){
-    ?>
+  if ($redirect_link) { ?>
     <div id="avisoModal">
       <div id="avisoModalContent">
         <button id="closeModalBtn" aria-label="Fechar modal">&times;</button>
         <h2>Atenção</h2>
         <p class="mb-3">Essa página é de uma excursão passada. </p>
-        <a class="d-block" style="text-decoration:underline" href="<?= $redirect_link; ?>">Clique aqui para acessar a página atual para a excursão Ensaios da Anitta Campinas 2026.</a>
+        <a class="d-block" style="text-decoration:underline" href="<?= $redirect_link ?>">Clique aqui para acessar a página atual para a excursão Ensaios da Anitta Campinas 2026.</a>
         
         <a class="whatsapp-btn main-close-btn mt-3" href="#">Fechar</a>
       </div>
@@ -205,22 +218,30 @@ usort($datas, function($a, $b) {
     });
     </script>
 
-    <?php
-  }
-  
+    <?php }
   ?>
   <section id="content-event" class="pb-5 aer-bg-light">
 
     <script>
-      <?php if(is_user_logged_in()){ ?>
-        window.sessionStorage.setItem('aer_user', JSON.stringify({nome_completo: '<?= $user_meta['first_name'][0] . " " . $user_meta['last_name'][0]; ?>', doc: '<?= $user_meta['nickname'][0]; ?>', telefone: '<?= $user_meta['billing_phone'][0]; ?>'}))
+      <?php if (is_user_logged_in()) { ?>
+        window.sessionStorage.setItem('aer_user', JSON.stringify({nome_completo: '<?= $user_meta[
+          'first_name'
+        ][0] .
+          ' ' .
+          $user_meta['last_name'][0] ?>', doc: '<?= $user_meta[
+  'nickname'
+][0] ?>', telefone: '<?= $user_meta['billing_phone'][0] ?>'}))
       <?php } else { ?>
         window.sessionStorage.removeItem('aer_user')
       <?php } ?>
     </script>
 
     <div class="hero-img">
-      <img class="main-image" src="<?= $excursao['img'] ?>" alt="Imagem representativa da excursão <?= $excursao['nome'] ?> da Aerotour" width="100%" height="100%">
+      <img class="main-image" src="<?= $excursao[
+        'img'
+      ] ?>" alt="Imagem representativa da excursão <?= $excursao[
+  'nome'
+] ?> da Aerotour" width="100%" height="100%">
     </div>
 
     <!-- quando houver banner: py-md-3 -->
@@ -235,10 +256,10 @@ usort($datas, function($a, $b) {
         <small>PARCEIRO</small>
         <?php
         // Insere o banner ArteCult
-          get_template_part('assets/banners/banner-artecult', null);
+        get_template_part('assets/banners/banner-artecult', null);
 
         // Insere o modal
-          // get_template_part('includes/modals/modal', null);
+        get_template_part('includes/modals/modal', null);
         ?>
        </div>
        
@@ -255,11 +276,19 @@ usort($datas, function($a, $b) {
             <div class="share">
               <span>Compartilhe</span>
               <div class="share-icons d-flex gap-2">
-                <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons('whatsapp', 18, 18)?></a>
-                <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons('instagram', 18, 18)?>
+                <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons(
+  'whatsapp',
+  18,
+  18
+) ?></a>
+                <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons(
+                  'instagram',
+                  18,
+                  18
+                ) ?>
                 </a>
                 <a href="https://www.facebook.com/aerotourcampinas/" aria-label="Botão compartilhar pelo Facebook">
-                  <?= aer_icons('facebook', 18, 18)?>
+                  <?= aer_icons('facebook', 18, 18) ?>
                 </a>
               </div>
             </div>
@@ -270,52 +299,81 @@ usort($datas, function($a, $b) {
 
           <!-- CONTADOR DE RESERVAS -->
           <?php
-            if(get_the_ID() == 4893){
-              $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id = 4894 AND status = 'normal'");
-              $total_reservas_count = count($total_reservas) + 15;
+          // obtém o valor do meta show_vendidos e renderiza na tela
+          $show_vendidos = get_post_meta(
+            $excursao['id'],
+            'show_vendidos',
+            true
+          );
+          if ($show_vendidos === 'yes') { ?>
 
-              ?>
-            <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
-              <?php
-            } else if(get_the_ID() == 2606){
-            $total_reservas = $wpdb -> get_results("SELECT status FROM aer_reservas WHERE variation_id IN (2607, 2608, 2609, 2610, 2611) AND status = 'normal'");
-            $total_reservas_count = count($total_reservas) + 10;
-              ?>
-            <div class="lugares-reservados gap-1"><?= aer_icons('banco', 15, 15, '.png'); ?><p class="mb-0 ms-2"><?= $total_reservas_count; ?> lugares reservados</p></div>
+            <!-- get na tabela reservas para contar quantas reservas existem para o produto atual -->
+            <?php
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'reservas';
 
-              <?php
+            // se uma excursão tiver múltiplas datas, somar as reservas de todas as variações
+            $variacao_ids = array_map(function ($_var) {
+              return $_var['variation_id'];
+            }, $excursao['variacoes']);
+            $_ids_str = implode(',', $variacao_ids);
+            $reservas_count = $wpdb->get_var(
+              $wpdb->prepare(
+                "SELECT COUNT(*) FROM $table_name WHERE variation_id IN ($_ids_str)"
+              )
+            );
+
+            // obter o valor numérico no meta "vendidos_inc" e somar ao contador
+            $incremento = get_post_meta($excursao['id'], 'vendidos_inc', true);
+            if (is_numeric($incremento)) {
+              $reservas_count += (int) $incremento;
             }
+            ?>
+            <div class="reservas-contador">
+              <p><strong><?= aer_icons(
+                'banco',
+                16,
+                16,
+                '.webp'
+              ) ?></strong><?= $reservas_count ?> lugares já reservados!</p>
+            </div>  
+                <div class="status-badge">
+
+                </div>
+              
+              <?php }
           ?>
           <!-- FIM CONTADOR DE RESERVAS -->
 
           <!-- Aviso de últimas vagas -->
            <!-- se houver apenas uma variação e ela tiver menos de 10 vagas disponíveis -->
-          <?php 
-            $variacoes_disp = array_filter($excursao['variacoes'], function($_var){
-              return get_post_meta($_var['variation_id'], 'encerrar_vendas', true) !== 'yes';
-            });
-            
-            if(count($variacoes_disp) == 1){
-              $vaga_var = $variacoes_disp[0];
-              $disponibilidade_html = $vaga_var['availability_html'];
-              preg_match('/\d+/', strip_tags($disponibilidade_html), $matches);
-              $vagas_disponiveis = isset($matches[0]) ? (int)$matches[0] : 0;
+          <?php
+          $variacoes_disp = array_filter($excursao['variacoes'], function (
+            $_var
+          ) {
+            return get_post_meta(
+              $_var['variation_id'],
+              'encerrar_vendas',
+              true
+            ) !== 'yes';
+          });
 
-              if($vagas_disponiveis > 0 && $vagas_disponiveis <= 10){
-                ?>
+          if (count($variacoes_disp) == 1) {
+            $vaga_var = $variacoes_disp[0];
+            $disponibilidade_html = $vaga_var['availability_html'];
+            preg_match('/\d+/', strip_tags($disponibilidade_html), $matches);
+            $vagas_disponiveis = isset($matches[0]) ? (int) $matches[0] : 0;
+
+            if ($vagas_disponiveis > 0 && $vagas_disponiveis <= 10) { ?>
                 <div class="aviso-ultimas-vagas">
-                  <strong class="d-block">Últimos lugares!</strong> Restam <?= $vagas_disponiveis; ?> vagas disponíveis para essa excursão!
+                  <strong class="d-block">Últimos lugares!</strong> Restam <?= $vagas_disponiveis ?> vagas disponíveis para essa excursão!
                 </div>
-                <?php
-              }else if(!$vagas_disponiveis){
-                  ?>
+                <?php } elseif (!$vagas_disponiveis) { ?>
                 <div class="aviso-ultimas-vagas aviso-esgotado">
                   <strong class="d-block">Esgotado!</strong> Não temos mais lugares disponíveis...
                 </div>
-                <?php
-              }
-            }
-            
+                <?php }
+          }
           ?>
           
           <!-- info inner -->
@@ -324,68 +382,79 @@ usort($datas, function($a, $b) {
             <section class="grid-container">
               <!-- Box Datas -->
               <div class="box box1">
-                <div class="label"><?= aer_icons('calendar-red', 22, 22)?>
+                <div class="label"><?= aer_icons('calendar-red', 22, 22) ?>
                   <span>Data</span>
                 </div>
                 
-                  <?php 
-                    if(count($datas) > 2){
-                      ?>
+                  <?php if (count($datas) > 2) { ?>
                       <div class="pre-value">Entre</div>
-                      <div class="value" style="margin-top: -6px"><?= $datas[0]; ?></div>
+                      <div class="value" style="margin-top: -6px"><?= $datas[0] ?></div>
                       <div class="pre-value">e</div>
-                      <div class="value" style="margin-top: -6px"><?= $datas[count($datas) - 1]; ?></div>
+                      <div class="value" style="margin-top: -6px"><?= $datas[
+                        count($datas) - 1
+                      ] ?></div>
 
-                      <?php
-
-                    }else if(count($datas) <= 2){
-                      foreach($datas as $data){
-                        ?>
-                        <div class="value"><?= $data === "31/12/2026" ? "A definir..." : $data; ?></div>
-                        <?php
-                      }
-                    }
-                  ?>
+                      <?php } elseif (count($datas) <= 2) {
+                    foreach ($datas as $data) { ?>
+                        <div class="value"><?= $data === '31/12/2026'
+                          ? 'A definir...'
+                          : $data ?></div>
+                        <?php }
+                  } ?>
                 
               </div>
 
               <!-- Box Local -->
               <div class="box box2">
-                <div class="label"><?= aer_icons('pin-red', 22, 22)?>
+                <div class="label"><?= aer_icons('pin-red', 22, 22) ?>
                   <span>Local</span>
                 </div>
                 <?php
                 $local = get_post_meta($excursao['id'], 'local_evento', true);
                 $local_array = preg_split('/\s*\/\s*/', $local);
                 ?>
-                <div class="value"><?= $local_array[0]; ?></div>
-                <div class="post-value"><?= $local_array[1]; ?></div>
+                <div class="value"><?= $local_array[0] ?></div>
+                <div class="post-value"><?= $local_array[1] ?></div>
               </div>
 
               <!-- Box Previsão chegada -->
               <div class="box box3">
-                <div class="label"><?= aer_icons('clock-red', 15, 15)?>
+                <div class="label"><?= aer_icons('clock-red', 15, 15) ?>
                   <span>Chegada prevista</span>
                 </div>
-                <div class="value"><?= get_post_meta(get_the_ID(), 'previsao_chegada', true); ?></div>
+                <div class="value"><?= get_post_meta(
+                  get_the_ID(),
+                  'previsao_chegada',
+                  true
+                ) ?></div>
               </div>
 
               <!-- Box Ingressos -->
               <div class="box box4">
-                <div class="label"><?= aer_icons('ticket-red', 15, 15)?>
+                <div class="label"><?= aer_icons('ticket-red', 15, 15) ?>
                   <span>Ingressos</span>
                 </div>
-                <div class="value"><a class="ingressos-link" aria-label="Link para venda de ingressos" href="<?= get_post_meta(get_the_ID(), 'ingressos_link', true); ?>" target="_blank"><?= get_post_meta(get_the_ID(), 'ingressos_label', true); ?></a></div>
+                <div class="value"><a class="ingressos-link" aria-label="Link para venda de ingressos" href="<?= get_post_meta(
+                  get_the_ID(),
+                  'ingressos_link',
+                  true
+                ) ?>" target="_blank"><?= get_post_meta(
+  get_the_ID(),
+  'ingressos_label',
+  true
+) ?></a></div>
               </div>
             </section>
 
             <!-- cta button -->
-            <a href="#reservaBox" class="cta-button" aria-label="Reservar lugar na excursão <?= $excursao['nome']; ?>" onclick="gtag('event', 'clique_reservar_cta', {
+            <a href="#reservaBox" class="cta-button" aria-label="Reservar lugar na excursão <?= $excursao[
+              'nome'
+            ] ?>" onclick="gtag('event', 'clique_reservar_cta', {
                   'event_category': 'ads',
                   'event_label': 'clique_reservar_cta',
                   'value': 1
                 })">
-              <?= aer_icons('bookmark-light', 16, 16, '.webp'); ?> Reservar agora
+              <?= aer_icons('bookmark-light', 16, 16, '.webp') ?> Reservar agora
             </a>
 
 
@@ -434,21 +503,24 @@ usort($datas, function($a, $b) {
                       <button class="scroll-btn left" id="scrollLeft">&#9664;</button>
                       <div class="filtro-scroll" id="filtroCidades">
                         <button class="filtro-btn active" data-cidade="todas">Todas</button>
-                        <?php 
+                        <?php
                         //iterar $excursao['embarques'], obter a string $embarque['nome'], dividir essa string em ' - ', retornar o primeiro termo, armazenar em uma array única e ordenar em ordem alafabetica
-                        $cidades = array_unique(array_map(function($_emb){
-                          return strtolower(trim(explode(' - ', $_emb['nome'])[0]));
-                        }, $excursao['embarques']));
+                        $cidades = array_unique(
+                          array_map(function ($_emb) {
+                            return strtolower(
+                              trim(explode(' - ', $_emb['nome'])[0])
+                            );
+                          }, $excursao['embarques'])
+                        );
                         sort($cidades);
-                        
-                        foreach($cidades as $cidade){
-                          ?>
-                            <button class="filtro-btn" data-cidade="<?= $cidade; ?>"><?= ucfirst($cidade); ?></button>
+
+                        foreach ($cidades as $cidade) { ?>
+                            <button class="filtro-btn" data-cidade="<?= $cidade ?>"><?= ucfirst(
+  $cidade
+) ?></button>
 
 
-                          <?php
-                        }
-
+                          <?php }
                         ?>
                         
                         <button class="filtro-btn" data-cidade="indaiatuba">Indaiatuba</button>
@@ -458,32 +530,34 @@ usort($datas, function($a, $b) {
                   </div>
 
                   <div class="lista-embarque" id="listaEmbarque">
-                    <?php
-                    foreach($excursao['embarques'] as $i => $embarque){
-                      $horarios_simples = array_unique(array_map(function($_op){
-                        return $_op['horario'];
-                      }, $embarque['horarios']));
-
+                    <?php foreach ($excursao['embarques'] as $i => $embarque) {
+                      $horarios_simples = array_unique(
+                        array_map(function ($_op) {
+                          return $_op['horario'];
+                        }, $embarque['horarios'])
+                      );
                       // o single product antigo tem funções para lidar com múltiplos horários
-
                       ?>
-                      <div class="item-embarque" data-cidade="<?= strtolower(trim(explode(' - ', $embarque['nome'])[0])); ?>">
+                      <div class="item-embarque" data-cidade="<?= strtolower(
+                        trim(explode(' - ', $embarque['nome'])[0])
+                      ) ?>">
                         <div class="item-embarque-info">
-                          <p class="nome-embarque"><?= $embarque['nome']; ?></p>
+                          <p class="nome-embarque"><?= $embarque['nome'] ?></p>
                           <span>Endereço:</span> 
-                          <p><?= $embarque['endereco']; ?></p>
+                          <p><?= $embarque['endereco'] ?></p>
                           <span>Referência para embarque:</span>
-                          <p><?= $embarque['obs']; ?></p>
+                          <p><?= $embarque['obs'] ?></p>
                         </div>
                         <div class="detalhes">
-                          <div class="horario"><?= $horarios_simples[0]; ?></div>
-                          <div class="mapa"><a href="<?= $embarque['link_mapa']; ?>" target="_blank">Ver no mapa</a></div>
+                          <div class="horario"><?= $horarios_simples[0] ?></div>
+                          <div class="mapa"><a href="<?= $embarque[
+                            'link_mapa'
+                          ] ?>" target="_blank">Ver no mapa</a></div>
                         </div>
                       </div>
 
                       <?php
-                    }
-                    ?>
+                    } ?>
                     <div class="mostrar-tudo-btn d-none" data-cidade="todas">Mostrar tudo</div>
                   </div>
                 </div>
@@ -520,7 +594,7 @@ usort($datas, function($a, $b) {
         <div id="reservaBox" class="col-md-5 col center-element reserva-box">
 
           <!--<div id="bannerRoleta">-->
-          <!--  <img class="w-100 mb-1" src="<?= get_stylesheet_directory_uri()?>/assets/banners/banner-roleta.webp" alt="Banner roleta Aerotour">-->
+          <!--  <img class="w-100 mb-1" src="<?= get_stylesheet_directory_uri() ?>/assets/banners/banner-roleta.webp" alt="Banner roleta Aerotour">-->
           <!--</div>-->
 
           <!-- <div class="excursao-details position-relative aer-box mt-3 mt-sm-2"> -->
@@ -528,7 +602,20 @@ usort($datas, function($a, $b) {
             <!-- <h2 class="mb-4">Faça aqui sua reserva</h2> -->
 
             <!-- RESERVA APP - REACT  -->
-            <div id="reserva_app" data-cart-url='<?= wc_get_cart_url(); ?>' data-ajax-url='<?php echo admin_url( 'admin-ajax.php' ); ?>' data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE); ?>' data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE); ?>' data-product-id='<?= $excursao['id']; ?>' data-exc-embarques='<?= json_encode($excursao['exc_embarques'], JSON_UNESCAPED_UNICODE); ?>'></div>
+            <div id="reserva_app" data-cart-url='<?= wc_get_cart_url() ?>' data-ajax-url='<?php echo admin_url(
+  'admin-ajax.php'
+); ?>' data-variacoes='<?= json_encode(
+  $excursao['variacoes'],
+  JSON_UNESCAPED_UNICODE
+) ?>' data-embarques='<?= json_encode(
+  $excursao['embarques'],
+  JSON_UNESCAPED_UNICODE
+) ?>' data-product-id='<?= $excursao[
+  'id'
+] ?>' data-exc-embarques='<?= json_encode(
+  $excursao['exc_embarques'],
+  JSON_UNESCAPED_UNICODE
+) ?>'></div>
             <!-- FIM RESERVA APP - REACT  -->
           
 
@@ -539,10 +626,12 @@ usort($datas, function($a, $b) {
 
       <!-- BOTÃO WHATSAPP -->
       <div id="exc-wpp-cta" class="desktop">
-        <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao['nome']; ?>" aria-label="Botão para chamar no WhatsApp">
+        <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao[
+          'nome'
+        ] ?>" aria-label="Botão para chamar no WhatsApp">
           <div role="button" class="mt-5">
             <div class="wpp-icon">
-              <?= aer_icons('whatsapp', 30, 30); ?>
+              <?= aer_icons('whatsapp', 30, 30) ?>
             </div>
             <div class="wpp-text">
               <p>Dúvidas?</p>
@@ -555,23 +644,26 @@ usort($datas, function($a, $b) {
 
       <!-- EXCURSÕES RELACIONADAS -->
       <section id="excursoes-relacionadas" class="mt-5 py-md-3">
-        <?php 
+        <?php
         $product = wc_get_product(get_the_id());
-        $cross_sells = $product -> cross_sell_ids;
-        if(sizeof($cross_sells) > 0){
-          $relateds = wc_get_products(array(
+        $cross_sells = $product->cross_sell_ids;
+        if (sizeof($cross_sells) > 0) {
+          $relateds = wc_get_products([
             'orderby' => 'date',
             'order' => 'DESC',
             'status' => 'publish',
             'include' => $cross_sells,
-            'limit' => -1,
-          ));
-          
-          if(sizeof($relateds) > 0){
-            aer_cards_slider(aer_proximas_excursoes($relateds), 'Veja também', 'light');
+            'limit' => -1
+          ]);
+
+          if (sizeof($relateds) > 0) {
+            aer_cards_slider(
+              aer_proximas_excursoes($relateds),
+              'Veja também',
+              'light'
+            );
           }
         }
-        
         ?> 
       </section>
 
@@ -579,9 +671,7 @@ usort($datas, function($a, $b) {
       <div id="social-footer" class="d-flex mt-sm-4 mt-5">
         <div class="instagram-feed col-md-6">
           <h2 class="bg-title">Siga a Aerotour</h2>
-          <?php
-          echo do_shortcode( '[instagram feed="4017"]' );
-          ?>
+          <?php echo do_shortcode('[instagram feed="4017"]'); ?>
         </div>
         <div id="secaoFotos" col-md-6">
           <h2 class="bg-title">Fotos das excursões</h2>
@@ -626,7 +716,7 @@ usort($datas, function($a, $b) {
       </div>
     </div>
   </section>
-  <script src="<?php echo get_stylesheet_directory_uri() ?>/js/single-product.js?ver=<?= time(); ?>"></script>
+  <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/single-product.js?ver=<?= time() ?>"></script>
 <!-- React e ReactDOM em produção -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>

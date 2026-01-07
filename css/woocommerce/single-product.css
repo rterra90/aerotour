@@ -9,6 +9,20 @@
 #topAdBanner small {
   font-size: 0.575rem;
 }
+.reservas-contador{
+    background: var(--aer-box-light);
+    width: fit-content;
+    margin: 4px 0 8px 0;
+    padding: 4px 7px;
+    font-size: .75rem;
+    border-radius: .25rem;
+}
+.reservas-contador p{
+  margin: 0
+}.reservas-contador strong{
+margin-right: 5px;
+filter: contrast(0.675);
+}
 .aviso-ultimas-vagas {
   background-color: #fff8cc;
   border: 1px solid #ffd700;

@@ -1,13 +1,15 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+if (!defined('ABSPATH')) {
+  exit(); // Exit if accessed directly.
 }
 
-do_action( 'woocommerce_before_customer_login_form' ); ?>
+do_action('woocommerce_before_customer_login_form');
+?>
 
 
-<?php if ( 'yes' === get_option( 'woocommerce_enable_myaccount_registration' ) ) : ?><?php endif; ?>
-<link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/form-login.min.css?ver=<?= time(); ?>">
+<?php if ('yes' === get_option('woocommerce_enable_myaccount_registration')):
+endif; ?>
+<link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/css/form-login.min.css?ver=<?= time() ?>">
 <section id="form-login" class="container">
 
 	<!-- Título -->
@@ -27,43 +29,64 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 		<!-- JÁ SOU CLIENTE -->
 		<div class="login-box active" id="login">
 			<h2 class="bg-title">Já sou cliente</h2>
-			<?php
-				if(isset($_GET['login']) && $_GET['login'] === 'failed'){
-					?>
+			<?php if (isset($_GET['login']) && $_GET['login'] === 'failed') { ?>
 						<div class="login-error-alert">
 							Erro: Verifique seus dados e tente fazer login novamente.
 						</div>
-					<?php
-				}
-			?>
-			<form class="woocommerce-form woocommerce-form-login login" method="post" action="<?php echo esc_url(  get_permalink() ); ?>">
-				<?php do_action( 'woocommerce_login_form_start' ); ?>
+					<?php } ?>
+			<form class="woocommerce-form woocommerce-form-login login" method="post" action="<?php echo esc_url(
+     get_permalink()
+   ); ?>">
+				<?php do_action('woocommerce_login_form_start'); ?>
 
 				<div>
-					<label for="username"><?php esc_html_e( 'Username or email address', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
-					<input type="text" name="username" id="username" autocomplete="username" value="<?php echo ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>" />
+					<label for="username"><?php esc_html_e(
+       'Username or email address',
+       'woocommerce'
+     ); ?>&nbsp;<span class="required">*</span></label>
+					<input type="text" name="username" id="username" autocomplete="username" value="<?php echo !empty(
+       $_POST['username']
+     )
+       ? esc_attr(wp_unslash($_POST['username']))
+       : ''; ?>" />
 				</div>
 				<div>
-					<label for="password"><?php esc_html_e( 'Password', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
+					<label for="password"><?php esc_html_e(
+       'Password',
+       'woocommerce'
+     ); ?>&nbsp;<span class="required">*</span></label>
 					<input type="password" name="password" id="password" autocomplete="current-password" />
 				</div>
 				<input type="hidden" id="qr_event_coupon_control_login">
 
-				<?php do_action( 'woocommerce_login_form' ); ?>
+				<?php do_action('woocommerce_login_form'); ?>
 
 				<p class="form-login-end remember-checkbox">
 					<label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-						<input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></span>
+						<input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span><?php esc_html_e(
+        'Remember me',
+        'woocommerce'
+      ); ?></span>
 					</label>
-					<?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
-					<button type="submit" data-btn-reactive class="main-btn woocommerce-form-login__submit<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="login" value="<?php esc_attr_e( 'Log in', 'woocommerce' ); ?>"><?php esc_html_e( 'Log in', 'woocommerce' ); ?></button>
+					<?php wp_nonce_field('woocommerce-login', 'woocommerce-login-nonce'); ?>
+					<button type="submit" data-btn-reactive class="main-btn woocommerce-form-login__submit<?php echo esc_attr(
+       wc_wp_theme_get_element_class_name('button')
+         ? ' ' . wc_wp_theme_get_element_class_name('button')
+         : ''
+     ); ?>" name="login" value="<?php esc_attr_e(
+  'Log in',
+  'woocommerce'
+); ?>"><?php esc_html_e('Log in', 'woocommerce'); ?></button>
 				</p>
 
 				<p class="woocommerce-LostPassword lost_password">
-					<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'Lost your password?', 'woocommerce' ); ?></a>
+					<a href="<?php echo esc_url(wp_lostpassword_url()); ?>"><?php esc_html_e(
+  'Lost your password?',
+  'woocommerce'
+); ?></a>
 				</p>
 
-				<?php do_action( 'woocommerce_login_form_end' ); ?>
+				<?php do_action('woocommerce_login_form_end'); ?>
 
 			</form>
 		</div>
@@ -78,42 +101,72 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 			<!-- REGISTRO COM FORMULÁRIO -->
 			<!-- Botão -->
 			<button id="emailRegister" class="secondary-btn toggle-active">
-				<div class="d-flex gap-2"><?= aer_icons('email', 20, 20); ?><span>Cadastrar com email</span></div>
+				<div class="d-flex gap-2"><?= aer_icons(
+      'email',
+      20,
+      20
+    ) ?><span>Cadastrar com email</span></div>
 			</button>
 
 			<!-- Formulário de registro -->
-			<form id="emailRegisterForm" method="post" class="woocommerce-form woocommerce-form-register register" <?php do_action( 'woocommerce_register_form_tag' ); ?> >
+			<form id="emailRegisterForm" method="post" class="woocommerce-form woocommerce-form-register register" <?php do_action(
+     'woocommerce_register_form_tag'
+   ); ?> >
 
-				<?php do_action( 'woocommerce_register_form_start' ); ?>
+				<?php do_action('woocommerce_register_form_start'); ?>
 
-				<?php if ( 'no' === get_option( 'woocommerce_registration_generate_username' ) ) : ?>
+				<?php if ('no' === get_option('woocommerce_registration_generate_username')): ?>
 
 				<div class="form-row-hidden">
-					<input type="hidden" class="<?= isset($_POST['username']) && strlen($_POST['username']) < 11 && !isset($_GET['login']) ? 'erro-input' : ''; ?>" name="username" id="reg_username" autocomplete="username" value="<?php echo ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>" />
+					<input type="hidden" class="<?= isset($_POST['username']) &&
+     strlen($_POST['username']) < 11 &&
+     !isset($_GET['login'])
+       ? 'erro-input'
+       : '' ?>" name="username" id="reg_username" autocomplete="username" value="<?php echo !empty(
+  $_POST['username']
+)
+  ? esc_attr(wp_unslash($_POST['username']))
+  : ''; ?>" />
 				</div>
 
 				<?php endif; ?>
 
 				<div class="form-row">
-					<label for="reg_email"><?php esc_html_e( 'Email address', 'woocommerce' ); ?></label>
-					<input type="email" name="email" id="reg_email" autocomplete="email" value="<?php echo ( ! empty( $_POST['email'] ) ) ? esc_attr( wp_unslash( $_POST['email'] ) ) : ''; ?>" />
+					<label for="reg_email"><?php esc_html_e(
+       'Email address',
+       'woocommerce'
+     ); ?></label>
+					<input type="email" name="email" id="reg_email" autocomplete="email" value="<?php echo !empty(
+       $_POST['email']
+     )
+       ? esc_attr(wp_unslash($_POST['email']))
+       : ''; ?>" />
 				</div>
 
-				<?php if ( 'no' === get_option( 'woocommerce_registration_generate_password' ) ) : ?>
+				<?php if ('no' === get_option('woocommerce_registration_generate_password')): ?>
 
 				<div>
-					<label for="reg_password"><?php esc_html_e( 'Password', 'woocommerce' ); ?></label>
+					<label for="reg_password"><?php esc_html_e(
+       'Password',
+       'woocommerce'
+     ); ?></label>
 					<input type="password" name="password" id="reg_password" autocomplete="new-password" />
 				</div>
 
 				<?php
-				function coupon_to_register(){
-					if(get_option('qr_code_coupon_status')['status'] === 'ativado') return 'qr_code_coupon_status';
-					else if(get_option('new_register_coupon_status')['status'] === 'ativado') return 'new_register_coupon_status';
-					else return null;
-				};
-				if(coupon_to_register() !== null){
-					?>
+    function coupon_to_register()
+    {
+      if (get_option('qr_code_coupon_status')['status'] === 'ativado') {
+        return 'qr_code_coupon_status';
+      } elseif (
+        get_option('new_register_coupon_status')['status'] === 'ativado'
+      ) {
+        return 'new_register_coupon_status';
+      } else {
+        return null;
+      }
+    }
+    if (coupon_to_register() !== null) { ?>
 
 
 						<input type="hidden" data-code>
@@ -125,23 +178,27 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 							cupomInputHidden.dataset.code = window.localStorage.getItem('aer_qr_event') ? 'sundayrocksunday' : 'boasvindas';
 
 						</script>
-					<?php
-				}
-					
-				?>
-			<?php else : ?>
+					<?php }
+    ?>
+			<?php else: ?>
 
-				<p><?php esc_html_e( 'A link to set a new password will be sent to your email address.', 'woocommerce' ); ?></p>
+				<p><?php esc_html_e(
+      'A link to set a new password will be sent to your email address.',
+      'woocommerce'
+    ); ?></p>
 
 			<?php endif; ?>
 
-			<?php do_action( 'woocommerce_register_form' ); ?>
+			<?php do_action('woocommerce_register_form'); ?>
 			<input type="hidden" id="register_method" value="site" name="register_method">
 			<p class="woocommerce-form-row form-row">
-				<?php wp_nonce_field( 'woocommerce-register', 'woocommerce-register-nonce' ); ?>
-				<button type="submit" data-btn-reactive class="main-btn woocommerce-form-register__submit" name="register" value="<?php esc_attr_e( 'Register', 'woocommerce' ); ?>"><?php esc_html_e( 'Register', 'woocommerce' ); ?></button>
+				<?php wp_nonce_field('woocommerce-register', 'woocommerce-register-nonce'); ?>
+				<button type="submit" data-btn-reactive class="main-btn woocommerce-form-register__submit" name="register" value="<?php esc_attr_e(
+      'Register',
+      'woocommerce'
+    ); ?>"><?php esc_html_e('Register', 'woocommerce'); ?></button>
 			</p>
-			<?php do_action( 'woocommerce_register_form_end' ); ?>
+			<?php do_action('woocommerce_register_form_end'); ?>
 
 		</form>
 	</div>
@@ -202,10 +259,9 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 	document.querySelector('input#reg_username').addEventListener('keyup', (e) => cpfMask(e));
 
 
-	<?php
-		if(get_option('new_register_coupon_status')){ // && !get_option('qr_code_coupon_status')
-			$coupon_code = get_option('new_register_coupon_status')['code'];
-			?>
+	<?php if (get_option('new_register_coupon_status')) {
+   // && !get_option('qr_code_coupon_status')
+   $coupon_code = get_option('new_register_coupon_status')['code']; ?>
 			const _target = document.querySelector('#new_register_coupon_control_register');
 			if(_target){
 				_target.setAttribute('name', 'new_register_coupon_control');
@@ -213,8 +269,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 			}
 
 			<?php
-		}
-	?>
+ } ?>
 
 
     	document.querySelectorAll('input[type="password"]').forEach(inp => {
@@ -241,7 +296,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
         })
     })
 </script>
-<script src="<?php echo get_stylesheet_directory_uri() ?>/js/react_apps/third_party_login.js"></script>
+<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/react_apps/third_party_login.js"></script>
 <script>
 	    function showTab(tabId) {
       document.querySelectorAll('.login-box').forEach(box => {
@@ -258,4 +313,4 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 <!-- React e ReactDOM em produção -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
-<?php do_action( 'woocommerce_after_customer_login_form' ); ?>	
+<?php do_action('woocommerce_after_customer_login_form'); ?>	
