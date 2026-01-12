@@ -25,13 +25,19 @@ function slugify($str, $delimiter = '-')
 }
 
 //Número de produtos na página de arquivo
-add_filter(
-  'loop_shop_per_page',
-  function ($cols) {
-    return 100;
-  },
-  20
-);
+add_action('pre_get_posts', 'mostrar_todos_produtos_shop');
+
+function mostrar_todos_produtos_shop($query)
+{
+  // Aplica apenas no front-end, na query principal e na página de loja/categoria
+  if (
+    !is_admin() &&
+    $query->is_main_query() &&
+    (is_shop() || is_product_category() || is_product_tag())
+  ) {
+    $query->set('posts_per_page', -1); // -1 remove o limite e a paginação
+  }
+}
 
 //Remove a exibição de cross-sell do cart
 remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');

@@ -329,14 +329,29 @@ usort($datas, function ($a, $b) {
               $reservas_count += (int) $incremento;
             }
             ?>
-            <div class="reservas-contador">
-              <p><strong><?= aer_icons(
-                'banco',
-                16,
-                16,
-                '.webp'
-              ) ?></strong><?= $reservas_count ?> lugares já reservados!</p>
-            </div>  
+            <div class="status-badges-container">
+              <div class="reservas-contador">
+                <p><strong><?= aer_icons(
+                  'banco',
+                  16,
+                  16,
+                  '.webp'
+                ) ?></strong><?= $reservas_count ?> lugares já reservados!</p>
+              </div> 
+
+              <div class="reservas-status">
+                <div class="vagas-disponiveis">Vagas disponíveis!</div>
+
+                <div class="ultimas-vagas">
+
+                </div>
+
+                <div class="esgotado">
+
+                </div>
+              </div>
+            </div>
+             
                 <div class="status-badge">
 
                 </div>

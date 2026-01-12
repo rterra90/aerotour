@@ -3,9 +3,48 @@
   padding: 40px 0;
   color: var(--aer-light-text);
 }
+
 #archive-product > .archive-container {
   flex-direction: row-reverse;
   gap: 48px;
+}
+
+/* Estilização do estado vazio */
+.no-results-found {
+    display: none; /* Escondido por padrão */
+    list-style: none;
+    width: 100%;
+    padding: 40px 20px;
+    text-align: center;
+    color: #858585; /* Cinza claro discreto */
+    font-family: sans-serif;
+}
+
+.no-results-found i, .no-results-found span.icon {
+    display: block;
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.no-results-found p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.btn-clear-search {
+    background: transparent;
+    border: 1px solid #444;
+    color: #888;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-clear-search:hover {
+    background: #222;
+    color: #fff;
+    border-color: #666;
 }
 .archive-container .content-area ul.products .row > div {
   width: 33.3%;

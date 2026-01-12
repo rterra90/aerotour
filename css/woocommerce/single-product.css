@@ -9,6 +9,28 @@
 #topAdBanner small {
   font-size: 0.575rem;
 }
+
+/* SEÇÃO STATUS DE RESERVAS*/
+/* Badges */
+.vagas-disponiveis {
+  display: inline-block;
+  padding: 0.4em 0.8em;
+  background-color: #28a745; /* verde para indicar disponibilidade */
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-radius: 20px; /* formato arredondado estilo badge */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vagas-disponiveis:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+/* Contador de reservas realizadas */
 .reservas-contador{
     background: var(--aer-box-light);
     width: fit-content;
