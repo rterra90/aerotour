@@ -319,7 +319,7 @@ usort($datas, function ($a, $b) {
             $_ids_str = implode(',', $variacao_ids);
             $reservas_count = $wpdb->get_var(
               $wpdb->prepare(
-                "SELECT COUNT(*) FROM $table_name WHERE variation_id IN ($_ids_str)"
+                "SELECT COUNT(*) FROM $table_name WHERE status = 'normal' AND variation_id IN ($_ids_str)"
               )
             );
 
