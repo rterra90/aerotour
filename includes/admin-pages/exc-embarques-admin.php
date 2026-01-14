@@ -1,41 +1,36 @@
 <?php
 
-// COLOCAR UMA MENSAGEM QUANDO NÃO HÁ NENHUM PADRAO DE HORARIOS DEFINIDO 
+// COLOCAR UMA MENSAGEM QUANDO NÃO HÁ NENHUM PADRAO DE HORARIOS DEFINIDO
 
-
-add_action( 'woocommerce_product_data_panels', 'painel_exc_embarques' );
-function painel_exc_embarques() {
+add_action('woocommerce_product_data_panels', 'painel_exc_embarques');
+function painel_exc_embarques()
+{
   global $post;
   global $wpdb;
-  $nome_tabela = $wpdb->prefix . 'embarques'; 
-  $embarques_db = $wpdb -> get_results("SELECT * from $nome_tabela");
-  $embarques_exc = json_decode(get_post_meta($post -> ID, 'embarques', true));
-  $embarques_exc_bot = json_decode(get_post_meta($post -> ID, 'exc_embarques', true));
-  
-  //ALTERA A DATA 31/12/2026 PARA A DEFINIR (AVENGED SEVENFOLD)
-  foreach ($embarques_exc_bot as $_embarque) {
-    foreach ($_embarque -> opcoes as $opcao) {
-        if ($opcao -> dia === '31/12/2026') {
-            $opcao -> dia = 'A definir...';
-        }
+  $nome_tabela = $wpdb->prefix . 'embarques';
+  $embarques_db = $wpdb->get_results("SELECT * from $nome_tabela");
+  $embarques_exc = json_decode(get_post_meta($post->ID, 'embarques', true));
+  $embarques_exc_bot = json_decode(
+    get_post_meta($post->ID, 'exc_embarques', true)
+  );
 
-    }
-  }
-  
-  
+  $exc_variacoes =
+    wc_get_product($post->ID)->status !== 'auto-draft'
+      ? wc_get_product($post->ID)->get_available_variations()
+      : null;
 
-  $exc_variacoes = wc_get_product($post -> ID) -> status !== 'auto-draft' ? wc_get_product($post -> ID)->get_available_variations() : null;
-
-  if(isset($exc_variacoes)){
-    $dias_exc = array_map(function($_var){
+  if (isset($exc_variacoes)) {
+    $dias_exc = array_map(function ($_var) {
       return $_var['attributes']['attribute_dia'];
     }, $exc_variacoes);
   }
-  
+
   $padroes_horarios_salvos = get_option('padroes_horarios');
-?>
+  ?>
   <div class="panel woocommerce_options_panel wc_metaboxes_wrapper hidden px-4" id="exc_embarques_meta">
-    <div class="section-show" data-dias=<?= isset($exc_variacoes) ? json_encode($dias_exc) : ''?>>
+    <div class="section-show" data-dias=<?= isset($exc_variacoes)
+      ? json_encode($dias_exc)
+      : '' ?>>
       <dialog id="refHorarioModal">
         <p>Defina o horário de embarque no ponto</p>
         <p class="ref-nome-emb"></p>
@@ -45,180 +40,196 @@ function painel_exc_embarques() {
       <p>Selecione os embarques da excursão</p>
       <div class="main-embarques-header">
         <div id="padraoSelector">
-          <?php
-            if($padroes_horarios_salvos){
-              ?>
+          <?php if ($padroes_horarios_salvos) { ?>
                 <p>Selecione um padrão de horários</p>
                 <select name="padraoSelect" id="padraoSelect">
                   <option value="none" selected>Selecione...</option>
-                  <?php
-                    foreach($padroes_horarios_salvos as $_padrao){
-                      $nome_emb_ref = '';
-                      foreach($embarques_db as $_emb_db){
-                        if((int)$_emb_db -> id == (int)$_padrao['referencia']){
-                          $nome_emb_ref = $_emb_db -> nome;
-                        }
+                  <?php foreach ($padroes_horarios_salvos as $_padrao) {
+
+                    $nome_emb_ref = '';
+                    foreach ($embarques_db as $_emb_db) {
+                      if ((int) $_emb_db->id == (int) $_padrao['referencia']) {
+                        $nome_emb_ref = $_emb_db->nome;
                       }
-                      ?>
-                      <option data-ref="<?= $nome_emb_ref; ?>" value="<?= $_padrao['nome']; ?>" data-json='<?= json_encode([$_padrao], JSON_UNESCAPED_UNICODE)?>'><?= $_padrao['nome']; ?></option>
-                      <?php
                     }
-                  ?>
+                    ?>
+                      <option data-ref="<?= $nome_emb_ref ?>" value="<?= $_padrao[
+  'nome'
+] ?>" data-json='<?= json_encode(
+  [$_padrao],
+  JSON_UNESCAPED_UNICODE
+) ?>'><?= $_padrao['nome'] ?></option>
+                      <?php
+                  } ?>
                 </select>
-              <?php
-            }
-          ?>
+              <?php } ?>
         </div>
       </div>
 
       <ul class="main-embarques-list">
         <?php
-          $ordem_dos_embarques = get_option('preset_ordem_embarques');
-          foreach($ordem_dos_embarques as $_ordem){
-            $embarque_db = array_filter($embarques_db, function($_emb_db) use($_ordem){
-              return $_emb_db -> id == $_ordem;
-            });
-            $embarque_db = array_values($embarque_db)[0];
-            if($embarques_exc){
-              $meta_embarque_exc = array_values(array_filter($embarques_exc, function($_emb_exc) use($embarque_db){
-                if($embarque_db -> id == $_emb_exc -> embarqueId) return $_emb_exc;
-              }));
-              $meta_embarque_exc = $meta_embarque_exc[0] ?? null;
-            }else{
-              $meta_embarque_exc = null;
-            }
+        $ordem_dos_embarques = get_option('preset_ordem_embarques');
+        foreach ($ordem_dos_embarques as $_ordem) {
+
+          $embarque_db = array_filter($embarques_db, function ($_emb_db) use (
+            $_ordem
+          ) {
+            return $_emb_db->id == $_ordem;
+          });
+          $embarque_db = array_values($embarque_db)[0];
+          if ($embarques_exc) {
+            $meta_embarque_exc = array_values(
+              array_filter($embarques_exc, function ($_emb_exc) use (
+                $embarque_db
+              ) {
+                if ($embarque_db->id == $_emb_exc->embarqueId) {
+                  return $_emb_exc;
+                }
+              })
+            );
+            $meta_embarque_exc = $meta_embarque_exc[0] ?? null;
+          } else {
+            $meta_embarque_exc = null;
+          }
           ?>
-            <li data-embarque-id="<?= $embarque_db -> id; ?>" data-status="<?= $meta_embarque_exc ? 'ativo' : 'inativo' ?>" data-endereco="<?= $embarque_db -> endereco; ?>" data-referencia="<?= $embarque_db -> obs; ?>">
+            <li data-embarque-id="<?= $embarque_db->id ?>" data-status="<?= $meta_embarque_exc
+  ? 'ativo'
+  : 'inativo' ?>" data-endereco="<?= $embarque_db->endereco ?>" data-referencia="<?= $embarque_db->obs ?>">
               <div class="emb-item-head">
-                <p class="emb-title"><?= $embarque_db -> nome; ?></p>
-                <div class="emb-ativo-check"><span class="dashicons dashicons-yes-alt" data-embarque-id="<?= $embarque_db -> id; ?>"></span></div>
+                <p class="emb-title"><?= $embarque_db->nome ?></p>
+                <div class="emb-ativo-check"><span class="dashicons dashicons-yes-alt" data-embarque-id="<?= $embarque_db->id ?>"></span></div>
               </div>
               <div class="emb-item-body">
-                <ul class="lista-horarios" data-embarque-id="<?= $embarque_db -> id; ?>">
+                <ul class="lista-horarios" data-embarque-id="<?= $embarque_db->id ?>">
                   <?php
-                    $horariosIndex = 1;
-                    if($meta_embarque_exc){
-                      foreach($meta_embarque_exc -> horarios as $horarioObj){
-                        ?>
-                          <li data-order="<?= $horariosIndex; ?>">
+                  $horariosIndex = 1;
+                  if ($meta_embarque_exc) {
+                    foreach ($meta_embarque_exc->horarios as $horarioObj) { ?>
+                          <li data-order="<?= $horariosIndex ?>">
                             <div class="horario">
-                              <input type="time" data-order="<?= $horariosIndex; ?>" value="<?= $horarioObj -> horario; ?>" onchange="salvaEmbarques()">
+                              <input type="time" data-order="<?= $horariosIndex ?>" value="<?= $horarioObj->horario ?>" onchange="salvaEmbarques()">
                             </div>
-                            <div class="disponibilidade" data-embarque-id="<?= $embarque_db -> id; ?>" data-order="<?= $horariosIndex; ?>">
+                            <div class="disponibilidade" data-embarque-id="<?= $embarque_db->id ?>" data-order="<?= $horariosIndex ?>">
                               <?php
-
-                                $_status = '';
-                                if(isset($dias_exc)){
-                                  foreach($dias_exc as $_dia){
-                                    foreach($horarioObj -> disponibilidade as $_disp){
-                                      if($_disp -> disp_dia === $_dia){
-                                        $_status = $_disp -> status === 'disponivel' ? true : false;
-                                      }
+                              $_status = '';
+                              if (isset($dias_exc)) {
+                                foreach ($dias_exc as $_dia) {
+                                  foreach (
+                                    $horarioObj->disponibilidade
+                                    as $_disp
+                                  ) {
+                                    if ($_disp->disp_dia === $_dia) {
+                                      $_status =
+                                        $_disp->status === 'disponivel'
+                                          ? true
+                                          : false;
                                     }
-
-
-                                    ?>
+                                  } ?>
                                       <label>
-                                        <?= $_status ? '<input checked onchange="salvaEmbarques()" type="checkbox" data-content="'.substr($_dia, 0, -5).'" data-dia="'.$_dia.'">' : '<input onchange="salvaEmbarques()" type="checkbox" data-content="'.substr($_dia, 0, -5).'" data-dia="'.$_dia.'">' ?>
+                                        <?= $_status
+                                          ? '<input checked onchange="salvaEmbarques()" type="checkbox" data-content="' .
+                                            substr($_dia, 0, -5) .
+                                            '" data-dia="' .
+                                            $_dia .
+                                            '">'
+                                          : '<input onchange="salvaEmbarques()" type="checkbox" data-content="' .
+                                            substr($_dia, 0, -5) .
+                                            '" data-dia="' .
+                                            $_dia .
+                                            '">' ?>
                                       </label>
                                     <?php
-                                  }
                                 }
-                                
+                              }
                               ?>
                             </div>
                             <div class="opcoes">
-                              <?php
-                                if($horariosIndex > 1){
-                                  ?> 
-                                  <span onclick="excluirHorario(this.dataset.embarqueId, this.dataset.order)" class="dashicons dashicons-trash" data-embarque-id="<?= $embarque_db -> id; ?>" data-order="<?= $horariosIndex; ?>"></span>
-                                  <?php
-                                }
-                              ?>
+                              <?php if ($horariosIndex > 1) { ?> 
+                                  <span onclick="excluirHorario(this.dataset.embarqueId, this.dataset.order)" class="dashicons dashicons-trash" data-embarque-id="<?= $embarque_db->id ?>" data-order="<?= $horariosIndex ?>"></span>
+                                  <?php } ?>
                             </div>
                           </li>
-                        <?php
-                        $horariosIndex++;
-                      }
-                    }else{
-                      ?>
-                        <li data-order="<?= $horariosIndex; ?>">
+                        <?php $horariosIndex++;}
+                  } else {
+                     ?>
+                        <li data-order="<?= $horariosIndex ?>">
                           <div class="horario">
-                            <input type="time" onchange="salvaEmbarques()" data-order="<?= $horariosIndex; ?>" value="">
+                            <input type="time" onchange="salvaEmbarques()" data-order="<?= $horariosIndex ?>" value="">
                           </div>
-                          <div class="disponibilidade" data-embarque-id="<?= $embarque_db -> id; ?>" data-order="<?= $horariosIndex; ?>">
-                            <?php
-                              foreach($dias_exc as $_dia){
-                                ?>
-                                  <label><input type="checkbox" onchange="salvaEmbarques()" data-content="<?= substr($_dia, 0, -5); ?>" data-dia="<?= $_dia; ?>" checked></label>
-                                <?php
-                              }
-                            ?>
+                          <div class="disponibilidade" data-embarque-id="<?= $embarque_db->id ?>" data-order="<?= $horariosIndex ?>">
+                            <?php foreach ($dias_exc as $_dia) { ?>
+                                  <label><input type="checkbox" onchange="salvaEmbarques()" data-content="<?= substr(
+                                    $_dia,
+                                    0,
+                                    -5
+                                  ) ?>" data-dia="<?= $_dia ?>" checked></label>
+                                <?php } ?>
                           </div>
                           <div class="opcoes"></div>
                         </li>
                       <?php
-                    }
+                  }
                   ?>
                 </ul>
                 <div class="emb-item-footer">
-                  <span class="add-horario-btn" onclick="adicionarHorario(<?= $embarque_db -> id; ?>)">Adicionar horário</span>
+                  <span class="add-horario-btn" onclick="adicionarHorario(<?= $embarque_db->id ?>)">Adicionar horário</span>
                   <div class="switch taxa">
-                  <?php
-                      if($meta_embarque_exc){
-                        ?>
+                  <?php if ($meta_embarque_exc) { ?>
                           <label>
                             Adicionar taxa
                             <input type="checkbox" 
-                            <?= ((int)$meta_embarque_exc -> taxa !== 0) ? 'checked' : ''; ?> 
-                            data-embarque-id="<?= $embarque_db -> id; ?>" 
-                            onchange="toggleTaxa(<?= $embarque_db -> id; ?>, this)">
+                            <?= (int) $meta_embarque_exc->taxa !== 0
+                              ? 'checked'
+                              : '' ?> 
+                            data-embarque-id="<?= $embarque_db->id ?>" 
+                            onchange="toggleTaxa(<?= $embarque_db->id ?>, this)">
                             <span class="slider"></span>
                           </label>
                           <input type="number" 
                           onchange="salvaEmbarques()"
-                          class="<?= ((int)$meta_embarque_exc -> taxa !== 0) ? 'ativo' : ''; ?>" 
-                          value="<?= ((int)$meta_embarque_exc -> taxa !== 0) ? $meta_embarque_exc -> taxa : ''; ?>">
-                        <?php
-                      }else{
-                        ?>
+                          class="<?= (int) $meta_embarque_exc->taxa !== 0
+                            ? 'ativo'
+                            : '' ?>" 
+                          value="<?= (int) $meta_embarque_exc->taxa !== 0
+                            ? $meta_embarque_exc->taxa
+                            : '' ?>">
+                        <?php } else { ?>
                           <label>
                             Adicionar taxa
-                            <input type="checkbox" data-embarque-id="<?= $embarque_db -> id; ?>" onchange="toggleTaxa(<?= $embarque_db -> id; ?>, this)">
+                            <input type="checkbox" data-embarque-id="<?= $embarque_db->id ?>" onchange="toggleTaxa(<?= $embarque_db->id ?>, this)">
                             <span class="slider"></span>
                           </label>
                           <input type="number" onchange="salvaEmbarques()">
-                        <?php
-                      }
-                    ?>
+                        <?php } ?>
                   </div>
                 </div>
               </div>
             </li>
 
         <?php
-          }
+        }
         ?>
         
       </ul>
-      <?php 
-        woocommerce_wp_hidden_input(array(
-          'id'      => 'meta_embarques',
-          'value'   => $embarques_exc ? json_encode($embarques_exc, JSON_UNESCAPED_UNICODE) : '',
-        ));
+      <?php
+      woocommerce_wp_hidden_input([
+        'id' => 'meta_embarques',
+        'value' => $embarques_exc
+          ? json_encode($embarques_exc, JSON_UNESCAPED_UNICODE)
+          : ''
+      ]);
 
-        // METAFIELD PARA LEITURA DO BOT
-        woocommerce_wp_hidden_input(array(
-          'id'      => 'meta_exc_embarques',
-          'value'   => $embarques_exc_bot ? json_encode($embarques_exc_bot, JSON_UNESCAPED_UNICODE) : '',
-        ));
-
-
-        // woocommerce_wp_textarea_input(array(
-        //   'id'      => 'meta_exc_embarques',
-        //   'value'   => $embarques_exc_bot ? json_encode($embarques_exc_bot, JSON_UNESCAPED_UNICODE) : '',
-        // ));
-      ?>
+      // METAFIELD PARA LEITURA DO BOT
+      woocommerce_wp_hidden_input([
+        'id' => 'meta_exc_embarques',
+        'value' => $embarques_exc_bot
+          ? json_encode($embarques_exc_bot, JSON_UNESCAPED_UNICODE)
+          : ''
+      ]);// woocommerce_wp_textarea_input(array(
+  //   'id'      => 'meta_exc_embarques',
+  //   'value'   => $embarques_exc_bot ? json_encode($embarques_exc_bot, JSON_UNESCAPED_UNICODE) : '',
+  // ));
+  ?>
         
       <script>
         const embsLisHeads = document.querySelectorAll('ul.main-embarques-list > li .emb-item-head');

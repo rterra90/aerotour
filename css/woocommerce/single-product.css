@@ -12,14 +12,14 @@
 
 /* SEÇÃO STATUS DE RESERVAS*/
 /* Badges */
-.vagas-disponiveis {
+/* .vagas-disponiveis {
   display: inline-block;
   padding: 0.4em 0.8em;
-  background-color: #28a745; /* verde para indicar disponibilidade */
+  background-color: #28a745;
   color: #fff;
   font-weight: bold;
   font-size: 0.9rem;
-  border-radius: 20px; /* formato arredondado estilo badge */
+  border-radius: 20px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -29,7 +29,15 @@
 .vagas-disponiveis:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+} */
+ 
+.status-badges-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+ /* Contador decrescente de últimas vagas*/
+
 /* Contador de reservas realizadas */
 .reservas-contador{
     background: var(--aer-box-light);
@@ -48,7 +56,7 @@ filter: contrast(0.675);
 .aviso-ultimas-vagas {
   background-color: #fff8cc;
   border: 1px solid #ffd700;
-  padding: 8px 12px;
+  padding: 6px 10px;  
   border-radius: 6px;
   font-size: 0.85rem;
   width: fit-content;
@@ -56,6 +64,7 @@ filter: contrast(0.675);
   margin: unset;
   font-size: 0.775rem;
 }
+
 .aviso-ultimas-vagas.aviso-esgotado {
   background-color: #ffe5e5;
   border: 1px solid #cc0000;
@@ -544,9 +553,12 @@ dl#principaisDuvidasContent .resposta {
 @media (max-width: 768px) {
   .aviso-ultimas-vagas {
     margin: 0 auto;
-    font-size: 0.725rem;
     text-align: center;
   }
+  .aviso-ultimas-vagas.left{
+    margin: 0;
+    text-align: left;
+}
   #info-body h1 {
     font-size: 1.4rem;
     width: 100%;

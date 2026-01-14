@@ -100,9 +100,10 @@ function excursao_formatada($id)
   ];
 }
 
-$excursao = excursao_formatada(get_the_ID());
+$excursao = excursao_formatada(get_the_ID()); // print_r($excursao);
 
-// print_r($excursao);
+// Define se exibe número de lugares vendidos
+$show_vendidos = get_post_meta($excursao['id'], 'show_vendidos', true);
 
 //Define a propriedade 'encerrar_vendas' em cada variação
 foreach ($excursao['variacoes'] as $i => $var) {
@@ -111,6 +112,7 @@ foreach ($excursao['variacoes'] as $i => $var) {
       ? true
       : false;
 }
+
 //Define e ordena a array de datas
 $datas = array_map(function ($_var) {
   return $_var['attributes']['attribute_dia'];
@@ -298,98 +300,80 @@ usort($datas, function ($a, $b) {
           
 
           <!-- CONTADOR DE RESERVAS -->
-          <?php
-          // obtém o valor do meta show_vendidos e renderiza na tela
-          $show_vendidos = get_post_meta(
-            $excursao['id'],
-            'show_vendidos',
-            true
-          );
-          if ($show_vendidos === 'yes') { ?>
+<div class="status-badges-container">
+  <!-- Aviso de últimas vagas -->
+  <!-- se houver apenas uma variação e ela tiver menos de 10 vagas disponíveis -->
+  <?php
+  $variacoes_disp = array_filter($excursao['variacoes'], function ($_var) {
+    return get_post_meta($_var['variation_id'], 'encerrar_vendas', true) !==
+      'yes';
+  });
 
-            <!-- get na tabela reservas para contar quantas reservas existem para o produto atual -->
-            <?php
-            global $wpdb;
-            $table_name = $wpdb->prefix . 'reservas';
+  if (count($variacoes_disp) == 1) {
+    $vaga_var = $variacoes_disp[0];
+    $disponibilidade_html = $vaga_var['availability_html'];
+    preg_match('/\d+/', strip_tags($disponibilidade_html), $matches);
+    $vagas_disponiveis = isset($matches[0]) ? (int) $matches[0] : 0;
 
-            // se uma excursão tiver múltiplas datas, somar as reservas de todas as variações
-            $variacao_ids = array_map(function ($_var) {
-              return $_var['variation_id'];
-            }, $excursao['variacoes']);
-            $_ids_str = implode(',', $variacao_ids);
-            $reservas_count = $wpdb->get_var(
-              $wpdb->prepare(
-                "SELECT COUNT(*) FROM $table_name WHERE status = 'normal' AND variation_id IN ($_ids_str)"
-              )
-            );
+    if ($vagas_disponiveis > 0 && $vagas_disponiveis <= 10) { ?>
+      <div class="aviso-ultimas-vagas <?= $show_vendidos === 'yes'
+        ? 'left'
+        : '' ?>">
+        <strong class="d-block">Últimos lugares!</strong> Apenas <?= $vagas_disponiveis ?> vagas disponíveis!
+      </div>
+      <?php } elseif (!$vagas_disponiveis) { ?>
+      <div class="aviso-ultimas-vagas aviso-esgotado">
+        <strong class="d-block">Esgotado!</strong> Não temos mais lugares disponíveis...
+      </div>
+      <?php }
+  }
+  ?>
+  <!-- Contador de reservas realizadas -->
+<?php if ($show_vendidos === 'yes') { ?>
 
-            // obter o valor numérico no meta "vendidos_inc" e somar ao contador
-            $incremento = get_post_meta($excursao['id'], 'vendidos_inc', true);
-            if (is_numeric($incremento)) {
-              $reservas_count += (int) $incremento;
-            }
-            ?>
-            <div class="status-badges-container">
+              <!-- get na tabela reservas para contar quantas reservas existem para o produto atual -->
+              <?php
+              global $wpdb;
+              $table_name = $wpdb->prefix . 'reservas';
+
+              // se uma excursão tiver múltiplas datas, somar as reservas de todas as variações
+              $variacao_ids = array_map(function ($_var) {
+                return $_var['variation_id'];
+              }, $excursao['variacoes']);
+              $_ids_str = implode(',', $variacao_ids);
+              $reservas_count = $wpdb->get_var(
+                $wpdb->prepare(
+                  "SELECT COUNT(*) FROM $table_name WHERE status = 'normal' AND variation_id IN ($_ids_str)"
+                )
+              );
+
+              // obter o valor numérico no meta "vendidos_inc" e somar ao contador
+              $incremento = get_post_meta(
+                $excursao['id'],
+                'vendidos_inc',
+                true
+              );
+              if (is_numeric($incremento)) {
+                $reservas_count += (int) $incremento;
+              }
+              ?>
               <div class="reservas-contador">
                 <p><strong><?= aer_icons(
                   'banco',
                   16,
                   16,
                   '.webp'
-                ) ?></strong><?= $reservas_count ?> lugares já reservados!</p>
+                ) ?></strong><?= $reservas_count ?> lugares reservados!</p>
               </div> 
-
-              <div class="reservas-status">
-                <div class="vagas-disponiveis">Vagas disponíveis!</div>
-
-                <div class="ultimas-vagas">
-
-                </div>
-
-                <div class="esgotado">
-
-                </div>
-              </div>
-            </div>
-             
-                <div class="status-badge">
-
-                </div>
               
-              <?php }
-          ?>
+              <?php } ?>
+
+</div>
+
+          
           <!-- FIM CONTADOR DE RESERVAS -->
 
-          <!-- Aviso de últimas vagas -->
-           <!-- se houver apenas uma variação e ela tiver menos de 10 vagas disponíveis -->
-          <?php
-          $variacoes_disp = array_filter($excursao['variacoes'], function (
-            $_var
-          ) {
-            return get_post_meta(
-              $_var['variation_id'],
-              'encerrar_vendas',
-              true
-            ) !== 'yes';
-          });
 
-          if (count($variacoes_disp) == 1) {
-            $vaga_var = $variacoes_disp[0];
-            $disponibilidade_html = $vaga_var['availability_html'];
-            preg_match('/\d+/', strip_tags($disponibilidade_html), $matches);
-            $vagas_disponiveis = isset($matches[0]) ? (int) $matches[0] : 0;
-
-            if ($vagas_disponiveis > 0 && $vagas_disponiveis <= 10) { ?>
-                <div class="aviso-ultimas-vagas">
-                  <strong class="d-block">Últimos lugares!</strong> Restam <?= $vagas_disponiveis ?> vagas disponíveis para essa excursão!
-                </div>
-                <?php } elseif (!$vagas_disponiveis) { ?>
-                <div class="aviso-ultimas-vagas aviso-esgotado">
-                  <strong class="d-block">Esgotado!</strong> Não temos mais lugares disponíveis...
-                </div>
-                <?php }
-          }
-          ?>
           
           <!-- info inner -->
           <div class="info">
