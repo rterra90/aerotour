@@ -3618,22 +3618,15 @@
       }
       adminFetch({ action: "get_reservas" }, "GET", success);
     }
-    function update_reserva(res_id, _action, setUpdateDone) {
+    function update_reserva(res_id, _action, updateReservaDom) {
       const postData = {
         action: "update_reserva",
         to: _action,
         res_id
       };
       adminFetch(postData, "POST", (data) => {
-        const domElement = document.querySelector(
-          `tr[data-reserva-id="${res_id}"]`
-        );
-        if (domElement) {
-          domElement.querySelector('td[data-coluna="status"]').innerText = data[0].status;
-          domElement.querySelector('td[data-coluna="embarque"]').innerText = data[0].embarque;
-          domElement.querySelector('td[data-coluna="horario"]').innerText = data[0].horario.substring(0, 5);
-        }
-        setUpdateDone(_action);
+        console.log("success, chama updateReservaDom");
+        updateReservaDom(data[0], res_id);
       });
     }
     return {
@@ -3858,9 +3851,16 @@
   var import_prop_types2 = __toESM(require_prop_types());
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
-    const orderLink = `https://aerotour.com.br/wp-admin/post.php?post=${reserva.order_id}&action=edit`;
+    const [currentReserva, setCurrentReserva] = React.useState(reserva);
+    const orderLink = `${theme_links.adminUrl}post.php?post=${reserva.order_id}&action=edit`;
     const dia = excDetails["id_" + reserva.variation_id] ? excDetails["id_" + reserva.variation_id][1] : "";
-    const [updateDone, setUpdateDone] = React.useState(false);
+    const rotaDaViagem = () => {
+      if (reserva.rota === "2")
+        return "\u27A1";
+      if (reserva.rota === "3")
+        return "\u2B05";
+      return "";
+    };
     function getAncestorByTag(element, tagName) {
       let ancestor = element;
       tagName = tagName.toLowerCase();
@@ -3887,6 +3887,24 @@
         _m.remove();
       });
     }
+    function updateReservaDom(reservaAtualizada, idReserva) {
+      const domElement = document.querySelector(
+        `tr[data-reserva-id="${idReserva}"]`
+      );
+      if (domElement) {
+        setCurrentReserva(reservaAtualizada);
+        if (reservaAtualizada.status === "cancel")
+          domElement.classList.add("reserva-cancelada");
+        else {
+          domElement.classList.remove("reserva-cancelada");
+        }
+        ;
+        _closeMenu();
+        setToast("Reserva atualizada com sucesso");
+      } else {
+        console.log("Elemento DOM da reserva n\xE3o encontrado.");
+      }
+    }
     function closeOptionsMenu({ target }) {
       if (document.body.classList.contains("tem-menu-ativo")) {
         const targetMenu = document.querySelector("tr .menu-reserva");
@@ -3896,11 +3914,11 @@
           switch (target.dataset.opcao) {
             case "Cancelar reserva":
               target.parentElement.classList.add("loading");
-              adminAjax.update_reserva(reserva.ID, "cancelar", setUpdateDone);
+              adminAjax.update_reserva(reserva.ID, "cancelar", updateReservaDom);
               break;
             case "Reativar reserva":
               target.parentElement.classList.add("loading");
-              adminAjax.update_reserva(reserva.ID, "reativar", setUpdateDone);
+              adminAjax.update_reserva(reserva.ID, "reativar", updateReservaDom);
               break;
             case "Copiar dados":
               copyToClipboard(
@@ -3941,11 +3959,11 @@
         opcoes.forEach((_opcao) => {
           switch (_opcao) {
             case "Reativar reserva":
-              if (reserva.status === "cancel")
+              if (currentReserva.status === "cancel")
                 menuOption(_opcao);
               break;
             case "Cancelar reserva":
-              if (reserva.status !== "cancel")
+              if (currentReserva.status !== "cancel")
                 menuOption(_opcao);
               break;
             default:
@@ -3963,25 +3981,7 @@
         }, 80);
       }
     }
-    React.useEffect(() => {
-      if (updateDone) {
-        switch (updateDone) {
-          case "cancelar":
-            reserva.status = "cancel";
-            setToast("Reserva cancelada");
-            break;
-          case "reativar":
-            reserva.status = "normal";
-            setToast("Reserva reativada");
-            break;
-          default:
-            break;
-        }
-        _closeMenu();
-        setTimeout(() => setUpdateDone(false), 3e3);
-      }
-    }, [updateDone]);
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("tr", { onClick: openOptionsMenu, "data-reserva-id": reserva.ID, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("tr", { onClick: openOptionsMenu, "data-reserva-id": reserva.ID, className: reserva.status === "cancel" ? "reserva-cancelada" : "", children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "order-id", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: orderLink, children: reserva.order_id }) }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("td", { "data-coluna": "excursao", children: [
         excDetails["id_" + reserva.variation_id] ? excDetails["id_" + reserva.variation_id][0] : "",
@@ -3992,9 +3992,11 @@
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "nome-completo", children: reserva.p_nome }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "cpf", children: reserva.p_cpf }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "telefone", children: reserva.p_telefone }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "embarque", children: reserva.embarque }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "horario", children: reserva.horario.slice(0, -3) }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "status", children: reserva.status })
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("td", { "data-coluna": "embarque", children: [
+        reserva.embarque,
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: rotaDaViagem() })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "horario", children: reserva.horario.slice(0, -3) })
     ] });
   };
   ItemReserva.propTypes = {
@@ -11782,8 +11784,7 @@
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "cpf", children: "CPF" }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "telefone", children: "Telefone" }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "embarque", onClick: ordenarPassageiros, children: "Embarque" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "horario", children: "Hor\xE1rio" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "status", children: "Status" })
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "horario", children: "Hor\xE1rio" })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("tbody", { children: [
           reservas && reservas_f.length > 0 ? reservas_f.map((reserva, _i) => {

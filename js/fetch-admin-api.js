@@ -3,7 +3,7 @@
 function fetchAdminAPI(action, _data, _success, type = 'POST') {
   jQuery(function ($) {
     $.ajax({
-      url: ajax_url,
+      url: theme_links.adminAjaxUrl,
       type: type,
       data: {
         action: action,
@@ -30,7 +30,7 @@ function adminApiFetch(action, data = {}, callback = () => {}, type = 'POST') {
 
   jQuery(function ($) {
     $.ajax({
-      url: ajax_url,
+      url: theme_links.adminAjaxUrl,
       type: type,
       dataType: 'json',
       data: {

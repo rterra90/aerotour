@@ -3,11 +3,17 @@
 import PropTypes from 'prop-types';
 
 const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
-  const orderLink = `https://aerotour.com.br/wp-admin/post.php?post=${reserva.order_id}&action=edit`;
+  const [currentReserva, setCurrentReserva] = React.useState(reserva);  
+  const orderLink = `${theme_links.adminUrl}post.php?post=${reserva.order_id}&action=edit`;
   const dia = excDetails['id_' + reserva.variation_id]
     ? excDetails['id_' + reserva.variation_id][1]
     : '';
-  const [updateDone, setUpdateDone] = React.useState(false);
+
+  const rotaDaViagem = () => {
+    if (reserva.rota === '2') return '➡';
+    if (reserva.rota === '3') return '⬅';
+    return '';
+  }
 
   function getAncestorByTag(element, tagName) {
     let ancestor = element;
@@ -18,6 +24,7 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
     }
     return null;
   }
+
   async function copyToClipboard(textToCopy) {
     try {
       await navigator.clipboard.writeText(textToCopy);
@@ -36,6 +43,25 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
     });
   }
 
+  function updateReservaDom(reservaAtualizada, idReserva) {
+    //Seleciona o elemento DOM da reserva atualizada
+    const domElement = document.querySelector(
+      `tr[data-reserva-id="${idReserva}"]`,
+    );
+
+    if(domElement){
+      setCurrentReserva(reservaAtualizada);
+      //Atualiza status
+      if(reservaAtualizada.status === 'cancel')domElement.classList.add('reserva-cancelada')
+      else {domElement.classList.remove('reserva-cancelada')};
+      _closeMenu()
+      setToast('Reserva atualizada com sucesso');
+    }else{
+      console.log('Elemento DOM da reserva não encontrado.');
+    }
+
+  }
+
   function closeOptionsMenu({ target }) {
     if (document.body.classList.contains('tem-menu-ativo')) {
       const targetMenu = document.querySelector('tr .menu-reserva');
@@ -46,11 +72,11 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
         switch (target.dataset.opcao) {
           case 'Cancelar reserva':
             target.parentElement.classList.add('loading');
-            adminAjax.update_reserva(reserva.ID, 'cancelar', setUpdateDone);
+            adminAjax.update_reserva(reserva.ID, 'cancelar', updateReservaDom);
             break;
           case 'Reativar reserva':
             target.parentElement.classList.add('loading');
-            adminAjax.update_reserva(reserva.ID, 'reativar', setUpdateDone);
+            adminAjax.update_reserva(reserva.ID, 'reativar', updateReservaDom);
             break;
 
           case 'Copiar dados':
@@ -99,13 +125,14 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
         _element.classList.add('menu-reserva-component');
         menuElement.querySelector('ul').appendChild(_element);
       };
+
       opcoes.forEach((_opcao) => {
         switch (_opcao) {
           case 'Reativar reserva':
-            if (reserva.status === 'cancel') menuOption(_opcao);
+            if (currentReserva.status === 'cancel') menuOption(_opcao);
             break;
           case 'Cancelar reserva':
-            if (reserva.status !== 'cancel') menuOption(_opcao);
+            if (currentReserva.status !== 'cancel') menuOption(_opcao);
             break;
           default:
             menuOption(_opcao);
@@ -129,29 +156,9 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
     }
   }
 
-  React.useEffect(() => {
-    if (updateDone) {
-      switch (updateDone) {
-        case 'cancelar':
-          reserva.status = 'cancel';
-          setToast('Reserva cancelada');
-
-          break;
-        case 'reativar':
-          reserva.status = 'normal';
-          setToast('Reserva reativada');
-
-          break;
-        default:
-          break;
-      }
-      _closeMenu();
-      setTimeout(() => setUpdateDone(false), 3000);
-    }
-  }, [updateDone]);
 
   return (
-    <tr onClick={openOptionsMenu} data-reserva-id={reserva.ID}>
+    <tr onClick={openOptionsMenu} data-reserva-id={reserva.ID} className={reserva.status === 'cancel' ? 'reserva-cancelada' : ''}>
       <td data-coluna="order-id">
         <a href={orderLink}>{reserva.order_id}</a>
       </td>
@@ -164,9 +171,8 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
       <td data-coluna="nome-completo">{reserva.p_nome}</td>
       <td data-coluna="cpf">{reserva.p_cpf}</td>
       <td data-coluna="telefone">{reserva.p_telefone}</td>
-      <td data-coluna="embarque">{reserva.embarque}</td>
+      <td data-coluna="embarque">{reserva.embarque}<span>{rotaDaViagem()}</span></td>
       <td data-coluna="horario">{reserva.horario.slice(0, -3)}</td>
-      <td data-coluna="status">{reserva.status}</td>
     </tr>
   );
 };

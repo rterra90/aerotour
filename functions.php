@@ -867,11 +867,10 @@ if (is_admin()) {
       null,
       true
     );
-    wp_localize_script(
-      'fetch-admin-api',
-      'ajax_url',
-      admin_url('admin-ajax.php')
-    );
+    wp_localize_script('fetch-admin-api', 'theme_links', [
+      'adminUrl' => admin_url(),
+      'adminAjaxUrl' => admin_url('admin-ajax.php')
+    ]);
     wp_enqueue_script(
       'sortable-js',
       'https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js',

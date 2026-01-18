@@ -102,7 +102,6 @@ function AppReservasAdmin({ ajaxUrl }) {
               Embarque
             </th>
             <th data-coluna="horario">Horário</th>
-            <th data-coluna="status">Status</th>
           </tr>
         </thead>
         <tbody>
