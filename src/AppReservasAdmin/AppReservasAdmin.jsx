@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 import useAdminAjax from '../Hooks/useAdminAjax';
 import SelectLiveSearch from './SelectLiveSearch';
+import PageNavigation from './PageNavigation';
 import ItemReserva from './ItemReserva';
 import PropTypes from 'prop-types';
 import Toast from './Toast';
@@ -9,130 +10,99 @@ import BotaoExportarXLS from './BotaoExportarXLS';
 
 function AppReservasAdmin({ ajaxUrl }) {
   const [toast, setToast] = React.useState(false);
-  const [reservas, setReservas] = React.useState(null);
-  const [reservas_f, setReservas_f] = React.useState([]);
+  const [reservas, setReservas] = React.useState([]);
   const [excDetails, setExcDetails] = React.useState(null);
-  const [excDetails2, setExcDetails2] = React.useState(null);
   const [filter, setFilter] = React.useState(0);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(25); // padrão inicial
+
   const tableToSheetRef = React.useRef(null);
+
   const adminAjax = useAdminAjax(ajaxUrl);
 
   React.useEffect(() => {
     adminAjax.get_reservas(setReservas, setExcDetails);
-  }, []);
+  }, [adminAjax]);
 
-  React.useEffect(() => {
-    if (excDetails) setExcDetails2(Object.values(excDetails));
-  }, [excDetails]);
+  const reservasFiltradas = React.useMemo(() => {
+    if (!reservas) return [];
+    return filter > 0
+      ? reservas.filter(r => r.variation_id == filter)
+      : reservas;
+  }, [reservas, filter]);
 
-  React.useEffect(() => {
-    const sheetBtn = document.querySelector('#exportSheetBtn');
-    const thead_embarque = document.querySelector(
-      '#adminReservasTable thead th[data-coluna="embarque"]',
-    );
+    // calcular total de páginas
+  const totalPages = Math.ceil(reservasFiltradas.length / pageSize);
 
-    if (filter > 0) {
-      //se tiver filtro
-      setReservas_f(
-        reservas.filter((r) => {
-          if (r.variation_id == filter) return r;
-        }),
-      );
-      if (thead_embarque) thead_embarque.classList.add('sort-enabled');
-      if (sheetBtn) sheetBtn.removeAttribute('disabled');
-    } else {
-      //se NÃO tiver filtro
-      setReservas_f([]);
-      if (thead_embarque) thead_embarque.classList.remove('sort-enabled');
-      if (sheetBtn) sheetBtn.setAttribute('disabled', 'true');
-    }
-  }, [filter]);
+  // calcular registros da página atual
+  const reservasPaginadas = React.useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return reservasFiltradas.slice(start, end);
+  }, [reservasFiltradas, currentPage, pageSize]);
 
-  function ordenarPassageiros({ target }) {
-    if (target.classList.contains('sort-enabled')) {
-      // const _by = target.dataset.coluna;
-      let reservas_ordenadas = {};
-      reservas_f.forEach((_reserva) => {
-        if (typeof reservas_ordenadas[_reserva.embarque] == 'undefined') {
-          reservas_ordenadas[_reserva.embarque] = [];
-        }
-        reservas_ordenadas[_reserva.embarque].push(_reserva);
-      });
-
-      let _res_fil_ord = []; //reservas filtradas por excursão e ordenadas por embarque
-      Object.keys(reservas_ordenadas).forEach((_local_emb) => {
-        _res_fil_ord = [..._res_fil_ord, ...reservas_ordenadas[_local_emb]];
-      });
-      setReservas_f(_res_fil_ord);
-    }
-  }
 
   return (
     <div id="adminReservasTable">
-      {toast ? <Toast message={toast} setToast={setToast} /> : null}
+      {toast && <Toast message={toast} setToast={setToast} />}
       <div className="filtros">
-        <div className="exc-search">
-          {excDetails2 ? (
-            <SelectLiveSearch
-              srcArray={excDetails2}
-              setFilter={setFilter}
-              filter={filter}
-            />
-          ) : (
-            'carregado excursões...'
-          )}
-        </div>
+        {/* {excDetails && (
+          <SelectLiveSearch
+            srcArray={Object.values(excDetails)}
+            setFilter={setFilter}
+            filter={filter}
+          />
+        )} */}
+              {/* navegação entre páginas */}
+      <PageNavigation
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        showPageSize={false}
+
+
+      />
         <BotaoExportarXLS _ref={tableToSheetRef} />
       </div>
-      {reservas ? (
-        <p>
-          {reservas_f.length > 0 ? reservas_f.length : reservas.length} reservas
-        </p>
-      ) : null}
+
+      <p>{reservasFiltradas.length} reservas</p>
 
       <table ref={tableToSheetRef}>
         <thead>
           <tr>
-            <th data-coluna="order-id">Pedido</th>
-            <th data-coluna="excursao">Excursão</th>
-            <th data-coluna="nome-completo">Nome Completo</th>
-            <th data-coluna="cpf">CPF</th>
-            <th data-coluna="telefone">Telefone</th>
-            <th data-coluna="embarque" onClick={ordenarPassageiros}>
-              Embarque
-            </th>
-            <th data-coluna="horario">Horário</th>
+            <th>Pedido</th>
+            <th>Excursão</th>
+            <th>Nome Completo</th>
+            <th>CPF</th>
+            <th>Telefone</th>
+            <th>Embarque</th>
+            <th>Horário</th>
           </tr>
         </thead>
         <tbody>
-          {reservas && reservas_f.length > 0
-            ? reservas_f.map((reserva, _i) => {
-                return (
-                  <ItemReserva
-                    key={_i}
-                    reserva={reserva}
-                    excDetails={excDetails}
-                    setToast={setToast}
-                  />
-                );
-              })
-            : null}
-
-          {reservas && reservas_f.length == 0
-            ? reservas.map((reserva) => {
-                return (
-                  <ItemReserva
-                    key={reserva.ID}
-                    reserva={reserva}
-                    excDetails={excDetails}
-                    adminAjax={adminAjax}
-                    setToast={setToast}
-                  />
-                );
-              })
-            : null}
+          {reservasPaginadas.map(reserva => (
+            <ItemReserva
+              key={reserva.ID}
+              reserva={reserva}
+              excDetails={excDetails}
+              setToast={setToast}
+              adminAjax={adminAjax}
+            />
+          ))}
         </tbody>
       </table>
+
+      {/* navegação entre páginas */}
+      <PageNavigation
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+      />
+
     </div>
   );
 }

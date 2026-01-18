@@ -3572,11 +3572,11 @@
               return jsxWithValidation(type, props, key, false);
             }
           }
-          var jsx6 = jsxWithValidationDynamic;
-          var jsxs4 = jsxWithValidationStatic;
+          var jsx7 = jsxWithValidationDynamic;
+          var jsxs5 = jsxWithValidationStatic;
           exports.Fragment = REACT_FRAGMENT_TYPE;
-          exports.jsx = jsx6;
-          exports.jsxs = jsxs4;
+          exports.jsx = jsx7;
+          exports.jsxs = jsxs5;
         })();
       }
     }
@@ -3625,7 +3625,6 @@
         res_id
       };
       adminFetch(postData, "POST", (data) => {
-        console.log("success, chama updateReservaDom");
         updateReservaDom(data[0], res_id);
       });
     }
@@ -3845,11 +3844,65 @@
     setFilter: import_prop_types.default.func.isRequired,
     filter: import_prop_types.default.number.isRequired
   };
-  var SelectLiveSearch_default = SelectLiveSearch;
 
-  // src/AppReservasAdmin/ItemReserva.jsx
+  // src/AppReservasAdmin/PageNavigation.jsx
   var import_prop_types2 = __toESM(require_prop_types());
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+  var PageNavigation = ({ currentPage, setCurrentPage, totalPages, pageSize, setPageSize, showPageSize = true }) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { id: "tablePagination", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "pagination-nav", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "button",
+          {
+            disabled: currentPage === 1,
+            onClick: () => setCurrentPage((p) => p - 1),
+            children: "Anterior"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { children: [
+          "P\xE1gina ",
+          currentPage,
+          " de ",
+          totalPages
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "button",
+          {
+            disabled: currentPage === totalPages,
+            onClick: () => setCurrentPage((p) => p + 1),
+            children: "Pr\xF3xima"
+          }
+        )
+      ] }),
+      showPageSize ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "pagination-controls", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { children: [
+        "Registros por p\xE1gina:",
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          "select",
+          {
+            value: pageSize,
+            onChange: (e) => {
+              const val2 = parseInt(e.target.value, 10);
+              setPageSize(val2 > 500 ? 500 : val2);
+              setCurrentPage(1);
+            },
+            children: [10, 25, 50, 100, 250, 500].map((opt) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: opt, children: opt }, opt))
+          }
+        )
+      ] }) }) : null
+    ] });
+  };
+  PageNavigation.propTypes = {
+    currentPage: import_prop_types2.default.number,
+    setCurrentPage: import_prop_types2.default.func,
+    totalPages: import_prop_types2.default.number,
+    pageSize: import_prop_types2.default.number,
+    setPageSize: import_prop_types2.default.func
+  };
+  var PageNavigation_default = PageNavigation;
+
+  // src/AppReservasAdmin/ItemReserva.jsx
+  var import_prop_types3 = __toESM(require_prop_types());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
     const [currentReserva, setCurrentReserva] = React.useState(reserva);
     const orderLink = `${theme_links.adminUrl}post.php?post=${reserva.order_id}&action=edit`;
@@ -3981,49 +4034,49 @@
         }, 80);
       }
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("tr", { onClick: openOptionsMenu, "data-reserva-id": reserva.ID, className: reserva.status === "cancel" ? "reserva-cancelada" : "", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "order-id", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: orderLink, children: reserva.order_id }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("td", { "data-coluna": "excursao", children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("tr", { onClick: openOptionsMenu, "data-reserva-id": reserva.ID, className: reserva.status === "cancel" ? "reserva-cancelada" : "", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "order-id", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("a", { href: orderLink, children: reserva.order_id }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("td", { "data-coluna": "excursao", children: [
         excDetails["id_" + reserva.variation_id] ? excDetails["id_" + reserva.variation_id][0] : "",
         " ",
         "- ",
         dia.substring(0, 5)
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "nome-completo", children: reserva.p_nome }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "cpf", children: reserva.p_cpf }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "telefone", children: reserva.p_telefone }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("td", { "data-coluna": "embarque", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "nome-completo", children: reserva.p_nome }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "cpf", children: reserva.p_cpf }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "telefone", children: reserva.p_telefone }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("td", { "data-coluna": "embarque", children: [
         reserva.embarque,
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: rotaDaViagem() })
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: rotaDaViagem() })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("td", { "data-coluna": "horario", children: reserva.horario.slice(0, -3) })
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "horario", children: reserva.horario.slice(0, -3) })
     ] });
   };
   ItemReserva.propTypes = {
-    reserva: import_prop_types2.default.object.isRequired,
-    excDetails: import_prop_types2.default.object.isRequired,
-    adminAjax: import_prop_types2.default.object.isRequired,
-    setToast: import_prop_types2.default.func
+    reserva: import_prop_types3.default.object.isRequired,
+    excDetails: import_prop_types3.default.object.isRequired,
+    adminAjax: import_prop_types3.default.object.isRequired,
+    setToast: import_prop_types3.default.func
   };
   var ItemReserva_default = ItemReserva;
 
   // src/AppReservasAdmin/AppReservasAdmin.jsx
-  var import_prop_types5 = __toESM(require_prop_types());
+  var import_prop_types6 = __toESM(require_prop_types());
 
   // src/AppReservasAdmin/Toast.jsx
-  var import_prop_types3 = __toESM(require_prop_types());
-  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  var import_prop_types4 = __toESM(require_prop_types());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var Toast = ({ message, setToast }) => {
     React.useEffect(() => {
       setTimeout(() => {
         setToast(false);
       }, 3e3);
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "toast", children: message });
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "toast", children: message });
   };
   Toast.propTypes = {
-    message: import_prop_types3.default.string.isRequired,
-    setToast: import_prop_types3.default.func
+    message: import_prop_types4.default.string.isRequired,
+    setToast: import_prop_types4.default.func
   };
   var Toast_default = Toast;
 
@@ -11681,10 +11734,10 @@
   var version = XLSX.version;
 
   // src/AppReservasAdmin/BotaoExportarXLS.jsx
-  var import_prop_types4 = __toESM(require_prop_types());
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
+  var import_prop_types5 = __toESM(require_prop_types());
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var BotaoExportarXLS = ({ _ref }) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
       "button",
       {
         onClick: () => {
@@ -11697,130 +11750,95 @@
     );
   };
   BotaoExportarXLS.propTypes = {
-    _ref: import_prop_types4.default.object.isRequired
+    _ref: import_prop_types5.default.object.isRequired
   };
   var BotaoExportarXLS_default = BotaoExportarXLS;
 
   // src/AppReservasAdmin/AppReservasAdmin.jsx
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   function AppReservasAdmin({ ajaxUrl }) {
     const [toast, setToast] = React.useState(false);
-    const [reservas, setReservas] = React.useState(null);
-    const [reservas_f, setReservas_f] = React.useState([]);
+    const [reservas, setReservas] = React.useState([]);
     const [excDetails, setExcDetails] = React.useState(null);
-    const [excDetails2, setExcDetails2] = React.useState(null);
     const [filter, setFilter] = React.useState(0);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [pageSize, setPageSize] = React.useState(25);
     const tableToSheetRef = React.useRef(null);
     const adminAjax = useAdminAjax_default(ajaxUrl);
     React.useEffect(() => {
       adminAjax.get_reservas(setReservas, setExcDetails);
-    }, []);
-    React.useEffect(() => {
-      if (excDetails)
-        setExcDetails2(Object.values(excDetails));
-    }, [excDetails]);
-    React.useEffect(() => {
-      const sheetBtn = document.querySelector("#exportSheetBtn");
-      const thead_embarque = document.querySelector(
-        '#adminReservasTable thead th[data-coluna="embarque"]'
-      );
-      if (filter > 0) {
-        setReservas_f(
-          reservas.filter((r) => {
-            if (r.variation_id == filter)
-              return r;
-          })
-        );
-        if (thead_embarque)
-          thead_embarque.classList.add("sort-enabled");
-        if (sheetBtn)
-          sheetBtn.removeAttribute("disabled");
-      } else {
-        setReservas_f([]);
-        if (thead_embarque)
-          thead_embarque.classList.remove("sort-enabled");
-        if (sheetBtn)
-          sheetBtn.setAttribute("disabled", "true");
-      }
-    }, [filter]);
-    function ordenarPassageiros({ target }) {
-      if (target.classList.contains("sort-enabled")) {
-        let reservas_ordenadas = {};
-        reservas_f.forEach((_reserva) => {
-          if (typeof reservas_ordenadas[_reserva.embarque] == "undefined") {
-            reservas_ordenadas[_reserva.embarque] = [];
-          }
-          reservas_ordenadas[_reserva.embarque].push(_reserva);
-        });
-        let _res_fil_ord = [];
-        Object.keys(reservas_ordenadas).forEach((_local_emb) => {
-          _res_fil_ord = [..._res_fil_ord, ...reservas_ordenadas[_local_emb]];
-        });
-        setReservas_f(_res_fil_ord);
-      }
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { id: "adminReservasTable", children: [
-      toast ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Toast_default, { message: toast, setToast }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "filtros", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "exc-search", children: excDetails2 ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-          SelectLiveSearch_default,
+    }, [adminAjax]);
+    const reservasFiltradas = React.useMemo(() => {
+      if (!reservas)
+        return [];
+      return filter > 0 ? reservas.filter((r) => r.variation_id == filter) : reservas;
+    }, [reservas, filter]);
+    const totalPages = Math.ceil(reservasFiltradas.length / pageSize);
+    const reservasPaginadas = React.useMemo(() => {
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      return reservasFiltradas.slice(start, end);
+    }, [reservasFiltradas, currentPage, pageSize]);
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { id: "adminReservasTable", children: [
+      toast && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Toast_default, { message: toast, setToast }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "filtros", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+          PageNavigation_default,
           {
-            srcArray: excDetails2,
-            setFilter,
-            filter
+            currentPage,
+            setCurrentPage,
+            totalPages,
+            pageSize,
+            setPageSize,
+            showPageSize: false
           }
-        ) : "carregado excurs\xF5es..." }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(BotaoExportarXLS_default, { _ref: tableToSheetRef })
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(BotaoExportarXLS_default, { _ref: tableToSheetRef })
       ] }),
-      reservas ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("p", { children: [
-        reservas_f.length > 0 ? reservas_f.length : reservas.length,
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("p", { children: [
+        reservasFiltradas.length,
         " reservas"
-      ] }) : null,
-      /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("table", { ref: tableToSheetRef, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "order-id", children: "Pedido" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "excursao", children: "Excurs\xE3o" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "nome-completo", children: "Nome Completo" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "cpf", children: "CPF" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "telefone", children: "Telefone" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "embarque", onClick: ordenarPassageiros, children: "Embarque" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("th", { "data-coluna": "horario", children: "Hor\xE1rio" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("table", { ref: tableToSheetRef, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("th", { children: "Pedido" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("th", { children: "Excurs\xE3o" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("th", { children: "Nome Completo" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("th", { children: "CPF" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("th", { children: "Telefone" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("th", { children: "Embarque" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("th", { children: "Hor\xE1rio" })
         ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("tbody", { children: [
-          reservas && reservas_f.length > 0 ? reservas_f.map((reserva, _i) => {
-            return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-              ItemReserva_default,
-              {
-                reserva,
-                excDetails,
-                setToast
-              },
-              _i
-            );
-          }) : null,
-          reservas && reservas_f.length == 0 ? reservas.map((reserva) => {
-            return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-              ItemReserva_default,
-              {
-                reserva,
-                excDetails,
-                adminAjax,
-                setToast
-              },
-              reserva.ID
-            );
-          }) : null
-        ] })
-      ] })
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("tbody", { children: reservasPaginadas.map((reserva) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+          ItemReserva_default,
+          {
+            reserva,
+            excDetails,
+            setToast,
+            adminAjax
+          },
+          reserva.ID
+        )) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+        PageNavigation_default,
+        {
+          currentPage,
+          setCurrentPage,
+          totalPages,
+          pageSize,
+          setPageSize
+        }
+      )
     ] });
   }
   AppReservasAdmin.propTypes = {
-    ajaxUrl: import_prop_types5.default.string.isRequired
+    ajaxUrl: import_prop_types6.default.string.isRequired
   };
   var reserva_admin_app_root = document.getElementById("adminReservasApp");
   if (reserva_admin_app_root) {
     ReactDOM.createRoot(reserva_admin_app_root).render(
-      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(AppReservasAdmin, { ajaxUrl: reserva_admin_app_root.dataset.ajaxUrl })
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(AppReservasAdmin, { ajaxUrl: reserva_admin_app_root.dataset.ajaxUrl })
     );
   }
 })();
