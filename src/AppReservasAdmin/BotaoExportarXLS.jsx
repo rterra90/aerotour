@@ -13,7 +13,7 @@ const BotaoExportarXLS = ({ _ref }) => {
       }}
       id="exportSheetBtn"
     >
-      Exportar XLS
+<span className="dashicons dashicons-media-spreadsheet"></span>
     </button>
   );
 };

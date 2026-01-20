@@ -95,7 +95,7 @@
           var ContextProvider = REACT_PROVIDER_TYPE;
           var Element = REACT_ELEMENT_TYPE;
           var ForwardRef = REACT_FORWARD_REF_TYPE;
-          var Fragment2 = REACT_FRAGMENT_TYPE;
+          var Fragment = REACT_FRAGMENT_TYPE;
           var Lazy = REACT_LAZY_TYPE;
           var Memo = REACT_MEMO_TYPE;
           var Portal = REACT_PORTAL_TYPE;
@@ -154,7 +154,7 @@
           exports.ContextProvider = ContextProvider;
           exports.Element = Element;
           exports.ForwardRef = ForwardRef;
-          exports.Fragment = Fragment2;
+          exports.Fragment = Fragment;
           exports.Lazy = Lazy;
           exports.Memo = Memo;
           exports.Portal = Portal;
@@ -3640,203 +3640,123 @@
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var SelectLiveSearch = ({ srcArray, setFilter, filter }) => {
     const [status, setStatus] = React.useState("pr\xF3ximas");
-    const selectFormRef = React.useRef();
-    React.useEffect(() => {
-      if (srcArray) {
-        let createCustomDropdown2 = function(dropdown) {
-          const options = dropdown.querySelectorAll("option");
-          const optionsArr = Array.prototype.slice.call(options);
-          const customDropdown = document.createElement("div");
-          customDropdown.classList.add("live-search-dropdown");
-          dropdown.insertAdjacentElement("afterend", customDropdown);
-          const selected = document.createElement("div");
-          selected.classList.add("dropdown-select");
-          selected.textContent = optionsArr[0].textContent;
-          customDropdown.appendChild(selected);
-          const menu = document.createElement("div");
-          menu.classList.add("dropdown-menu");
-          customDropdown.appendChild(menu);
-          selected.addEventListener("click", toggleDropdown2.bind(menu));
-          const search = document.createElement("input");
-          search.placeholder = "Search...";
-          search.type = "text";
-          search.classList.add("dropdown-menu-search");
-          menu.appendChild(search);
-          const menuInnerWrapper = document.createElement("div");
-          menuInnerWrapper.classList.add("dropdown-menu-inner");
-          menu.appendChild(menuInnerWrapper);
-          optionsArr.forEach((option) => {
-            const item = document.createElement("div");
-            item.addEventListener("click", ({ target }) => {
-              const _filter = target.dataset.varId == "undefined" ? 0 : +target.dataset.varId;
-              setFilter(_filter);
-            });
-            item.classList.add("dropdown-menu-item");
-            item.dataset.value = option.value;
-            item.dataset.varId = option.dataset.varId;
-            item.dataset.dia = option.dataset.dia;
-            item.textContent = option.textContent;
-            menuInnerWrapper.appendChild(item);
-            item.addEventListener(
-              "click",
-              setSelected2.bind(item, selected, dropdown, menu)
-            );
-          });
-          menuInnerWrapper.querySelector("div").classList.add("selected");
-          search.addEventListener(
-            "input",
-            filterItems2.bind(search, optionsArr, menu)
-          );
-          document.addEventListener(
-            "click",
-            closeIfClickedOutside2.bind(customDropdown, menu)
-          );
-          dropdown.style.display = "none";
-        }, toggleDropdown2 = function() {
-          if (this.offsetHeight === 0) {
-            this.style.display = "block";
-            this.querySelector("input.dropdown-menu-search").focus();
-          } else {
-            this.style.display = "none";
-            this.querySelector("input").focus();
-          }
-        }, setSelected2 = function(selected, dropdown, menu) {
-          const value = this.dataset.value;
-          const label = this.textContent;
-          selected.textContent = label;
-          dropdown.value = value;
-          menu.style.display = "none";
-          menu.querySelector("input").value = "";
-          menu.querySelectorAll("div").forEach((div) => {
-            if (div.classList.contains("is-select")) {
-              div.classList.remove("is-select");
-            }
-            if (div.offsetParent === null) {
-              div.style.display = "block";
-            }
-          });
-          this.classList.add("is-select");
-        }, filterItems2 = function(itemsArr, menu) {
-          const customOptions = menu.querySelectorAll(".dropdown-menu-inner div");
-          const value = this.value.toLowerCase();
-          const filteredItems = itemsArr.filter(
-            (item) => item.value.toLowerCase().includes(value)
-          );
-          const indexesArr = filteredItems.map((item) => itemsArr.indexOf(item));
-          itemsArr.forEach((option) => {
-            if (!indexesArr.includes(itemsArr.indexOf(option))) {
-              customOptions[itemsArr.indexOf(option)].style.display = "none";
-            } else {
-              if (customOptions[itemsArr.indexOf(option)].offsetParent === null) {
-                customOptions[itemsArr.indexOf(option)].style.display = "block";
-              }
-            }
-          });
-        }, closeIfClickedOutside2 = function(menu, e) {
-          if (e.target.closest(".live-search-dropdown") === null && e.target !== this && menu.offsetParent !== null) {
-            menu.style.display = "none";
-          }
-        };
-        var createCustomDropdown = createCustomDropdown2, toggleDropdown = toggleDropdown2, setSelected = setSelected2, filterItems = filterItems2, closeIfClickedOutside = closeIfClickedOutside2;
-        const form = document.querySelector(".live-search-form");
-        const dropdowns = document.querySelectorAll(".live-search-dropdown");
-        if (dropdowns.length > 0) {
-          dropdowns.forEach((dropdown) => {
-            createCustomDropdown2(dropdown);
-          });
+    const [searchTerm, setSearchTerm] = React.useState("");
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [selectedLabel, setSelectedLabel] = React.useState("");
+    const wrapperRef = React.useRef(null);
+    const sortedData = React.useMemo(() => {
+      return [...srcArray].sort((a, b) => {
+        const dateA = new Date(a[1].split("/").reverse().join("/"));
+        const dateB = new Date(b[1].split("/").reverse().join("/"));
+        return dateA - dateB;
+      });
+    }, [srcArray]);
+    const filteredOptions = React.useMemo(() => {
+      const now = (/* @__PURE__ */ new Date()).getTime();
+      let data = sortedData.filter((item) => {
+        const diaTimestamp = new Date(item[1].split("/").reverse().join("/")).getTime();
+        if (status === "pr\xF3ximas" && diaTimestamp + 1728e5 < now) {
+          return false;
         }
-        if (form !== null) {
-          form.addEventListener("submit", (e) => {
-            e.preventDefault();
-          });
+        if (status === "passadas" && diaTimestamp > now) {
+          return false;
+        }
+        if (searchTerm) {
+          const texto = `${item[0]} ${item[1]}`.toLowerCase();
+          return texto.includes(searchTerm.toLowerCase());
+        }
+        return true;
+      });
+      if (status === "passadas") {
+        data.sort((a, b) => {
+          const dateA = new Date(a[1].split("/").reverse().join("/"));
+          const dateB = new Date(b[1].split("/").reverse().join("/"));
+          return dateB - dateA;
+        });
+      }
+      return data;
+    }, [sortedData, status, searchTerm]);
+    React.useEffect(() => {
+      function handleClickOutside(e) {
+        if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+          setIsOpen(false);
         }
       }
-    }, [srcArray]);
-    const sortedData = srcArray.sort((a, b) => {
-      const dateA = new Date(a[1].split("/").reverse().join("/"));
-      const dateB = new Date(b[1].split("/").reverse().join("/"));
-      return dateA - dateB;
-    });
-    function alternaProxPass(proxOuPass) {
-      const currentTimestamp = /* @__PURE__ */ new Date();
-      const allOptions = selectFormRef.current.querySelectorAll(
-        ".dropdown-menu-item"
-      );
-      allOptions.forEach((_option) => {
-        const _diaStr = _option.dataset.dia;
-        const _diaTimestamp = new Date(
-          _diaStr.split("/").reverse().join("/")
-        ).getTime();
-        if (_diaTimestamp + 172800 < currentTimestamp) {
-          if (proxOuPass === "pr\xF3ximas")
-            _option.style.display = "none";
-          else
-            _option.style.display = "block";
-        } else if (_diaTimestamp > currentTimestamp) {
-          if (proxOuPass === "passadas")
-            _option.style.display = "none";
-          else
-            _option.style.display = "block";
-        }
-      });
-      setStatus(proxOuPass);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+    function handleSelect(item) {
+      setFilter(+item[2]);
+      setSelectedLabel(`${item[0]} - ${item[1]}`);
+      setSearchTerm("");
+      setIsOpen(false);
     }
-    React.useEffect(() => {
-      alternaProxPass(status);
-    }, [filter]);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "form",
-        {
-          ref: selectFormRef,
-          name: "countries",
-          className: "live-search-form",
-          id: "form",
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "form-arrow", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { className: "bx bx-chevron-down" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { name: "country", id: "country", className: "live-search-dropdown", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { disabled: true, children: "Filtre por excurs\xE3o..." }),
-              sortedData ? sortedData.map((item) => {
-                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-                  "option",
-                  {
-                    value: item[0],
-                    "data-dia": item[1],
-                    "data-var-id": item[2],
-                    children: [
-                      item[0],
-                      " - ",
-                      item[1]
-                    ]
-                  },
-                  item[2]
-                );
-              }) : null
-            ] })
-          ] })
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "selec-prox-pass", children: [
+    function clearSelection() {
+      setFilter(0);
+      setSelectedLabel("");
+      setSearchTerm("");
+      setIsOpen(false);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "live-search-wrapper", ref: wrapperRef, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "live-search-header", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Filtre por excurs\xE3o" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "selec-prox-pass", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "span",
+            {
+              className: status === "pr\xF3ximas" ? "ativo" : "",
+              onClick: () => setStatus("pr\xF3ximas"),
+              children: "pr\xF3ximas"
+            }
+          ),
+          " ",
+          "|",
+          " ",
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "span",
+            {
+              className: status === "passadas" ? "ativo" : "",
+              onClick: () => setStatus("passadas"),
+              children: "passadas"
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "live-search-input-wrapper", children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "span",
+          "input",
           {
-            className: status === "pr\xF3ximas" ? "ativo" : "",
-            onClick: ({ currentTarget }) => alternaProxPass(currentTarget.innerText),
-            children: "pr\xF3ximas"
+            type: "text",
+            placeholder: selectedLabel || "Buscar excurs\xE3o...",
+            value: searchTerm,
+            onFocus: () => setIsOpen(true),
+            onChange: (e) => setSearchTerm(e.target.value),
+            className: "live-search-input"
           }
         ),
-        " ",
-        "|",
-        " ",
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "span",
+        selectedLabel && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "button",
           {
-            className: status === "passadas" ? "ativo" : "",
-            onClick: ({ currentTarget }) => alternaProxPass(currentTarget.innerText),
-            children: "passadas"
+            type: "button",
+            className: "clear-btn",
+            onClick: clearSelection,
+            children: "\xD7"
           }
         )
-      ] })
+      ] }),
+      isOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "live-search-options", children: filteredOptions.length > 0 ? filteredOptions.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        "div",
+        {
+          className: `dropdown-menu-item ${filter === +item[2] ? "selected" : ""}`,
+          onClick: () => handleSelect(item),
+          children: [
+            item[0],
+            " - ",
+            item[1]
+          ]
+        },
+        item[2]
+      )) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "no-results", children: "Nenhuma excurs\xE3o encontrada" }) })
     ] });
   };
   SelectLiveSearch.propTypes = {
@@ -3844,6 +3764,7 @@
     setFilter: import_prop_types.default.func.isRequired,
     filter: import_prop_types.default.number.isRequired
   };
+  var SelectLiveSearch_default = SelectLiveSearch;
 
   // src/AppReservasAdmin/PageNavigation.jsx
   var import_prop_types2 = __toESM(require_prop_types());
@@ -11745,7 +11666,7 @@
           writeFileSyncXLSX(wb, "SheetJSReactExport.xlsx");
         },
         id: "exportSheetBtn",
-        children: "Exportar XLS"
+        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { className: "dashicons dashicons-media-spreadsheet" })
       }
     );
   };
@@ -11782,6 +11703,17 @@
     return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { id: "adminReservasTable", children: [
       toast && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Toast_default, { message: toast, setToast }),
       /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "filtros", children: [
+        excDetails && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "filtros-interno", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            SelectLiveSearch_default,
+            {
+              srcArray: Object.values(excDetails),
+              setFilter,
+              filter
+            }
+          ),
+          filter > 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(BotaoExportarXLS_default, { _ref: tableToSheetRef })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
           PageNavigation_default,
           {
@@ -11792,8 +11724,7 @@
             setPageSize,
             showPageSize: false
           }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(BotaoExportarXLS_default, { _ref: tableToSheetRef })
+        )
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("p", { children: [
         reservasFiltradas.length,

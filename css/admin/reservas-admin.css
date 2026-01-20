@@ -22,11 +22,13 @@
   display: flex;
   justify-content: space-between;
 }
+#adminReservasTable .filtros .filtros-interno{
+      display: flex;
+    align-items: end;
+    padding-bottom: 8px;
+}
 #exportSheetBtn {
-  cursor: pointer;
-  max-height: 32px;
-  font-size: 1.125rem;
-  text-transform: uppercase;
+margin-left: 20px
 }
 #exportSheetBtn[disabled] {
   cursor: not-allowed;
@@ -239,7 +241,113 @@ tr.menu-ativo .menu-reserva ul:not(.loading) li {
 }
 
 /* Live search select */
-.live-search-dropdown {
+.live-search-wrapper{
+  position: relative;
+}
+.live-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 350px;
+}
+.live-search-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.live-search-header > * {
+  margin: 0;
+}
+.live-search-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.live-search-input:focus {
+  border-color: #0073e6;
+  box-shadow: 0 0 0 2px rgba(0,115,230,0.2);
+  outline: none;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #777;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.clear-btn:hover {
+  color: #000;
+}
+
+.live-search-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.25rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 10;
+  padding: 2px 0;
+}
+
+.dropdown-menu-item {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 1.3rem;
+}
+
+.dropdown-menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-menu-item.selected {
+  background-color: #e6f0ff;
+  font-weight: 500;
+}
+
+.no-results {
+  padding: 0.75rem;
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+.selec-prox-pass {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.selec-prox-pass span {
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.selec-prox-pass span:hover {
+  color: #000;
+}
+
+.selec-prox-pass span.ativo {
+  font-weight: 600;
+  color: #0073e6;
+}
+/* .live-search-dropdown {
   min-width: 360px;
   width: 400px;
   background: #e3e3e3;
@@ -300,4 +408,4 @@ tr.menu-ativo .menu-reserva ul:not(.loading) li {
 }
 .selec-prox-pass span:not(.ativo):hover {
   text-decoration: underline;
-}
+} */

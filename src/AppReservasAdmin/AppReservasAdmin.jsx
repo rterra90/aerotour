@@ -46,13 +46,17 @@ function AppReservasAdmin({ ajaxUrl }) {
     <div id="adminReservasTable">
       {toast && <Toast message={toast} setToast={setToast} />}
       <div className="filtros">
-        {/* {excDetails && (
-          <SelectLiveSearch
-            srcArray={Object.values(excDetails)}
-            setFilter={setFilter}
-            filter={filter}
-          />
-        )} */}
+        {excDetails && (
+          <div className="filtros-interno">
+            <SelectLiveSearch
+              srcArray={Object.values(excDetails)}
+              setFilter={setFilter}
+              filter={filter}
+            />
+            {filter > 0 && <BotaoExportarXLS _ref={tableToSheetRef} />}
+            
+          </div>
+        )}
               {/* navegação entre páginas */}
       <PageNavigation
         currentPage={currentPage}
@@ -64,7 +68,7 @@ function AppReservasAdmin({ ajaxUrl }) {
 
 
       />
-        <BotaoExportarXLS _ref={tableToSheetRef} />
+        
       </div>
 
       <p>{reservasFiltradas.length} reservas</p>

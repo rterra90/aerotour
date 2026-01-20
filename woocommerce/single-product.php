@@ -248,22 +248,23 @@ usort($datas, function ($a, $b) {
 
     <!-- quando houver banner: py-md-3 -->
     <!-- quando NÃO houver banner: py-md-5 -->
-    <div class="container-xxl py-md-3 py-3 excursao-wrapper"> 
+    <!-- <div class="container-xxl py-md-3 py-3 excursao-wrapper">  -->
+    <div class="container-xxl py-md-5 py-3 excursao-wrapper"> 
       <div class="notices">
         <?php wc_print_notices(); ?>
       </div>
 
       <!-- BANNER ARTECULT -->
-       <div id="topAdBanner">
+       <!-- <div id="topAdBanner">
         <small>PARCEIRO</small>
         <?php
-        // Insere o banner ArteCult
-        get_template_part('assets/banners/banner-artecult', null);
+// Insere o banner ArteCult
+// get_template_part('assets/banners/banner-artecult', null);
 
-        // Insere o modal
-        get_template_part('includes/modals/modal', null);
-        ?>
-       </div>
+// Insere o modal
+// get_template_part('includes/modals/modal', null);
+?>
+       </div> -->
        
       
       <!-- quando houver banner: mt-md-3 -->

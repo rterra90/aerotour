@@ -266,6 +266,9 @@ function ajax_send_email()
 
       if ($variation) {
         $emails = obter_emails_por_produto($variation_id);
+
+        // filtrar $emails retornando apenas o elementos a partir do index 43
+        // $emails = array_slice($emails, 83);
         // $emails = [''];
 
         //para ser consumido no template do e-mail
@@ -447,8 +450,12 @@ function obter_emails_por_produto($produto_id)
   // Passo 1: Consultar a tabela 'aer_reservas' para obter os user_ids
   $user_ids = $wpdb->get_col(
     $wpdb->prepare(
-      'SELECT user_id FROM aer_reservas WHERE variation_id = %d',
-      $produto_id
+      'SELECT user_id 
+     FROM aer_reservas 
+     WHERE variation_id = %d
+       AND status = %s',
+      $produto_id,
+      'normal'
     )
   );
 
@@ -472,9 +479,9 @@ function obter_emails_por_produto($produto_id)
     }
   }
 
-  // $emails = array_filter($emails, function($_email){
-  //   return is_email($_email);
-  // });
+  //remover valores duplicados de $emails
+  $emails = array_values(array_unique($emails));
+
   return $emails;
 }
 
