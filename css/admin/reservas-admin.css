@@ -18,20 +18,100 @@
   width: 100%;
 
 }
-#adminReservasTable .filtros {
+
+/* Seção de opções */
+/* Container principal da seção de opções */
+#tableOptions {
   display: flex;
+  flex-wrap: wrap; /* permite quebrar em telas menores */
+  gap: 1rem;
+  align-items: center;
   justify-content: space-between;
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
 }
-#adminReservasTable .filtros .filtros-interno{
-      display: flex;
-    align-items: end;
-    padding-bottom: 8px;
+
+/* Filtro por excursão + botão exportar */
+#tableOptions .filtra-excursao {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
+
+/* Busca rápida */
+#tableOptions .busca-rapida {
+  flex: 1;
+  min-width: 200px;
+}
+
+#tableOptions .busca-rapida input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#tableOptions .busca-rapida input:focus {
+  border-color: #0073e6;
+  box-shadow: 0 0 0 2px rgba(0,115,230,0.2);
+  outline: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  #tableOptions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #tableOptions .filtra-excursao {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  #tableOptions .busca-rapida, .live-search-wrapper {
+    width: 100%;
+  }
+}
+
+/* Botão exportar planilha */
 #exportSheetBtn {
 margin-left: 20px
 }
 #exportSheetBtn[disabled] {
   cursor: not-allowed;
+}
+
+/* Busca rápida */
+.busca-rapida {
+margin: 7px 0;
+  align-items: end;
+  display: flex;
+}
+
+/* Lista de reservas */
+#adminReservasTable .rota-icone{
+    border-radius: 10px;
+    width: 17px;
+    height: 17px;
+    line-height: 16px;
+    text-align: center;
+    display: inline-block;
+    font-weight: 800;
+    margin-right: 3px;
+}
+#adminReservasTable .rota-icone[data-rota='3']{
+    background: #d36551;
+    color: #ebdcdc;
+}
+#adminReservasTable .rota-icone[data-rota='2']{
+    background: #516dd3;
+    color: #e3dceb;
 }
 #adminReservasTable li {
   display: flex;
@@ -174,7 +254,7 @@ tr.menu-ativo .menu-reserva ul:not(.loading) li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+margin: 0 0 0 auto;
   padding: 0.75rem 1rem;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -347,65 +427,3 @@ tr.menu-ativo .menu-reserva ul:not(.loading) li {
   font-weight: 600;
   color: #0073e6;
 }
-/* .live-search-dropdown {
-  min-width: 360px;
-  width: 400px;
-  background: #e3e3e3;
-  line-height: 1.2;
-  letter-spacing: 1px;
-  position: relative;
-  cursor: pointer;
-  margin-bottom: 4px;
-  transition: 0.12s;
-}
-.live-search-dropdown:hover {
-  background: #d1d1d1;
-}
-.live-search-dropdown .dropdown-select {
-  padding: 9px 10px 7px 34px;
-}
-.live-search-dropdown .dropdown-menu {
-  width: 400px;
-  min-width: 360px;
-  max-height: 460px;
-  overflow-y: scroll;
-}
-.live-search-dropdown .dropdown-menu input {
-  width: 96%;
-  padding: 4px 10px;
-  letter-spacing: 1px;
-  margin: 0 auto;
-  display: block;
-}
-.live-search-dropdown .dropdown-menu .dropdown-menu-item {
-  padding: 10px;
-}
-.live-search-dropdown .dropdown-menu .dropdown-menu-item.is-select {
-  background-color: #c2c2c2;
-}
-.live-search-dropdown
-  .dropdown-menu
-  .dropdown-menu-item:not(.is-select):not(:disabled):hover {
-  background-color: #d5d5d5;
-  border: 1px solid #cecece;
-}
-.exc-search {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-.selec-prox-pass {
-  font-size: 1.15rem;
-}
-.selec-prox-pass span {
-  opacity: 0.5;
-  cursor: pointer;
-}
-.selec-prox-pass span.ativo {
-  opacity: 1;
-  text-decoration: underline;
-  cursor: text;
-}
-.selec-prox-pass span:not(.ativo):hover {
-  text-decoration: underline;
-} */

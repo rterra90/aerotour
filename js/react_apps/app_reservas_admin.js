@@ -95,7 +95,7 @@
           var ContextProvider = REACT_PROVIDER_TYPE;
           var Element = REACT_ELEMENT_TYPE;
           var ForwardRef = REACT_FORWARD_REF_TYPE;
-          var Fragment = REACT_FRAGMENT_TYPE;
+          var Fragment3 = REACT_FRAGMENT_TYPE;
           var Lazy = REACT_LAZY_TYPE;
           var Memo = REACT_MEMO_TYPE;
           var Portal = REACT_PORTAL_TYPE;
@@ -154,7 +154,7 @@
           exports.ContextProvider = ContextProvider;
           exports.Element = Element;
           exports.ForwardRef = ForwardRef;
-          exports.Fragment = Fragment;
+          exports.Fragment = Fragment3;
           exports.Lazy = Lazy;
           exports.Memo = Memo;
           exports.Portal = Portal;
@@ -3967,8 +3967,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "cpf", children: reserva.p_cpf }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "telefone", children: reserva.p_telefone }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("td", { "data-coluna": "embarque", children: [
-        reserva.embarque,
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: rotaDaViagem() })
+        reserva.rota != 1 && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "rota-icone", "data-rota": reserva.rota, children: rotaDaViagem() }) }),
+        " ",
+        reserva.embarque
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "horario", children: reserva.horario.slice(0, -3) })
     ] });
@@ -11684,6 +11685,7 @@
     const [filter, setFilter] = React.useState(0);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [pageSize, setPageSize] = React.useState(25);
+    const [searchTerm, setSearchTerm] = React.useState("");
     const tableToSheetRef = React.useRef(null);
     const adminAjax = useAdminAjax_default(ajaxUrl);
     React.useEffect(() => {
@@ -11692,8 +11694,17 @@
     const reservasFiltradas = React.useMemo(() => {
       if (!reservas)
         return [];
-      return filter > 0 ? reservas.filter((r) => r.variation_id == filter) : reservas;
-    }, [reservas, filter]);
+      let filtradas = filter > 0 ? reservas.filter((r) => r.variation_id == filter) : reservas;
+      if (searchTerm) {
+        const termo = searchTerm.toLowerCase();
+        const sanitizeCpf = (cpf) => cpf.replaceAll(".", "").replace("-", "");
+        const sanitizeTelefone = (telefone) => telefone.replace(/[()\-\s]/g, "");
+        filtradas = filtradas.filter(
+          (r) => r.order_id && r.order_id.toLowerCase().includes(termo) || r.p_nome && r.p_nome.toLowerCase().includes(termo) || r.p_cpf && sanitizeCpf(r.p_cpf).toLowerCase().includes(sanitizeCpf(termo)) || r.p_telefone && sanitizeTelefone(r.p_telefone).toLowerCase().includes(sanitizeTelefone(termo))
+        );
+      }
+      return filtradas;
+    }, [reservas, filter, searchTerm]);
     const totalPages = Math.ceil(reservasFiltradas.length / pageSize);
     const reservasPaginadas = React.useMemo(() => {
       const start = (currentPage - 1) * pageSize;
@@ -11702,17 +11713,31 @@
     }, [reservasFiltradas, currentPage, pageSize]);
     return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { id: "adminReservasTable", children: [
       toast && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Toast_default, { message: toast, setToast }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "filtros", children: [
-        excDetails && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "filtros-interno", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-            SelectLiveSearch_default,
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "filtros", id: "tableOptions", children: [
+        excDetails && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "filtra-excursao", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              SelectLiveSearch_default,
+              {
+                srcArray: Object.values(excDetails),
+                setFilter,
+                filter
+              }
+            ),
+            filter > 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(BotaoExportarXLS_default, { _ref: tableToSheetRef })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "busca-rapida", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            "input",
             {
-              srcArray: Object.values(excDetails),
-              setFilter,
-              filter
+              type: "text",
+              placeholder: "Buscar por nome, CPF ou telefone...",
+              value: searchTerm,
+              onChange: (e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }
             }
-          ),
-          filter > 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(BotaoExportarXLS_default, { _ref: tableToSheetRef })
+          ) })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
           PageNavigation_default,

@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
+
 import useAdminAjax from '../Hooks/useAdminAjax';
 import SelectLiveSearch from './SelectLiveSearch';
 import PageNavigation from './PageNavigation';
@@ -15,21 +16,39 @@ function AppReservasAdmin({ ajaxUrl }) {
   const [filter, setFilter] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(25); // padrão inicial
+  const [searchTerm, setSearchTerm] = React.useState('');
 
   const tableToSheetRef = React.useRef(null);
-
   const adminAjax = useAdminAjax(ajaxUrl);
 
   React.useEffect(() => {
     adminAjax.get_reservas(setReservas, setExcDetails);
   }, [adminAjax]);
 
+  // aplica filtro por excursão e busca rápida
   const reservasFiltradas = React.useMemo(() => {
     if (!reservas) return [];
-    return filter > 0
+
+    let filtradas = filter > 0
       ? reservas.filter(r => r.variation_id == filter)
       : reservas;
-  }, [reservas, filter]);
+
+    if (searchTerm) {
+      const termo = searchTerm.toLowerCase();
+      const sanitizeCpf = cpf => cpf.replaceAll('.', '').replace('-', '');
+      const sanitizeTelefone = telefone => telefone.replace(/[()\-\s]/g, '');
+
+      filtradas = filtradas.filter(r =>
+        (r.order_id && r.order_id.toLowerCase().includes(termo)) ||
+        (r.p_nome && r.p_nome.toLowerCase().includes(termo)) ||
+        (r.p_cpf && sanitizeCpf(r.p_cpf).toLowerCase().includes(sanitizeCpf(termo))) ||
+        (r.p_telefone && sanitizeTelefone(r.p_telefone).toLowerCase().includes(sanitizeTelefone(termo)))
+      );
+    }
+
+    return filtradas;
+  }, [reservas, filter, searchTerm]);
+
 
     // calcular total de páginas
   const totalPages = Math.ceil(reservasFiltradas.length / pageSize);
@@ -45,30 +64,39 @@ function AppReservasAdmin({ ajaxUrl }) {
   return (
     <div id="adminReservasTable">
       {toast && <Toast message={toast} setToast={setToast} />}
-      <div className="filtros">
+      <div className="filtros" id="tableOptions">
         {excDetails && (
-          <div className="filtros-interno">
-            <SelectLiveSearch
-              srcArray={Object.values(excDetails)}
-              setFilter={setFilter}
-              filter={filter}
-            />
-            {filter > 0 && <BotaoExportarXLS _ref={tableToSheetRef} />}
-            
-          </div>
+          <>
+            <div className="filtra-excursao">
+              <SelectLiveSearch
+                srcArray={Object.values(excDetails)}
+                setFilter={setFilter}
+                filter={filter}
+              />
+              {filter > 0 && <BotaoExportarXLS _ref={tableToSheetRef} />}
+            </div>
+                    {/* 🔎 campo de busca rápida */}
+            <div className="busca-rapida">
+              <input
+                type="text"
+                placeholder="Buscar por nome, CPF ou telefone..."
+                value={searchTerm}
+                onChange={e => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1); // resetar para primeira página ao buscar
+                }}
+                />
+            </div>
+          </>
         )}
-              {/* navegação entre páginas */}
-      <PageNavigation
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={totalPages}
-        pageSize={pageSize}
-        setPageSize={setPageSize}
-        showPageSize={false}
-
-
-      />
-        
+        <PageNavigation
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          showPageSize={false}
+        />
       </div>
 
       <p>{reservasFiltradas.length} reservas</p>
@@ -98,7 +126,6 @@ function AppReservasAdmin({ ajaxUrl }) {
         </tbody>
       </table>
 
-      {/* navegação entre páginas */}
       <PageNavigation
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
@@ -106,7 +133,6 @@ function AppReservasAdmin({ ajaxUrl }) {
         pageSize={pageSize}
         setPageSize={setPageSize}
       />
-
     </div>
   );
 }

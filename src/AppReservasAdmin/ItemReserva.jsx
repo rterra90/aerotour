@@ -171,7 +171,7 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
       <td data-coluna="nome-completo">{reserva.p_nome}</td>
       <td data-coluna="cpf">{reserva.p_cpf}</td>
       <td data-coluna="telefone">{reserva.p_telefone}</td>
-      <td data-coluna="embarque">{reserva.embarque}<span>{rotaDaViagem()}</span></td>
+      <td data-coluna="embarque">{reserva.rota != 1 && <><span className="rota-icone" data-rota={reserva.rota}>{rotaDaViagem()}</span></> } {reserva.embarque}</td>
       <td data-coluna="horario">{reserva.horario.slice(0, -3)}</td>
     </tr>
   );
