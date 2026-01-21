@@ -31,6 +31,9 @@ function ajax_get_excursoes()
       $this_var['nome'] = $product->get_name();
       $this_var['variation_id'] = $var['variation_id'];
       $this_var['parent_id'] = $product->get_id();
+      $this_var['edit_link'] = html_entity_decode(
+        get_edit_post_link($product->get_id())
+      );
 
       //se $dia_var_iso for maior ou igual a hoje + 2 dias, adiciona em $vars_atuais, senão em $vars_passadas
       if ((int) strtotime('now') < (int) strtotime($dia_var_iso) + 3600 * 48) {

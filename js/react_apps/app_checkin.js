@@ -4140,7 +4140,7 @@
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "exc_name", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
             "a",
             {
-              href: `https://aerotour.com.br/wp-admin/post.php?post=${_excursao.parent_id}&action=edit`,
+              href: _excursao.edit_link,
               children: [
                 _excursao.nome,
                 " - ",
