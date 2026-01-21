@@ -3793,16 +3793,16 @@
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
           "button",
           {
-            className: `check-box ${pax.saida ? "checked" : ""} ${pax.ida_desativado ? "disabled" : ""}`,
-            onClick: ({ currentTarget }) => !pax.ida_desativado && toggleCheck(pax.ID, "saida", !pax.saida, currentTarget),
+            className: `check-box ${pax.saida ? "checked" : ""} ${pax.rota == 3 ? "disabled" : ""}`,
+            onClick: ({ currentTarget }) => pax.rota != 3 && toggleCheck(pax.ID, "saida", !pax.saida, currentTarget),
             children: pax.saida && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 5 })
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
           "button",
           {
-            className: `check-box ${pax.volta ? "checked" : ""} ${pax.volta_desativado ? "disabled" : ""}`,
-            onClick: ({ currentTarget }) => !pax.volta_desativado && toggleCheck(pax.ID, "volta", !pax.volta, currentTarget),
+            className: `check-box ${pax.volta ? "checked" : ""} ${pax.rota == 2 ? "disabled" : ""}`,
+            onClick: ({ currentTarget }) => pax.rota != 2 && toggleCheck(pax.ID, "volta", !pax.volta, currentTarget),
             children: pax.volta && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 5 })
           }
         )

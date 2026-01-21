@@ -17,10 +17,10 @@ const AppCheckInPaxLi = ({ pax, setModalPax, toggleCheck }) => {
       <div className="check-group">
         <button
           className={`check-box ${pax.saida ? 'checked' : ''} ${
-            pax.ida_desativado ? 'disabled' : ''
+            pax.rota == 3 ? 'disabled' : ''
           }`}
           onClick={({ currentTarget }) =>
-            !pax.ida_desativado &&
+            pax.rota != 3 &&
             toggleCheck(pax.ID, 'saida', !pax.saida, currentTarget)
           }
         >
@@ -28,10 +28,10 @@ const AppCheckInPaxLi = ({ pax, setModalPax, toggleCheck }) => {
         </button>
         <button
           className={`check-box ${pax.volta ? 'checked' : ''} ${
-            pax.volta_desativado ? 'disabled' : ''
+            pax.rota == 2 ? 'disabled' : ''
           }`}
           onClick={({ currentTarget }) =>
-            !pax.volta_desativado &&
+            pax.rota != 2 &&
             toggleCheck(pax.ID, 'volta', !pax.volta, currentTarget)
           }
         >

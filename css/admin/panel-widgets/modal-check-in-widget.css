@@ -82,7 +82,7 @@
 
 .check-in-modal-inner .check-box.disabled {
   background: #5b5b5b;
-  border-color: #474747;
+  border-color: transparent;
   cursor: not-allowed;
   opacity: 0.6;
 }
