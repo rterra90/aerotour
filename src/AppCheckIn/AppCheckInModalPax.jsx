@@ -20,7 +20,7 @@ const AppCheckInModalPax = ({ setModalPax, modalPax }) => {
           </span>
           <span className="pax-btns">
             <a
-              href={`https://wa.me/${modalPax.p_telefone.replace(/\D/g, '')}`}
+              href={`https://wa.me/55${modalPax.p_telefone.replace(/\D/g, '')}`}
               target="_blank"
               rel="noopener noreferrer"
               title="Abrir no WhatsApp"

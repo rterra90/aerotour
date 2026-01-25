@@ -64,7 +64,6 @@ const AppCheckInModal = ({
   // 🔹 Aplicar filtro + ordenação combinados
   const passageirosProcessados = React.useMemo(() => {
     const filtrados = filterPassageiros(passageiros);
-    console.log(sortPassageiros(filtrados));
     return sortPassageiros(filtrados);
   }, [passageiros, sortType, filterType]);
 
@@ -199,7 +198,20 @@ const AppCheckInModal = ({
                       <div key={grupo.embarque} className="embarque-grupo">
                         <h4>
                           <div>
-                            {grupo.embarque} &nbsp; {grupo.passageiros.length}
+                            {grupo.embarque}
+                            <div className="grupo-embarque-resume">
+                              Total:
+                              {' ' + grupo.passageiros.length}
+                              <div className="ida-volta">
+                                <span>Ida:
+                                {' ' + grupo.passageiros.filter((pax) => pax.saida).length}</span>
+                                <span>Volta:
+                                {' ' + grupo.passageiros.filter((pax) => pax.volta).length}</span>
+                              </div>
+
+                            </div>
+
+                            
                           </div>
                           <span
                             onClick={({ target }) => {

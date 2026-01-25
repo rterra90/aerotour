@@ -3743,7 +3743,7 @@
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
                 "a",
                 {
-                  href: `https://wa.me/${modalPax.p_telefone.replace(/\D/g, "")}`,
+                  href: `https://wa.me/55${modalPax.p_telefone.replace(/\D/g, "")}`,
                   target: "_blank",
                   rel: "noopener noreferrer",
                   title: "Abrir no WhatsApp",
@@ -3905,7 +3905,6 @@
     };
     const passageirosProcessados = React.useMemo(() => {
       const filtrados = filterPassageiros(passageiros);
-      console.log(sortPassageiros(filtrados));
       return sortPassageiros(filtrados);
     }, [passageiros, sortType, filterType]);
     React.useEffect(() => {
@@ -4030,8 +4029,20 @@
             /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("h4", { children: [
               /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
                 grupo.embarque,
-                " \xA0 ",
-                grupo.passageiros.length
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "grupo-embarque-resume", children: [
+                  "Total:",
+                  " " + grupo.passageiros.length,
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "ida-volta", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                      "Ida:",
+                      " " + grupo.passageiros.filter((pax) => pax.saida).length
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+                      "Volta:",
+                      " " + grupo.passageiros.filter((pax) => pax.volta).length
+                    ] })
+                  ] })
+                ] })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
                 "span",

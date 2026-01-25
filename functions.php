@@ -1,6 +1,212 @@
 <?php
 $root_url = get_stylesheet_directory_uri();
 
+/**
+ * 1. Cria a página no menu Ferramentas
+ */
+add_action('admin_menu', function () {
+  add_management_page(
+    'Migração de Reservas',
+    'Migrar Reservas',
+    'manage_options',
+    'migrar-reservas-tool',
+    'render_migracao_page'
+  );
+});
+
+/**
+ * 2. Renderiza o HTML da página
+ */
+function render_migracao_page()
+{
+  ?>
+    <div class="wrap">
+        <h1>Migração de Pedidos para Tabela de Reservas</h1>
+        <p>Configurações para processamento de pedidos (IDs <strong>420</strong> a <strong>1006</strong>).</p>
+        
+        <div style="background: #fff; padding: 15px; border: 1px solid #ccd0d4; margin-bottom: 20px; border-radius: 4px;">
+            <label style="display: block; margin-bottom: 10px;">
+                <input type="checkbox" id="test-mode" checked> 
+                <strong>Modo Teste</strong> (Apenas simula a migração e exibe os dados tratados)
+            </label>
+            
+            <button id="start-migration" class="button button-primary" data-ajax="<?= admin_url(
+              'admin-ajax.php'
+            ) ?>">Iniciar Migração</button>
+            <button id="stop-migration" class="button button-secondary" disabled>Parar Processo</button>
+        </div>
+        
+        <div id="migration-log" style="margin-top: 20px; padding: 15px; background: #222; color: #0f0; font-family: monospace; height: 450px; overflow-y: scroll; border-radius: 5px; line-height: 1.6; font-size: 12px;">
+            > Aguardando comando...<br>
+        </div>
+    </div>
+
+    <script>
+    jQuery(document).ready(function($) {
+        let isRunning = false;
+        let totalProcessed = 0; // Contador acumulativo
+
+        $('#start-migration').on('click', function() {
+            isRunning = true;
+            totalProcessed = 0; // Reseta ao iniciar
+            $(this).prop('disabled', true).text('Processando...');
+            $('#stop-migration').prop('disabled', false);
+            $('#test-mode').prop('disabled', true);
+            $('#migration-log').html('> Iniciando processamento a partir do ID 420...<br>');
+            
+            processBatch(420); // Início definido no ID 420
+        });
+
+        $('#stop-migration').on('click', function() {
+            isRunning = false;
+            $(this).prop('disabled', true).text('Parando...');
+        });
+
+        function processBatch(currentId) {
+            const maxId = 1006;
+            const batchSize = 5;
+            const isTest = $('#test-mode').is(':checked');
+            
+            if (!isRunning) {
+                $('#migration-log').append('<br><span style="color:red;">[INTERROMPIDO] Processo parado pelo usuário. Total processado até agora: ' + totalProcessed + '</span>');
+                resetButtons();
+                return;
+            }
+
+            if (currentId > maxId) {
+                const corFinal = isTest ? 'cyan' : 'white';
+                $('#migration-log').append('<br><span style="color:'+corFinal+'; font-weight:bold; font-size: 14px;">[CONCLUÍDO] Fim do intervalo. Total de registros afetados/simulados: ' + totalProcessed + '</span>');
+                resetButtons();
+                return;
+            }
+
+            $.ajax({
+                url: ajaxurl,
+                method: 'POST',
+                data: {
+                    action: 'executar_migracao_ajax',
+                    start_id: currentId,
+                    end_id: Math.min(currentId + batchSize - 1, maxId),
+                    test_mode: isTest ? 1 : 0
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#migration-log').append(response.data.logs);
+                        totalProcessed += response.data.count; // Soma o contador vindo do PHP
+                        $('#migration-log').scrollTop($('#migration-log')[0].scrollHeight);
+                        
+                        processBatch(currentId + batchSize);
+                    }
+                },
+                error: function(_e) {
+                    $('#migration-log').append('<span style="color:red;">> ERRO CRÍTICO NA REQUISIÇÃO.</span><br>');
+                    resetButtons();
+                }
+            });
+        }
+
+        function resetButtons() {
+            isRunning = false;
+            $('#start-migration').prop('disabled', false).text('Iniciar Migração');
+            $('#stop-migration').prop('disabled', true).text('Parar Processo');
+            $('#test-mode').prop('disabled', false);
+        }
+    });
+    </script>
+    <?php
+}
+
+/**
+ * 3. Lógica de Processamento (Back-end)
+ */
+add_action('wp_ajax_executar_migracao_ajax', function () {
+  global $wpdb;
+  $tabela_destino = 'aer_reservas_bkp';
+
+  $start_id = intval($_POST['start_id']);
+  $end_id = intval($_POST['end_id']);
+  $test_mode = filter_var($_POST['test_mode'], FILTER_VALIDATE_BOOLEAN);
+
+  $logs = '';
+  $count = 0; // Contador deste lote
+
+  for ($order_id = $start_id; $order_id <= $end_id; $order_id++) {
+    $order = wc_get_order($order_id);
+
+    if (!$order) {
+      $logs .= "ID #$order_id: <span style='color:#555;'>Inexistente</span><br>";
+      continue;
+    }
+
+    $passageiro_meta = $order->get_meta('passageiro');
+    if (empty($passageiro_meta)) {
+      $logs .= "Pedido #$order_id: <span style='color:orange;'>Sem meta 'passageiro'</span><br>";
+      continue;
+    }
+
+    $passageiro = is_string($passageiro_meta)
+      ? json_decode($passageiro_meta, true)
+      : $passageiro_meta;
+
+    if (!is_array($passageiro)) {
+      $logs .= "Pedido #$order_id: <span style='color:red;'>JSON corrompido</span><br>";
+      continue;
+    }
+
+    // Tratamento da string de embarque (remove os 8 últimos caracteres)
+    if (isset($passageiro['embarque'])) {
+      $passageiro['embarque'] = substr($passageiro['embarque'], 0, -8);
+    }
+
+    // Captura IDs
+    $user_id = $order->get_user_id();
+    $items = $order->get_items();
+    $variation_id = 0;
+    foreach ($items as $item) {
+      $variation_id = $item->get_variation_id() ?: $item->get_product_id();
+      break;
+    }
+
+    $dados_insercao = [
+      'p_nome' => $passageiro['nome_completo'] ?? '',
+      'p_cpf' => $passageiro['cpf'] ?? '',
+      'p_telefone' => $passageiro['telefone'] ?? '',
+      'embarque' => $passageiro['embarque'] ?? '',
+      'status' => $passageiro['status'] ?? '',
+      'user_id' => $user_id,
+      'variation_id' => $variation_id,
+      'order_id' => $order_id
+    ];
+
+    if ($test_mode) {
+      $count++;
+      $logs .=
+        "Pedido #$order_id: <span style='color:#00ffff;'>[TESTE]</span> " .
+        $dados_insercao['p_nome'] .
+        ' | Status: ' .
+        $dados_insercao['status'] .
+        '<br>';
+    } else {
+      $resultado = $wpdb->insert($tabela_destino, $dados_insercao);
+
+      if ($resultado) {
+        $count++;
+        $logs .= "Pedido #$order_id: <span style='color:#0f0;'>MIGRADO</span> ({$dados_insercao['p_nome']})<br>";
+      } else {
+        $logs .=
+          "Pedido #$order_id: <span style='color:red;'>ERRO DB: " .
+          $wpdb->last_error .
+          '</span><br>';
+      }
+    }
+  }
+
+  wp_send_json_success([
+    'logs' => $logs,
+    'count' => $count // Retorna quantos registros foram processados com sucesso neste lote
+  ]);
+});
+
 function slugify($str, $delimiter = '-')
 {
   $slug = strtolower(

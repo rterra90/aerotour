@@ -248,11 +248,27 @@
   align-items: center;
   font-weight: 600 !important;
 }
-.embarque-grupo h4 span {
+.embarque-grupo h4 > span {
   font-family: fantasy;
   font-size: 1.25rem;
   padding: 2px 5px;
   cursor: pointer;
+}
+.embarque-grupo .grupo-embarque-resume{
+  font-size: 0.75rem;
+  color: #444;
+}
+.embarque-grupo .grupo-embarque-resume .ida-volta{
+  display: inline-block;
+  margin-left: 16px;
+  color: #585858;
+  font-size: .7rem;
+  padding-left: 10px;
+  border-radius: 3px;
+  background: #d9d9d9;
+}
+.embarque-grupo .grupo-embarque-resume .ida-volta span{
+  margin-right: 10px;
 }
 .embarque-grupo ul {
   list-style: none;
