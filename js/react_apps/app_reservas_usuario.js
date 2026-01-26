@@ -5007,7 +5007,7 @@
         setLoading(true);
       if (index >= selectedDates.length) {
         botaoContinuarRef.current.innerHTML = "Redirecionando para o carrinho...";
-        window.location.href = "http://aerotour.com.br/carrinho/";
+        window.location.href = themeLinks.siteUrl + "/carrinho/";
         return;
       }
       const submitQty = passageiros.length;
@@ -5034,7 +5034,6 @@
           desconto_antecipado: hasDiscount
         },
         success: function() {
-          console.log(`Varia\xE7\xE3o ${submitVarId} adicionada`);
           submitToCart(index + 1);
         },
         error: function(response) {

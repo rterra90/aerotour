@@ -151,8 +151,7 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
     if (!loading) setLoading(true);
     if (index >= selectedDates.length) {
       botaoContinuarRef.current.innerHTML = 'Redirecionando para o carrinho...';
-      window.location.href = 'http://localhost/aerotour-site/carrinho/';
-      // window.location.href = 'http://aerotour.com.br/carrinho/';
+      window.location.href = themeLinks.siteUrl + '/carrinho/';
 
       return;
     }
@@ -187,8 +186,7 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
         desconto_antecipado: hasDiscount,
       },
       success: function () {
-        console.log(`Variação ${submitVarId} adicionada`);
-        submitToCart(index + 1); // chama a próxima
+       submitToCart(index + 1); // chama a próxima
       },
       error: function (response) {
         console.log(['Erro ao adicionar variação:', response]);

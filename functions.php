@@ -1,6 +1,13 @@
 <?php
 $root_url = get_stylesheet_directory_uri();
 
+wp_enqueue_script('theme-links', get_template_directory_uri() . '/js/main.js');
+wp_localize_script('theme-links', 'themeLinks', [
+  'adminUrl' => admin_url(),
+  'adminAjaxUrl' => admin_url('admin-ajax.php'),
+  'siteUrl' => get_site_url()
+]);
+
 /**
  * 1. Cria a página no menu Ferramentas
  */
@@ -906,13 +913,14 @@ function exibe_pdv()
 }
 /* Fim Ponto de venda em cart_collaterals */
 
-/* Valida adição ao carrinho*/
+/* Valida adição ao carrinho */
 add_filter(
   'woocommerce_add_to_cart_validation',
   'filter_add_to_cart_validation',
   10,
   5
 );
+
 function filter_add_to_cart_validation(
   $passed,
   $product_id,
@@ -921,25 +929,33 @@ function filter_add_to_cart_validation(
   $variations
 ) {
   foreach (WC()->cart->get_cart() as $cart_item) {
-    if ($cart_item['variation_id'] === $variation_id) {
+    // Se for variação, compara variation_id
+    if ($variation_id > 0 && $cart_item['variation_id'] == $variation_id) {
       $passed = false;
-      // Displaying a custom message
-      $message = __(
-        "<span>Parece que você já tem uma reserva para essa excursão no carrinho.<a href='" .
-          wc_get_cart_url() .
-          "' class='message-link'>Ver carrinho</a></span>",
-        'woocommerce'
+    }
+
+    // Se não for variação, compara product_id
+    if ($variation_id == 0 && $cart_item['product_id'] == $product_id) {
+      $passed = false;
+    }
+
+    if (!$passed) {
+      $message = sprintf(
+        __(
+          "<span>Parece que você já tem uma reserva para essa excursão no carrinho. 
+        <a href='%s' class='message-link'>Ver carrinho</a></span>",
+          'woocommerce'
+        ),
+        esc_url(wc_get_cart_url())
       );
       wc_add_notice($message, 'error');
-      // We stop the loop
-      break;
-    } else {
-      $passed = true;
+      break; // interrompe o loop
     }
   }
+
   return $passed;
 }
-/* Fim Valida adição ao carrinho*/
+/* Fim Valida adição ao carrinho */
 
 add_filter(
   'woocommerce_checkout_must_be_logged_in_message',
