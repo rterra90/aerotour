@@ -84,6 +84,10 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
       botaoContinuarRef.current.innerHTML =
         '<span class="loadingElement my-0"></span>';
       return;
+    }else{
+      botaoContinuarRef.current.innerHTML = 'Continuar';
+      botaoContinuarRef.current.removeAttribute('disabled');
+
     }
   }, [loading]);
 
@@ -92,14 +96,6 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
       if (variacoes[0].encerrar_vendas) setExcursaoEncerrada(true);
       else {
         const singleVarId = variacoes[0].variation_id;
-        // let payloadDia;
-        // if(variacoes[0].attributes.attribute_dia == "31/12/2026"){
-        //   payloadDia = "A definir...";
-        // }else{
-        //   payloadDia = variacoes[0].attributes.attribute_dia;
-        // }
-
-        // const dataIso = convertDate(variacoes[0].attributes.attribute_dia, 'iso');
 
         const dataPayload = [
           variacoes[0].attributes.attribute_dia,
@@ -147,53 +143,61 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
     });
   }, []);
 
-  function submitToCart(index = 0) {
-    if (!loading) setLoading(true);
-    if (index >= selectedDates.length) {
-      botaoContinuarRef.current.innerHTML = 'Redirecionando para o carrinho...';
-      window.location.href = themeLinks.siteUrl + '/carrinho/';
+function submitToCart(index = 0) {
+  if (!loading) setLoading(true);
 
-      return;
-    }
-
-    const submitQty = passageiros.length;
-    const submitTaxa = taxa;
-    const submitEmbarque = embarque ? embarque[0].embarqueId : null;
-    const submitHorario = horario;
-    const submitPax =
-      passageiros.length > 0 ? JSON.stringify(passageiros) : null;
-
-    const _date = selectedDates[index];
-    const submitVarId = getVarIdByDate(_date);
-
-    const lastSelectedDate = selectedDates[selectedDates.length - 1];
-    const hasDiscount = discountCost
-      ? convertDate(lastSelectedDate, 'iso')
-      : false;
-
-    $.ajax({
-      type: 'POST',
-      url: ajaxUrl,
-      data: {
-        action: 'add_variation_to_cart',
-        product_id: productId,
-        variation_id: submitVarId,
-        quantity: submitQty,
-        taxa: submitTaxa,
-        embarque: submitEmbarque,
-        horario: submitHorario,
-        passageiros: submitPax,
-        desconto_antecipado: hasDiscount,
-      },
-      success: function () {
-       submitToCart(index + 1); // chama a próxima
-      },
-      error: function (response) {
-        console.log(['Erro ao adicionar variação:', response]);
-        submitToCart(index + 1); // mesmo com erro, segue
-      },
-    });
+  if (index >= selectedDates.length) {
+    botaoContinuarRef.current.innerHTML = 'Redirecionando para o carrinho...';
+    window.location.href = themeLinks.siteUrl + '/carrinho/';
+    return;
   }
+
+  const submitQty = passageiros.length;
+  const submitTaxa = taxa;
+  const submitEmbarque = embarque ? embarque[0].embarqueId : null;
+  const submitHorario = horario;
+  const submitPax = passageiros.length > 0 ? JSON.stringify(passageiros) : null;
+
+  const _date = selectedDates[index];
+  const submitVarId = getVarIdByDate(_date);
+
+  const lastSelectedDate = selectedDates[selectedDates.length - 1];
+  const hasDiscount = discountCost ? convertDate(lastSelectedDate, 'iso') : false;
+
+  $.ajax({
+    type: 'POST',
+    url: ajaxUrl,
+    dataType: 'json', // importante para interpretar resposta WooCommerce
+    data: {
+      action: 'add_variation_to_cart',
+      product_id: productId,
+      variation_id: submitVarId,
+      quantity: submitQty,
+      taxa: submitTaxa,
+      embarque: submitEmbarque,
+      horario: submitHorario,
+      passageiros: submitPax,
+      desconto_antecipado: hasDiscount,
+    },
+    success: function (response) {
+      // WooCommerce retorna { error: true, messages: "..."} quando bloqueia
+      if (response.error) {
+        setLoading(false);
+        setAvisosModalOpen('ja-adicionado-carrinho');
+
+        return; // interrompe fluxo
+      }
+
+      // se deu certo, chama próxima
+      submitToCart(index + 1);
+    },
+    error: function (xhr, status, error) {
+      console.error('Erro AJAX:', error);
+      setLoading(false);
+      // não prossegue em caso de erro
+    },
+  });
+}
 
   function openDateModal() {
     setDateModalOpen(true);

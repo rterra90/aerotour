@@ -68,26 +68,51 @@ function ajax_get_excursoes()
   ]);
 }
 //ADICIONA VARIAÇÃO AO CARRINHO VIA AJAX
+// ADICIONA VARIAÇÃO AO CARRINHO VIA AJAX
 add_action('wp_ajax_add_variation_to_cart', 'ajax_add_variation_to_cart');
 add_action(
   'wp_ajax_nopriv_add_variation_to_cart',
   'ajax_add_variation_to_cart'
 );
+
 function ajax_add_variation_to_cart()
 {
   $product_id = absint($_POST['product_id']);
   $variation_id = absint($_POST['variation_id']);
   $quantity = absint($_POST['quantity']);
-  $taxa = $_POST['taxa'];
-  $embarque = $_POST['embarque'];
-  $horario = $_POST['horario'];
+  $taxa = sanitize_text_field($_POST['taxa']);
+  $embarque = sanitize_text_field($_POST['embarque']);
+  $horario = sanitize_text_field($_POST['horario']);
   $passageiros = $_POST['passageiros'];
 
   $cart_item_data = [
-    'desconto_antecipado' => $_POST['desconto_antecipado'] //false ou string de data
+    'desconto_antecipado' => sanitize_text_field($_POST['desconto_antecipado']),
+    'taxa' => $taxa,
+    'embarque' => $embarque,
+    'horario' => $horario,
+    'passageiros' => $passageiros
   ];
 
-  WC()->cart->add_to_cart(
+  // Executa a validação WooCommerce (inclui seu filtro personalizado)
+  $passed = apply_filters(
+    'woocommerce_add_to_cart_validation',
+    true,
+    $product_id,
+    $quantity,
+    $variation_id,
+    []
+  );
+
+  if (!$passed) {
+    // Retorna erro em formato JSON para o frontend
+    wp_send_json([
+      'error' => true,
+      'messages' => wc_print_notices(true) // captura mensagens de erro
+    ]);
+  }
+
+  // Se passou na validação, adiciona ao carrinho
+  $added = WC()->cart->add_to_cart(
     $product_id,
     $quantity,
     $variation_id,
@@ -95,7 +120,15 @@ function ajax_add_variation_to_cart()
     $cart_item_data
   );
 
-  // Retorna os fragments para atualizar o mini-carrinho
+  if (!$added) {
+    wp_send_json([
+      'error' => true,
+      'messages' =>
+        '<ul class="woocommerce-error"><li>Não foi possível adicionar ao carrinho.</li></ul>'
+    ]);
+  }
+
+  // Retorna fragments para atualizar mini-carrinho
   WC_AJAX::get_refreshed_fragments();
   wp_die();
 }

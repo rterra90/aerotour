@@ -4789,6 +4789,23 @@
                           children: "Fechar"
                         }
                       )
+                    ] }),
+                    alertType == "ja-adicionado-carrinho" && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "error-container", role: "alert", "aria-live": "assertive", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "error-icon", children: "\u26A0\uFE0F" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("p", { className: "error-message", children: [
+                        "J\xE1 existe uma reserva para essa excurs\xE3o no carrinho.",
+                        " ",
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "d-block", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("a", { href: themeLinks.siteUrl + "/carrinho", className: "close-button d-block mt-3", children: "Ir ao carrinho" }) })
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        "button",
+                        {
+                          className: "close-button",
+                          type: "button",
+                          onClick: () => closeAvisosModal("cancel"),
+                          children: "Fechar"
+                        }
+                      )
                     ] })
                   ]
                 }
@@ -4956,6 +4973,9 @@
         botaoContinuarRef.current.setAttribute("disabled", "");
         botaoContinuarRef.current.innerHTML = '<span class="loadingElement my-0"></span>';
         return;
+      } else {
+        botaoContinuarRef.current.innerHTML = "Continuar";
+        botaoContinuarRef.current.removeAttribute("disabled");
       }
     }, [loading]);
     React.useEffect(() => {
@@ -5022,6 +5042,8 @@
       $.ajax({
         type: "POST",
         url: ajaxUrl,
+        dataType: "json",
+        // importante para interpretar resposta WooCommerce
         data: {
           action: "add_variation_to_cart",
           product_id: productId,
@@ -5033,12 +5055,17 @@
           passageiros: submitPax,
           desconto_antecipado: hasDiscount
         },
-        success: function() {
+        success: function(response) {
+          if (response.error) {
+            setLoading(false);
+            setAvisosModalOpen("ja-adicionado-carrinho");
+            return;
+          }
           submitToCart(index + 1);
         },
-        error: function(response) {
-          console.log(["Erro ao adicionar varia\xE7\xE3o:", response]);
-          submitToCart(index + 1);
+        error: function(xhr, status, error) {
+          console.error("Erro AJAX:", error);
+          setLoading(false);
         }
       });
     }

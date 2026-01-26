@@ -123,6 +123,24 @@ const AvisosModal = ({
               </button>
             </div>
           )}
+
+          {/* Conteúdo já existe no carrinho */}
+          {alertType == 'ja-adicionado-carrinho' && (
+            <div className="error-container" role="alert" aria-live="assertive">
+              <div className="error-icon">⚠️</div>
+              <p className="error-message">
+                Já existe uma reserva para essa excursão no carrinho.{' '}
+                <span className="d-block"><a href={themeLinks.siteUrl + '/carrinho'} className="close-button d-block mt-3">Ir ao carrinho</a></span>
+              </p>
+              <button
+                className="close-button"
+                type="button"
+                onClick={() => closeAvisosModal('cancel')}
+              >
+                Fechar
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

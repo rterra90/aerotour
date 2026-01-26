@@ -272,6 +272,13 @@ usort($datas, function ($a, $b) {
 
         <!-- INFORMAÇÕES -->
         <div id="info-body" class="col-md-7 col">
+
+        <div class="woocommerce-notices-wrapper">
+
+</div>
+
+
+
           <div class="d-flex justify-content-between gap-2">
             <h1><span>Excursão<br/></span><?= $excursao['nome'] ?></h1>
 
