@@ -5,7 +5,8 @@ wp_enqueue_script('theme-links', get_template_directory_uri() . '/js/main.js');
 wp_localize_script('theme-links', 'themeLinks', [
   'adminUrl' => admin_url(),
   'adminAjaxUrl' => admin_url('admin-ajax.php'),
-  'siteUrl' => get_site_url()
+  'siteUrl' => get_site_url(),
+  'cartUrl' => wc_get_cart_url()
 ]);
 
 /**
@@ -928,6 +929,11 @@ function filter_add_to_cart_validation(
   $variation_id,
   $variations
 ) {
+  // Dados do novo passageiro
+  $novo_passageiros = !empty($_POST['passageiros'])
+    ? json_decode(stripslashes($_POST['passageiros']))
+    : [];
+
   foreach (WC()->cart->get_cart() as $cart_item) {
     // Se for variação, compara variation_id
     if ($variation_id > 0 && $cart_item['variation_id'] == $variation_id) {
@@ -940,17 +946,8 @@ function filter_add_to_cart_validation(
     }
 
     if (!$passed) {
-      $message = sprintf(
-        __(
-          "<span>Parece que você já tem uma reserva para essa excursão no carrinho. 
-        <a href='%s' class='message-link'>Ver carrinho</a></span>",
-          'woocommerce'
-        ),
-        esc_url(wc_get_cart_url())
-      );
-      wc_add_notice($message, 'error');
-      break; // interrompe o loop
-    }
+      break;
+    } // interrompe o loop
   }
 
   return $passed;

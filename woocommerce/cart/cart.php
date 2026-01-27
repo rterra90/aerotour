@@ -15,7 +15,7 @@ $items_carrinho = $woocommerce->cart->get_cart();
   get_stylesheet_directory_uri()
 ) ?>/css/includes/banner-cupom.css">
 
-<h1 class="mt-3">Carrinho de reservas</h1>
+<h1 class="mt-2">Carrinho de reservas</h1>
 
 <div class="notices woocommerce-notices-wrapper">
     <?php wc_print_notices(); ?>
@@ -94,7 +94,7 @@ $items_carrinho = $woocommerce->cart->get_cart();
                               $parent_permalink = get_permalink($parent_id);
                               ?>
 
-																<a href="<?= esc_url($parent_permalink) ?>">
+																<a class="title-link" href="<?= esc_url($parent_permalink) ?>">
 																		<h3 class="bg-title">
 																				Excursão <?= esc_html(
                       preg_replace(
@@ -267,39 +267,20 @@ $items_carrinho = $woocommerce->cart->get_cart();
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    // Toggle passageiros
-    document.querySelectorAll(".toggle-passengers").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const list = btn.nextElementSibling;
-            const paxQty = btn.dataset.qty;
-            list.classList.toggle("open");
-            btn.classList.toggle("active");
-            btn.textContent = list.classList.contains("open") 
-                ? "Ocultar passageiros ("+paxQty+")"
-                : "Ver passageiros ("+paxQty+")";
-        });
-    });
 
-    // Remover item com confirmação
-    document.querySelectorAll(".remove-item").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            if (!confirm("Tem certeza que deseja remover esta excursão do carrinho?")) {
-                e.preventDefault();
-            }
-        });
-    });
-
-    // Ajustes visuais
-    const totalTitle = document.querySelector('.cart_totals h2');
-    if(totalTitle) totalTitle.classList.add('bg-title');
-    const finalizarBtn = document.querySelector('.checkout-button');
-    if(finalizarBtn) finalizarBtn.innerText = "Continuar para pagamento";
-});
-
-function toggleCupomInputs(element_id){
-    document.querySelector('#' + element_id).classList.toggle('active');
-}
 </script>
 
-<?php do_action('woocommerce_after_cart'); ?>
+<?php
+do_action('woocommerce_after_cart');
+
+//Enfileira o script customizado do carrinho
+wp_enqueue_script(
+  'cart-custom-js',
+  get_stylesheet_directory_uri() . '/js/cart.js',
+  ['jquery'],
+  time(),
+  true
+);
+
+
+?>
