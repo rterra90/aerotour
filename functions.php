@@ -249,7 +249,7 @@ function mostrar_todos_produtos_shop($query)
     $query->is_main_query() &&
     (is_shop() || is_product_category() || is_product_tag())
   ) {
-    $query->set('posts_per_page', -1); // -1 remove o limite e a paginação
+    $query->set('posts_per_page', -1); // '-1' remove o limite e a paginação
   }
 }
 
@@ -1028,6 +1028,13 @@ function filter_function_name($title, $sep, $seplocation)
     return str_replace('Categorias de produto | ', '', $title);
   }
   return $title;
+}
+
+//Função utilitária para versionar assets (CSS e JS) com base na data de modificação do arquivo
+function aer_get_asset_version($path)
+{
+  $file = get_stylesheet_directory() . $path;
+  return file_exists($file) ? filemtime($file) : '1.0.0';
 }
 
 require_once get_template_directory() . '/endpoints/cupom_update.php';

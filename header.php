@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+<!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-W8B65D68');</script>
+})(window,document,'script','dataLayer','GTM-W8B65D68');</script> -->
 <!-- End Google Tag Manager -->
 <?php
 global $wpdb;
@@ -47,10 +47,12 @@ if (is_product()) {
   <!-- //bloginfo('name') -->
   <link rel="canonical" href="<?= esc_url(get_permalink(get_the_ID())) ?>" />
   <link rel="shortcut icon" href="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/aer-favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/style.min.css?ver=<?= time() ?>">
-  <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/css/checkout.css?ver=<?= time() ?>">
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" /> -->
+
+  <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/style.min.css??ver=<?= aer_get_asset_version(
+  '/style.min.css'
+) ?>">
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -61,37 +63,59 @@ if (is_product()) {
 <!-- <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;700&display=swap" rel="stylesheet"> -->
 
 <?php
-$excursoes = wc_get_products([
-  'orderby' => 'date',
-  'order' => 'DESC',
-  'status' => 'publish',
-  'limit' => -1
-]);
+// 1. Otimização de busca de dados (Cache com Transients)
+$featured_data = get_transient('aer_featured_trip');
+$featured_data = [];
+if (count($featured_data) === 0) {
+  $excursoes_hero = wc_get_products([
+    'orderby' => 'date',
+    'order' => 'DESC',
+    'status' => 'publish',
+    'limit' => 5,
+    'featured' => true
+  ]);
 
-foreach (aer_proximas_excursoes($excursoes, 'destaque') as $_i => $_exc) {
+  // Inicializamos como array vazio para evitar erros
+  $featured_data = [];
 
-  $background_img = wp_get_attachment_image_src(
-    get_post_meta($_exc->get_id(), 'dest_img_1_id', true),
-    'single-post-thumbnail'
-  )[0];
-  $focus_img = wp_get_attachment_image_src(
-    get_post_meta($_exc->get_id(), 'dest_img_2_id', true),
-    'large'
-  )[0];
-  ?>
-          <link rel="preload" as="image" href="<?= esc_url(
-            $background_img
-          ) ?>" />
-          <link rel="preload" as="image" href="<?= esc_url($focus_img) ?>" />
-        <?php break;
+  foreach (aer_proximas_excursoes($excursoes_hero) as $_exc) {
+    $featured_data = [
+      'bg' => wp_get_attachment_image_src(
+        get_post_meta($_exc->get_id(), 'dest_img_1_id', true),
+        'full'
+      )[0],
+      'focus' => wp_get_attachment_image_src(
+        get_post_meta($_exc->get_id(), 'dest_img_2_id', true),
+        'large'
+      )[0]
+    ];
+    break;
+  }
+  set_transient('aer_featured_trip', $featured_data, DAY_IN_SECONDS);
 }
+$background_img = $featured_data['bg'] ?? '';
+$focus_img = $featured_data['focus'] ?? '';
+
+//Preload das imagens de destaque da home
+if ($background_img): ?>
+    <link rel="preload" as="image" href="<?= esc_url(
+      $background_img
+    ) ?>" fetchpriority="high">
+    <?php if ($focus_img): ?>
+        <link rel="preload" as="image" href="<?= esc_url(
+          $focus_img
+        ) ?>" fetchpriority="high">
+    <?php endif; ?>
+<?php endif;
 ?>
 
-<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script src="https://sdk.mercadopago.com/js/v2" defer></script>
   <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/helper/style-selected-element.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
 
-<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/helper/cards-slider.js?ver=<?= time() ?>"></script>
+<script src="<?= get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js?ver=<?= aer_get_asset_version(
+  '/cards-slider.js'
+) ?>" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -126,7 +150,7 @@ foreach (aer_proximas_excursoes($excursoes, 'destaque') as $_i => $_exc) {
     /></noscript>
   <!-- End Meta Pixel Code -->
 
-<!-- DEPRECATED -->
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB"></script>
 <script>
@@ -135,7 +159,7 @@ foreach (aer_proximas_excursoes($excursoes, 'destaque') as $_i => $_exc) {
   gtag('js', new Date());
   gtag('config', 'G-F1239QYGYB');
 </script>
-<!-- DEPRECATED -->
+
 
 <!-- Google ADS -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719"
@@ -146,8 +170,8 @@ foreach (aer_proximas_excursoes($excursoes, 'destaque') as $_i => $_exc) {
 
 
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8B65D68"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8B65D68"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
 <!-- End Google Tag Manager (noscript) -->
 
 <?php if (isset($_COOKIE['parceiro_pdv'])) {
