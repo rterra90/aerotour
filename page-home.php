@@ -2,17 +2,29 @@
 // Template Name: Home
 ?>
 <?php
-get_header();
-$excursoes = wc_get_products([
-  'orderby' => 'date',
-  'order' => 'DESC',
-  'status' => 'publish',
-  'limit' => -1
-]);
-print_r($excursoes[0]);
+get_header(); //Busca excursões com data limite maior ou igual a hoje
+$hoje = date('Ymd');
+$args = [
+  'post_type' => 'product',
+  'post_status' => 'publish',
+  'posts_per_page' => 30,
+  'meta_key' => 'data_limite_excursao',
+  'orderby' => 'meta_value_num',
+  'order' => 'ASC',
+  'meta_query' => [
+    [
+      'key' => 'data_limite_excursao',
+      'value' => $hoje,
+      'compare' => '>=',
+      'type' => 'NUMERIC'
+    ]
+  ]
+];
+$query = new WP_Query($args);
+$excursoes_ids = $query->posts; // Converte IDs em objetos de produto do WooCommerce
+$excursoes = array_map('wc_get_product', $excursoes_ids);
 ?>
 <section id="content-home">
-    
   <?php // Insere o modal de QR Code se ativo
 
 
@@ -30,20 +42,23 @@ print_r($excursoes[0]);
   $displays_sections = get_option('aer_home_displays');
   foreach ($displays_sections as $_section) {
     if ($_section['type'] === 'proximas') {
-      aer_cards_slider(aer_proximas_excursoes($excursoes), $_section['nome']);
+      aer_cards_slider($excursoes, $_section['nome']);
     } elseif ($_section['type'] === 'apos-data') {
       aer_cards_slider(
         aer_excursoes_apos_data($excursoes, $_section['type_value']),
         $_section['nome']
       );
     } elseif ($_section['type'] === 'categoria') {
-      $_display_results = wc_get_products([
-        'category' => [$_section['type_value']]
-      ]);
-      aer_cards_slider(
-        aer_proximas_excursoes($_display_results),
-        $_section['nome']
-      );
+      // Supomos que $_section['type_value'] seja o SLUG ou ID da categoria
+      $slug_alvo = $_section['type_value'];
+      $_display_results = array_filter($excursoes, function ($excursao) use (
+        $slug_alvo
+      ) {
+        // Verifica se o produto pertence à categoria (funciona com ID ou Slug)
+        return has_term($slug_alvo, 'product_cat', $excursao->get_id());
+      });
+      $_display_results = array_slice($_display_results, 0, 8); // Opcional: Se você precisar de apenas os 4 primeiros dessa categoria na seção:
+      aer_cards_slider($_display_results, $_section['nome']);
     }
   } //Sugestão
   include 'includes/sugestao.php';
@@ -53,7 +68,8 @@ print_r($excursoes[0]);
       the_post();
       $args = [
         'post_type' => 'post',
-        'posts_per_page' => 4
+        'posts_per_page' => 4,
+        'nofound_rows' => true
       ];
       $query = new WP_Query($args);
       if ($query->have_posts()): ?>
@@ -99,71 +115,7 @@ print_r($excursoes[0]);
         </ul>
       </section>
   
-      <?php // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        // Restaura os dados originais do post
-        wp_reset_postdata();else: ?>
+      <?php wp_reset_postdata();else: ?>
       <p><?php _e('Sorry, no posts matched your criteria.'); ?></p>
   <?php endif;
     endwhile;

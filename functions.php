@@ -253,6 +253,30 @@ function mostrar_todos_produtos_shop($query)
   }
 }
 
+// Filtra a listagem de produtos no arquivo para mostrar apenas datas futuras
+add_action('pre_get_posts', function ($query) {
+  if (
+    !is_admin() &&
+    $query->is_main_query() &&
+    (is_shop() || is_product_category() || is_product_tag())
+  ) {
+    $hoje = date('Ymd');
+
+    $meta_query = (array) $query->get('meta_query');
+    $meta_query[] = [
+      'key' => 'data_limite_excursao',
+      'value' => $hoje,
+      'compare' => '>=',
+      'type' => 'NUMERIC'
+    ];
+
+    $query->set('meta_query', $meta_query);
+    $query->set('meta_key', 'data_limite_excursao');
+    $query->set('orderby', 'meta_value_num');
+    $query->set('order', 'ASC');
+  }
+});
+
 //Remove a exibição de cross-sell do cart
 remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
 
@@ -1036,6 +1060,83 @@ function aer_get_asset_version($path)
   $file = get_stylesheet_directory() . $path;
   return file_exists($file) ? filemtime($file) : '1.0.0';
 }
+
+// Função para atualizar a data limite do produto pai baseada nas variações
+function aer_atualizar_data_limite_produto($product_id)
+{
+  $product = wc_get_product($product_id);
+  if (!$product || !$product->is_type('variable')) {
+    return;
+  }
+
+  $maior_timestamp = 0;
+  $variations = $product->get_available_variations();
+
+  foreach ($variations as $variation) {
+    // Extrai a data do nome da variação (ex: "Show - 25/12/2024")
+    if (
+      preg_match(
+        '/(\d{2})\/(\d{2})\/(\d{4})/',
+        $variation['attributes']['attribute_dia'] ?? '',
+        $matches
+      )
+    ) {
+      $timestamp = strtotime("{$matches[3]}-{$matches[2]}-{$matches[1]}");
+      if ($timestamp > $maior_timestamp) {
+        $maior_timestamp = $timestamp;
+      }
+    }
+  }
+
+  if ($maior_timestamp > 0) {
+    // Salva no formato YYYYMMDD para busca rápida no banco
+    update_post_meta(
+      $product_id,
+      'data_limite_excursao',
+      date('Ymd', $maior_timestamp)
+    );
+  }
+}
+
+// /**
+//  * Script para processar todos os produtos e indexar a data limite
+//  * Execute este script apenas uma vez.
+//  */
+function aer_mass_update_trip_dates()
+{
+  // Apenas administradores podem disparar via URL
+  if (
+    !isset($_GET['update_aer_dates']) ||
+    !current_user_can('manage_options')
+  ) {
+    return;
+  }
+
+  $args = [
+    'post_type' => 'product',
+    'posts_per_page' => -1,
+    'fields' => 'ids' // Puxa apenas IDs para economizar memória
+  ];
+
+  $products = get_posts($args);
+  $count = 0;
+
+  foreach ($products as $product_id) {
+    $product = wc_get_product($product_id);
+
+    // Verificamos se é um produto variável (como as suas excursões)
+    if ($product && $product->is_type('variable')) {
+      aer_atualizar_data_limite_produto($product_id);
+      $count++;
+    }
+  }
+
+  wp_die("Sucesso! $count produtos foram indexados com a nova lógica de data.");
+}
+add_action('admin_init', 'aer_mass_update_trip_dates');
+
+// Executa sempre que um produto for salvo/atualizado
+add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');
 
 require_once get_template_directory() . '/endpoints/cupom_update.php';
 require_once get_template_directory() . '/endpoints/api_campanhas_get.php';

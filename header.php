@@ -65,7 +65,7 @@ if (is_product()) {
 <?php
 // 1. Otimização de busca de dados (Cache com Transients)
 $featured_data = get_transient('aer_featured_trip');
-$featured_data = [];
+$featured_data = []; //deve ser apagado após teste
 if (count($featured_data) === 0) {
   $excursoes_hero = wc_get_products([
     'orderby' => 'date',
@@ -78,7 +78,7 @@ if (count($featured_data) === 0) {
   // Inicializamos como array vazio para evitar erros
   $featured_data = [];
 
-  foreach (aer_proximas_excursoes($excursoes_hero) as $_exc) {
+  foreach ($excursoes_hero as $_exc) {
     $featured_data = [
       'bg' => wp_get_attachment_image_src(
         get_post_meta($_exc->get_id(), 'dest_img_1_id', true),
@@ -223,22 +223,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <header class="hero-container <?= is_front_page()
     ? ''
     : 'inner-header' ?>" id="aer_header">
-    <?php
-    $todas_campanhas = $wpdb->get_results(
-      $wpdb->prepare(
-        'SELECT `id`,`nome_campanha`,`valido_de`, `valido_ate`, `status` from `aer_camp_premios`'
-      )
-    );
-    $campanhas_ativas = array_values(
-      array_filter($todas_campanhas, function ($_camp) {
-        $inicio = strtotime($_camp->valido_de);
-        $final = strtotime($_camp->valido_ate) + 86400;
-        if (time() > $inicio && time() < $final) {
-          return $_camp;
-        }
-      })
-    );
-    ?>  <?php if (isset($campanhas_ativas[0])) {
+<?php // Tenta obter as campanhas ativas do cache primeiro
+
+
+$campanhas_ativas = get_transient('aer_campanhas_ativas');
+if ($campanhas_ativas === false) {
+  // Se não estiver no cache, faz a consulta ao banco de dados
+  $todas_campanhas = $wpdb->get_results(
+    $wpdb->prepare(
+      'SELECT `id`,`nome_campanha`,`valido_de`, `valido_ate`, `status` from `aer_camp_premios`'
+    )
+  ); // Filtra as campanhas para encontrar apenas as que estão no prazo de validade
+  $campanhas_ativas = array_values(
+    array_filter($todas_campanhas, function ($_camp) {
+      $inicio = strtotime($_camp->valido_de); // Adiciona 24h ao prazo final para garantir que o último dia seja incluso
+      $final = strtotime($_camp->valido_ate) + 86400;
+      $agora = time();
+      return $agora >= $inicio && $agora <= $final;
+    })
+  ); // Salva o resultado no cache por 1 hora (3600 segundos)
+  set_transient('aer_campanhas_ativas', $campanhas_ativas, HOUR_IN_SECONDS);
+}
+?>  <?php if (isset($campanhas_ativas[0])) {
     $campanha_atual = $campanhas_ativas[0];
     include 'includes/modals/roleta.php';
     // if(is_user_logged_in()){

@@ -652,23 +652,45 @@ usort($datas, function ($a, $b) {
       <!-- EXCURSÕES RELACIONADAS -->
       <section id="excursoes-relacionadas" class="mt-5 py-md-3">
         <?php
-        $product = wc_get_product(get_the_id());
-        $cross_sells = $product->cross_sell_ids;
-        if (sizeof($cross_sells) > 0) {
-          $relateds = wc_get_products([
-            'orderby' => 'date',
-            'order' => 'DESC',
-            'status' => 'publish',
-            'include' => $cross_sells,
-            'limit' => -1
-          ]);
+        global $product;
 
-          if (sizeof($relateds) > 0) {
-            aer_cards_slider(
-              aer_proximas_excursoes($relateds),
-              'Veja também',
-              'light'
-            );
+        if ($product) {
+          $cross_sells_ids = $product->get_cross_sell_ids();
+
+          if (!empty($cross_sells_ids)) {
+            $hoje = date('Ymd');
+
+            $args = [
+              'post_type' => 'product',
+              'post_status' => 'publish',
+              'post__in' => $cross_sells_ids, // Filtra pelos IDs de cross-sell
+              'posts_per_page' => 4,
+              'meta_key' => 'data_limite_excursao',
+              'orderby' => 'meta_value_num',
+              'order' => 'ASC',
+              'no_found_rows' => true, // Ganho de performance: não calcula paginação
+              'meta_query' => [
+                [
+                  'key' => 'data_limite_excursao',
+                  'value' => $hoje,
+                  'compare' => '>=',
+                  'type' => 'NUMERIC'
+                ]
+              ]
+            ];
+
+            $related_query = new WP_Query($args);
+
+            if ($related_query->have_posts()) {
+              // Convertemos os IDs encontrados de volta para objetos WC para o aer_cards_slider
+              $display_list = array_map(
+                'wc_get_product',
+                $related_query->posts
+              );
+
+              aer_cards_slider($display_list, 'Veja também', 'light');
+            }
+            wp_reset_postdata();
           }
         }
         ?> 
