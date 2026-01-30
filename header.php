@@ -129,7 +129,7 @@ if ($background_img): ?>
 window.addEventListener('load', function() {
     
     // 1. Bloco de Rastreamento (Apenas para não-admins e com atraso)
-    <?php if ( !current_user_can('administrator') ) : ?>
+    <?php if (!current_user_can('administrator')): ?>
         setTimeout(function() {
             // 1. Google Tag Manager (GTM)
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -175,7 +175,7 @@ window.addEventListener('load', function() {
     <?php endif; ?>
 
     // 2. Bloco do Mercado Pago (Apenas no Checkout)
-    <?php if ( is_checkout() ) : ?>
+    <?php if (is_checkout()): ?>
         setTimeout(function() {
             var mp = document.createElement('script');
             mp.src = "https://sdk.mercadopago.com/js/v2";

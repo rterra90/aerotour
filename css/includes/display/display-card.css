@@ -12,7 +12,179 @@ body {
   overflow: hidden;
   height: 100%;
   display: flex;
+  flex-direction: column;/* Container do Grid */
+.display-flex-child {
+  padding: 10px; /* Espaçamento leve entre colunas [cite: 15] */
+  display: flex;
+}
+
+/* Card Principal */
+.excursion-card {
+  width: 100%;
+  background-color: #161616; /* Fundo padrão Dark [cite: 27] */
+  color: #e7e7e7;
+  border-radius: 16px; /* Bordas mais arredondadas e modernas [cite: 16] */
+  overflow: hidden;
+  display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Sombra mais profunda [cite: 16] */
+}
+
+.excursion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Container da Imagem */
+.excursion-card .image-container {
+  position: relative;
+  width: 100%;
+  height: 180px; /* Altura fixa para manter uniformidade na galeria [cite: 17] */
+  overflow: hidden;
+}
+
+.excursion-card .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer [cite: 18] */
+  transition: transform 0.5s ease;
+}
+
+.excursion-card:hover .image-container img {
+  transform: scale(1.1);
+}
+
+/* Sistema de Badges Modernizado */
+.excursion-card .badge {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: .9em;
+    border-radius: 0 4px 4px 0;
+    font-weight: 700;
+    z-index: 2;
+    visibility: hidden;
+    letter-spacing: .07rem;
+    text-transform: uppercase;
+    box-shadow: 0 4px 8px rgba(0,0,0,.2);
+
+}
+
+
+.excursion-card img.encerrado{
+  filter: contrast(.5);
+}
+
+/* Cores por Status */
+.badge-disponivel { background-color: #2ecc71; color: #fff; }
+.badge-esgotado   { background-color: #e74c3c; color: #fff; visibility: visible!important;}
+.badge-encerrado  { background-color: #95a5a6; color: #fff; visibility: visible!important;}
+
+/* Overlay Visual para Status Negativos */
+.status-esgotado .image-container img,
+.status-encerrado .image-container img {
+  filter: grayscale(100%) brightness(0.7); /* Efeito visual de inativo */
+}
+
+/* Área de Informações */
+.excursion-card .info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+}
+
+.excursion-card .title {
+  font-size: 1.15rem; 
+  font-weight: 700;
+  line-height: 1.3; 
+  min-height: 3em; /* Garante alinhamento mesmo com títulos curtos */
+}
+
+.excursion-card .title span {
+  display: inline-block;
+  font-size: 0.7rem;
+  background: #400f0f; 
+  padding: 2px 8px; 
+  border-radius: 4px; 
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* Datas e Localização com Ícones Imaginários (via CSS) */
+.excursion-card .dates, 
+.excursion-card .location {
+  font-size: 0.85rem; 
+  color: #aaa;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.excursion-card .location p {
+  margin: 0;
+  color: #fff;
+  font-weight: 500; 
+}
+
+.excursion-card .location span {
+  font-size: 0.75rem; 
+  color: #888;
+}
+
+/* Botão CTA */
+.excursion-card .cta {
+  margin-top: auto; /* Empurra o botão sempre para o rodapé do card  */
+  background: #400f0f; 
+  border: none; 
+  border-radius: 10px; 
+  transition: all 0.3s ease; 
+}
+
+.excursion-card .cta a {
+  display: block;
+  padding: 12px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem; 
+  text-align: center;
+}
+
+.excursion-card .cta:hover {
+  background: #5a1a1a; 
+  transform: scale(1.02);
+}
+
+/* Variação Light  */
+.excursion-card.light {
+  background-color: #ffffff; 
+  color: #1a1a1a; 
+  border: 1px solid #ddd; 
+}
+
+.excursion-card.light button.cta a {
+    color: #400f0f;
+}
+
+.excursion-card.light .location p { color: #1a1a1a; }
+.excursion-card.light .dates { color: #555; }
+
+/* Responsividade Mobile [cite: 31, 32] */
+@media (max-width: 576px) {
+  .excursion-card .image-container {
+    height: 150px;
+  }
+  
+  .excursion-card .title {
+    font-size: 1rem;
+  }
+}
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -48,18 +220,7 @@ body {
   margin-bottom: 3px;
 }
 
-.excursion-card .badge {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  background-color: #b13a3a;
-  background-color: #797e08;
-  color: #fff;
-  padding: 6px 10px;
-  font-size: 0.9em;
-  border-radius: 4px;
-  font-weight: bold;
-}
+
 
 .excursion-card .info {
   flex-grow: 1;
@@ -78,7 +239,6 @@ body {
 }
 .excursion-card .info .dates,
 .excursion-card .info .location {
-  margin: 5px 0;
   font-size: 0.9rem;
 }
 
@@ -86,7 +246,7 @@ body {
   background-color: #400f0f;
   color: #fff;
   border: none;
-  padding: 10px 16px;
+  padding: 0px 16px;
   font-size: 0.85rem;
   text-transform: uppercase;
   border-radius: 6px;
@@ -150,10 +310,3 @@ body {
   }
 }
 
-/* ESPECÍFICO PARA ARQUIVO */
-#archive-product .excursion-card .info {
-  text-align: center;
-}
-#archive-product .excursion-card .title span {
-  margin: 0 auto 3px;
-}
