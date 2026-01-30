@@ -1102,38 +1102,38 @@ function aer_atualizar_data_limite_produto($product_id)
 //  * Script para processar todos os produtos e indexar a data limite
 //  * Execute este script apenas uma vez.
 //  */
-function aer_mass_update_trip_dates()
-{
-  // Apenas administradores podem disparar via URL
-  if (
-    !isset($_GET['update_aer_dates']) ||
-    !current_user_can('manage_options')
-  ) {
-    return;
-  }
+// function aer_mass_update_trip_dates()
+// {
+//   // Apenas administradores podem disparar via URL
+//   if (
+//     !isset($_GET['update_aer_dates']) ||
+//     !current_user_can('manage_options')
+//   ) {
+//     return;
+//   }
 
-  $args = [
-    'post_type' => 'product',
-    'posts_per_page' => -1,
-    'fields' => 'ids' // Puxa apenas IDs para economizar memória
-  ];
+//   $args = [
+//     'post_type' => 'product',
+//     'posts_per_page' => -1,
+//     'fields' => 'ids' // Puxa apenas IDs para economizar memória
+//   ];
 
-  $products = get_posts($args);
-  $count = 0;
+//   $products = get_posts($args);
+//   $count = 0;
 
-  foreach ($products as $product_id) {
-    $product = wc_get_product($product_id);
+//   foreach ($products as $product_id) {
+//     $product = wc_get_product($product_id);
 
-    // Verificamos se é um produto variável (como as suas excursões)
-    if ($product && $product->is_type('variable')) {
-      aer_atualizar_data_limite_produto($product_id);
-      $count++;
-    }
-  }
+//     // Verificamos se é um produto variável (como as suas excursões)
+//     if ($product && $product->is_type('variable')) {
+//       aer_atualizar_data_limite_produto($product_id);
+//       $count++;
+//     }
+//   }
 
-  wp_die("Sucesso! $count produtos foram indexados com a nova lógica de data.");
-}
-add_action('admin_init', 'aer_mass_update_trip_dates');
+//   wp_die("Sucesso! $count produtos foram indexados com a nova lógica de data.");
+// }
+// add_action('admin_init', 'aer_mass_update_trip_dates');
 
 // Executa sempre que um produto for salvo/atualizado
 add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');

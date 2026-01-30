@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <!-- Google Tag Manager -->
-<!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-W8B65D68');</script> -->
-<!-- End Google Tag Manager -->
+
 <?php
 global $wpdb;
 $user = wp_get_current_user();
@@ -60,7 +54,6 @@ if (is_product()) {
 <noscript>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap">
 </noscript>
-<!-- <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;700&display=swap" rel="stylesheet"> -->
 
 <?php
 // 1. Otimização de busca de dados (Cache com Transients)
@@ -109,7 +102,6 @@ if ($background_img): ?>
 <?php endif;
 ?>
 
-<script src="https://sdk.mercadopago.com/js/v2" defer></script>
   <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/helper/style-selected-element.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
 
@@ -132,47 +124,76 @@ if ($background_img): ?>
 }
 </script>
 
-  <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '704341881591730');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=704341881591730&ev=PageView&noscript=1"
-    /></noscript>
-  <!-- End Meta Pixel Code -->
 
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-F1239QYGYB');
+window.addEventListener('load', function() {
+    
+    // 1. Bloco de Rastreamento (Apenas para não-admins e com atraso)
+    <?php if ( !current_user_can('administrator') ) : ?>
+        setTimeout(function() {
+            // 1. Google Tag Manager (GTM)
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-W8B65D68');
+
+            // 2. Google Analytics (gtag.js)
+            var gtagScript = document.createElement('script');
+            gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB";
+            gtagScript.async = true;
+            document.head.appendChild(gtagScript);
+            
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-F1239QYGYB');
+
+            // 3. Meta Pixel (Facebook)
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '704341881591730');
+            fbq('track', 'PageView');
+
+            // 4. Google ADS
+            var adsense = document.createElement('script');
+            adsense.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719";
+            adsense.async = true;
+            adsense.crossOrigin = "anonymous";
+            document.head.appendChild(adsense);
+        }, 3500);
+
+        <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=704341881591730&ev=PageView&noscript=1"
+        /></noscript>
+
+//         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8B65D68"
+// height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <?php endif; ?>
+
+    // 2. Bloco do Mercado Pago (Apenas no Checkout)
+    <?php if ( is_checkout() ) : ?>
+        setTimeout(function() {
+            var mp = document.createElement('script');
+            mp.src = "https://sdk.mercadopago.com/js/v2";
+            mp.async = true;
+            document.head.appendChild(mp);
+            console.log('Mercado Pago: SDK carregado para finalização de compra.');
+        }, 1000); // Carrega um pouco antes dos rastreadores por ser funcional
+    <?php endif; ?>
+
+});
 </script>
 
 
-<!-- Google ADS -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719"
-  crossorigin="anonymous"></script>
-</head>
+
+
+
 
 <body <?php body_class(); ?>>
-
-
-<!-- Google Tag Manager (noscript) -->
-<!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8B65D68"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
-<!-- End Google Tag Manager (noscript) -->
 
 <?php if (isset($_COOKIE['parceiro_pdv'])) {
 
@@ -342,7 +363,4 @@ if ($campanhas_ativas === false) {
       });
       
     </script>
-    <img src="<?= esc_url(
-      $background_img
-    ) ?>" fetchpriority="high" decoding="async" alt="" style="display:none;" />
   </header>

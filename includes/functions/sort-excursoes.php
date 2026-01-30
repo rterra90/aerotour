@@ -13,8 +13,8 @@ function aer_proximas_excursoes($excursoes, $filter = null)
 
     // Filtro de Destaque: aproveita o objeto já existente
     if ($filter === 'destaque') {
-      $is_featured = get_post_meta($exc_id, 'destaque', true) === 'yes';
-      if ($is_featured) {
+      // Usa o método nativo do WooCommerce para verificar se está em destaque
+      if ($excursao->is_featured()) {
         $proximas_exc[] = $excursao;
       }
       continue;

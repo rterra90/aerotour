@@ -42,7 +42,7 @@ $excursoes = array_map('wc_get_product', $excursoes_ids);
   $displays_sections = get_option('aer_home_displays');
   foreach ($displays_sections as $_section) {
     if ($_section['type'] === 'proximas') {
-      aer_cards_slider($excursoes, $_section['nome']);
+      aer_cards_slider(array_slice($excursoes, 0, 8), $_section['nome']);
     } elseif ($_section['type'] === 'apos-data') {
       aer_cards_slider(
         aer_excursoes_apos_data($excursoes, $_section['type_value']),
