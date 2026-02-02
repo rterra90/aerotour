@@ -56,10 +56,11 @@ if (is_product()) {
 </noscript>
 
 <?php
+delete_transient('aer_featured_trip');
 // 1. Otimização de busca de dados (Cache com Transients)
 $featured_data = get_transient('aer_featured_trip');
-$featured_data = []; //deve ser apagado após teste
-if (count($featured_data) === 0) {
+
+if (false === $featured_data) {
   $excursoes_hero = wc_get_products([
     'orderby' => 'date',
     'order' => 'DESC',
@@ -89,7 +90,7 @@ if (count($featured_data) === 0) {
 $background_img = $featured_data['bg'] ?? '';
 $focus_img = $featured_data['focus'] ?? '';
 
-//Preload das imagens de destaque da home
+// Preload das imagens de destaque da home
 if ($background_img): ?>
     <link rel="preload" as="image" href="<?= esc_url(
       $background_img
@@ -124,69 +125,53 @@ if ($background_img): ?>
 }
 </script>
 
-
+<!-- 3. Mercado Pago (Apenas no Checkout) -->
+<?php if (is_checkout()): ?>
 <script>
-window.addEventListener('load', function() {
-    
-    // 1. Bloco de Rastreamento (Apenas para não-admins e com atraso)
-    <?php if (!current_user_can('administrator')): ?>
-        setTimeout(function() {
-            // 1. Google Tag Manager (GTM)
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-W8B65D68');
-
-            // 2. Google Analytics (gtag.js)
-            var gtagScript = document.createElement('script');
-            gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB";
-            gtagScript.async = true;
-            document.head.appendChild(gtagScript);
-            
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-F1239QYGYB');
-
-            // 3. Meta Pixel (Facebook)
-            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-            document,'script','https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '704341881591730');
-            fbq('track', 'PageView');
-
-            // 4. Google ADS
-            var adsense = document.createElement('script');
-            adsense.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719";
-            adsense.async = true;
-            adsense.crossOrigin = "anonymous";
-            document.head.appendChild(adsense);
-        }, 3500);
-
-        <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=704341881591730&ev=PageView&noscript=1"
-        /></noscript>
-
-//         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8B65D68"
-// height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <?php endif; ?>
-
-    // 2. Bloco do Mercado Pago (Apenas no Checkout)
-    <?php if (is_checkout()): ?>
+    window.addEventListener('load', function() {
         setTimeout(function() {
             var mp = document.createElement('script');
             mp.src = "https://sdk.mercadopago.com/js/v2";
             mp.async = true;
             document.head.appendChild(mp);
-            console.log('Mercado Pago: SDK carregado para finalização de compra.');
-        }, 1000); // Carrega um pouco antes dos rastreadores por ser funcional
-    <?php endif; ?>
-
-});
+        }, 1000);
+    });
 </script>
+<?php endif; ?>
+
+<?php if (!current_user_can('administrator')): ?>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-F1239QYGYB');
+    </script>
+
+    <script>
+              // Meta Pixel
+              !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+              n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+              document,'script','https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '704341881591730');
+              fbq('track', 'PageView');
+
+              // Google ADS
+              var adsense = document.createElement('script');
+              adsense.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719";
+              adsense.async = true;
+              adsense.crossOrigin = "anonymous";
+              document.head.appendChild(adsense);
+    </script>
+
+
+<?php endif; ?>
+    <noscript><img class="d-none" height="1" width="1" src="https://www.facebook.com/tr?id=704341881591730&ev=PageView&noscript=1"/></noscript>
+</head>
+
+
 
 
 

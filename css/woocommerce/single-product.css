@@ -524,8 +524,7 @@ dl#principaisDuvidasContent .resposta {
 .FeedHeader__info-row {
   margin: 0 !important;
 }
-.FeedHeader__follow-button button,
-.FeedLayout__col-footer .FeedLayout__follow-btn button {
+.instagram-feed a {
   background: linear-gradient(
     45deg,
     #f09433,
@@ -544,6 +543,10 @@ dl#principaisDuvidasContent .resposta {
   text-align: center !important;
   cursor: pointer !important;
   transition: transform 0.3s, box-shadow 0.3s !important;
+      margin-top: 10px;
+    display: inline-block;
+    max-width: 420px;
+    width: 100%;;
 }
 .instagram-feed .LoadMoreButton {
   background-color: none !important;

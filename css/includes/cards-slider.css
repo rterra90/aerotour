@@ -17,18 +17,19 @@
 .aer-cards-slider .slider-frame .controls-wrapper {
   position: absolute;
   top: 50%;
-  left: -18px;
+  left: -20px;
   transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  width: 103%;
-  z-index: 99;
+  width: calc(100% + 40px); /* Ajuste dinâmico para as setas ficarem fora do card  */
+  z-index: 100; /* Acima da animação dos cards  */
+  pointer-events: none; /* Permite clicar no que estiver atrás se necessário */
 }
 .aer-cards-slider .slider {
-  flex-wrap: nowrap;
-  transition: 0.3s;
-  transform: translateX(0%);
   display: flex;
+  flex-wrap: nowrap;
+  overflow: visible; /* Importante para não cortar as sombras e animações */
+  transition: 0.3s;
 }
 
 .aer-cards-slider .controls-wrapper span {
@@ -43,6 +44,8 @@
   line-height: 1.1;
   cursor: pointer;
   user-select: none;
+  pointer-events: auto; /* Reativa o clique apenas nos botões [cite: 39] */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Sombra para destacar do fundo [cite: 39] */
 }
 .aer-cards-slider .controls-wrapper span:not(.disabled):hover {
   background-color: #080808;
@@ -56,8 +59,21 @@
   display: none;
 }
 .aer-cards-slider .slider-wrapper {
-  overflow-x: hidden;
-  scroll-behavior: smooth;
+  overflow-x: auto; 
+  overflow-y: visible; /* Garante que a animação vindo de cima apareça  */
+  padding-top: 30px;    /* Espaço extra para o card "surgir" sem ser cortado */
+  margin-top: -30px;   /* Compensa o padding para manter o layout alinhado */
+  scroll-behavior: smooth; 
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; 
+}
+/* Esconde a barra de rolagem visual para manter o design limpo */
+.slider-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.slider-wrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @media (max-width: 768px) {
@@ -81,7 +97,7 @@
     padding: 0 4px;
   }
   .aer-cards-slider .slider-frame {
-    overflow: hidden;
+    overflow: visible;
   }
   .aer-cards-slider .slider-frame .controls-wrapper {
     display: none;

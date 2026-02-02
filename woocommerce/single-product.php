@@ -700,7 +700,9 @@ usort($datas, function ($a, $b) {
       <div id="social-footer" class="d-flex mt-sm-4 mt-5">
         <div class="instagram-feed col-md-6">
           <h2 class="bg-title">Siga a Aerotour</h2>
-          <?php echo do_shortcode('[instagram feed="4017"]'); ?>
+          <!-- botão com ícone para o instagram -->
+           <a href="https://www.instagram.com/aerotour_excursoes/" target="_blank" class="instagram-btn mb-3" aria-label="Link para o Instagram da Aerotour">
+            <?= aer_icons('instagram', 20, 20) ?> @aerotour_excursoes </a>
         </div>
         <div id="secaoFotos" col-md-6">
           <h2 class="bg-title">Fotos das excursões</h2>
