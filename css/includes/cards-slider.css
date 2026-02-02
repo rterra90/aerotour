@@ -60,9 +60,9 @@
 }
 .aer-cards-slider .slider-wrapper {
   overflow-x: auto; 
-  overflow-y: visible; /* Garante que a animação vindo de cima apareça  */
-  padding-top: 30px;    /* Espaço extra para o card "surgir" sem ser cortado */
-  margin-top: -30px;   /* Compensa o padding para manter o layout alinhado */
+  overflow-y: visible !important;
+  padding-top: 40px; 
+  margin-top: -40px;
   scroll-behavior: smooth; 
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; 
@@ -80,15 +80,14 @@
   .aer-cards-slider.container-md {
     padding: 0 !important;
   }
+  
   .aer-cards-slider h2 {
     padding-left: 10px;
   }
   .aer-cards-slider .slider {
-    padding: 0 10px;
-    overflow-x: scroll;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-    /* gap: 8px; */
+padding: 40px 10px 10px 10px !important; /* Aumentamos o padding superior */
+    margin-top: -40px !important;            /* Compensamos para não criar buraco no layout */
+    overflow: visible !important;
   }
   .aer-cards-slider .row.slider::-webkit-scrollbar {
     display: none;
@@ -97,9 +96,15 @@
     padding: 0 4px;
   }
   .aer-cards-slider .slider-frame {
-    overflow: visible;
+    overflow: visible!important;
   }
   .aer-cards-slider .slider-frame .controls-wrapper {
     display: none;
+  }
+  .aer-cards-slider .slider-wrapper {
+    overflow-x: auto;
+    overflow-y: visible !important; 
+    padding-top: 40px; 
+    margin-top: -40px;
   }
 }

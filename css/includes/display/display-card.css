@@ -2,13 +2,19 @@ body {
   background-color: #e7e7e7;
   background-color: #111111;
 }
-/* Estado inicial do card (invisível e um pouco acima) */
+/* Estado inicial: Invisível e deslocado para cima */
 .reveal-card {
     opacity: 0;
-    transform: translateY(-20px);
-    animation: revealCardIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-    /* O delay é calculado: posição no loop * 0.1s */
-    animation-delay: calc(var(--card-delay) * 0.1s);
+    transform: translateY(-30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    /* O delay continua sendo definido pela variável do PHP */
+    transition-delay: calc(var(--card-delay) * 0.1s);
+}
+
+/* Estado ativo: Disparado via JavaScript */
+.reveal-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @keyframes revealCardIn {

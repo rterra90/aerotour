@@ -1,3 +1,4 @@
+// Função para lidar com o scroll do slider
 function handleSlider(sliderRef, action) {
     const frame = document.querySelector(`.slider-frame[data-slider-ref="${sliderRef}"]`);
     if (!frame) return;
@@ -30,3 +31,27 @@ function handleSlider(sliderRef, action) {
         controls[1].classList.toggle('disabled', isAtEnd);
     }, 500);
 }
+
+
+// Animação de revelação dos cards ao entrar na viewport
+document.addEventListener('DOMContentLoaded', function() {
+    const cardOptions = {
+        threshold: 0.15, // Dispara quando 15% do card estiver visível
+        rootMargin: "0px 0px -50px 0px" // Margem para iniciar a animação um pouco antes
+    };
+
+    const cardObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Adiciona a classe que dispara a transição CSS
+                entry.target.classList.add('is-visible');
+                // Para de observar o card após a animação para economizar recursos
+                observer.unobserve(entry.target);
+            }
+        });
+    }, cardOptions);
+
+    // Seleciona todos os cards para observação
+    const cards = document.querySelectorAll('.reveal-card');
+    cards.forEach(card => cardObserver.observe(card));
+});

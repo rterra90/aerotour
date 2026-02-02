@@ -37,6 +37,9 @@ if ($vendas_encerradas) {
 } elseif (!$tem_vagas) {
   $badge_class = 'esgotado';
   $badge_label = 'Esgotado';
+} elseif ($tem_vagas) {
+  $badge_class = 'disponivel';
+  $badge_label = 'Vagas disponíveis';
 } else {
   // Aqui você pode adicionar lógica para "Últimas Vagas" se o estoque for baixo
   $badge_class = '';
@@ -100,7 +103,7 @@ if (isset($excursao->attributes['dia'])) {
     </div>
     <div class="info">
       <!-- Título  -->
-      <div class="title"><span>Excursão</span><?= $excursao->name ?></div>
+      <div class="title"><span>Excursão</span><a href="<?= $excursao->get_permalink() ?>" alt="<?= $excursao->name ?>"><?= $excursao->name ?></a></div>
 
       <!-- Datas -->
       <?php if (!empty($datas_array)) {
