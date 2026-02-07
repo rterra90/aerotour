@@ -20,8 +20,8 @@ Description: Tema criado para o site da Aerotour Caravanas
 @import url(css/contato.css);
 @import url(css/includes/sugestao.css);
 @import url(css/includes/main-carousel.css);
-@import url(css/includes/cards-slider.min.css);
-@import url(css/includes/display/display-card.min.css);
+/* @import url(css/includes/cards-slider.min.css);
+@import url(css/includes/display/display-card.min.css); */
 @import url(css/includes/parceiros.css);
 @import url(css/includes/qr-event-modal.css);
 @import url(css/thankyou.css);

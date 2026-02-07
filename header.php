@@ -23,6 +23,7 @@ if (is_product()) {
   $description_content =
     'Excursões para shows e eventos é com a Aerotour! Saídas de Campinas, Indaiatuba, Sumaré, Hortolândia, Paulínia, Salto, Valinhos, Vinhedo e Jundiaí.';
 }
+wp_head();
 ?>
 <head>
   <meta charset="UTF-8">

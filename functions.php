@@ -1,6 +1,27 @@
 <?php
 $root_url = get_stylesheet_directory_uri();
 
+/**
+ * Remove todos os estilos padrão do WooCommerce
+ */
+add_filter('woocommerce_enqueue_styles', '__return_empty_array');
+
+// Remove o script de checkout do WooCommerce (que inclui o bloco de pagamento)
+add_action(
+  'wp_enqueue_scripts',
+  function () {
+    wp_dequeue_script('wc-checkout');
+    if (is_checkout()) {
+      wp_dequeue_script('wc-cart-fragments');
+    }
+  },
+  100
+);
+
+//
+require_once get_template_directory() . '/includes/optimize-assets.php';
+add_action('wp_head', 'aer_inject_optimized_css', 10);
+
 wp_enqueue_script('theme-links', get_template_directory_uri() . '/js/main.js');
 wp_localize_script('theme-links', 'themeLinks', [
   'adminUrl' => admin_url(),
