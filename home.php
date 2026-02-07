@@ -1,32 +1,40 @@
-<?php get_header(); 
+<?php get_header();
 
 //widget de notícias padrão
-function aer_default_news_widget($article_class = '', $exc = NULL, $number = -1){
-  foreach(wp_get_recent_posts(array('numberposts' => $number, 'post_status' => 'publish', 'exclude' => $exc,)) as $last){
-    ?>
-  <article class="post single-news <?= $article_class; ?>">
-    <?php
-    foreach(get_the_category($last['ID']) as $cat){
-    ?>
-    <a href="<?= bloginfo('url');?>/blog/categorias/<?= $cat->slug;?>"><span class="cat-badge"><?= $cat->name; ?></span></a>
-    <?php
-    }
-    ?>
-    <a href="<?php the_permalink($last['ID']); ?>" title="<?php the_title_attribute($last['ID']);?>">
+function aer_default_news_widget($article_class = '', $exc = null, $number = -1)
+{
+  foreach (
+    wp_get_recent_posts([
+      'numberposts' => $number,
+      'post_status' => 'publish',
+      'exclude' => $exc
+    ])
+    as $last
+  ) { ?>
+  <article class="post single-news <?= $article_class ?>">
+    <?php foreach (get_the_category($last['ID']) as $cat) { ?>
+    <a href="<?= bloginfo(
+      'url'
+    ) ?>/blog/categorias/<?= $cat->slug ?>"><span class="cat-badge"><?= $cat->name ?></span></a>
+    <?php } ?>
+    <a href="<?php the_permalink(
+      $last['ID']
+    ); ?>" title="<?php the_title_attribute($last['ID']); ?>">
       <div class="single-news-inner"> 
-      <?= get_the_post_thumbnail($last['ID'], 'medium');?> 
+      <?= get_the_post_thumbnail($last['ID'], 'medium') ?> 
         <div>
-          <span class="archive-date d-block mt-1"><?= get_the_date('d/m/Y', $last['ID']);?></span> 
-          <h2><?= $last['post_title'];?></h2>
+          <span class="archive-date d-block mt-1"><?= get_the_date(
+            'd/m/Y',
+            $last['ID']
+          ) ?></span> 
+          <h2><?= $last['post_title'] ?></h2>
         </div>
       </div>
     </a>
   </article>
-  <?php
-  }
+  <?php }
 }
 ?>
-<link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/home.css">
 
 <main class="bg-df x-align py-5 aer-bg-light" id="blog-home">
   <div class="container-fluid">
@@ -36,9 +44,7 @@ function aer_default_news_widget($article_class = '', $exc = NULL, $number = -1)
       <div class="news-area row">
         <div class="col-md-9 row blog-grid">
 
-        <?php
-        aer_default_news_widget('col-sm-6 col-md-4 col-lg-4')
-        ?>
+        <?php aer_default_news_widget('col-sm-6 col-md-4 col-lg-4'); ?>
         </div>
 
 

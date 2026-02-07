@@ -1,4 +1,12 @@
-@import './blog/single-post.css';
+/* FONTS */
+@font-face {
+  font-family: Rockstar;
+  src: url('../assets/fonts/Rockstar-ExtraBold.otf');
+  font-weight: normal;
+}
+.rockstar-font {
+  font-family: 'Rockstar', sans-serif;
+}
 
 #blog-main {
   max-width: 1380px;

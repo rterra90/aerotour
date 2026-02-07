@@ -14,6 +14,7 @@
 header#aer_header {
   position: relative;
   z-index: 99;
+    padding: 0 6%;;
 }
 header#aer_header.inner-header {
   background-color: #0c0c0c;
@@ -304,6 +305,9 @@ button.navbar-toggler:focus-visible {
   }
 }
 @media (max-width: 576px) {
+  header#aer_header {
+    padding: 0 3%;;
+}
   .topbar {
     gap: 8px;
   }
