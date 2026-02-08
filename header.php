@@ -23,7 +23,6 @@ if (is_product()) {
   $description_content =
     'Excursões para shows e eventos é com a Aerotour! Saídas de Campinas, Indaiatuba, Sumaré, Hortolândia, Paulínia, Salto, Valinhos, Vinhedo e Jundiaí.';
 }
-wp_head();
 ?>
 <head>
   <meta charset="UTF-8">
@@ -104,9 +103,7 @@ if ($background_img): ?>
 <?php endif;
 ?>
 
-  <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/helper/style-selected-element.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
 <script src="<?= get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js?ver=<?= aer_get_asset_version(
   '/cards-slider.js'
 ) ?>" defer></script>
@@ -170,14 +167,9 @@ if ($background_img): ?>
 
 <?php endif; ?>
     <noscript><img class="d-none" height="1" width="1" src="https://www.facebook.com/tr?id=704341881591730&ev=PageView&noscript=1"/></noscript>
+
+    <?php wp_head(); ?>
 </head>
-
-
-
-
-
-
-
 
 <body <?php body_class(); ?>>
 
@@ -227,9 +219,7 @@ if ($background_img): ?>
     <?php
   }
   ?>
-  <header class="hero-container <?= is_front_page()
-    ? ''
-    : 'inner-header' ?>" id="aer_header">
+  <header class="<?= is_front_page() ? '' : 'inner-header' ?>" id="aer_header">
 <?php // Tenta obter as campanhas ativas do cache primeiro
 
 
@@ -314,7 +304,6 @@ if ($campanhas_ativas === false) {
                       'container_id' => 'user-menu-modal',
                       'container_class' => 'd-none'
                     ]); ?>
-                  <script>changeStyle("#user-menu-modal .menu-item")</script>
                 </div>
                 <?php } ?>
               </div>
