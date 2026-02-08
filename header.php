@@ -4,51 +4,25 @@
 <?php
 global $wpdb;
 $user = wp_get_current_user();
-$description_content = '';
-if (is_product()) {
-  $description_content = get_post_meta(
-    get_the_ID(),
-    '_yoast_wpseo_metadesc',
-    true
-  );
-} elseif (is_product_category()) {
-  $description_content =
-    'Confira todas as nossas próximas excursões para ' .
-    strtolower(get_queried_object()->name) .
-    'e faça sua reserva!';
-} elseif (is_archive()) {
-  $description_content =
-    'Confira todas as nossas próximas excursões e faça sua reserva!';
-} else {
-  $description_content =
-    'Excursões para shows e eventos é com a Aerotour! Saídas de Campinas, Indaiatuba, Sumaré, Hortolândia, Paulínia, Salto, Valinhos, Vinhedo e Jundiaí.';
-}
 ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="<?= $description_content ?>">
+  <meta name="description" content="<?= aer_get_seo_description() ?>">
   <meta name="copyright" content="© <?= date('Y') ?> Aerotour Excursões" />
   <meta name='impact-site-verification' value='add848c6-76d4-4a87-bb61-581c82810766'>
-
-  <style>
-    .carousel-item.active {
-      background-image: url('<?= esc_url($background_img) ?>');
-    }
-  </style>
-
   <title><?= wp_title('|', true, 'right') ?></title>
-  <!-- //bloginfo('name') -->
   <link rel="canonical" href="<?= esc_url(get_permalink(get_the_ID())) ?>" />
   <link rel="shortcut icon" href="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/aer-favicon.png" type="image/x-icon">
 
+  <!-- Estilo principal -->
   <link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/style.min.css??ver=<?= aer_get_asset_version(
   '/style.min.css'
 ) ?>">
 
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
 <noscript>
@@ -56,119 +30,49 @@ if (is_product()) {
 </noscript>
 
 <?php
-delete_transient('aer_featured_trip');
-// 1. Otimização de busca de dados (Cache com Transients)
-$featured_data = get_transient('aer_featured_trip');
+$hero = aer_get_hero_data();
+$background_img = $hero['bg'] ?? '';
+$focus_img = $hero['focus'] ?? '';
 
-if (false === $featured_data) {
-  $excursoes_hero = wc_get_products([
-    'orderby' => 'date',
-    'order' => 'DESC',
-    'status' => 'publish',
-    'limit' => 5,
-    'featured' => true
-  ]);
+if ($background_img) { ?><link rel="preload" as="image" href="<?= esc_url(
+  $background_img
+) ?>" fetchpriority="high"><?php }
 
-  // Inicializamos como array vazio para evitar erros
-  $featured_data = [];
-
-  foreach ($excursoes_hero as $_exc) {
-    $featured_data = [
-      'bg' => wp_get_attachment_image_src(
-        get_post_meta($_exc->get_id(), 'dest_img_1_id', true),
-        'full'
-      )[0],
-      'focus' => wp_get_attachment_image_src(
-        get_post_meta($_exc->get_id(), 'dest_img_2_id', true),
-        'large'
-      )[0]
-    ];
-    break;
-  }
-  set_transient('aer_featured_trip', $featured_data, DAY_IN_SECONDS);
-}
-$background_img = $featured_data['bg'] ?? '';
-$focus_img = $featured_data['focus'] ?? '';
-
-// Preload das imagens de destaque da home
-if ($background_img): ?>
-    <link rel="preload" as="image" href="<?= esc_url(
-      $background_img
-    ) ?>" fetchpriority="high">
-    <?php if ($focus_img): ?>
-        <link rel="preload" as="image" href="<?= esc_url(
-          $focus_img
-        ) ?>" fetchpriority="high">
-    <?php endif; ?>
-<?php endif;
+if ($focus_img) { ?><link rel="preload" as="image" href="<?= esc_url(
+  $focus_img
+) ?>" fetchpriority="high"><?php }
 ?>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
-<script src="<?= get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js?ver=<?= aer_get_asset_version(
+<?php $campanhas_ativas = aer_get_active_campaigns(); ?>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+  <script src="<?= get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js?ver=<?= aer_get_asset_version(
   '/cards-slider.js'
 ) ?>" defer></script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Aerotour Excursões",
-  "image": "https://aerotour.com.br/wp-content/themes/Aerotour/assets/images/main.png",
-  "@id": "https://www.aerotour.com.br/",
-  "url": "https://www.aerotour.com.br/",
-  "telephone": "+55-19-99747-7465",
-  "sameAs": [
-    "https://www.facebook.com/aerotourcampinas",
-    "https://www.instagram.com/aerotour_excursoes"
-  ]
-}
-</script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Aerotour Excursões",
+      "image": "https://aerotour.com.br/wp-content/themes/Aerotour/assets/images/main.png",
+      "@id": "https://www.aerotour.com.br/",
+      "url": "https://www.aerotour.com.br/",
+      "telephone": "+55-19-99747-7465",
+      "sameAs": [
+        "https://www.facebook.com/aerotourcampinas",
+        "https://www.instagram.com/aerotour_excursoes"
+      ]
+    }
+  </script>
 
-<!-- 3. Mercado Pago (Apenas no Checkout) -->
-<?php if (is_checkout()): ?>
-<script>
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            var mp = document.createElement('script');
-            mp.src = "https://sdk.mercadopago.com/js/v2";
-            mp.async = true;
-            document.head.appendChild(mp);
-        }, 1000);
-    });
-</script>
-<?php endif; ?>
+  <!-- Mercado Pago (Apenas no Checkout) -->
+  <?php if (is_checkout()): ?>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <?php endif; ?>
 
-<?php if (!current_user_can('administrator')): ?>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-F1239QYGYB');
-    </script>
+  <noscript><img class="d-none" height="1" width="1" src="https://www.facebook.com/tr?id=704341881591730&ev=PageView&noscript=1"/></noscript>
 
-    <script>
-              // Meta Pixel
-              !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-              n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-              document,'script','https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '704341881591730');
-              fbq('track', 'PageView');
-
-              // Google ADS
-              var adsense = document.createElement('script');
-              adsense.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719";
-              adsense.async = true;
-              adsense.crossOrigin = "anonymous";
-              document.head.appendChild(adsense);
-    </script>
-
-
-<?php endif; ?>
-    <noscript><img class="d-none" height="1" width="1" src="https://www.facebook.com/tr?id=704341881591730&ev=PageView&noscript=1"/></noscript>
-
-    <?php wp_head(); ?>
+  <?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>

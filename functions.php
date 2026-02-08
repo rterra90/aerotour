@@ -1,6 +1,8 @@
 <?php
 $root_url = get_stylesheet_directory_uri();
 
+// WOCOOMMERCE RESET
+
 /**
  * Remove todos os estilos padrão do WooCommerce
  */
@@ -18,9 +20,23 @@ add_action(
   100
 );
 
-//
+// FIM WOOCOMMERCE RESET
+
+//--------------------
+
+// HEADER
+
+// Inclui os estilos otimizados diretamente no header
 require_once get_template_directory() . '/includes/optimize-assets.php';
 add_action('wp_head', 'aer_inject_optimized_css', 10);
+
+// Carrega as funções de template e SEO
+require_once get_template_directory() .
+  '/includes/functions/header-setup-functions.php';
+
+// FIM HEADER
+
+//---------------------
 
 wp_enqueue_script('theme-links', get_template_directory_uri() . '/js/main.js');
 wp_localize_script('theme-links', 'themeLinks', [
