@@ -242,7 +242,10 @@ $customer_reservas_cancel = array_filter($customer_reservas_final, function($c_r
                         <p>Local do evento: <?= $reserva['local_evento']; ?></p>
 
                         <div class="reserva-options-wrapper">
-                          <span class="options-btn" onclick="openModalBox('reservaOptions<?= $reserva['variation_id']; ?>')">•••</span>
+                          <span class="options-btn" data-dropdown-target="reservaOptions<?= $reserva['variation_id']; ?>">
+                            •••
+                          </span>
+                          
                           <div class="options-menu d-none" id="reservaOptions<?= $reserva['variation_id']; ?>">
                             <nav>
                               <ul data-variation-id="<?= $reserva['variation_id']; ?>">

@@ -201,7 +201,7 @@ if ($campanhas_ativas === false) {
   ? $user->display_name
   : 'Olá, visitante' ?></span></div>
                 <?php if (is_user_logged_in()) { ?>
-                <div class="user-menu-container user-menu-btn" onclick="openModalBox('user-menu-modal')">
+                <div class="user-menu-container user-menu-btn" data-dropdown-target="user-menu-modal">
                   
                     <?php wp_nav_menu([
                       'menu' => 'Usuário header',

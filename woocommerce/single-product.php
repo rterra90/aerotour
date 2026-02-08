@@ -748,6 +748,7 @@ usort($datas, function ($a, $b) {
     </div>
   </section>
   <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/single-product.js?ver=<?= time() ?>"></script>
+  <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/react_apps/app_reservas_usuario.js?ver=<?= time() ?>"></script>
 <!-- React e ReactDOM em produção -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
