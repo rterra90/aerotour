@@ -43,7 +43,8 @@ wp_localize_script('theme-links', 'themeLinks', [
   'adminUrl' => admin_url(),
   'adminAjaxUrl' => admin_url('admin-ajax.php'),
   'siteUrl' => get_site_url(),
-  'cartUrl' => wc_get_cart_url()
+  'cartUrl' => wc_get_cart_url(),
+  'stylesheetUrl' => get_stylesheet_directory_uri(),
 ]);
 
 /**
@@ -64,101 +65,101 @@ add_action('admin_menu', function () {
  */
 function render_migracao_page()
 {
-  ?>
-    <div class="wrap">
-        <h1>Migração de Pedidos para Tabela de Reservas</h1>
-        <p>Configurações para processamento de pedidos (IDs <strong>420</strong> a <strong>1006</strong>).</p>
-        
-        <div style="background: #fff; padding: 15px; border: 1px solid #ccd0d4; margin-bottom: 20px; border-radius: 4px;">
-            <label style="display: block; margin-bottom: 10px;">
-                <input type="checkbox" id="test-mode" checked> 
-                <strong>Modo Teste</strong> (Apenas simula a migração e exibe os dados tratados)
-            </label>
-            
-            <button id="start-migration" class="button button-primary" data-ajax="<?= admin_url(
-              'admin-ajax.php'
-            ) ?>">Iniciar Migração</button>
-            <button id="stop-migration" class="button button-secondary" disabled>Parar Processo</button>
-        </div>
-        
-        <div id="migration-log" style="margin-top: 20px; padding: 15px; background: #222; color: #0f0; font-family: monospace; height: 450px; overflow-y: scroll; border-radius: 5px; line-height: 1.6; font-size: 12px;">
-            > Aguardando comando...<br>
-        </div>
+?>
+  <div class="wrap">
+    <h1>Migração de Pedidos para Tabela de Reservas</h1>
+    <p>Configurações para processamento de pedidos (IDs <strong>420</strong> a <strong>1006</strong>).</p>
+
+    <div style="background: #fff; padding: 15px; border: 1px solid #ccd0d4; margin-bottom: 20px; border-radius: 4px;">
+      <label style="display: block; margin-bottom: 10px;">
+        <input type="checkbox" id="test-mode" checked>
+        <strong>Modo Teste</strong> (Apenas simula a migração e exibe os dados tratados)
+      </label>
+
+      <button id="start-migration" class="button button-primary" data-ajax="<?= admin_url(
+                                                                              'admin-ajax.php'
+                                                                            ) ?>">Iniciar Migração</button>
+      <button id="stop-migration" class="button button-secondary" disabled>Parar Processo</button>
     </div>
 
-    <script>
+    <div id="migration-log" style="margin-top: 20px; padding: 15px; background: #222; color: #0f0; font-family: monospace; height: 450px; overflow-y: scroll; border-radius: 5px; line-height: 1.6; font-size: 12px;">
+      > Aguardando comando...<br>
+    </div>
+  </div>
+
+  <script>
     jQuery(document).ready(function($) {
-        let isRunning = false;
-        let totalProcessed = 0; // Contador acumulativo
+      let isRunning = false;
+      let totalProcessed = 0; // Contador acumulativo
 
-        $('#start-migration').on('click', function() {
-            isRunning = true;
-            totalProcessed = 0; // Reseta ao iniciar
-            $(this).prop('disabled', true).text('Processando...');
-            $('#stop-migration').prop('disabled', false);
-            $('#test-mode').prop('disabled', true);
-            $('#migration-log').html('> Iniciando processamento a partir do ID 420...<br>');
-            
-            processBatch(420); // Início definido no ID 420
-        });
+      $('#start-migration').on('click', function() {
+        isRunning = true;
+        totalProcessed = 0; // Reseta ao iniciar
+        $(this).prop('disabled', true).text('Processando...');
+        $('#stop-migration').prop('disabled', false);
+        $('#test-mode').prop('disabled', true);
+        $('#migration-log').html('> Iniciando processamento a partir do ID 420...<br>');
 
-        $('#stop-migration').on('click', function() {
-            isRunning = false;
-            $(this).prop('disabled', true).text('Parando...');
-        });
+        processBatch(420); // Início definido no ID 420
+      });
 
-        function processBatch(currentId) {
-            const maxId = 1006;
-            const batchSize = 5;
-            const isTest = $('#test-mode').is(':checked');
-            
-            if (!isRunning) {
-                $('#migration-log').append('<br><span style="color:red;">[INTERROMPIDO] Processo parado pelo usuário. Total processado até agora: ' + totalProcessed + '</span>');
-                resetButtons();
-                return;
-            }
+      $('#stop-migration').on('click', function() {
+        isRunning = false;
+        $(this).prop('disabled', true).text('Parando...');
+      });
 
-            if (currentId > maxId) {
-                const corFinal = isTest ? 'cyan' : 'white';
-                $('#migration-log').append('<br><span style="color:'+corFinal+'; font-weight:bold; font-size: 14px;">[CONCLUÍDO] Fim do intervalo. Total de registros afetados/simulados: ' + totalProcessed + '</span>');
-                resetButtons();
-                return;
-            }
+      function processBatch(currentId) {
+        const maxId = 1006;
+        const batchSize = 5;
+        const isTest = $('#test-mode').is(':checked');
 
-            $.ajax({
-                url: ajaxurl,
-                method: 'POST',
-                data: {
-                    action: 'executar_migracao_ajax',
-                    start_id: currentId,
-                    end_id: Math.min(currentId + batchSize - 1, maxId),
-                    test_mode: isTest ? 1 : 0
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#migration-log').append(response.data.logs);
-                        totalProcessed += response.data.count; // Soma o contador vindo do PHP
-                        $('#migration-log').scrollTop($('#migration-log')[0].scrollHeight);
-                        
-                        processBatch(currentId + batchSize);
-                    }
-                },
-                error: function(_e) {
-                    $('#migration-log').append('<span style="color:red;">> ERRO CRÍTICO NA REQUISIÇÃO.</span><br>');
-                    resetButtons();
-                }
-            });
+        if (!isRunning) {
+          $('#migration-log').append('<br><span style="color:red;">[INTERROMPIDO] Processo parado pelo usuário. Total processado até agora: ' + totalProcessed + '</span>');
+          resetButtons();
+          return;
         }
 
-        function resetButtons() {
-            isRunning = false;
-            $('#start-migration').prop('disabled', false).text('Iniciar Migração');
-            $('#stop-migration').prop('disabled', true).text('Parar Processo');
-            $('#test-mode').prop('disabled', false);
+        if (currentId > maxId) {
+          const corFinal = isTest ? 'cyan' : 'white';
+          $('#migration-log').append('<br><span style="color:' + corFinal + '; font-weight:bold; font-size: 14px;">[CONCLUÍDO] Fim do intervalo. Total de registros afetados/simulados: ' + totalProcessed + '</span>');
+          resetButtons();
+          return;
         }
+
+        $.ajax({
+          url: ajaxurl,
+          method: 'POST',
+          data: {
+            action: 'executar_migracao_ajax',
+            start_id: currentId,
+            end_id: Math.min(currentId + batchSize - 1, maxId),
+            test_mode: isTest ? 1 : 0
+          },
+          success: function(response) {
+            if (response.success) {
+              $('#migration-log').append(response.data.logs);
+              totalProcessed += response.data.count; // Soma o contador vindo do PHP
+              $('#migration-log').scrollTop($('#migration-log')[0].scrollHeight);
+
+              processBatch(currentId + batchSize);
+            }
+          },
+          error: function(_e) {
+            $('#migration-log').append('<span style="color:red;">> ERRO CRÍTICO NA REQUISIÇÃO.</span><br>');
+            resetButtons();
+          }
+        });
+      }
+
+      function resetButtons() {
+        isRunning = false;
+        $('#start-migration').prop('disabled', false).text('Iniciar Migração');
+        $('#stop-migration').prop('disabled', true).text('Parar Processo');
+        $('#test-mode').prop('disabled', false);
+      }
     });
-    </script>
-    <?php
+  </script>
+  <?php
 }
 
 /**
@@ -370,18 +371,18 @@ function campos_registro()
   ];
 
   foreach ($campos as $campo) { ?>
-        <p class="form-row">
-          <label for=<?= $campo[1] ?>><?php _e(
-  $campo[0],
-  'text_domain'
-); ?><span class="required">*</span></label>
-          <input type="text" class="input-text" name=<?= $campo[1] ?> id=<?= $campo[1] ?> value=<?php if (
-   !empty($_POST[$campo[1]])
- ) {
-   esc_attr_e($_POST[$campo[1]]);
- } ?> >
-      </p>
-      <?php }
+    <p class="form-row">
+      <label for=<?= $campo[1] ?>><?php _e(
+                                    $campo[0],
+                                    'text_domain'
+                                  ); ?><span class="required">*</span></label>
+      <input type="text" class="input-text" name=<?= $campo[1] ?> id=<?= $campo[1] ?> value=<?php if (
+                                                                                              !empty($_POST[$campo[1]])
+                                                                                            ) {
+                                                                                              esc_attr_e($_POST[$campo[1]]);
+                                                                                            } ?>>
+    </p>
+  <?php }
 }
 function salva_campos($customer_id)
 {
@@ -469,22 +470,22 @@ function add_fields_to_edit_account_form()
     $value = isset(get_user_meta(get_current_user_id())[$campo[1]][0])
       ? esc_attr(get_user_meta(get_current_user_id())[$campo[1]][0])
       : ''; ?>
-      <div>
-        <p class="woocommerce-form-row woocommerce-form-row--wide form-row">
+    <div>
+      <p class="woocommerce-form-row woocommerce-form-row--wide form-row">
         <label for="<?= $campo[1] ?>"><?= $campo[0] ?></label>
         <?php if ($campo[0] == 'CPF' && $value !== '') { ?>
-            <input disabled type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" id="<?= $campo[1] ?>" value="<?php echo cpf_mask(
-  $value
-); ?>" />
-            <?php } else { ?>
-            <input type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" name="<?= $campo[1] ?>" id="<?= $campo[1] ?>" value="<?php echo $value; ?>" />
-            <?php } ?>
+          <input disabled type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" id="<?= $campo[1] ?>" value="<?php echo cpf_mask(
+                                                                                                                                                  $value
+                                                                                                                                                ); ?>" />
+        <?php } else { ?>
+          <input type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" name="<?= $campo[1] ?>" id="<?= $campo[1] ?>" value="<?php echo $value; ?>" />
+        <?php } ?>
 
-        </p>
-      </div>
-      <?php
-  }?>
-    <?php
+      </p>
+    </div>
+  <?php
+  } ?>
+<?php
 }
 
 function save_account_details_form($customer_id)
@@ -769,11 +770,11 @@ function pagamento_completo($order_id)
   foreach ($order->get_items() as $item) {
     $passageiros =
       get_post_meta($item->get_variation_id(), 'passageiros', true) !== ''
-        ? json_decode(
-          get_post_meta($item->get_variation_id(), 'passageiros')[0],
-          true
-        )
-        : [];
+      ? json_decode(
+        get_post_meta($item->get_variation_id(), 'passageiros')[0],
+        true
+      )
+      : [];
 
     /* formata o valor de 'embarque' - pode ser array ou string */
     if (gettype($passageiro['embarque']) !== 'string') {
@@ -914,20 +915,20 @@ add_action(
 );
 function add_terms_and_conditions_to_registration()
 {
-  ?>
+?>
   <p class="form-row terms wc-terms-and-conditions">
-              <label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox">
-                  <input type="checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" name="terms" <?php checked(
-                    apply_filters(
-                      'woocommerce_terms_is_checked_default',
-                      isset($_POST['terms'])
-                    ),
-                    true
-                  ); ?> id="terms" /> <span class="small">Concordo com os <b><a href="<?= get_privacy_policy_url() ?>" target="_blank">termos de uso</b> e com a <b>política de privacidade.</b></a></span>
-              </label>
-              <input type="hidden" name="terms-field" value="1" />
-          </p>
-  <?php
+    <label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox">
+      <input type="checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" name="terms" <?php checked(
+                                                                                                                            apply_filters(
+                                                                                                                              'woocommerce_terms_is_checked_default',
+                                                                                                                              isset($_POST['terms'])
+                                                                                                                            ),
+                                                                                                                            true
+                                                                                                                          ); ?> id="terms" /> <span class="small">Concordo com os <b><a href="<?= get_privacy_policy_url() ?>" target="_blank">termos de uso</b> e com a <b>política de privacidade.</b></a></span>
+    </label>
+    <input type="hidden" name="terms-field" value="1" />
+  </p>
+<?php
 }
 
 // Validate required term and conditions check box
@@ -958,20 +959,19 @@ function terms_and_conditions_validation($username, $email, $validation_errors)
 add_action('woocommerce_review_order_before_payment', 'exibe_pdv');
 function exibe_pdv()
 {
-  ?>
+?>
   <div class="cart_collaterals_pdv">
     <p>Ponto de venda: <span></span></p>
     <input type="hidden" name="pdv">
     <script>
-
-      if(window.sessionStorage.getItem('aer_pdv')){
-        document.querySelector('input[name="pdv"]').value = window.sessionStorage.getItem('aer_pdv'); 
+      if (window.sessionStorage.getItem('aer_pdv')) {
+        document.querySelector('input[name="pdv"]').value = window.sessionStorage.getItem('aer_pdv');
         document.querySelector('.cart_collaterals_pdv span').innerText = window.sessionStorage.getItem('aer_pdv').replace(/\_/g, ' ');
-      }else document.querySelector('.cart_collaterals_pdv').remove();
+      } else document.querySelector('.cart_collaterals_pdv').remove();
     </script>
   </div>
-    
-  <?php
+
+<?php
 }
 /* Fim Ponto de venda em cart_collaterals */
 
@@ -1023,15 +1023,18 @@ add_filter(
 );
 function custom_checkout_must_be_logged_in_message()
 {
-  ?>
-    <script>
-      if(window.location.href === '<?= wc_get_checkout_url() ?>'){
-        window.sessionStorage.setItem('aer_redirect_after_login', JSON.stringify({page:"checkout", url:"<?= wc_get_cart_url() ?>"}))
-        window.location.href = '<?= get_permalink(
-          wc_get_page_id('myaccount')
-        ) ?>'
-      }
-    </script>
+?>
+  <script>
+    if (window.location.href === '<?= wc_get_checkout_url() ?>') {
+      window.sessionStorage.setItem('aer_redirect_after_login', JSON.stringify({
+        page: "checkout",
+        url: "<?= wc_get_cart_url() ?>"
+      }))
+      window.location.href = '<?= get_permalink(
+                                wc_get_page_id('myaccount')
+                              ) ?>'
+    }
+  </script>
   <?php
 }
 
@@ -1042,8 +1045,8 @@ function aer_fees($cart_items)
   foreach ($cart_items->get_cart() as $item) {
     $item_fee =
       isset($item['taxa']) && $item['taxa'] !== 'unset' && $item['taxa'] != 0
-        ? (int) $item['taxa']
-        : 0;
+      ? (int) $item['taxa']
+      : 0;
     $final_price = $item['data']->regular_price + $item_fee;
 
     // Verifica se há desconto antecipado quando foi adicionado ao carrinho (1ª verificação)
@@ -1343,34 +1346,33 @@ if (is_admin()) {
   add_action('admin_footer', 'carregar_js_personalizado_para_abas');
   function carregar_js_personalizado_para_abas()
   {
-    ?>
+  ?>
     <script>
       jQuery(function($) {
-          // Ao clicar na aba personalizada
-          $('body').on('click', '.wc-tabs li a', function() {
-              var target = $(this).attr('href');
-              if (target === '#exc_embarques_meta') { // Verifique se a aba personalizada foi selecionada
-                  const _allVar = document.querySelectorAll('#variable_product_options .woocommerce_variations .woocommerce_variation');
-                  const _datas = Array.from(_allVar).map((_d) => {
-                    return _d.querySelector('h3 > select').value
-                  })
-                  const _wrapper = document.querySelector('#exc_embarques_meta.panel.woocommerce_options_panel');
-                   if(_datas.length < 1){
-                      _wrapper.querySelector('.section-show').style.display = 'none';
-                      _wrapper.querySelector('.section-hide').style.display = 'block';
-                   }
-                   else{
+        // Ao clicar na aba personalizada
+        $('body').on('click', '.wc-tabs li a', function() {
+          var target = $(this).attr('href');
+          if (target === '#exc_embarques_meta') { // Verifique se a aba personalizada foi selecionada
+            const _allVar = document.querySelectorAll('#variable_product_options .woocommerce_variations .woocommerce_variation');
+            const _datas = Array.from(_allVar).map((_d) => {
+              return _d.querySelector('h3 > select').value
+            })
+            const _wrapper = document.querySelector('#exc_embarques_meta.panel.woocommerce_options_panel');
+            if (_datas.length < 1) {
+              _wrapper.querySelector('.section-show').style.display = 'none';
+              _wrapper.querySelector('.section-hide').style.display = 'block';
+            } else {
 
-                    _wrapper.querySelector('.section-show').style.display = 'block';
-                    _wrapper.querySelector('.section-hide').style.display = 'none';
+              _wrapper.querySelector('.section-show').style.display = 'block';
+              _wrapper.querySelector('.section-hide').style.display = 'none';
 
-                    _wrapper.querySelector('.section-show').dataset.dias = JSON.stringify(_datas)
-                   }
-                }
-          });
+              _wrapper.querySelector('.section-show').dataset.dias = JSON.stringify(_datas)
+            }
+          }
+        });
       });
     </script>
-    <?php
+<?php
   }
 }
 ?>

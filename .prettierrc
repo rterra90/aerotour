@@ -1,7 +1,7 @@
 {
   "tabWidth": 2,
   "useTabs": false,
-  "plugins": ["@prettier/plugin-php"],
+  // "plugins": ["@prettier/plugin-php"],
   "parser": "php",
   "singleQuote": true,
   "trailingComma": "all",

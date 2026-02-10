@@ -1,4 +1,4 @@
-<!-- Insere o modal -->
+<!-- Insere o container padrão do modal -->
 <?php get_template_part('includes/modals/modal', null); ?>
 
 <?php wp_footer(); ?>
