@@ -1,4 +1,5 @@
 <script>
+  // Variável global com os dados das excursões para uso no modal de sugestão
   const excursoesDisponiveis = <?php echo json_encode($dados_js); ?>;
 </script>
 <section class="sugestao-cta py-4 container-md">
@@ -34,41 +35,53 @@
     btnSugerir.addEventListener('click', async (e) => {
       const termoOriginal = input.value.trim();
       const termoLimpo = limparString(termoOriginal);
-      const modal = new Modal();
-      // Comparação forte: verifica se o termo limpo está contido no nome limpo do produto
-      const sugestaoEncontrada = excursoesDisponiveis.find(ex =>
-        ex.nome_limpo.includes(termoLimpo) || termoLimpo.includes(ex.nome_limpo)
-      );
+      const sugestaoModal = new Modal();
 
-      if (sugestaoEncontrada) {
-        // Abrir modal com detalhes da excursão encontrada (#1 template, #2 dados)
-        await modal.open('sugestao-match', {
-          nome: sugestaoEncontrada.nome,
-          url: sugestaoEncontrada.url
+      // 2. Verificar se o termo corresponde a alguma excursão disponível (suporta multiplos resultados)
+      const matches = excursoesDisponiveis.filter(ex => ex.nome_limpo.includes(termoLimpo));
+
+      //
+      if (matches.length === 1) {
+        // Apenas um resultado: usamos o match individual
+        await sugestaoModal.open('sugestao-match', {
+          termo: termoOriginal,
+          nome: matches[0].nome,
+          url: matches[0].url
         });
-        // Adiciona lógica ao link interno do modal após carregar
-        document.getElementById('continuar-sugestao').onclick = async () => {
-          await modal.open('sugestao-form', {
-            termo: termoOriginal
-          });
-        };
+      } else if (matches.length > 1) {
+        // Múltiplos resultados: geramos a lista
+        await sugestaoModal.open('sugestao-lista', {
+          termo: termoOriginal,
+          lista_html: gerarHtmlLista(matches)
+        });
       } else {
-        // Abrir modal de sugestão sem correspondência
-        await modal.open('sugestao-form', {
+        // Nenhum resultado: formulário de sugestão
+        await sugestaoModal.open('sugestao-form', {
           termo: termoOriginal
         });
       }
 
-      console.log('Termo limpo:', termoLimpo);
-      console.log(sugestaoEncontrada ? 'Encontrada excursão similar:' : 'Nenhuma excursão encontrada', sugestaoEncontrada);
+      // Adiciona lógica ao link interno do modal após carregar
+      const continueLink = document.getElementById('continuar-sugestao');
+      if (continueLink) {
+        continueLink.onclick = async () => {
+          await sugestaoModal.open('sugestao-form', {
+            termo: termoOriginal
+          });
+        };
+      }
 
     });
   });
 
 
-
-  // if (window.location.hash.startsWith('#wpcf7')) {
-  //   document.querySelector('.sugestao-cta .input-area').remove()
-  // }
-  // document.querySelector('.sugestao-cta input.wpcf7-submit').setAttribute('data-btn-reactive', 'input')
+  // Função auxiliar para criar a lista de links
+  function gerarHtmlLista(items) {
+    return items.map(item => `
+        <div class="match-item">
+            <span>${item.nome}</span>
+            <a href="${item.url}" class="btn-ir">Ver Excursão</a>
+        </div>
+    `).join('');
+  }
 </script>

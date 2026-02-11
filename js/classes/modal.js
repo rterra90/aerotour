@@ -175,6 +175,8 @@ class Modal {
    * @param {Object} data - Dados adicionais para o conteúdo (ex: { title: 'Aviso!', body: 'Tem certeza?' }).
    */
   async open(contentType, data = {}) {
+    this.#modalElement.style.display = 'flex'; // Garante que o display mude antes da opacidade
+
     // 1. Renderiza o novo conteúdo
     const newContent = await this.#renderContent(contentType, data);
     this.#contentContainer.innerHTML = newContent;
@@ -193,8 +195,12 @@ class Modal {
   close() {
     this.#modalElement.classList.remove('open');
     document.body.classList.remove('modal-open');
-    // Opcional: Limpa o conteúdo após fechar
-    this.#contentContainer.innerHTML = '';
+    
+    // Espera a animação de 0.3s acabar para dar display none
+    setTimeout(() => {
+        this.#modalElement.style.display = 'none';
+        this.#contentContainer.innerHTML = '';
+    }, 300);
   }
 
   /**

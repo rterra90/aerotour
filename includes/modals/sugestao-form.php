@@ -1,6 +1,6 @@
 <div class="sugestao-final-container">
   <h3 class="modal-title">Quase lá! 🚀</h3>
-  <p>Não encontramos a excursão para <strong>"{{termo}}"</strong>. Deixe seus dados e nossa equipe verificará a disponibilidade!</p>
+  <p>Parece que ainda não temos uma excursão para <strong>"{{termo}}"</strong>. Deixe seus dados e nossa equipe verificará a disponibilidade!</p>
 
   <form id="form-sugestao-nativa" class="modal-form">
     <input type="hidden" name="sugestao_nome" value="{{termo}}">
