@@ -10,7 +10,7 @@
     </div>
 
     <div class="input-container">
-      <input type="text" id="input-sugestao" placeholder="Ex: Show do Coldplay em SP" autocomplete="off">
+      <input type="text" id="input-sugestao" placeholder="Qual excursão você gostaria?" autocomplete="off">
       <button id="btn-sugerir" disabled>Sugerir</button>
     </div>
   </div>

@@ -1,4 +1,49 @@
 <?php
+add_action('wp_ajax_processar_sugestao', 'ajax_processar_sugestao');
+function ajax_processar_sugestao()
+{
+  $sugestao = sanitize_text_field($_POST['sugestao_nome']);
+  $nome     = sanitize_text_field($_POST['usuario_nome']);
+  $email    = sanitize_email($_POST['usuario_email']);
+  $tel      = sanitize_text_field($_POST['usuario_tel']);
+
+  if (empty($email) && empty($tel)) {
+    wp_send_json_error('Preencha pelo menos um contato (e-mail ou telefone).');
+  } else if (empty($nome)) {
+    wp_send_json_error('Preencha seu nome e pelo menos uma forma de contato.');
+  }
+
+  // 2. Configuração do E-mail
+  $para      = get_option('admin_email'); // Ou o e-mail da Aerotour: contato@aerotour.com.br
+  $assunto   = "🚀 Nova Sugestão de Excursão: " . $sugestao;
+
+  // Corpo do e-mail em HTML
+  $mensagem  = "<html><body>";
+  $mensagem .= "<h2>Nova Sugestão Recebida pelo Site</h2>";
+  $mensagem .= "<p><strong>Sugestão:</strong> {$sugestao}</p>";
+  $mensagem .= "<hr>";
+  $mensagem .= "<p><strong>Dados do Cliente:</strong></p>";
+  $mensagem .= "<ul>";
+  $mensagem .= "<li><strong>Nome:</strong> {$nome}</li>";
+  $mensagem .= "<li><strong>E-mail:</strong> {$email}</li>";
+  $mensagem .= "<li><strong>WhatsApp:</strong> {$tel}</li>";
+  $mensagem .= "</ul>";
+  $mensagem .= "<p><em>Enviado via sistema nativo de sugestões Aerotour.</em></p>";
+  $mensagem .= "</body></html>";
+
+  $headers[] = 'Content-Type: text/html; charset=UTF-8';
+  $headers[] = 'From: Aerotour Site <' . get_option('admin_email') . '>';
+  $headers[] = 'Reply-To: ' . $nome . ' <' . $email . '>';
+
+  // 3. Envio
+  $enviado = wp_mail($para, $assunto, $mensagem, $headers);
+
+  if ($enviado) {
+    wp_send_json_success('Sugestão enviada com sucesso!');
+  } else {
+    wp_send_json_error('Erro interno ao enviar e-mail. Tente novamente.');
+  }
+}
 //GET EM EXCURSÕES
 add_action('wp_ajax_get_excursoes', 'ajax_get_excursoes');
 function ajax_get_excursoes()
@@ -124,7 +169,7 @@ function ajax_add_variation_to_cart()
     wp_send_json([
       'error' => true,
       'messages' =>
-        '<ul class="woocommerce-error"><li>Não foi possível adicionar ao carrinho.</li></ul>'
+      '<ul class="woocommerce-error"><li>Não foi possível adicionar ao carrinho.</li></ul>'
     ]);
   }
 
@@ -184,7 +229,7 @@ function ajax_get_reservas()
       "SELECT * FROM aer_reservas WHERE variation_id = $variation_id"
     );
   } else {
-    $response_r = $wpdb->get_results('SELECT * FROM aer_reservas');
+    $response_r = $wpdb->get_results('SELECT * FROM aer_reservas ORDER BY order_id ASC');
   }
 
   //Cria array com ID das excursões (variações) que têm passageiros
@@ -841,9 +886,9 @@ function ajax_toggle_qr_coupon()
   $current_value = get_option('qr_code_coupon_status');
   $new_value = [
     'status' =>
-      $current_value['status'] === 'desativado' || $current_value === false
-        ? 'ativado'
-        : 'desativado',
+    $current_value['status'] === 'desativado' || $current_value === false
+      ? 'ativado'
+      : 'desativado',
     'code' => null
   ];
   update_option('qr_code_coupon_status', $new_value);
@@ -876,9 +921,9 @@ function ajax_toggle_new_register_coupon()
   $current_value = get_option('new_register_coupon_status');
   $new_value = [
     'status' =>
-      $current_value === '' || $current_value['status'] === 'desativado'
-        ? 'ativado'
-        : 'desativado',
+    $current_value === '' || $current_value['status'] === 'desativado'
+      ? 'ativado'
+      : 'desativado',
     'code' => null
   ];
   update_option('new_register_coupon_status', $new_value);
@@ -923,5 +968,3 @@ function criar_campanha_cupons()
     wp_send_json_error('Erro na criação da campanha...');
   }
 }
-
-?>

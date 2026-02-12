@@ -187,6 +187,16 @@ class Modal {
 
     // 3. Adiciona listeners para os novos botões (exemplo: botões "Confirmar" e "Entendi")
     this.#attachContentListeners();
+
+    // Executar scripts injetados para rodarem após inserção no DOM por innerHTML
+    const scripts = this.#contentContainer.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+
   }
 
   /**

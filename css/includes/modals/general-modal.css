@@ -33,10 +33,10 @@
   color: #424d6d;
   margin-bottom: 20px;
 }
-#generalModalContent p {
+/* #generalModalContent p {
   margin-bottom: 25px;
   line-height: 1.5;
-}
+} */
 #generalModalContent a.whatsapp-btn {
   background-color: #25d366;
   color: white;

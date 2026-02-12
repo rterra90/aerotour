@@ -42,6 +42,7 @@
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
+    min-height: 42px;
 }
 .card-moderno #btn-sugerir:hover:not(:disabled) {
     background: var(--aer-accent);
@@ -307,6 +308,30 @@
   margin-top: 12px;
 }
 
+button.btn-enviar-modal[disabled] {
+    background: #918686;
+}
+.success-message-wrapper {
+    text-align: center;
+    padding: 1rem;
+}
+
+.btn-fechar-sucesso {
+    margin-top: 1.5rem;
+    border: none;
+    background: var(--aer-accent);
+    color: var(--aer-text-light);
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-fechar-sucesso:hover {
+    background: var(--aer-accent-hover);
+    color: #ffffff;
+}
 
 /* MODAL LISTA DE RESULTADOS */
 .lista-excursoes-matches {
