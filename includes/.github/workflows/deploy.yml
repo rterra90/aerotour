@@ -1,0 +1,29 @@
+name: Deploy via FTP
+
+on:
+  push:
+    branches:
+      - main # Aqui ele dispara sempre que você der push na main
+      - sugestao # Adicione o nome da sua branch aqui se quiser testar nela
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Pegando o código atual
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Necessário para comparar versões
+
+      - name: 📂 Subindo apenas arquivos modificados
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Opcional: se quiser ignorar arquivos específicos no servidor
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**

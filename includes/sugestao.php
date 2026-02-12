@@ -6,7 +6,7 @@
   <div class="sugestao-cta-wrapper card-moderno">
     <div class="text-area">
       <strong>Não encontrou sua excursão?</strong>
-      <span>Envie-nos sua sugestão de show ou evento!</span>
+      <span>Envie sua sugestão de show ou evento!</span>
     </div>
 
     <div class="input-container">
