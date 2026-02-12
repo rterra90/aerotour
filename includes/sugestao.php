@@ -2,7 +2,7 @@
   // Variável global com os dados das excursões para uso no modal de sugestão
   const excursoesDisponiveis = <?php echo json_encode($dados_js); ?>;
 </script>
-<section class="sugestao-cta py-4 container-md">
+<section class="sugestao-cta container-md">
   <div class="sugestao-cta-wrapper card-moderno">
     <div class="text-area">
       <strong>Não encontrou sua excursão?</strong>
@@ -64,7 +64,8 @@
       // Adiciona lógica ao link interno do modal após carregar
       const continueLink = document.getElementById('continuar-sugestao');
       if (continueLink) {
-        continueLink.onclick = async () => {
+        continueLink.onclick = async (_e) => {
+          _e.preventDefault();
           await sugestaoModal.open('sugestao-form', {
             termo: termoOriginal
           });

@@ -3,8 +3,8 @@ name: Deploy via FTP
 on:
   push:
     branches:
-      - main # Aqui ele dispara sempre que você der push na main
-      - sugestao # Adicione o nome da sua branch aqui se quiser testar nela
+      # - main # Aqui ele dispara sempre que você der push na main
+      # - sugestao # Adicione o nome da sua branch aqui se quiser testar nela
 
 jobs:
   web-deploy:

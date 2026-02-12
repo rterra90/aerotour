@@ -60,7 +60,7 @@
     /* Theme Light (Default) */
     --modal-bg: #ffffff;
     --modal-text: #2d3436;
-    --modal-text-secondary: #636e72;
+    --modal-text-secondary: #474646;
     --modal-border: rgba(0, 0, 0, 0.1);
     --modal-overlay: rgba(0, 0, 0, 0.6);
     --modal-input-bg: #f8f9fa;
@@ -70,13 +70,13 @@
 @media (prefers-color-scheme: dark) {
     :root {
         /* Theme Dark */
-        --modal-bg: #1e1e1e;
+        /* --modal-bg: #1e1e1e;
         --modal-text: #f8f9fa;
         --modal-text-secondary: #b2bec3;
         --modal-border: rgba(255, 255, 255, 0.1);
         --modal-overlay: rgba(0, 0, 0, 0.85);
         --modal-input-bg: #2d2d2d;
-        --modal-card-bg: #252525;
+        --modal-card-bg: #252525; */
     }
 }
 /* Container Principal */
@@ -398,7 +398,4 @@ button.btn-enviar-modal[disabled] {
 @media (max-width: 768px) {
     .card-moderno { flex-direction: column; text-align: center; gap:18px }
     .input-container { width: 100%; flex-direction: column; }
-    .card-moderno strong{
-      font-size: 1rem;
-    }
 }

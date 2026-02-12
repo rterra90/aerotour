@@ -1,4 +1,5 @@
 <?php
+
 /**
  * inc/optimize-assets.php
  * Entrega segmentada de CSS Crítico
@@ -30,7 +31,7 @@ function aer_get_segmented_css()
     // Slider e Cards: Comum na Home, Loja e Categorias
     'slider' => [
       'condition' =>
-        is_front_page() || is_shop() || is_product_category() || is_product(),
+      is_front_page() || is_shop() || is_product_category() || is_product(),
       'files' => [
         '/css/includes/display/display-card.min.css',
         '/css/includes/cards-slider.min.css'
