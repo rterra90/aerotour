@@ -34,6 +34,7 @@ foreach ($reservas_db as $reg) {
   $passageiro = [
     'nome' => $reg['p_nome'] ?: 'Não informado',
     'doc'  => $reg['p_cpf'] ?: '',
+    'telefone' => $reg['p_telefone'] ?: '',
     'is_me' => ($reg['user_id'] == $current_user_id)
   ];
 
@@ -57,6 +58,7 @@ foreach ($reservas_db as $reg) {
   if (!isset($ativas_agrupadas[$chave_ativa])) {
     $ativas_agrupadas[$chave_ativa] = [
       'id' => $v_id,
+      'order_id' => $reg['order_id'],
       'chave' => $chave_ativa,
       'nome' => substr($variacao->get_title(), 0, -5),
       'data' => $data_pt,
@@ -82,12 +84,12 @@ usort($ativas_agrupadas, function ($a, $b) {
 $futuras = [];
 $passadas = [];
 
-foreach ($ativas_agrupadas as $res) {
-  $time_reserva = strtotime($res['data_std']);
+foreach ($ativas_agrupadas as $reserva_ativa) {
+  $time_reserva = strtotime($reserva_ativa['data_std']);
   if (($time_reserva + 86400) < time()) {
-    $passadas[] = $res;
+    $passadas[] = $reserva_ativa;
   } else {
-    $futuras[] = $res;
+    $futuras[] = $reserva_ativa;
   }
 }
 
@@ -102,8 +104,36 @@ foreach ($ativas_agrupadas as $res) {
     <h2 class="mb-4 fw-bold">Próximas Excursões</h2>
 
     <?php if (count($futuras) > 0): ?>
-      <div class="row flex-nowrap flex-md-wrap overflow-auto g-4">
-        <?php foreach ($futuras as $res): ?>
+      <div class="row overflow-auto g-4">
+        <?php foreach ($futuras as $res):
+          $product_id = $variacao->get_parent_id();
+          $meta_embarques = get_post_meta($product_id, 'embarques', true);
+          $meta_embarques = json_decode($meta_embarques, true);
+
+          if (!empty($meta_embarques) && is_array($meta_embarques)) {
+            foreach ($meta_embarques as $key => $emb) {
+              $emb_id = $emb['embarqueId']; // ID para consulta
+
+              // Consulta a tabela aer_embarques para obter os detalhes estáticos
+              $detalhes_estaticos = $wpdb->get_row($wpdb->prepare(
+                "SELECT nome, endereco, obs, link_mapa FROM `aer_embarques` WHERE id = %d",
+                $emb_id
+              ), ARRAY_A);
+
+              if ($detalhes_estaticos) {
+                // Mescla os detalhes do banco de dados com as informações de horários/taxas
+                $meta_embarques[$key] = array_merge($meta_embarques[$key], $detalhes_estaticos);
+              }
+            }
+          }
+
+          // Agora passamos o objeto completo para o array da reserva
+          $ativas_agrupadas[$chave_ativa]['meta_embarques'] = $meta_embarques;
+        ?>
+
+
+
+
           <div class="card-wrapper col-md-4">
 
             <div class="booking-card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative">
@@ -122,7 +152,7 @@ foreach ($ativas_agrupadas as $res) {
                 </div>
               </div>
 
-              <div class="card-body p-4">
+              <div class="card-body">
                 <h5 class="card-title fw-bold mb-1"><?= $res['nome']; ?></h5>
                 <p class="text-muted small mb-3">
                   <i class="bi bi-geo-alt"></i> <?= $res['local_evento']; ?>
@@ -156,7 +186,30 @@ foreach ($ativas_agrupadas as $res) {
                   <?php endif; ?>
                 </div>
               </div>
+              <div class="action-bar d-flex justify-content-around align-items-center py-2 mb-1 border-top border-bottom border-light mx-n4 bg-light-subtle">
 
+                <a href="<?= wc_get_endpoint_url('view-order', $res['order_id'], wc_get_page_permalink('myaccount')); ?>"
+                  class="action-item text-secondary">
+                  <i class="bi bi-receipt mb-1" style="font-size: 1.1rem;"></i>
+                  <span>Ver pedido</span>
+                </a>
+
+                <a href="#"
+                  class="action-item text-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modal-embarque-<?= $res['chave']; ?>">
+                  <i class="bi bi-geo-fill mb-1" style="font-size: 1.1rem;"></i>
+                  <span>Alterar embarque</span>
+                </a>
+
+                <a href="#"
+                  class="action-item cancelar-option"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modal-cancelar-<?= $res['chave']; ?>">
+                  <i class="bi bi-trash3 mb-1" style="font-size: 1.1rem;"></i>
+                  <span>Cancelar reserva</span>
+                </a>
+              </div>
               <div class="card-footer bg-white border-0 p-3 text-center border-top-0">
                 <a href="<?= $res['url']; ?>" class="text-decoration-none small fw-bold">
                   Ver página da excursão →
@@ -165,21 +218,23 @@ foreach ($ativas_agrupadas as $res) {
             </div>
           </div>
 
+          <!-- Modal de visualização dos passageiros -->
           <div class="modal fade" id="modal-<?= $res['chave']; ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content rounded-4 border-0 shadow-lg">
                 <div class="modal-header border-0 pb-0">
-                  <h5 class="fw-bold m-0">Passageiros para este embarque</h5>
+                  <h5 class="fw-bold m-0">Passageiros nesta reserva</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
-                  <p class="small text-muted mb-3">Local: <strong><?= $res['local_embarque']; ?></strong></p>
+                <div class="modal-body">
+                  <p class="small text-muted mb-3">Embarque: <strong><?= $res['local_embarque']; ?></strong></p>
                   <ul class="list-group list-group-flush">
                     <?php foreach ($res['passageiros'] as $p): ?>
                       <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
                         <div>
                           <span class="fw-bold d-block"><?= $p['nome']; ?></span>
-                          <small class="text-muted">Documento: <?= $p['doc']; ?></small>
+                          <small class="text-muted d-block">Documento: <?= $p['doc']; ?></small>
+                          <small class="text-muted d-block">Telefone: <?= $p['telefone']; ?></small>
                         </div>
                         <?php if ($p['is_me']): ?>
                           <span class="badge rounded-pill bg-primary-subtle text-primary">Você</span>
@@ -191,150 +246,175 @@ foreach ($ativas_agrupadas as $res) {
               </div>
             </div>
           </div>
-        <?php endforeach; ?>
+
+          <!-- Modal de alteração de embarque -->
+          <div class="modal fade" id="modal-embarque-<?= $res['chave']; ?>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                  <h5 class="fw-bold m-0">Solicitar Troca de Embarque</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="secao-form">
+                    <form class="form-solicitar-embarque">
+                      <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">1. Novo Local Desejado</label>
+                        <select class="form-select select-novo-ponto" name="novo_ponto" required>
+                          <option value="" selected disabled>Selecione...</option>
+                          <?php foreach ($meta_embarques as $emb):
+                            $is_atual = ($emb['nome'] == $res['local_embarque']);
+                            $disponivel = false;
+
+                            // Valida disponibilidade na data da viagem
+                            foreach ($emb['horarios'] as $h) {
+                              foreach ($h['disponibilidade'] as $disp) {
+                                if ($disp['disp_dia'] == $res['data'] && $disp['status'] == 'disponivel') {
+                                  $disponivel = true;
+                                }
+                              }
+                            }
+                          ?>
+                            <option value="<?= $emb['nome']; ?>"
+                              <?= (!$disponivel || $is_atual) ? 'disabled' : ''; ?>>
+                              <?= $emb['nome']; ?>
+                              <?= $is_atual ? '(Atual)' : (!$disponivel ? '(Esgotado)' : ''); ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+                      <div class="secao-passageiros-troca mt-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">2. Selecione os Passageiros</label>
+                        <div class="list-group list-group-flush border rounded-3 overflow-hidden">
+                          <?php foreach ($res['passageiros'] as $index => $p): ?>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                              <input class="form-check-input check-passageiro me-3" type="checkbox" name="passageiros[]" value="<?= $p['nome']; ?>">
+                              <div>
+                                <span class="fw-bold d-block"><?= $p['nome']; ?></span>
+                                <small class="text-muted">CPF: <?= $p['doc']; ?></small>
+                              </div>
+                            </label>
+                          <?php endforeach; ?>
+                        </div>
+                      </div>
+
+                      <div class="aviso-troca-embarque">
+                        <small class="text-muted d-block">
+                          <i class="bi bi-info-circle me-1"></i> A solicitação de troca de embarque está sujeita à disponibilidade e aprovação da equipe <?= bloginfo('name'); ?>.
+                        </small>
+                      </div>
+
+                      <input type="hidden" name="excursao" value="<?= $res['nome']; ?>">
+                      <input type="hidden" name="data_viagem" value="<?= $res['data']; ?>">
+                      <input type="hidden" name="ponto_atual" value="<?= $res['local_embarque']; ?>">
+                      <input type="hidden" name="order_id" value="<?= $res['order_id']; ?>">
+
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                          Enviar Solicitação
+                        </button>
+                    </form>
+                  </div>
+                </div>
+                <div class="secao-sucesso d-none p-5 text-center">
+                  <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                  </div>
+                  <h4 class="fw-bold">Solicitação Enviada!</h4>
+                  <p class="text-muted">Recebemos seu pedido de alteração. Nossa equipe analisará a disponibilidade e você receberá uma confirmação por e-mail em breve.</p>
+                  <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mt-3" data-bs-dismiss="modal">Entendido</button>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
       </div>
-    <?php else: ?>
-      <p class="text-muted">Nada aqui por enquanto...</p>
-    <?php endif; ?>
+    <?php endforeach; ?>
   </div>
+<?php else: ?>
+  <p class="text-muted">Nada aqui por enquanto...</p>
+<?php endif; ?>
+</div>
 
-  <?php if (count($passadas) > 0): ?>
-    <div id="reservas_passadas_container" class="pt-4">
-      <h2 class="mb-4 fw-bold text-muted">Viagens Anteriores</h2>
-      <div class="row g-3 pb-2">
-        <?php foreach (array_reverse($passadas) as $res_p): ?>
-          <div class="col-12">
-            <div class="past-booking-item py-3 px-2 rounded-4">
-              <div class="p_imagem flex-shrink-0">
-                <?= str_replace('thumb', '60x60', $res_p['img']); ?>
-              </div>
+<?php if (count($passadas) > 0): ?>
+  <div id="reservas_passadas_container" class="pt-4">
+    <h2 class="mb-4 fw-bold text-muted">Viagens Anteriores</h2>
+    <div class="row g-3 pb-2">
+      <?php foreach (array_reverse($passadas) as $res_p): ?>
+        <div class="col-12">
+          <div class="past-booking-item py-3 px-2 rounded-4">
+            <div class="p_imagem flex-shrink-0">
+              <?= str_replace('thumb', '60x60', $res_p['img']); ?>
+            </div>
 
-              <div class="p_info flex-grow-1 ms-3">
-                <h6 class="fw-bold mb-0 text-dark"><?= $res_p['nome']; ?></h6>
-                <div class="d-flex flex-column flex-wrap mt-1">
-                  <span class="small text-muted d-block span-data">
-                    <i class="bi bi-calendar3"></i> <?= $res_p['data']; ?>
-                  </span>
-                  <span class="small text-muted d-block">
-                    <i class="bi bi-geo-alt"></i> <?= $res_p['local_evento']; ?>
-                  </span>
-                </div>
+            <div class="p_info flex-grow-1 ms-3">
+              <h6 class="fw-bold mb-0 text-dark"><?= $res_p['nome']; ?></h6>
+              <div class="d-flex flex-column flex-wrap mt-1">
+                <span class="small text-muted d-block span-data">
+                  <i class="bi bi-calendar3"></i> <?= $res_p['data']; ?>
+                </span>
+                <span class="small text-muted d-block">
+                  <i class="bi bi-geo-alt"></i> <?= $res_p['local_evento']; ?>
+                </span>
               </div>
             </div>
           </div>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  <?php endif; ?>
-
-  <?php if (count($canceladas_agrupadas) > 0): ?>
-    <section id="secao-cancelados" class="mt-5 pb-5">
-      <div class="d-flex justify-content-between align-items-center accordion-header-custom"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseCancelados"
-        role="button"
-        aria-expanded="false">
-
-        <h2 class="h5 fw-bold text-muted mb-0">
-          Reservas canceladas (<?= count($canceladas_agrupadas); ?>)
-        </h2>
-
-        <i class="transition-icon">
-          < </i>
-      </div>
-
-      <div class="collapse" id="collapseCancelados">
-        <div class="row g-3">
-          <?php foreach ($canceladas_agrupadas as $cancel): ?>
-            <div class="col-12">
-              <div class="cancel-booking-item d-flex align-items-center p-3 border-bottom">
-                <div class="flex-grow-1">
-                  <h6 class="fw-bold mb-0 text-secondary"><?= $cancel['nome']; ?></h6>
-                  <small class="text-muted opacity-75">
-                    <?= $cancel['data']; ?> <span>• <?= count($cancel['passageiros']); ?> passageiro(s)</span>
-                  </small>
-                </div>
-                <div class="text-end">
-                  <span class="btn btn-sm btn-outline-secondary rounded-pill px-3"
-                    data-bs-toggle="modal"
-                    data-role="button"
-                    data-bs-target="#modal-cancel-<?= $cancel['id']; ?>">
-                    Ver detalhes
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="modal fade" id="modal-cancel-<?= $cancel['id']; ?>" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content rounded-4 border-0">
-                  <div class="modal-header border-0 pb-0">
-                    <h5 class="fw-bold m-0 text-danger">Detalhes do Cancelamento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body p-4">
-                    <p class="small text-muted mb-3">Excursão: <strong><?= $cancel['nome']; ?></strong></p>
-                    <ul class="list-group list-group-flush">
-                      <?php foreach ($cancel['passageiros'] as $r): ?>
-                        <li class="list-group-item px-0 py-3">
-                          <span class="fw-bold d-block text-dark"><?= $r['nome']; ?></span>
-                          <div class="d-flex justify-content-between">
-                            <small class="text-muted">Doc: <?= $r['doc']; ?></small>
-                            <span class="badge bg-danger-subtle text-danger rounded-pill">Cancelado</span>
-                          </div>
-                        </li>
-                      <?php endforeach; ?>
-                    </ul>
-                    <div class="mt-4 p-3 bg-light rounded-3">
-                      <small class="text-muted d-block">
-                        <i class="bi bi-info-circle me-1"></i> Reservas canceladas podem levar alguns dias para o estorno ser processado, dependendo do método de pagamento.
-                      </small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <?php endforeach; ?>
         </div>
-      </div>
-    </section>
+      <?php endforeach; ?>
+    </div>
+  </div>
+<?php endif; ?>
 
+<?php if (count($canceladas_agrupadas) > 0): ?>
+  <section id="secao-cancelados" class="mt-5 pb-5">
+    <div class="d-flex justify-content-between align-items-center accordion-header-custom"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseCancelados"
+      role="button"
+      aria-expanded="false">
 
+      <h2 class="h5 fw-bold text-muted mb-0">
+        Reservas canceladas (<?= count($canceladas_agrupadas); ?>)
+      </h2>
 
+      <i class="transition-icon">
+        < </i>
+    </div>
 
-    <!-- <div id="reservas_canceladas_container" class="mt-5 pt-4">
-      <h2 class="mb-4 fw-bold text-danger">Reservas Canceladas</h2>
+    <div class="collapse" id="collapseCancelados">
       <div class="row g-3">
-        <?php foreach ($canceladas_agrupadas as $cancelada): ?>
-          <?php $qtd = count($cancelada['passageiros']); ?>
+        <?php foreach ($canceladas_agrupadas as $cancel): ?>
           <div class="col-12">
-            <div class="cancel-booking-item d-flex align-items-center p-3 bg-white rounded-4 shadow-sm border-start border-4 border-danger">
-
-              <div class="p_info flex-grow-1">
-                <h6 class="fw-bold mb-0 text-dark"><?= $cancelada['nome']; ?></h6>
-                <small class="text-muted"><?= $cancelada['data']; ?> - <?= $cancelada['local_evento']; ?></small>
+            <div class="cancel-booking-item d-flex align-items-center p-3 border-bottom">
+              <div class="flex-grow-1">
+                <h6 class="fw-bold mb-0 text-secondary"><?= $cancel['nome']; ?></h6>
+                <small class="text-muted opacity-75">
+                  <?= $cancel['data']; ?> <span>• <?= count($cancel['passageiros']); ?> passageiro(s)</span>
+                </small>
               </div>
-
-              <div class="p_status text-end">
-                <a href="#" class="btn btn-link text-danger fw-bold text-decoration-none p-0"
+              <div class="text-end">
+                <span class="btn btn-sm btn-outline-secondary rounded-pill px-3"
                   data-bs-toggle="modal"
-                  data-bs-target="#modal-cancel-<?= $cancelada['id']; ?>">
-                  <?= $qtd . ($qtd > 1 ? " reservas canceladas" : " reserva cancelada"); ?>
-                </a>
+                  data-role="button"
+                  data-bs-target="#modal-cancel-<?= $cancel['id']; ?>">
+                  Ver detalhes
+                </span>
               </div>
             </div>
           </div>
-
-          <div class="modal fade" id="modal-cancel-<?= $cancelada['id']; ?>" tabindex="-1" aria-hidden="true">
+          <div class="modal fade" id="modal-cancel-<?= $cancel['id']; ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content rounded-4 border-0">
                 <div class="modal-header border-0 pb-0">
                   <h5 class="fw-bold m-0 text-danger">Detalhes do Cancelamento</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
-                  <p class="small text-muted mb-3">Excursão: <strong><?= $cancelada['nome']; ?></strong></p>
+                <div class="modal-body">
+                  <p class="small text-muted mb-3">Excursão: <strong><?= $cancel['nome']; ?></strong></p>
                   <ul class="list-group list-group-flush">
-                    <?php foreach ($cancelada['passageiros'] as $r): ?>
+                    <?php foreach ($cancel['passageiros'] as $r): ?>
                       <li class="list-group-item px-0 py-3">
                         <span class="fw-bold d-block text-dark"><?= $r['nome']; ?></span>
                         <div class="d-flex justify-content-between">
@@ -355,8 +435,9 @@ foreach ($ativas_agrupadas as $res) {
           </div>
         <?php endforeach; ?>
       </div>
-    </div> -->
-  <?php endif; ?>
+    </div>
+  </section>
+<?php endif; ?>
 
 </section>
 <script src="<?php echo get_stylesheet_directory_uri() ?>/js/minhas-reservas.js"></script>

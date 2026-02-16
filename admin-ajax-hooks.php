@@ -1,4 +1,41 @@
 <?php
+//ENVIA SOLICITAÇÃO DE TROCA DE EMBARQUE PARA O ADMINISTRADOR
+add_action('wp_ajax_solicitar_alteracao_embarque', 'solicitar_alteracao_embarque');
+function solicitar_alteracao_embarque()
+{
+  $novo_ponto = sanitize_text_field($_POST['novo_ponto']);
+  $excursao   = sanitize_text_field($_POST['excursao']);
+  $data_v     = sanitize_text_field($_POST['data_viagem']);
+  $ponto_ant  = sanitize_text_field($_POST['ponto_atual']);
+  $order_id   = sanitize_text_field($_POST['order_id']);
+  $passageiros = $_POST['passageiros']; // Array
+
+  $to = get_option('admin_email');
+  $subject = "Solicitação de Troca de Embarque - Pedido #$order_id";
+
+  $message = "Nova solicitação de alteração de embarque recebida:\n\n";
+  $message .= "Pedido: #$order_id\n";
+  $message .= "Excursão: $excursao ($data_v)\n";
+  $message .= "Ponto Atual: $ponto_ant\n";
+  $message .= "Novo Ponto Solicitado: $novo_ponto\n\n";
+  $message .= "Passageiros a serem alterados:\n";
+
+  foreach ($passageiros as $p) {
+    $message .= "- " . sanitize_text_field($p) . "\n";
+  }
+
+  // $sent = wp_mail($to, $subject, $message);
+
+  $sent_test = true; // Simula envio bem-sucedido para testes
+
+  if ($sent_test) {
+    wp_send_json_success();
+  } else {
+    wp_send_json_error("Falha ao enviar e-mail.");
+  }
+}
+
+//ENVIA SUGESTÃO DE EXCURSÃO PARA EMAIL DO ADMINISTRADOR
 add_action('wp_ajax_processar_sugestao', 'ajax_processar_sugestao');
 function ajax_processar_sugestao()
 {
@@ -44,6 +81,7 @@ function ajax_processar_sugestao()
     wp_send_json_error('Erro interno ao enviar e-mail. Tente novamente.');
   }
 }
+
 //GET EM EXCURSÕES
 add_action('wp_ajax_get_excursoes', 'ajax_get_excursoes');
 function ajax_get_excursoes()
@@ -112,7 +150,7 @@ function ajax_get_excursoes()
     'passadas' => $vars_passadas
   ]);
 }
-//ADICIONA VARIAÇÃO AO CARRINHO VIA AJAX
+
 // ADICIONA VARIAÇÃO AO CARRINHO VIA AJAX
 add_action('wp_ajax_add_variation_to_cart', 'ajax_add_variation_to_cart');
 add_action(

@@ -384,7 +384,6 @@ if ($redirect_link) { ?>
         <!-- FIM CONTADOR DE RESERVAS -->
 
 
-
         <!-- info inner -->
         <div class="info">
           <!-- grid container -->
@@ -446,10 +445,10 @@ if ($redirect_link) { ?>
                                                                                                               'ingressos_link',
                                                                                                               true
                                                                                                             ) ?>" target="_blank"><?= get_post_meta(
-                                        get_the_ID(),
-                                        'ingressos_label',
-                                        true
-                                      ) ?></a></div>
+                                                                                                                                    get_the_ID(),
+                                                                                                                                    'ingressos_label',
+                                                                                                                                    true
+                                                                                                                                  ) ?></a></div>
             </div>
           </section>
 
@@ -593,35 +592,21 @@ if ($redirect_link) { ?>
       </div>
       <!-- FIM INFORMAÇÕES -->
 
-      <!-- RESERVA REACT -->
+
       <div id="reservaBox" class="col-md-5 col center-element reserva-box">
 
-        <!--<div id="bannerRoleta">-->
-        <!--  <img class="w-100 mb-1" src="<?= get_stylesheet_directory_uri() ?>/assets/banners/banner-roleta.webp" alt="Banner roleta Aerotour">-->
-        <!--</div>-->
-
-        <!-- <div class="excursao-details position-relative aer-box mt-3 mt-sm-2"> -->
-
-        <!-- <h2 class="mb-4">Faça aqui sua reserva</h2> -->
-
         <!-- RESERVA APP - REACT  -->
-        <div id="reserva_app" data-cart-url='<?= wc_get_cart_url() ?>' data-ajax-url='<?php echo admin_url(
-                                                                                        'admin-ajax.php'
-                                                                                      ); ?>' data-variacoes='<?= json_encode(
-                          $excursao['variacoes'],
-                          JSON_UNESCAPED_UNICODE
-                        ) ?>' data-embarques='<?= json_encode(
-                        $excursao['embarques'],
-                        JSON_UNESCAPED_UNICODE
-                      ) ?>' data-product-id='<?= $excursao['id'] ?>' data-exc-embarques='<?= json_encode(
-                            $excursao['exc_embarques'],
-                            JSON_UNESCAPED_UNICODE
-                          ) ?>'></div>
+        <div id="reserva_app" data-cart-url='<?= wc_get_cart_url() ?>'
+          data-ajax-url='<?php echo admin_url('admin-ajax.php'); ?>'
+          data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE) ?>'
+          data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE) ?>'
+          data-product-id='<?= $excursao['id'] ?>'
+          data-exc-embarques='<?= json_encode($excursao['exc_embarques'], JSON_UNESCAPED_UNICODE) ?>'>
+        </div>
         <!-- FIM RESERVA APP - REACT  -->
 
-
       </div>
-      <!-- FIM RESERVA REACT -->
+
 
     </section>
 

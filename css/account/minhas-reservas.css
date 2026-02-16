@@ -1,5 +1,4 @@
-@import 'cancelar-reserva-modal.css';
-@import 'alterar-embarque-modal.css';
+/* @import 'cancelar-reserva-modal.css'; */
 main {
   overflow: hidden!important;
 }
@@ -15,6 +14,60 @@ main {
     /* min-height: 100vh; */
 }
 
+/* Modal de ações de minhas reservas (cancelar, alterar embarque, etc.) */
+.reservas-wrapper .modal .modal-body{
+    padding: 16px 24px;
+}
+.reservas-wrapper .modal button[type="submit"] {
+    background-color: var(--aer-accent);
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    padding-top: 8px;
+}
+.reservas-wrapper .modal button[type="submit"]:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.modal .secao-sucesso {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.bi-check-circle-fill {
+    display: inline-block;
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+.modal .aviso-troca-embarque{
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-top: 12px;
+    font-size: .825rem;
+}
+.reservas-wrapper .card-wrapper {
+/* max-width: 360px; */
+    flex: 0 1 360px;
+    min-width: 300px;
+
+}
+.reservas-wrapper .row{
+    flex-wrap: nowrap;
+}
 /* Estilização do Card "Ticket" */
 .booking-card {
     background: #ffffff;
@@ -93,6 +146,45 @@ main {
     font-size: 0.9rem;
     font-weight: 500;
     color: #444;
+}
+
+/* Botões de Ação (Cancelar, Detalhes, etc.) */
+
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    text-decoration: none !important;
+    color: #6c757d;
+    transition: opacity 0.2s;
+}
+.action-item i {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.action-item span {
+    font-size: 0.55rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-top: 3px;
+    text-align: center;
+    display: inline-block;
+    padding: 0 3px;
+}
+
+.action-item.cancelar-option{
+    color: #cb8087
+}
+
+.action-item:hover {
+    opacity: 0.7;
+    color: #212529;
+}
+
+.action-item:not(:last-child) {
+    border-right: 1px solid rgba(0,0,0,0.08);
 }
 
 /* Botões e Interatividade */
