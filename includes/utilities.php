@@ -1,4 +1,41 @@
 <?php
+/// Funções utilitárias diversas usadas em várias partes do tema
+
+//Função utilitária para versionar assets (CSS e JS) com base na data de modificação do arquivo
+function aer_get_asset_version($path)
+{
+  $file = get_stylesheet_directory() . $path;
+  return file_exists($file) ? filemtime($file) : '1.0.0';
+}
+
+//Medidas de imagens
+add_image_size('card_img_size', 300, 95);
+add_image_size('blog_card_thumb', 330, 220);
+
+/// Transforma string em slug (ex: "Excursão para Foz do Iguaçu" => "excursao-para-foz-do-iguacu")
+function slugify($str, $delimiter = '-')
+{
+  $slug = strtolower(
+    trim(
+      preg_replace(
+        '/[\s-]+/',
+        $delimiter,
+        preg_replace(
+          '/[^A-Za-z0-9-]+/',
+          $delimiter,
+          preg_replace(
+            '/[&]/',
+            'and',
+            preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))
+          )
+        )
+      ),
+      $delimiter
+    )
+  );
+  return $slug;
+}
+
 function cpf_mask($value)
 {
   $_cpf = preg_replace("/\D/", '', $value);
@@ -61,51 +98,11 @@ function horarios_embarque($_emb_dias)
   return $horarios_embarque;
 }
 
-add_filter('woocommerce_checkout_fields', 'custom_override_checkout_fields');
-function custom_override_checkout_fields($fields)
-{
-  unset($fields['billing']['billing_company']); //remover empresa
-  unset($fields['billing']['billing_address_1']); //remover endereço 1
-  unset($fields['billing']['billing_address_2']); //remover endereço 2
-  unset($fields['billing']['billing_city']); //remover cidade
-  unset($fields['billing']['billing_postcode']); //remover cep
-  unset($fields['billing']['billing_country']); //remover país 
-  unset($fields['billing']['billing_state']); //remover estado
-
-  return $fields;
-}
 
 
-
-add_action('woocommerce_account_menu_items', 'custom_account_menu');
-function custom_account_menu($menu_links)
-{
-  unset($menu_links['downloads']);
-  $menu_links['customer-logout'] = 'Sair';
-  $menu_links = array_slice($menu_links, 0, 5, true)
-    + array('minhas-reservas' => 'Minhas reservas')
-    + array_slice($menu_links, 5, NULL, true);
-
-  return $menu_links;
-}
-
-add_action('init', 'add_endpoints');
-function add_endpoints()
-{
-  add_rewrite_endpoint('minhas-reservas', EP_PAGES);
-}
-
-add_action('woocommerce_account_minhas-reservas_endpoint', 'minhas_reservas_endpoint_page_create');
-function minhas_reservas_endpoint_page_create()
-{
-  wc_get_template('myaccount/minhas-reservas.php');
-}
-
+// Validação de CPF
 function validaCPF($cpf)
 {
-
-  // $cpf = str_replace('.', '',$cpf_raw);
-  // $cpf = str_replace('-', '',$cpf);
   // Extrai somente os números
   $cpf = preg_replace('/[^0-9]/is', '', $cpf);
 
@@ -132,7 +129,7 @@ function validaCPF($cpf)
   return true;
 }
 
-//Datas formatadas para cards de excursão
+//Datas formatadas para cards de excursão (REMOVER JUNTO COM aer_cards)
 function card_datas($datas)
 {
   foreach ($datas as $i => $data) {
@@ -158,12 +155,12 @@ function data_to_dmy($data_raw)
   return explode('-', $data_raw)[2] . '/' . explode('-', $data_raw)[1] . '/' . explode('-', $data_raw)[0];
 }
 
-function horario_formatado($_order, $index)
-{
-  $passageiro = json_decode(get_post_meta($_order->get_id(), 'passageiro', true));
-  if (gettype($passageiro->embarque) === 'string') return substr($passageiro->embarque, -6, -1);
-  else return substr($passageiro->embarque[$index], -6, -1);
-}
+// function horario_formatado($_order, $index) 
+// {
+//   $passageiro = json_decode(get_post_meta($_order->get_id(), 'passageiro', true));
+//   if (gettype($passageiro->embarque) === 'string') return substr($passageiro->embarque, -6, -1);
+//   else return substr($passageiro->embarque[$index], -6, -1);
+// }
 
 function unicode_filter($str)
 {
@@ -172,24 +169,6 @@ function unicode_filter($str)
     if (str_contains($str, $value[0])) $str = str_replace($value[0], $value[1], $str);
   };
   return $str;
-}
-
-function filter_woocommerce_cart_totals_coupon_html($coupon_html, $coupon, $discount_amount_html)
-{
-  // Change text
-  $coupon_html = $discount_amount_html . ' <a href="' . esc_url(add_query_arg('remove_coupon', rawurlencode($coupon->get_code()), defined('WOOCOMMERCE_CHECKOUT') ? wc_get_checkout_url() : wc_get_cart_url())) . '" class="woocommerce-remove-coupon" data-coupon="' . esc_attr($coupon->get_code()) . '">' . __('<i class="bi bi-trash"></i>', 'woocommerce') . '</a>';
-
-  return $coupon_html;
-}
-add_filter('woocommerce_cart_totals_coupon_html', 'filter_woocommerce_cart_totals_coupon_html', 10, 3);
-
-
-// Adicionar o filtro ao texto de "obrigado pelo pedido"
-add_filter('woocommerce_thankyou_order_received_text', 'customizar_texto_obrigado', 10, 2);
-function customizar_texto_obrigado($texto, $pedido)
-{
-  $novo_texto = "Confira os detalhes do pedido"; // Substitua pelo texto desejado
-  return $novo_texto;
 }
 
 //Obtém informações de um embarque pelo ID

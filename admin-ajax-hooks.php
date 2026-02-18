@@ -1,4 +1,79 @@
 <?php
+
+add_action('wp_ajax_solicitar_cancelamento_reserva', 'processar_solicitacao_cancelamento');
+
+function processar_solicitacao_cancelamento()
+{
+  global $wpdb;
+
+  // Sanitização básica
+  $order_id     = intval($_POST['order_id']);
+  $variation_id = intval($_POST['variation_id']);
+  $user_id      = get_current_user_id();
+
+  // Recebe a array de IDs (ex: ['1234', '1235'])
+  $passageiros_ids = isset($_POST['passageiros']) ? $_POST['passageiros'] : [];
+
+  if (empty($passageiros_ids)) {
+    wp_send_json_error("Nenhum passageiro selecionado.");
+  }
+
+  $wpdb->query('START TRANSACTION');
+
+  try {
+    // 1. Inserir na tabela de cancelamentos para histórico e gestão admin
+    $ins_cancel = $wpdb->insert('aer_cancelamentos', [
+      'order_id'         => $order_id,
+      'user_id'          => $user_id,
+      'variation_id'     => $variation_id,
+      'passageiros'      => json_encode($passageiros_ids), // Armazena os IDs
+      'status'           => 'pendente'
+    ]);
+
+    if (!$ins_cancel) throw new Exception("Falha ao registrar solicitação.");
+
+    // 2. Atualizar o status de cada reserva específica para 'pending_cancel'
+    foreach ($passageiros_ids as $reserva_id) {
+      $update = $wpdb->update(
+        'aer_reservas',
+        ['status' => 'pending_cancel'],
+        ['id' => intval($reserva_id), 'order_id' => $order_id]
+      );
+      if ($update === false) throw new Exception("Erro ao atualizar reserva ID: $reserva_id");
+    }
+
+    $wpdb->query('COMMIT');
+
+    // 3. Notificação por E-mail
+    // $to = get_option('admin_email');
+    // $subject = "⚠️ Pedido de Cancelamento - Pedido #$order_id";
+    // $message = "Uma nova solicitação de cancelamento foi aberta para $order_id.\n";
+    // $message .= "IDs das reservas: " . implode(', ', $passageiros_ids) . "\n";
+    // $message .= "Motivo: " . ($motivo ?: "Não informado");
+
+    // wp_mail($to, $subject, $message);
+    wp_send_json_success('enviou email com sucesso');
+  } catch (Exception $e) {
+    $wpdb->query('ROLLBACK');
+    wp_send_json_error($e->getMessage());
+  }
+}
+
+
+// if ($resultado) {
+//   // Envio de E-mail para o Admin
+//   // $to = get_option('admin_email');
+//   // $subject = "⚠️ Novo Pedido de Cancelamento - Pedido #$order_id";
+//   // $message = "O usuário solicitou o cancelamento para os seguintes passageiros:\n\n";
+//   // foreach($passageiros as $p) { $message .= "- $p\n"; }
+//   // $message .= "\nMotivo: " . ($motivo ?: "Não informado");
+
+//   // wp_mail($to, $subject, $message);
+//   wp_send_json_success('Solicitação de cancelamento enviada com sucesso!');
+// } else {
+//   wp_send_json_error("Erro ao registrar no banco de dados.");
+// }
+// }
 //ENVIA SOLICITAÇÃO DE TROCA DE EMBARQUE PARA O ADMINISTRADOR
 add_action('wp_ajax_solicitar_alteracao_embarque', 'solicitar_alteracao_embarque');
 function solicitar_alteracao_embarque()
@@ -123,7 +198,10 @@ function ajax_get_excursoes()
         //Adiciona quantidade de passageiros
         $_v_id = $var['variation_id'];
         $pax_qty = $wpdb->get_var(
-          "SELECT COUNT(*) FROM aer_reservas WHERE variation_id = $_v_id AND status = 'normal'"
+          $wpdb->prepare(
+            "SELECT COUNT(*) FROM aer_reservas WHERE variation_id = %d AND status != 'cancel'",
+            $_v_id
+          )
         );
         $this_var['pax_qty'] = intval($pax_qty);
 

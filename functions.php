@@ -1,379 +1,41 @@
 <?php
 $root_url = get_stylesheet_directory_uri();
 
-// WOCOOMMERCE RESET
-
-/**
- * Remove todos os estilos padrão do WooCommerce
- */
-add_filter('woocommerce_enqueue_styles', '__return_empty_array');
-
-// Remove o script de checkout do WooCommerce (que inclui o bloco de pagamento)
-add_action(
-  'wp_enqueue_scripts',
-  function () {
-    wp_dequeue_script('wc-checkout');
-    if (is_checkout()) {
-      wp_dequeue_script('wc-cart-fragments');
-    }
-  },
-  100
-);
-
-// FIM WOOCOMMERCE RESET
-
-//--------------------
-
-// HEADER
-
-// Inclui os estilos otimizados diretamente no header
-require_once get_template_directory() . '/includes/optimize-assets.php';
-add_action('wp_head', 'aer_inject_optimized_css', 10);
-
-// Carrega as funções de template e SEO
-require_once get_template_directory() .
-  '/includes/functions/header-setup-functions.php';
-
-// Enqueue Bootstrap Icons
-function enqueue_bootstrap_icons()
-{
-  wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css', array(), '1.11.3');
-}
-add_action('wp_enqueue_scripts', 'enqueue_bootstrap_icons');
-
-// FIM HEADER
-
-//---------------------
-
-// FOOTER
-
+// Localize script com URLs do site para uso em JS
 wp_enqueue_script('theme-links', get_template_directory_uri() . '/js/main.js', array(), '1.0', true);
 wp_localize_script('theme-links', 'themeLinks', [
   'adminUrl' => admin_url(),
-  'adminAjaxUrl' => admin_url('admin-ajax.php'),
+  'ajaxUrl' => admin_url('admin-ajax.php'),
   'siteUrl' => get_site_url(),
   'cartUrl' => wc_get_cart_url(),
   'stylesheetUrl' => get_stylesheet_directory_uri(),
 ]);
 
-// FIM FOOTER
+// ÁREA DE INCLUDES
+require_once get_template_directory() . '/includes/header-functions.php';
+require_once get_template_directory() . '/includes/woocommerce-functions.php';
+require_once get_template_directory() . '/includes/utilities.php';
 
-//---------------------
+require_once get_template_directory() . '/admin-head-scripts.php';
+require_once get_template_directory() . '/admin-footer-scripts.php';
+require_once get_template_directory() . '/admin-ajax-hooks.php';
+require_once get_template_directory() . '/email-hooks.php';
+require_once get_template_directory() . '/exc-passageiros-admin.php';
+require_once get_template_directory() . '/includes/preview-emails.php';
+require_once get_template_directory() . '/includes/functions/login-functions.php';
+require_once get_template_directory() . '/includes/functions/refunds-functions.php';
+require_once get_template_directory() . '/includes/cards-slider.php';
+require_once get_template_directory() . '/includes/functions/sort-excursoes.php';
+require_once get_template_directory() . '/includes/functions/coupons-functions.php';
+require_once get_template_directory() . '/includes/functions/blog.php';
+require_once get_template_directory() . '/includes/functions/general-customize.php';
+require_once get_template_directory() . '/includes/functions/process-product-meta.php';
+require_once get_template_directory() . '/includes/afiliados/pdv-functions.php';
 
-/**
- * 1. Cria a página no menu Ferramentas
- */
-add_action('admin_menu', function () {
-  add_management_page(
-    'Migração de Reservas',
-    'Migrar Reservas',
-    'manage_options',
-    'migrar-reservas-tool',
-    'render_migracao_page'
-  );
-});
+// require_once get_template_directory() . '/includes/functions/contrato.php';
 
-/**
- * 2. Renderiza o HTML da página
- */
-function render_migracao_page()
-{
-?>
-  <div class="wrap">
-    <h1>Migração de Pedidos para Tabela de Reservas</h1>
-    <p>Configurações para processamento de pedidos (IDs <strong>420</strong> a <strong>1006</strong>).</p>
 
-    <div style="background: #fff; padding: 15px; border: 1px solid #ccd0d4; margin-bottom: 20px; border-radius: 4px;">
-      <label style="display: block; margin-bottom: 10px;">
-        <input type="checkbox" id="test-mode" checked>
-        <strong>Modo Teste</strong> (Apenas simula a migração e exibe os dados tratados)
-      </label>
 
-      <button id="start-migration" class="button button-primary" data-ajax="<?= admin_url(
-                                                                              'admin-ajax.php'
-                                                                            ) ?>">Iniciar Migração</button>
-      <button id="stop-migration" class="button button-secondary" disabled>Parar Processo</button>
-    </div>
-
-    <div id="migration-log" style="margin-top: 20px; padding: 15px; background: #222; color: #0f0; font-family: monospace; height: 450px; overflow-y: scroll; border-radius: 5px; line-height: 1.6; font-size: 12px;">
-      > Aguardando comando...<br>
-    </div>
-  </div>
-
-  <script>
-    jQuery(document).ready(function($) {
-      let isRunning = false;
-      let totalProcessed = 0; // Contador acumulativo
-
-      $('#start-migration').on('click', function() {
-        isRunning = true;
-        totalProcessed = 0; // Reseta ao iniciar
-        $(this).prop('disabled', true).text('Processando...');
-        $('#stop-migration').prop('disabled', false);
-        $('#test-mode').prop('disabled', true);
-        $('#migration-log').html('> Iniciando processamento a partir do ID 420...<br>');
-
-        processBatch(420); // Início definido no ID 420
-      });
-
-      $('#stop-migration').on('click', function() {
-        isRunning = false;
-        $(this).prop('disabled', true).text('Parando...');
-      });
-
-      function processBatch(currentId) {
-        const maxId = 1006;
-        const batchSize = 5;
-        const isTest = $('#test-mode').is(':checked');
-
-        if (!isRunning) {
-          $('#migration-log').append('<br><span style="color:red;">[INTERROMPIDO] Processo parado pelo usuário. Total processado até agora: ' + totalProcessed + '</span>');
-          resetButtons();
-          return;
-        }
-
-        if (currentId > maxId) {
-          const corFinal = isTest ? 'cyan' : 'white';
-          $('#migration-log').append('<br><span style="color:' + corFinal + '; font-weight:bold; font-size: 14px;">[CONCLUÍDO] Fim do intervalo. Total de registros afetados/simulados: ' + totalProcessed + '</span>');
-          resetButtons();
-          return;
-        }
-
-        $.ajax({
-          url: ajaxurl,
-          method: 'POST',
-          data: {
-            action: 'executar_migracao_ajax',
-            start_id: currentId,
-            end_id: Math.min(currentId + batchSize - 1, maxId),
-            test_mode: isTest ? 1 : 0
-          },
-          success: function(response) {
-            if (response.success) {
-              $('#migration-log').append(response.data.logs);
-              totalProcessed += response.data.count; // Soma o contador vindo do PHP
-              $('#migration-log').scrollTop($('#migration-log')[0].scrollHeight);
-
-              processBatch(currentId + batchSize);
-            }
-          },
-          error: function(_e) {
-            $('#migration-log').append('<span style="color:red;">> ERRO CRÍTICO NA REQUISIÇÃO.</span><br>');
-            resetButtons();
-          }
-        });
-      }
-
-      function resetButtons() {
-        isRunning = false;
-        $('#start-migration').prop('disabled', false).text('Iniciar Migração');
-        $('#stop-migration').prop('disabled', true).text('Parar Processo');
-        $('#test-mode').prop('disabled', false);
-      }
-    });
-  </script>
-  <?php
-}
-
-/**
- * 3. Lógica de Processamento (Back-end)
- */
-add_action('wp_ajax_executar_migracao_ajax', function () {
-  global $wpdb;
-  $tabela_destino = 'aer_reservas_bkp';
-
-  $start_id = intval($_POST['start_id']);
-  $end_id = intval($_POST['end_id']);
-  $test_mode = filter_var($_POST['test_mode'], FILTER_VALIDATE_BOOLEAN);
-
-  $logs = '';
-  $count = 0; // Contador deste lote
-
-  for ($order_id = $start_id; $order_id <= $end_id; $order_id++) {
-    $order = wc_get_order($order_id);
-
-    if (!$order) {
-      $logs .= "ID #$order_id: <span style='color:#555;'>Inexistente</span><br>";
-      continue;
-    }
-
-    $passageiro_meta = $order->get_meta('passageiro');
-    if (empty($passageiro_meta)) {
-      $logs .= "Pedido #$order_id: <span style='color:orange;'>Sem meta 'passageiro'</span><br>";
-      continue;
-    }
-
-    $passageiro = is_string($passageiro_meta)
-      ? json_decode($passageiro_meta, true)
-      : $passageiro_meta;
-
-    if (!is_array($passageiro)) {
-      $logs .= "Pedido #$order_id: <span style='color:red;'>JSON corrompido</span><br>";
-      continue;
-    }
-
-    // Tratamento da string de embarque (remove os 8 últimos caracteres)
-    if (isset($passageiro['embarque'])) {
-      $passageiro['embarque'] = substr($passageiro['embarque'], 0, -8);
-    }
-
-    // Captura IDs
-    $user_id = $order->get_user_id();
-    $items = $order->get_items();
-    $variation_id = 0;
-    foreach ($items as $item) {
-      $variation_id = $item->get_variation_id() ?: $item->get_product_id();
-      break;
-    }
-
-    $dados_insercao = [
-      'p_nome' => $passageiro['nome_completo'] ?? '',
-      'p_cpf' => $passageiro['cpf'] ?? '',
-      'p_telefone' => $passageiro['telefone'] ?? '',
-      'embarque' => $passageiro['embarque'] ?? '',
-      'status' => $passageiro['status'] ?? '',
-      'user_id' => $user_id,
-      'variation_id' => $variation_id,
-      'order_id' => $order_id
-    ];
-
-    if ($test_mode) {
-      $count++;
-      $logs .=
-        "Pedido #$order_id: <span style='color:#00ffff;'>[TESTE]</span> " .
-        $dados_insercao['p_nome'] .
-        ' | Status: ' .
-        $dados_insercao['status'] .
-        '<br>';
-    } else {
-      $resultado = $wpdb->insert($tabela_destino, $dados_insercao);
-
-      if ($resultado) {
-        $count++;
-        $logs .= "Pedido #$order_id: <span style='color:#0f0;'>MIGRADO</span> ({$dados_insercao['p_nome']})<br>";
-      } else {
-        $logs .=
-          "Pedido #$order_id: <span style='color:red;'>ERRO DB: " .
-          $wpdb->last_error .
-          '</span><br>';
-      }
-    }
-  }
-
-  wp_send_json_success([
-    'logs' => $logs,
-    'count' => $count // Retorna quantos registros foram processados com sucesso neste lote
-  ]);
-});
-
-function slugify($str, $delimiter = '-')
-{
-  $slug = strtolower(
-    trim(
-      preg_replace(
-        '/[\s-]+/',
-        $delimiter,
-        preg_replace(
-          '/[^A-Za-z0-9-]+/',
-          $delimiter,
-          preg_replace(
-            '/[&]/',
-            'and',
-            preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))
-          )
-        )
-      ),
-      $delimiter
-    )
-  );
-  return $slug;
-}
-
-//Número de produtos na página de arquivo
-add_action('pre_get_posts', 'mostrar_todos_produtos_shop');
-
-function mostrar_todos_produtos_shop($query)
-{
-  // Aplica apenas no front-end, na query principal e na página de loja/categoria
-  if (
-    !is_admin() &&
-    $query->is_main_query() &&
-    (is_shop() || is_product_category() || is_product_tag())
-  ) {
-    $query->set('posts_per_page', -1); // '-1' remove o limite e a paginação
-  }
-}
-
-// Filtra a listagem de produtos no arquivo para mostrar apenas datas futuras
-add_action('pre_get_posts', function ($query) {
-  if (
-    !is_admin() &&
-    $query->is_main_query() &&
-    (is_shop() || is_product_category() || is_product_tag())
-  ) {
-    $hoje = date('Ymd');
-
-    $meta_query = (array) $query->get('meta_query');
-    $meta_query[] = [
-      'key' => 'data_limite_excursao',
-      'value' => $hoje,
-      'compare' => '>=',
-      'type' => 'NUMERIC'
-    ];
-
-    $query->set('meta_query', $meta_query);
-    $query->set('meta_key', 'data_limite_excursao');
-    $query->set('orderby', 'meta_value_num');
-    $query->set('order', 'ASC');
-  }
-});
-
-//Remove a exibição de cross-sell do cart
-remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
-
-//Medidas de imagens
-add_image_size('card_img_size', 300, 95);
-add_image_size('blog_card_thumb', 330, 220);
-
-//ADICIONAR SUPORTE WOOCOMMERCE
-function aerotour_add_woocommercer_support()
-{
-  add_theme_support('woocommerce');
-}
-add_action('after_setup_theme', 'aerotour_add_woocommercer_support');
-
-// include 'includes/initial-setup.php';
-
-include 'utilities.php';
-include 'admin-head-scripts.php';
-include 'admin-footer-scripts.php';
-include 'admin-ajax-hooks.php';
-include 'email-hooks.php';
-include 'exc-passageiros-admin.php';
-
-include 'includes/preview-emails.php';
-include 'includes/functions/login-functions.php';
-include 'includes/functions/refunds-functions.php';
-include 'includes/cards-slider.php';
-// include 'includes/functions/contrato.php';
-include 'includes/functions/sort-excursoes.php';
-include 'includes/functions/coupons-functions.php';
-include 'includes/functions/blog.php';
-include 'includes/functions/general-customize.php';
-include 'includes/functions/process-product-meta.php';
-include 'includes/afiliados/pdv-functions.php';
-
-function remover_breadcrumb_em_arquivos_woocommerce()
-{
-  if (is_product_category() || is_shop() || is_product_tag()) {
-    remove_action(
-      'woocommerce_before_main_content',
-      'woocommerce_breadcrumb',
-      20
-    );
-  }
-}
-add_action('wp', 'remover_breadcrumb_em_arquivos_woocommerce');
 
 /* Adiciona campos ao formulário de registro */
 function campos_registro()
@@ -968,25 +630,7 @@ function terms_and_conditions_validation($username, $email, $validation_errors)
 }
 /* Fim Termos e condições */
 
-/* Ponto de venda em cart_collaterals */
-add_action('woocommerce_review_order_before_payment', 'exibe_pdv');
-function exibe_pdv()
-{
-?>
-  <div class="cart_collaterals_pdv">
-    <p>Ponto de venda: <span></span></p>
-    <input type="hidden" name="pdv">
-    <script>
-      if (window.sessionStorage.getItem('aer_pdv')) {
-        document.querySelector('input[name="pdv"]').value = window.sessionStorage.getItem('aer_pdv');
-        document.querySelector('.cart_collaterals_pdv span').innerText = window.sessionStorage.getItem('aer_pdv').replace(/\_/g, ' ');
-      } else document.querySelector('.cart_collaterals_pdv').remove();
-    </script>
-  </div>
 
-<?php
-}
-/* Fim Ponto de venda em cart_collaterals */
 
 /* Valida adição ao carrinho */
 add_filter(
@@ -1107,12 +751,7 @@ function filter_function_name($title, $sep, $seplocation)
   return $title;
 }
 
-//Função utilitária para versionar assets (CSS e JS) com base na data de modificação do arquivo
-function aer_get_asset_version($path)
-{
-  $file = get_stylesheet_directory() . $path;
-  return file_exists($file) ? filemtime($file) : '1.0.0';
-}
+
 
 // Função para atualizar a data limite do produto pai baseada nas variações
 function aer_atualizar_data_limite_produto($product_id)
@@ -1150,43 +789,6 @@ function aer_atualizar_data_limite_produto($product_id)
     );
   }
 }
-
-// /**
-//  * Script para processar todos os produtos e indexar a data limite
-//  * Execute este script apenas uma vez.
-//  */
-// function aer_mass_update_trip_dates()
-// {
-//   // Apenas administradores podem disparar via URL
-//   if (
-//     !isset($_GET['update_aer_dates']) ||
-//     !current_user_can('manage_options')
-//   ) {
-//     return;
-//   }
-
-//   $args = [
-//     'post_type' => 'product',
-//     'posts_per_page' => -1,
-//     'fields' => 'ids' // Puxa apenas IDs para economizar memória
-//   ];
-
-//   $products = get_posts($args);
-//   $count = 0;
-
-//   foreach ($products as $product_id) {
-//     $product = wc_get_product($product_id);
-
-//     // Verificamos se é um produto variável (como as suas excursões)
-//     if ($product && $product->is_type('variable')) {
-//       aer_atualizar_data_limite_produto($product_id);
-//       $count++;
-//     }
-//   }
-
-//   wp_die("Sucesso! $count produtos foram indexados com a nova lógica de data.");
-// }
-// add_action('admin_init', 'aer_mass_update_trip_dates');
 
 // Executa sempre que um produto for salvo/atualizado
 add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');
@@ -1267,14 +869,6 @@ if (is_admin()) {
       null,
       true
     );
-
-    //CLASSE CHECK IN WIDGET SEM REACT
-    // wp_enqueue_script('check-in-widget', get_template_directory_uri() . '/js/admin-panel-widgets/check-in-widget/check-in-widget.js', array('jquery'), null, true);
-
-    //CLASSE CHECK IN WIDGET COM REACT
-    // wp_enqueue_script('checkin-modal', get_template_directory_uri() . 'dist/assets/checkin_widget.js',['wp-element'], filemtime(plugin_dir_path(__FILE__) . 'dist/assets/checkin_widget.js'), true);
-
-    // wp_add_inline_script('checkin-widget', 'new CheckInModal();', 'after');
   }
   add_action('admin_enqueue_scripts', 'admin_custom_scripts');
 

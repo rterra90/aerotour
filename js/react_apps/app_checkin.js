@@ -3919,7 +3919,7 @@
             passageiro.volta = passageiro.volta === "1";
           });
           const passageirosNormais = _passageiros.filter(
-            (p) => p.status === "normal"
+            (p) => p.status !== "cancel"
           );
           const passageirosCancelados2 = _passageiros.filter(
             (p) => p.status === "cancel"

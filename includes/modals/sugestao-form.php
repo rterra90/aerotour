@@ -39,7 +39,7 @@
 
 
       try {
-        const response = await fetch(themeLinks.adminAjaxUrl, {
+        const response = await fetch(themeLinks.ajaxUrl, {
           method: 'POST',
           body: formData
         });

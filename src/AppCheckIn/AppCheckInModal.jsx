@@ -82,7 +82,7 @@ const AppCheckInModal = ({
 
         // separa por status
         const passageirosNormais = _passageiros.filter(
-          (p) => p.status === 'normal',
+          (p) => p.status !== 'cancel',
         );
         const passageirosCancelados = _passageiros.filter(
           (p) => p.status === 'cancel',
