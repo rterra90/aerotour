@@ -99,11 +99,11 @@ function solicitar_alteracao_embarque()
     $message .= "- " . sanitize_text_field($p) . "\n";
   }
 
-  // $sent = wp_mail($to, $subject, $message);
+  $sent = wp_mail($to, $subject, $message);
 
-  $sent_test = true; // Simula envio bem-sucedido para testes
+  // $sent_test = true; // Simula envio bem-sucedido para testes
 
-  if ($sent_test) {
+  if ($sent) {
     wp_send_json_success();
   } else {
     wp_send_json_error("Falha ao enviar e-mail.");
