@@ -69,7 +69,7 @@ if ($meta_embarques) {
               </div>
             </div>
 
-            <div class="aviso-troca-embarque">
+            <div class="aviso">
               <small class="text-muted d-block">
                 <i class="bi bi-info-circle me-1"></i> A solicitação de troca de embarque está sujeita à disponibilidade e aprovação da equipe <?= bloginfo('name'); ?>.
               </small>

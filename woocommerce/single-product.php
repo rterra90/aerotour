@@ -1,38 +1,5 @@
 <?php
 get_header();
-// JSON-LD
-if ($product) {
-  $jsonLd = [
-    '@context' => 'https://schema.org/',
-    '@type' => 'Product',
-    'name' => 'Excursão ' . $product->get_name(),
-    'image' => wp_get_attachment_url($product->get_image_id()),
-    'description' => wp_strip_all_tags($product->get_short_description()),
-    'brand' => [
-      '@type' => 'Brand',
-      'name' => 'Aerotour Excursões'
-    ],
-    'offers' => [
-      '@type' => 'Offer',
-      'priceCurrency' => 'BRL',
-      'price' => $product->get_price() . '.00',
-      'availability' => $product->is_in_stock()
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-      'url' => get_permalink($product->get_id()),
-      'seller' => [
-        '@id' => 'https://www.aerotour.com.br/'
-      ]
-    ]
-  ];
-}
-echo '<script type="application/ld+json">' .
-  json_encode(
-    $jsonLd,
-    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
-  ) .
-  '</script>';
-// FIM JSON-LD
 
 $user = wp_get_current_user();
 $user_meta = get_user_meta($user->ID);
@@ -122,6 +89,51 @@ usort($datas, function ($a, $b) {
   $dataB = DateTime::createFromFormat('d/m/Y', $b);
   return $dataA <=> $dataB;
 });
+
+
+// JSON-LD
+$date_obj = DateTime::createFromFormat('d/m/Y', $datas[0]);
+$start_date = $date_obj->format('Y-m-d');
+$ultima_data = get_post_meta($product->get_id(), 'data_limite_excursao', true);
+$is_encerrada = date('Ymd') > $ultima_data;
+if ($product) {
+  $jsonLd = [
+    '@context' => 'https://schema.org/',
+    '@type' => ['Product', 'Event'],
+    'name' => 'Excursão ' . $product->get_name(),
+    'image' => wp_get_attachment_url($product->get_image_id()),
+    'description' => wp_strip_all_tags($product->get_short_description()),
+    'startDate' => $start_date,
+    'eventStatus' => $is_encerrada 
+        ? 'https://schema.org/EventMovedOnline'
+        : 'https://schema.org/EventScheduled',
+    'brand' => [
+      '@type' => 'Brand',
+      'name' => 'Aerotour Excursões'
+    ],
+    'offers' => [
+      '@type' => 'Offer',
+      'priceCurrency' => 'BRL',
+      'price' => $product->get_price() . '.00',
+      'availability' => $is_encerrada 
+            ? 'https://schema.org/Discontinued' 
+            : 'https://schema.org/InStock',
+      'url' => get_permalink($product->get_id()),
+      'seller' => [
+            '@type' => 'Organization',
+            'name' => 'Aerotour Excursões',
+            'url' => 'https://www.aerotour.com.br/'
+      ]
+    ]
+  ];
+}
+echo '<script type="application/ld+json">' .
+  json_encode(
+    $jsonLd,
+    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+  ) .
+  '</script>';
+// FIM JSON-LD
 ?>
 <style>
   #avisoModal {
@@ -285,7 +297,14 @@ if ($redirect_link) { ?>
           <h1><span>Excursão<br /></span><?= $excursao['nome'] ?></h1>
 
           <!-- SOCIAL SHARE -->
-          <div class="share">
+          <?php
+          if($is_encerrada){
+              ?>
+              <span>Excursão encerrada</span>
+              <?php
+          }else{
+              ?>
+              <div class="share">
             <span>Compartilhe</span>
             <div class="share-icons d-flex gap-2">
               <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons(
@@ -304,6 +323,11 @@ if ($redirect_link) { ?>
               </a>
             </div>
           </div>
+              <?php
+          }
+          
+          ?>
+          
           <!-- FIM SOCIAL SHARE -->
 
         </div>

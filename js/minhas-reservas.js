@@ -1,61 +1,4 @@
 // Script para validar o formulário de solicitação de troca de embarque
-// document.querySelectorAll('.form-solicitar-embarque').forEach(form => {
-//   const selectPonto = form.querySelector('.select-novo-ponto');
-//     const checkboxes = form.querySelectorAll('.check-passageiro');
-//     const btnEnviar = form.querySelector('button[type="submit"]');
-//     btnEnviar.disabled = true
-    
-//     function validarFormulario() {
-//         const pontoSelecionado = selectPonto.value !== "";
-//         const algumPassageiroCheck = Array.from(checkboxes).some(cb => cb.checked);
-
-//         // Habilita o botão apenas se ambos os critérios forem atendidos
-//         btnEnviar.disabled = !(pontoSelecionado && algumPassageiroCheck);
-//     }
-
-//     selectPonto.addEventListener('change', validarFormulario);
-//     checkboxes.forEach(cb => cb.addEventListener('change', validarFormulario));
-//     form.addEventListener('submit', function(e) {
-//         e.preventDefault();
-        
-//         const passageirosSelecionados = Array.from(this.querySelectorAll('input[name="passageiros[]"]:checked'));
-        
-//         if (passageirosSelecionados.length === 0) {
-//             alert("Por favor, selecione pelo menos um passageiro.");
-//             return;
-//         }
-
-//         const btn = this.querySelector('button[type="submit"]');
-//         btn.disabled = true;
-//         btn.innerHTML = 'Enviando...';
-
-//         const formData = new FormData(this);
-//         formData.append('action', 'solicitar_alteracao_embarque');
-//         fetch(themeLinks.ajaxUrk, {
-//             method: 'POST',
-//             body: formData
-//         })
-//         .then(res => res.json())
-//         .then(data => {
-//             if(data.success) {
-//                 // Encontra o modal atual
-//                 const modalElement = form.closest('.modal-content');
-                
-//                 // Esconde todos os elementos do formulário e o título original
-//                 modalElement.querySelectorAll('.secao-form').forEach(el => el.classList.add('d-none'));
-                
-//                 // Mostra a seção de sucesso
-//                 modalElement.querySelector('.secao-sucesso').classList.remove('d-none');
-//             } else {
-//                 alert("Erro ao enviar: " + data.data);
-//                 btn.disabled = false;
-//                 btn.innerText = 'Enviar Solicitação';
-//             }
-//             btn.disabled = false;
-//             btn.innerText = 'Enviar Solicitação';
-//         });
-//     });
-// });
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- 1. VALIDAÇÃO DE BOTÕES ---
@@ -109,11 +52,34 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.success) {
                     // Esconde o formulário e mostra a seção de sucesso
                     modalContent.querySelectorAll('.secao-form').forEach(el => el.classList.add('d-none'));
                     modalContent.querySelector('.secao-sucesso').classList.remove('d-none');
+
+                    if(action == 'solicitar_cancelamento_reserva'){
+                        // 1. Calcula data limite para conclusão
+                        const dataHoje = new Date();
+                        dataHoje.setDate(dataHoje.getDate() + 10);
+                        // Formata para o padrão brasileiro dd/mm/aaaa
+                        const dataFormatada = dataHoje.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        })
+                        // Injeta a data no campo do modal
+                        const displayData = modalContent.querySelector('.data-limite-cancelamento');
+                        if (displayData) {
+                            displayData.innerText = dataFormatada;
+                        }
+
+                        // 2. Captura os dados para atualizar o Card e os outros Modais
+                        const idsCancelados = Array.from(form.querySelectorAll('input[name="passageiros[]"]:checked')).map(cb => cb.value);
+                        const cardChave = form.closest('.modal').id.replace('modal-cancelar-', ''); // Pega a chave da reserva do ID do modal
+
+                        atualizarInterfacePosCancelamento(cardChave, idsCancelados);
+                    }
+                    
                 } else {
                     alert('Erro: ' + (data.data || 'Falha na requisição'));
                     btn.disabled = false;
@@ -141,4 +107,43 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializa as funções
     gerenciarValidacao();
     configurarEnvios();
+
+    
+    function atualizarInterfacePosCancelamento(chave, idsCancelados) {
+    // 1. Localiza o Card e os Modais específicos dessa reserva
+    const card = document.querySelector(`.card-wrapper[data-chave="${chave}"]`);
+    const modalPassageiros = document.getElementById(`modal-passageiros-${chave}`);
+        console.log(modalPassageiros);
+
+    // 2. Adiciona o Alerta no Card (se ainda não existir)
+    if (card && !card.querySelector('.alert-warning')) {
+        const alertaHTML = `
+            <div class="alert alert-warning py-2 mb-2" style="font-size: 0.75rem;">
+                <i class="bi bi-hourglass-split me-1"></i>Há uma solicitação de cancelamento aberta para esta reserva.
+            </div>`;
+        card.querySelector('.card-body').insertAdjacentHTML('beforebegin', alertaHTML);
+    }
+
+    // 3. Atualiza os passageiros em TODOS os modais
+    idsCancelados.forEach(id => {
+        // Seleciona as linhas/inputs referentes a este passageiro específico em todos os modais
+        const seletores = [modalPassageiros];
+        
+        seletores.forEach(modal => {
+            if (!modal) return;
+            const container = modal.querySelector(`li[data-res-id="${id}"]`)
+            if (container) {
+                // Aplica estilo visual de desabilitado
+                container.classList.add('bg-light', 'opacity-75');
+
+                // Adiciona a Badge de Pendente (se não existir)
+                if (!container.querySelector('.badge-warning') && !container.querySelector('.bi-hourglass-split')) {
+                    const badge = '<span class="badge bg-warning-subtle text-warning small ms-2">Cancelamento pendente</span>';
+                    // Insere na div de conteúdo do passageiro
+                    container.insertAdjacentHTML('beforeend', badge);
+                }
+            }
+        });
+    });
+}
 });

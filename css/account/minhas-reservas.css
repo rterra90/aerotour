@@ -50,7 +50,7 @@ main {
     from { transform: scale(0); }
     to { transform: scale(1); }
 }
-.modal .aviso-troca-embarque{
+.modal .aviso{
     background-color: #fff3cd;
     border: 1px solid #ffeeba;
     color: #856404;
@@ -58,6 +58,9 @@ main {
     border-radius: 6px;
     margin-top: 12px;
     font-size: .825rem;
+}
+.modal .aviso a{
+    font-weight: 600;
 }
 .reservas-wrapper .card-wrapper {
 /* max-width: 360px; */

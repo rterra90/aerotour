@@ -59,7 +59,7 @@
 
         <?php if ($res['wpp_link']): ?>
           <a href="<?= $res['wpp_link']; ?>" target="_blank" class="btn btn-success btn-sm rounded-pill py-2">
-            <i class="bi bi-whatsapp me-2"></i> Grupo da Viagem
+            <i class="bi bi-whatsapp me-2"></i> Grupo de WhatsApp
           </a>
         <?php endif; ?>
       </div>
@@ -84,7 +84,7 @@
         class="action-item cancelar-option"
         data-bs-toggle="modal"
         data-bs-target="#modal-cancelar-<?= $res['chave']; ?>">
-        <i class="bi bi-trash3 mb-1" style="font-size: 1.1rem;"></i>
+        <i class="bi bi-x-circle mb-1" style="font-size: 1.1rem;"></i>
         <span>Cancelar reserva</span>
       </a>
     </div>

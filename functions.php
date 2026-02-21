@@ -15,10 +15,10 @@ wp_localize_script('theme-links', 'themeLinks', [
 require_once get_template_directory() . '/includes/header-functions.php';
 require_once get_template_directory() . '/includes/woocommerce-functions.php';
 require_once get_template_directory() . '/includes/utilities.php';
+require_once get_template_directory() . '/includes/functions/ajax-hooks.php';
 
 require_once get_template_directory() . '/admin-head-scripts.php';
 require_once get_template_directory() . '/admin-footer-scripts.php';
-require_once get_template_directory() . '/admin-ajax-hooks.php';
 require_once get_template_directory() . '/email-hooks.php';
 require_once get_template_directory() . '/exc-passageiros-admin.php';
 require_once get_template_directory() . '/includes/preview-emails.php';
@@ -803,20 +803,23 @@ require_once get_template_directory() . '/endpoints/api_user_get.php';
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN
 if (is_admin()) {
   // include_once get_template_directory() . '/includes/admin-pages/panel-widgets/gerenciar-exc-widgets.php'; // widget check-in
-  include_once get_template_directory() .
+  require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/check-in/check-in-widget.php'; // widget check-in
-  include_once get_template_directory() .
+  require_once get_template_directory() .
     '/includes/admin-pages/reservas-admin.php'; //página Reservas
-  include_once get_template_directory() .
+  require_once get_template_directory() .
     '/includes/admin-pages/embarques/embarques-admin.php'; //página Embarques
-  include_once get_template_directory() .
+  require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/home-cards-widget.php'; // widget home cards
-  include_once get_template_directory() .
+  require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/campanhas_cupons_widget.php'; // widget campanhas cupons
-  include_once get_template_directory() .
+  require_once get_template_directory() .
     '/includes/admin-pages/cancelamentos-admin.php';
-  include_once get_template_directory() .
+  require_once get_template_directory() .
     '/includes/admin-pages/exc-embarques-admin.php';
+
+  //   require_once get_template_directory() .
+  // '/includes/admin-pages/fluxo-adicionar-excursao.php'; // widget check-in
 
   //ADMIN CUSTOM SCRIPTS
   function admin_custom_scripts()
