@@ -132,7 +132,19 @@ main {
     font-weight: 600;
     color: var(--aer-accent); /* Cor de destaque para o mês */
 }
-
+ .terceiros-badge{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 7px 10px  4px;
+    background: white;
+    border-radius: .5rem;
+ }
+ .terceiros-badge i{
+    font-size: 1.25rem;
+    color: var(--aer-bg-dark);
+    line-height: 1;
+ }
 /* Grid de Informações Rápidas */
 .info-grid {
     background: #fcfcfc;

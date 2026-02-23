@@ -16,6 +16,7 @@ require_once get_template_directory() . '/includes/header-functions.php';
 require_once get_template_directory() . '/includes/woocommerce-functions.php';
 require_once get_template_directory() . '/includes/utilities.php';
 require_once get_template_directory() . '/includes/functions/ajax-hooks.php';
+require_once get_template_directory() . '/includes/functions/usuarios-functions.php';
 
 require_once get_template_directory() . '/admin-head-scripts.php';
 require_once get_template_directory() . '/admin-footer-scripts.php';
@@ -149,9 +150,7 @@ function add_fields_to_edit_account_form()
       <p class="woocommerce-form-row woocommerce-form-row--wide form-row">
         <label for="<?= $campo[1] ?>"><?= $campo[0] ?></label>
         <?php if ($campo[0] == 'CPF' && $value !== '') { ?>
-          <input disabled type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" id="<?= $campo[1] ?>" value="<?php echo cpf_mask(
-                                                                                                                                                  $value
-                                                                                                                                                ); ?>" />
+          <input disabled type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" id="<?= $campo[1] ?>" value="<?php echo cpf_mask($value); ?>" />
         <?php } else { ?>
           <input type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" name="<?= $campo[1] ?>" id="<?= $campo[1] ?>" value="<?php echo $value; ?>" />
         <?php } ?>
@@ -165,6 +164,8 @@ function add_fields_to_edit_account_form()
 
 function save_account_details_form($customer_id)
 {
+  global $wpdb; // Acesso ao banco de dados do WordPress
+
   $campos = [
     ['Telefone', 'billing_phone'],
     ['CPF', 'cpf'],
@@ -172,14 +173,16 @@ function save_account_details_form($customer_id)
     ['Data de nascimento', 'data_nasc'],
     ['Cidade', 'billing_city']
   ];
-  foreach ($campos as $campo) {
-    if (isset($_POST[$campo[1]])) {
-      $_value = $_POST[$campo[1]];
-      if ($campo[1] == 'cpf') {
-        $_value = str_replace('-', '', str_replace('.', '', $_POST[$campo[1]]));
-      }
 
-      update_user_meta($customer_id, $campo[1], sanitize_text_field($_value));
+  foreach ($campos as $campo) {
+    $meta_key = $campo[1];
+
+    if (isset($_POST[$meta_key])) {
+      // Sanitização básica inicial
+      $_value = sanitize_text_field($_POST[$meta_key]);
+
+      // Atualiza no banco de dados
+      update_user_meta($customer_id, $meta_key, sanitize_text_field($_value));
     }
   }
 }
@@ -276,8 +279,11 @@ function pagamento_completed($order_id)
     foreach ($passageiros as $passageiro) {
       //Obtém o ID do usuário titular do pedido
       $order_user_id = $order->get_customer_id();
+
+      // ID do usuário do site para quem é a reserva. Pode não ser para o titular da conta. À frente, verificaremos se existe user no site que corresponde à pessoa da reserva
       $reserva_user_id = 0;
 
+      // Eu uso user_login como parâmetro para verificar se o usuário existe; antigamente o user_login era o cpf do usuário. hoje em dia, é o e-mail.
       $user_nickname = wp_get_current_user()->user_login;
       if (is_numeric($user_nickname)) {
         //usuários antigos, com CPF no nickname
@@ -348,7 +354,7 @@ function pagamento_completed($order_id)
         'volta' => 3
       ];
       $rota = $mapaRota[$passageiro->tripType] ?? null;
-
+      $cpf_sanitizado = str_replace('-', '', str_replace('.', '', $passageiro->cpf));
       $wpdb->query(
         "INSERT INTO `aer_reservas` (`ID`, `user_id`, `order_user_id`, `variation_id`, `order_id`, `status`, `p_nome`, `p_cpf`, `p_telefone`, `embarque`, `horario`, `data_nasc`, `rota`) VALUES (NULL, '" .
           $reserva_user_id .
@@ -361,7 +367,7 @@ function pagamento_completed($order_id)
           "', 'normal', '" .
           $passageiro->nome_completo .
           "', '" .
-          $passageiro->cpf .
+          $cpf_sanitizado .
           "', '" .
           $passageiro->celular .
           "', '" .

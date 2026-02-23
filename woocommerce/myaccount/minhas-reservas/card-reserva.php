@@ -1,4 +1,14 @@
-<?php $res = $args['res']; ?>
+<?php $res = $args['res'];
+
+if (count($res['passageiros']) === 1) {
+  if ((int)$res['passageiros'][0]['order_user_id'] !== (int)wp_get_current_user()->ID) {
+    $pedido_de_terceiro = true;
+  } else {
+    $pedido_de_terceiro = false;
+  }
+}
+
+?>
 <div class="card-wrapper col-md-4" data-chave="<?= $res['chave']; ?>">
 
   <div class="booking-card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative">
@@ -15,6 +25,15 @@
           ?>
         </span>
       </div>
+      <?php
+      if ($pedido_de_terceiro) {
+      ?>
+        <div class="terceiros-badge">
+          <i class="bi bi-person-bounding-box"></i>
+        </div>
+      <?php
+      }
+      ?>
     </div>
     <?php if (in_array('pending_cancel', array_column($res['passageiros'], 'status'))): ?>
       <div class="alert alert-warning py-2 mb-2" style="font-size: 0.75rem;">

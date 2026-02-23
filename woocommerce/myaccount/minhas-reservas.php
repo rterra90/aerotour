@@ -4,15 +4,45 @@ global $wpdb;
 $current_user_id = wp_get_current_user()->ID;
 $ativas_agrupadas = [];
 $canceladas_agrupadas = [];
+$user_cpf = get_user_meta($current_user_id, 'cpf', true);
+
+if ($user_cpf) {
+  $reservas_db = $wpdb->get_results($wpdb->prepare(
+    "SELECT * FROM `aer_reservas` WHERE p_cpf = %s OR order_user_id = %d",
+    $user_cpf,
+    $current_user_id
+  ), ARRAY_A);
+
+  // Corrige o user_id da reserva no banco de dados se necessário
+  if (!empty($reservas_db)) {
+    foreach ($reservas_db as $reserva) {
+
+      // Verifica se o user_id da reserva é diferente do ID do usuário logado
+      if ((int)$reserva['user_id'] !== (int)$current_user_id) {
+
+        // Executa a atualização na tabela
+        $wpdb->update(
+          'aer_reservas',
+          array('user_id' => $current_user_id), // Dados a serem alterados
+          array('id'      => $reserva['ID']),   // Onde (ajuste 'id' para o nome da sua chave primária)
+          array('%d'),                          // Formato do dado alterado
+          array('%d')                           // Formato do WHERE
+        );
+      }
+    }
+  }
+} else {
+  $reservas_db = $wpdb->get_results($wpdb->prepare(
+    "SELECT * FROM `aer_reservas` WHERE user_id = %d OR order_user_id = %d",
+    $current_user_id,
+    $current_user_id
+  ), ARRAY_A);
+}
 
 
 
 // 1. Busca de dados: obtém todas as reservas associadas ao usuário (tanto como comprador quanto como passageiro)
-$reservas_db = $wpdb->get_results($wpdb->prepare(
-  "SELECT * FROM `aer_reservas` WHERE user_id = %d OR order_user_id = %d",
-  $current_user_id,
-  $current_user_id
-), ARRAY_A);
+
 
 
 
@@ -40,7 +70,9 @@ foreach ($reservas_db as $reg) {
     'doc'  => $reg['p_cpf'] ?: '',
     'telefone' => $reg['p_telefone'] ?: '',
     'status' => $reg['status'],
-    'is_me' => ($reg['user_id'] == $current_user_id)
+    'is_me' => ($reg['user_id'] == $current_user_id),
+    'order_user_id' => $reg['order_user_id'],
+    // 'sou_dono' => $reg['order_user_id'] == $current_user_id,
   ];
 
   // --- FILTRO 1: SE ESTIVER CANCELADA ---

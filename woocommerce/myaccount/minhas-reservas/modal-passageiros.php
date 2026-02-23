@@ -13,7 +13,7 @@
             <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3" data-res-id="<?= $p['res_id'] ?>">
               <div>
                 <span class="fw-bold d-block"><?= $p['nome']; ?></span>
-                <small class="text-muted d-block">Documento: <?= $p['doc']; ?></small>
+                <small class="text-muted d-block">Documento: <?= cpf_mask($p['doc']); ?></small>
                 <small class="text-muted d-block">Telefone: <?= $p['telefone']; ?></small>
               </div>
               <?php if ($p['status'] === 'pending_cancel'): ?>
