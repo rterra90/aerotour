@@ -48,7 +48,7 @@
   padding-left: 40px;
   padding-right: 40px;
 }
-#form-login .mostra-senha {
+/* #form-login .mostra-senha {
   position: relative;
   width: 100%;
 }
@@ -60,7 +60,7 @@
   position: absolute;
   right: 14px;
   top: -55px;
-}
+} */
 #form-login .form-login-end {
   display: flex;
   flex-direction: column;
@@ -187,4 +187,72 @@ form#emailRegisterForm {
 }
 .woocommerce-form span.required {
   display: none;
+}
+/* 1. Container principal para alinhar os elementos filhos */
+.form-row-password-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* 2. Ajuste no Input para dar espaço ao ícone à direita */
+#reg_password {
+    width: 100%;
+    padding-right: 40px !important; /* Abre espaço para o olho não sobrepor o texto */
+    box-sizing: border-box;
+}
+
+/* 3. Posicionamento do Ícone de Olho */
+.mostra-senha {
+    position: absolute;
+    right: 10px;
+    top: 28px; /* Ajuste conforme a altura do seu Label */
+    cursor: pointer;
+    color: #666;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    height: 35px; /* Alinha verticalmente com o centro do input */
+}
+
+/* 4. Estilização do Medidor de Força (WooCommerce) */
+.woocommerce-password-strength {
+    text-align: center;
+    font-weight: 600;
+    padding: 6px 10px;
+    margin: 10px 0 5px 0;
+    font-size: 0.85em;
+    border-radius: 4px;
+    display: block;
+}
+
+/* Cores dinâmicas para o medidor */
+.woocommerce-password-strength.bad { 
+    background-color: #f2dede; 
+    color: #a94442; 
+    border: 1px solid #ebccd1; 
+}
+.woocommerce-password-strength.short { 
+    background-color: #f2dede; 
+    color: #a94442; 
+}
+.woocommerce-password-strength.good { 
+    background-color: #fcf8e3; 
+    color: #8a6d3b; 
+    border: 1px solid #faebcc; 
+}
+.woocommerce-password-strength.strong { 
+    background-color: #dff0d8; 
+    color: #3c763d; 
+    border: 1px solid #d6e9c6; 
+}
+
+/* 5. Estilização da Dica (Texto pequeno) */
+.woocommerce-password-hint {
+    display: block;
+    margin-top: 5px;
+    line-height: 1.4;
+    color: #666;
+    font-size: 0.8em;
 }

@@ -92,7 +92,7 @@ $show_placeholder = false; ?>
         <div class="secao-sucesso d-none p-5 text-center">
           <i class="bi bi-info-circle-fill text-warning" style="font-size: 4rem;"></i>
           <h4 class="fw-bold mt-3">Solicitação recebida</h4>
-          <p class="text-muted">Sua solicitação de cancelamento foi registrada. O prazo para conclusão e estorno, quando elegível, é de até 10 dias.<br /></p>
+          <p class="text-muted">Sua solicitação de cancelamento foi registrada. O prazo para conclusão e estorno, quando elegível, é de até 05 dias úteis.<br /></p>
 
           <div class="alert alert-light border-0 small">
             <i class="bi bi-clock-history me-1"></i>

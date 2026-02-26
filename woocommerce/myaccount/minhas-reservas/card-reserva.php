@@ -1,10 +1,8 @@
 <?php $res = $args['res'];
-
+$pedido_de_terceiro = false;
 if (count($res['passageiros']) === 1) {
   if ((int)$res['passageiros'][0]['order_user_id'] !== (int)wp_get_current_user()->ID) {
     $pedido_de_terceiro = true;
-  } else {
-    $pedido_de_terceiro = false;
   }
 }
 
@@ -85,11 +83,18 @@ if (count($res['passageiros']) === 1) {
     </div>
     <div class="action-bar d-flex justify-content-around align-items-center py-2 mb-1 border-top border-bottom border-light mx-n4 bg-light-subtle">
 
-      <a href="<?= wc_get_endpoint_url('view-order', $res['order_id'], wc_get_page_permalink('myaccount')); ?>"
-        class="action-item text-secondary">
-        <i class="bi bi-receipt mb-1" style="font-size: 1.1rem;"></i>
-        <span>Ver pedido</span>
-      </a>
+      <?php
+      if (!$pedido_de_terceiro) {
+      ?>
+        <a href="<?= wc_get_endpoint_url('view-order', $res['order_id'], wc_get_page_permalink('myaccount')); ?>"
+          class="action-item text-secondary">
+          <i class="bi bi-receipt mb-1" style="font-size: 1.1rem;"></i>
+          <span>Ver pedido</span>
+        </a>
+      <?php
+      }
+      ?>
+
 
       <a href="#"
         class="action-item text-secondary"

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Aerotour: Funções de Lógica de Template e Busca de Dados
  */
@@ -90,28 +91,49 @@ function aer_get_active_campaigns()
  */
 function aer_inject_tracking_scripts()
 {
+  // Lista de IPs de localhost (IPv4 e IPv6)
+  $whitelist = array('127.0.0.1', '::1');
+  $localhost_url = $_SERVER['HTTP_HOST'] === 'localhost';
+  $is_localhost = in_array($_SERVER['REMOTE_ADDR'], $whitelist) || $localhost_url;
+
   if (current_user_can('administrator')) {
     return;
   } ?>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-F1239QYGYB');
-    </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-    <script>
-        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-        document,'script','https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '704341881591730');
-        fbq('track', 'PageView');
-    </script>
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-F1239QYGYB');
+  </script>
 
-    <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719"></script>
-    <?php
+  <script>
+    ! function(f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function() {
+        n.callMethod ?
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = '2.0';
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window,
+      document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '704341881591730');
+    fbq('track', 'PageView');
+  </script>
+
+  <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9214010465016719"></script>
+<?php
 }
 add_action('wp_head', 'aer_inject_tracking_scripts');

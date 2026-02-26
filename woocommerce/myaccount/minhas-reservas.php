@@ -17,17 +17,18 @@ if ($user_cpf) {
   if (!empty($reservas_db)) {
     foreach ($reservas_db as $reserva) {
 
-      // Verifica se o user_id da reserva é diferente do ID do usuário logado
+      // Verifica se user_id da reserva é diferente do ID do usuário e se o CPF é igual
       if ((int)$reserva['user_id'] !== (int)$current_user_id) {
-
-        // Executa a atualização na tabela
-        $wpdb->update(
-          'aer_reservas',
-          array('user_id' => $current_user_id), // Dados a serem alterados
-          array('id'      => $reserva['ID']),   // Onde (ajuste 'id' para o nome da sua chave primária)
-          array('%d'),                          // Formato do dado alterado
-          array('%d')                           // Formato do WHERE
-        );
+        if ($reserva['p_cpf'] === $user_cpf) {
+          // Executa a atualização na tabela
+          $wpdb->update(
+            'aer_reservas',
+            array('user_id' => $current_user_id), // Dados a serem alterados
+            array('id'      => $reserva['ID']),   // Onde (ajuste 'id' para o nome da sua chave primária)
+            array('%d'),                          // Formato do dado alterado
+            array('%d')                           // Formato do WHERE
+          );
+        }
       }
     }
   }

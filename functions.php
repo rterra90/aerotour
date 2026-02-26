@@ -1,6 +1,80 @@
 <?php
 $root_url = get_stylesheet_directory_uri();
 
+// 1. Criar o Widget no Dashboard
+add_action('wp_dashboard_setup', 'aer_add_csv_import_widget');
+
+function aer_add_csv_import_widget()
+{
+  wp_add_dashboard_widget(
+    'aer_reserva_import_box',         // ID do Widget
+    'Importar Passageiros (CSV)',     // Título
+    'aer_reserva_import_display'      // Função de exibição
+  );
+}
+
+// 2. Interface do Widget
+function aer_reserva_import_display()
+{
+  // Verificar se o formulário foi enviado
+  if (isset($_POST['aer_import_nonce']) && wp_verify_nonce($_POST['aer_import_nonce'], 'aer_csv_upload')) {
+    aer_handle_csv_upload();
+  }
+?>
+  <form method="post" enctype="multipart/form-data">
+    <?php wp_nonce_field('aer_csv_upload', 'aer_import_nonce'); ?>
+    <p>Selecione o arquivo .csv com os passageiros:</p>
+    <input type="file" name="aer_csv_file" accept=".csv" required />
+    <p style="font-size: 11px; color: #666;">
+      Formato esperado: Nome Completo, CPF, Telefone, Embarque
+    </p>
+    <?php submit_button('Importar Passageiros'); ?>
+  </form>
+  <?php
+}
+
+// 3. Processamento do CSV e Inserção no Banco
+function aer_handle_csv_upload()
+{
+  global $wpdb;
+  $table_name = 'aer_reservas'; // Ajuste se o prefixo for diferente
+
+  if (!empty($_FILES['aer_csv_file']['tmp_name'])) {
+    $file = fopen($_FILES['aer_csv_file']['tmp_name'], 'r');
+    $count = 0;
+
+    // Ignorar o cabeçalho se o seu CSV tiver um
+    // fgetcsv($file); 
+
+    while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
+      // $data[0] = Nome, $data[1] = CPF, $data[2] = Telefone, $data[3] = Embarque
+
+      $wpdb->insert(
+        $table_name,
+        array(
+          'user_id'       => 0,
+          'order_user_id' => 0,
+          'variation_id'  => 5572,
+          'order_id'      => 0,
+          'status'        => 'normal',
+          'p_nome'        => sanitize_text_field($data[0]),
+          'p_cpf'         => sanitize_text_field($data[1]),
+          'p_telefone'    => sanitize_text_field($data[2]),
+          'embarque'      => sanitize_text_field($data[3]),
+          'horario'       => '00:00', // Valor padrão caso a coluna exija
+          'saida'         => 0,
+          'volta'         => 0,
+          'data_nasc'     => null,
+          'rota'          => 1
+        )
+      );
+      $count++;
+    }
+    fclose($file);
+    echo "<div class='updated'><p>Sucesso! $count passageiros importados.</p></div>";
+  }
+}
+
 // Localize script com URLs do site para uso em JS
 wp_enqueue_script('theme-links', get_template_directory_uri() . '/js/main.js', array(), '1.0', true);
 wp_localize_script('theme-links', 'themeLinks', [
@@ -260,125 +334,83 @@ function pagamento_processing($order_id)
   }
 }
 
-add_action('woocommerce_order_status_completed', 'pagamento_completed');
-function pagamento_completed($order_id)
+add_action('woocommerce_order_status_completed', 'pagamento_completed_otimizado');
+
+function pagamento_completed_otimizado($order_id)
 {
   global $wpdb;
   $order = wc_get_order($order_id);
+  $order_user_id = $order->get_customer_id(); // ID de quem comprou
   $passageiros_items = get_post_meta($order_id, 'passageiros_items', true);
+
+  if (empty($passageiros_items)) return;
 
   $p_index = 0;
   foreach ($order->get_items() as $order_item) {
-    $passageiros = $passageiros_items[$p_index]['passageiros'];
-    // $passageiros = array_filter($passageiros, function ($item){ if($item !== false) return $item; });
-    $embarque = $passageiros_items[$p_index]['embarque'];
-    $horario = $passageiros_items[$p_index]['horario'];
-    $variation_id = $passageiros_items[$p_index]['variation_id'];
-    $p_index = $p_index + 1;
+    $item_data = $passageiros_items[$p_index] ?? null;
+    if (!$item_data) continue;
+
+    $passageiros  = $item_data['passageiros'] ?? [];
+    $embarque_id  = $item_data['embarque'] ?? 0;
+    $horario      = $item_data['horario'] ?? '';
+    $variation_id = $item_data['variation_id'] ?? 0;
+    $p_index++;
+
+    // Obtém o nome do embarque uma única vez por item do pedido 
+    $nome_embarque = $wpdb->get_var($wpdb->prepare(
+      "SELECT nome FROM aer_embarques WHERE id = %d",
+      $embarque_id
+    ));
 
     foreach ($passageiros as $passageiro) {
-      //Obtém o ID do usuário titular do pedido
-      $order_user_id = $order->get_customer_id();
+      // Sanitização do CPF do passageiro 
+      $cpf_limpo = preg_replace('/\D/', '', $passageiro->cpf);
+      $reserva_user_id = null; // Padrão: nulo se não encontrar conta
 
-      // ID do usuário do site para quem é a reserva. Pode não ser para o titular da conta. À frente, verificaremos se existe user no site que corresponde à pessoa da reserva
-      $reserva_user_id = 0;
+      // Lógica Unificada: Busca se o passageiro já tem conta no site
+      if (!empty($cpf_limpo)) {
+        // 1. Tenta pelo username (logins antigos com CPF) 
+        $user_by_login = get_user_by('login', $cpf_limpo);
 
-      // Eu uso user_login como parâmetro para verificar se o usuário existe; antigamente o user_login era o cpf do usuário. hoje em dia, é o e-mail.
-      $user_nickname = wp_get_current_user()->user_login;
-      if (is_numeric($user_nickname)) {
-        //usuários antigos, com CPF no nickname
-        // $reserva_user_id = $passageiro -> doc != $user_nickname ? 0 : $order_user_id;
-
-        if ($passageiro->doc != $user_nickname) {
-          if (username_exists($passageiro->doc)) {
-            $reserva_user_id = username_exists($passageiro->doc);
-          } else {
-            $args = [
-              'meta_key' => 'cpf',
-              'meta_value' => $passageiro->doc,
-              'number' => 1,
-              'count_total' => false,
-              'fields' => 'ID'
-            ];
-            $user_query = new WP_User_Query($args);
-            if (!empty($user_query->get_results())) {
-              $reserva_user_id = $user_query->get_results()[0];
-            } else {
-              $reserva_user_id = 0;
-            }
-          }
+        if ($user_by_login) {
+          $reserva_user_id = $user_by_login->ID;
         } else {
-          $reserva_user_id = $order_user_id;
-        }
-      } else {
-        //usuários novos, com email no nickname
-
-        //CPF meta do usuário atual que está fazendo o pedido
-        $cpf_current_user = get_user_meta(get_current_user_id(), 'cpf', true);
-
-        if ((int) $passageiro->doc !== (int) $cpf_current_user) {
-          if (username_exists($passageiro->doc)) {
-            //Verifica se existe user antigo com o cpf no user_login
-            $reserva_user_id = username_exists($passageiro->doc);
-          } else {
-            //Verifica se existe user novo com o cpf no meta 'cpf'
-
-            $args = [
-              'meta_key' => 'cpf',
-              'meta_value' => $passageiro->doc,
-              'number' => 1,
-              'count_total' => false,
-              'fields' => 'ID'
-            ];
-            $user_query = new WP_User_Query($args);
-
-            // Verifica se encontrou algum usuário
-            if (!empty($user_query->get_results())) {
-              $reserva_user_id = $user_query->get_results()[0];
-            } else {
-              $reserva_user_id = 0;
-            }
+          // 2. Tenta pelo Meta CPF (logins novos)
+          $user_query = new WP_User_Query([
+            'meta_key'    => 'cpf',
+            'meta_value'  => $cpf_limpo,
+            'number'      => 1,
+            'fields'      => 'ID',
+          ]);
+          $results = $user_query->get_results();
+          if (!empty($results)) {
+            $reserva_user_id = $results[0];
           }
-        } else {
-          $reserva_user_id = $order_user_id;
         }
       }
 
-      $nome_embarque = $wpdb->get_results(
-        "SELECT nome from aer_embarques WHERE id = $embarque"
-      );
-      $nome_embarque = $nome_embarque[0]->nome;
-      $mapaRota = [
-        'ida-e-volta' => 1,
-        'ida' => 2,
-        'volta' => 3
-      ];
+      // Mapeamento de Rota
+      $mapaRota = ['ida-e-volta' => 1, 'ida' => 2, 'volta' => 3];
       $rota = $mapaRota[$passageiro->tripType] ?? null;
-      $cpf_sanitizado = str_replace('-', '', str_replace('.', '', $passageiro->cpf));
-      $wpdb->query(
-        "INSERT INTO `aer_reservas` (`ID`, `user_id`, `order_user_id`, `variation_id`, `order_id`, `status`, `p_nome`, `p_cpf`, `p_telefone`, `embarque`, `horario`, `data_nasc`, `rota`) VALUES (NULL, '" .
-          $reserva_user_id .
-          "', '" .
-          $order_user_id .
-          "', '" .
-          $variation_id .
-          "', '" .
-          $order_id .
-          "', 'normal', '" .
-          $passageiro->nome_completo .
-          "', '" .
-          $cpf_sanitizado .
-          "', '" .
-          $passageiro->celular .
-          "', '" .
-          $nome_embarque .
-          "', '" .
-          $horario .
-          "', '" .
-          $passageiro->data_nascimento .
-          "', '" .
-          $rota .
-          "')"
+
+      // Inserção Segura no Banco 
+      $wpdb->insert(
+        "aer_reservas",
+        array(
+          'user_id'       => $reserva_user_id, // ID do passageiro ou NULL
+          'order_user_id' => $order_user_id,   // ID do comprador
+          'variation_id'  => $variation_id,
+          'order_id'      => $order_id,
+          'status'        => 'normal',
+          'p_nome'        => sanitize_text_field($passageiro->nome_completo),
+          'p_cpf'         => $cpf_limpo,
+          'p_telefone'    => sanitize_text_field($passageiro->celular),
+          'embarque'      => $nome_embarque,
+          'horario'       => $horario,
+          'data_nasc'     => $passageiro->data_nascimento,
+          'rota'          => $rota
+        ),
+        array('%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d')
       );
     }
   }

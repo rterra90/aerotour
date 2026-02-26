@@ -395,7 +395,7 @@ function ajax_send_email()
 
         // filtrar $emails retornando apenas o elementos a partir do index 43
         // $emails = array_slice($emails, 83);
-        // $emails = [''];
+        $emails = ['rterragd@hotmail.com'];
 
         //para ser consumido no template do e-mail
         $email_params = [
@@ -555,7 +555,7 @@ function ajax_send_email()
 
 function get_email_body($email_template, $email_params)
 {
-  $arquivo_email = __DIR__ . '/emails/' . $email_template . '.php';
+  $arquivo_email = dirname(__DIR__, 2) . '/emails/' . $email_template . '.php'; // AQUI
 
   if (file_exists($arquivo_email)) {
     ob_start(); // Inicia o buffer para capturar a saída do arquivo
