@@ -40,11 +40,11 @@ $user = wp_get_current_user();
                                             $background_img
                                           ) ?>" fetchpriority="high"><?php }
 
-                          if ($focus_img) { ?>
+                                                                    if ($focus_img) { ?>
     <link rel="preload" as="image" href="<?= esc_url(
-                                            $focus_img
-                                          ) ?>" fetchpriority="high"><?php }
-                            ?>
+                                                                        $focus_img
+                                                                      ) ?>" fetchpriority="high"><?php }
+                                                                                                  ?>
 
   <?php $campanhas_ativas = aer_get_active_campaigns(); ?>
 
@@ -123,7 +123,7 @@ $user = wp_get_current_user();
   } else {
   ?>
     <div id="top-header">
-      <h1 class="mb-0 h6">Excursões para shows eventos é com a Aerotour! <?= $_SERVER['REMOTE_ADDR']; ?></h1>
+      <h1 class="mb-0 h6">Excursões para shows eventos é com a Aerotour!</h1>
     </div>
   <?php
   }
@@ -151,13 +151,13 @@ $user = wp_get_current_user();
       set_transient('aer_campanhas_ativas', $campanhas_ativas, HOUR_IN_SECONDS);
     }
     ?> <?php if (isset($campanhas_ativas[0])) {
-      $campanha_atual = $campanhas_ativas[0];
-      include 'includes/modals/roleta.php';
-      // if(is_user_logged_in()){
-      //   if(wp_get_current_user() -> ID == 42  || wp_get_current_user() -> ID == 70)
-      //   include 'includes/modals/roleta.php';
-      // }
-    } ?>
+          $campanha_atual = $campanhas_ativas[0];
+          include 'includes/modals/roleta.php';
+          // if(is_user_logged_in()){
+          //   if(wp_get_current_user() -> ID == 42  || wp_get_current_user() -> ID == 70)
+          //   include 'includes/modals/roleta.php';
+          // }
+        } ?>
 
 
     <div class="topbar d-flex justify-between py-3">
@@ -166,12 +166,12 @@ $user = wp_get_current_user();
           <img src="<?= esc_url(
                       get_theme_mod('aer_logo')
                     ) ?>" alt="<?= esc_attr(
-                        get_post_meta(
-                          attachment_url_to_postid(get_theme_mod('aer_logo')),
-                          '_wp_attachment_image_alt',
-                          true
-                        )
-                      ) ?>">
+                                  get_post_meta(
+                                    attachment_url_to_postid(get_theme_mod('aer_logo')),
+                                    '_wp_attachment_image_alt',
+                                    true
+                                  )
+                                ) ?>">
         </a>
       </div>
       <div class="navbar-flex-wrapper">
@@ -203,8 +203,8 @@ $user = wp_get_current_user();
                                                                       16,
                                                                       16
                                                                     ) ?><span><?= is_user_logged_in()
-                            ? $user->display_name
-                            : 'Olá, visitante' ?></span></div>
+                                                                                ? $user->display_name
+                                                                                : 'Olá, visitante' ?></span></div>
               <?php if (is_user_logged_in()) { ?>
                 <div class="user-menu-container user-menu-btn" data-dropdown-target="user-menu-modal">
 
