@@ -352,7 +352,10 @@ echo '<script type="application/ld+json">' .
           </section>
 
           <!-- cta button -->
-          <a href="#reservaBox" class="cta-button" aria-label="Reservar lugar na excursão <?= $excursao['nome'] ?>" onclick="gtag('event', 'clique_reservar_cta', {
+          <a href="#reservaBox"
+            class="cta-button"
+            aria-label="Reservar lugar na excursão <?= $excursao['nome'] ?>"
+            onclick="gtag('event', 'clique_reservar_cta', {
                   'event_category': 'ads',
                   'event_label': 'clique_reservar_cta',
                   'value': 1
@@ -360,132 +363,44 @@ echo '<script type="application/ld+json">' .
             <?= aer_icons('bookmark-light', 16, 16, '.webp') ?> Reservar agora
           </a>
 
-
-          <h2>Informações sobre a excursão</h2>
-
-          <!-- TABS NAVIGATION -->
-          <div class="tab-container">
-            <div class="tab-nav">
-              <button class="tab-btn active" data-tab="tab1" onclick="gtag('event', 'tab_como_funciona', {
+          <!-- INFORMAÇÕES SOBRE A EXCURSÃO EM TABS -->
+          <section id="informacoes-excursao">
+            <h2>Informações sobre a excursão</h2>
+            <div class="tab-container">
+              <!-- TAB BUTTONS -->
+              <div class="tab-nav">
+                <button class="tab-btn active" data-tab="tab1" onclick="gtag('event', 'tab_como_funciona', {
                   'event_category': 'ads',
                   'event_label': 'tab_como_funciona',
                   'value': 1
                 })">Como funciona</button>
-              <button class="tab-btn" data-tab="tab2" onclick="gtag('event', 'tab_locais_embarque', {
+                <button class="tab-btn" data-tab="tab2" onclick="gtag('event', 'tab_locais_embarque', {
                   'event_category': 'ads',
                   'event_label': 'tab_locais_embarque',
                   'value': 1
                 })">Locais de embarque</button>
-              <button class="tab-btn" data-tab="tab3" onclick="gtag('event', 'tab_principais_duvidas', {
+                <button class="tab-btn" data-tab="tab3" onclick="gtag('event', 'tab_principais_duvidas', {
                   'event_category': 'ads',
                   'event_label': 'tab_principais_duvidas',
                   'value': 1
                 })">Principais dúvidas</button>
-            </div>
-
-            <!-- TAB CONTENT COMO FUNCIONA -->
-            <div id="tab1" class="tab-content tab-como-funciona active">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item bg-transparent">Transporte para o evento, ida e volta.</li>
-                <li class="list-group-item bg-transparent">Grupo exclusivo no WhatsApp para comunicação.</li>
-                <li class="list-group-item bg-transparent">Retorno logo após o final do evento. No caso de festivais, será considerado o final da última apresentação musical do palco principal.</li>
-                <li class="list-group-item bg-transparent">No retorno, os desembarques acontecem nos mesmos pontos.</li>
-                <li class="list-group-item bg-transparent">O desembarque e estacionamento do veículo no local do evento dependem das condições e orientações de trânsito local.</li>
-                <li class="list-group-item bg-transparent">Tolerância para retorno ao veículo a ser definida de acordo com as condições de cada evento. Em geral, é de 1h após o final do evento.</li>
-                <li class="list-group-item bg-transparent">Incluso monitoria e água a bordo.</li>
-                <li class="list-group-item bg-transparent">NÃO inclui ingresso para os eventos.</li>
-              </ul>
-            </div>
-
-            <!-- TAB CONTENT EMBARQUES -->
-            <div id="tab2" class="tab-content tab-embarques">
-              <div class="embarque-container">
-                <div class="filtro-header">
-                  <span>Filtre por <br />cidade:</span>
-                  <div class="filtro-wrapper">
-                    <button class="scroll-btn left" id="scrollLeft">&#9664;</button>
-                    <div class="filtro-scroll" id="filtroCidades">
-                      <button class="filtro-btn active" data-cidade="todas">Todas</button>
-                      <?php
-                      //iterar $excursao['embarques'], obter a string $embarque['nome'], dividir essa string em ' - ', retornar o primeiro termo, armazenar em uma array única e ordenar em ordem alafabetica
-                      $cidades = array_unique(
-                        array_map(function ($_emb) {
-                          return strtolower(
-                            trim(explode(' - ', $_emb['nome'])[0])
-                          );
-                        }, $excursao['embarques'])
-                      );
-                      sort($cidades);
-
-                      foreach ($cidades as $cidade) { ?>
-                        <button class="filtro-btn" data-cidade="<?= $cidade ?>"><?= ucfirst(
-                                                                                  $cidade
-                                                                                ) ?></button>
-
-
-                      <?php }
-                      ?>
-
-                      <button class="filtro-btn" data-cidade="indaiatuba">Indaiatuba</button>
-                    </div>
-                    <button class="scroll-btn right" id="scrollRight">&#9654;</button>
-                  </div>
-                </div>
-
-                <div class="lista-embarque" id="listaEmbarque">
-                  <?php foreach ($excursao['embarques'] as $i => $embarque) {
-                    $horarios_simples = array_unique(
-                      array_map(function ($_op) {
-                        return $_op['horario'];
-                      }, $embarque['horarios'])
-                    );
-                    // o single product antigo tem funções para lidar com múltiplos horários
-                  ?>
-                    <div class="item-embarque" data-cidade="<?= strtolower(
-                                                              trim(explode(' - ', $embarque['nome'])[0])
-                                                            ) ?>">
-                      <div class="item-embarque-info">
-                        <p class="nome-embarque"><?= $embarque['nome'] ?></p>
-                        <span>Endereço:</span>
-                        <p><?= $embarque['endereco'] ?></p>
-                        <span>Referência para embarque:</span>
-                        <p><?= $embarque['obs'] ?></p>
-                      </div>
-                      <div class="detalhes">
-                        <div class="horario"><?= $horarios_simples[0] ?></div>
-                        <div class="mapa"><a href="<?= $embarque['link_mapa'] ?>" target="_blank">Ver no mapa</a></div>
-                      </div>
-                    </div>
-
-                  <?php
-                  } ?>
-                  <div class="mostrar-tudo-btn d-none" data-cidade="todas">Mostrar tudo</div>
-                </div>
               </div>
-            </div>
 
-            <!-- TAB CONTENT PRINCIPAIS DÚVIDAS -->
-            <div id="tab3" class="tab-content tab-duvidas">
-              <dl id="principaisDuvidasContent">
-                <dt class="text-start pergunta fw-bold mb-1">• A excursão inclui ingresso para os eventos?</dt>
-                <dd class="text-start resposta">Não. Nós não comercializamos ingressos, a menos que expressamente informado, e recomendamos a compra apenas em pontos de venda autorizados.</dd>
-                <dt class="text-start pergunta fw-bold mb-1">• É possível reservar apenas ida ou volta?</dt>
-                <dd class="text-start resposta">Sim, porém não há diferenciação nos valores. Cada reserva na excursão representa um lugar reservado por toda a viagem — ida e volta. Você poderá informar durante o processo de reserva se deseja utilizar o transporte em apenas um dos sentidos ou pela viagem toda. Essa informação é importante para controle do embarque de passageiros, mas não impede que o passageiro altere seus planos se precisar.</dd>
-                <dt class="text-start pergunta fw-bold mb-1">• Como saber se há disponibilidade de vagas?</dt>
-                <dd class="text-start resposta">As vagas são gerenciadas pelo próprio site. Enquanto houver vagas, estará disponível para reservas. Um aviso em amarelo surgirá quando estivermos na últimas vagas, e um aviso em vermelho indicará que as vagas estão esgotadas.</dd>
-                <dt class="text-start pergunta fw-bold mb-1">• É preciso encaminhar comprovante de pagamento por e-mail?</dt>
-                <dd class="text-start resposta">Não, você não precisa encaminhar nenhum tipo de comprovante após fazer sua reserva com a Aerotour. Você receberá um email de confirmação de reserva e você também poderá vê-la na página "Minhas reservas", na sua área logada aqui no site.</dd>
-                <dt class="text-start pergunta fw-bold mb-1">• Como acessar o grupo de WhatsApp da excursão?</dt>
-                <dd class="text-start resposta">Os grupos são criados 5 dias antes da data da excursão. Quem reservar antes desse período, receberá um e-mail com o link para acesso assim que o grupo for disponibilizado. Caso contrário, o link será enviado no e-mail de confirmação de reserva. Também será possível acessar o grupo por meio da página <b>Minhas reservas</b>.</dd>
-                <dt class="text-start pergunta fw-bold mb-1">• É permitido deixar pertences no veículo?</dt>
-                <dd class="text-start resposta">De forma geral, não há impedimentos para quem deseja deixar algum item no interior do veículo durante os eventos. No entanto, não dispomos de serviço de guarda de objetos e não assumimos a responsabilidade por eles. Por isso, não recomendamos que sejam deixados objetos de valor.</dd>
-                <dt class="text-start pergunta fw-bold mb-1">• Em qual tipo de veículo será feito o transporte?</dt>
-                <dd class="text-start resposta">As excursões podem acontecer em veículos como ônibus e micro-ônibus executivos ou vans. A definição depende da demanda de passageiros para cada excursão, visando garantir a eficiência, conforto e segurança da viagem</dd>
-                <dt class="text-start pergunta fw-bold mb-1">• Qual o itinerário da viagem?.</dt>
-                <dd class="text-start resposta">Em excursões para São Paulo, organizamos as excursões em duas rotas. Uma delas inclui Sumaré, Hortolândia, Paulínia e Campinas(Unicamp). A outra inclui Salto, Indaiatuba e Campinas (Largo do Pará). Os passageiros de Valinhos, Vinhedo e Jundiaí são acomodados conforme a disponiblidade dos veículos. Para outros destinos, as definições ocorrem de acordo com a rota.</dd>
-              </dl>
+              <!-- TAB CONTENT COMO FUNCIONA -->
+              <?php
+              if (has_term('rock-in-rio', 'product_cat')) get_template_part('woocommerce/single-product/tab', 'como-funciona-rir');
+              else get_template_part('woocommerce/single-product/tab', 'como-funciona');
+              ?>
+
+              <!-- TAB CONTENT EMBARQUES -->
+              <?php get_template_part('woocommerce/single-product/tab', 'embarques', ['exc_embarques' => $excursao['embarques']]); ?>
+
+              <!-- TAB CONTENT PRINCIPAIS DÚVIDAS -->
+              <?php get_template_part('woocommerce/single-product/tab', 'duvidas'); ?>
             </div>
-          </div>
+          </section>
+
+
         </div>
 
       </div>

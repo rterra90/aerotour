@@ -395,7 +395,7 @@ function ajax_send_email()
 
         // filtrar $emails retornando apenas o elementos a partir do index 43
         // $emails = array_slice($emails, 83);
-        $emails = ['rterragd@hotmail.com'];
+        // $emails = ['rterragd@hotmail.com'];
 
         //para ser consumido no template do e-mail
         $email_params = [
