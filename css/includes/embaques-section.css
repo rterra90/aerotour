@@ -26,6 +26,15 @@
   padding: 0 20px 0 20px;
 }
 
+.badge-dia-anterior{
+    color: #212529;
+    background-color: #ffdd76;
+    font-size: .65rem;
+    margin-bottom: 6px;
+    position: relative;
+    top: -6px;
+}
+
 .filtro-scroll {
   display: flex;
   overflow-x: auto;
