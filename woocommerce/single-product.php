@@ -393,7 +393,9 @@ echo '<script type="application/ld+json">' .
               ?>
 
               <!-- TAB CONTENT EMBARQUES -->
-              <?php get_template_part('woocommerce/single-product/tab', 'embarques', ['exc_embarques' => $excursao['embarques']]); ?>
+              <?php if (has_term('rock-in-rio', 'product_cat')) get_template_part('woocommerce/single-product/tab', 'embarques-rir', ['exc_embarques' => $excursao['embarques']]);
+              else get_template_part('woocommerce/single-product/tab', 'embarques', ['exc_embarques' => $excursao['embarques']])
+              ?>
 
               <!-- TAB CONTENT PRINCIPAIS DÚVIDAS -->
               <?php get_template_part('woocommerce/single-product/tab', 'duvidas'); ?>
@@ -415,7 +417,7 @@ echo '<script type="application/ld+json">' .
           data-variacoes='<?= json_encode($excursao['variacoes'], JSON_UNESCAPED_UNICODE) ?>'
           data-embarques='<?= json_encode($excursao['embarques'], JSON_UNESCAPED_UNICODE) ?>'
           data-product-id='<?= $excursao['id'] ?>'
-          data-exc-embarques='<?= json_encode($excursao['exc_embarques'], JSON_UNESCAPED_UNICODE) ?>'>
+          data-estado-destino='<?= has_term('rock-in-rio', 'product_cat') ? 'rj' : 'sp'; ?>'>
         </div>
         <!-- FIM RESERVA APP - REACT  -->
 

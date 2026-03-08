@@ -226,6 +226,21 @@
   font-size: 0.85rem;
 }
 
+.aviso-dia-anterior{
+    display: block;
+    color: #212529;
+    background-color: #ffdd76;
+    font-size: .65rem;
+    margin-bottom: 6px;
+    position: relative;
+    top: -6px;
+    width: fit-content;
+    margin: 5px auto -4px;
+    padding: 1px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
 .title {
   font-size: 1rem;
   font-weight: 600;

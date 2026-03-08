@@ -14,7 +14,7 @@ import {
   dataTemDescontoHoje,
 } from '../Utilities';
 
-function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
+function AppReservas({ variacoes, embarques, productId, ajaxUrl, estadoDestino }) {
   const [availableDates, setAvailableDates] = React.useState([]);
   const [selectedDates, setSelectedDates] = React.useState([]);
   const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -39,6 +39,8 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
   const embarqueBoxRef = React.useRef();
 
   // const totalCost = precoUnitario * passageiros.length * selectedDates.length;
+
+  const cidadesDiaAnterior = ['Campinas', 'Limeira', 'Americana', 'Sumaré', 'Itu', 'Salto', 'Indaiatuba'];
 
   function calculaValorTotal() {
     const total = precoUnitario * passageiros.length * selectedDates.length;
@@ -444,6 +446,8 @@ function submitToCart(index = 0) {
                 variacoesSelecionadas={variacoesSelecionadas}
                 setPrecoUnitario={setPrecoUnitario}
                 setTaxa={setTaxa}
+                estadoDestino={estadoDestino}
+                cidadesDiaAnterior={cidadesDiaAnterior}
               />
             )}
 
@@ -513,6 +517,7 @@ addEventListener('DOMContentLoaded', () => {
         embarques={JSON.parse(reservas_app_root.dataset.embarques)}
         productId={JSON.parse(reservas_app_root.dataset.productId)}
         ajaxUrl={reservas_app_root.dataset.ajaxUrl}
+        estadoDestino={reservas_app_root.dataset.estadoDestino}
       />,
     );
   }

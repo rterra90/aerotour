@@ -28,7 +28,7 @@
 
 .badge-dia-anterior{
     color: #212529;
-    background-color: #ffdd76;
+    background-color: #fff3cd;
     font-size: .65rem;
     margin-bottom: 6px;
     position: relative;
@@ -148,6 +148,7 @@
   font-size: 13px;
   color: #0077cc;
   cursor: pointer;
+  margin-top: 4px;
   text-decoration: underline;
 }
 .mostrar-tudo-btn {
@@ -176,7 +177,7 @@
     max-width: 100%;
   }
   .detalhes {
-    margin-top: 10px;
+    margin-top: 4px;
     text-align: left;
   }
   .filtro-header span {

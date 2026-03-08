@@ -14,6 +14,8 @@ const EmbarquesModal = ({
   variacoesSelecionadas,
   setPrecoUnitario,
   setTaxa,
+  estadoDestino,
+  cidadesDiaAnterior
 }) => {
   const [visible, setVisible] = React.useState(false);
   const [embarquesNoPeriodo, setEmbarquesNoPeriodo] = React.useState([]);
@@ -26,6 +28,8 @@ const EmbarquesModal = ({
   const embarqueForm = React.useRef();
   const priceContainerRef = React.useRef();
   const saveBtnRef = React.useRef();
+
+  
 
   function closeEmbarqueModal(_save) {
     if (_save && preEmbarque.length > 0)
@@ -208,7 +212,8 @@ const EmbarquesModal = ({
         data-modal="embarque"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3>Selecione seu embarque</h3>
+        <h3>Selecione seu embarque - {preEmbarque[0] && preEmbarque[0].nome.split(' - ')[0]}</h3>
+        
         <form className="embarque-list" ref={embarqueForm}>
           <select
             onChange={(e) =>
@@ -259,6 +264,7 @@ const EmbarquesModal = ({
                 </h2>
 
                 <div className="embarque-details-inner">
+
                   {/* Horário simples */}
                   <div className="horarios">
                     {horariosDisponiveis.length === 1 && (
@@ -266,6 +272,13 @@ const EmbarquesModal = ({
                         <h3 className="title">Horário de embarque</h3>
                         <span className="horario-single d-block text-center">
                           {horariosDisponiveis[0]}
+                        
+                        {/* Exibe badge "do dia anterior" */}
+                        {estadoDestino === 'rj' && 
+                        preEmbarque[0] && 
+                        cidadesDiaAnterior.includes(preEmbarque[0].nome.split(' - ')[0]) ? 
+                        <span className="aviso-dia-anterior">do dia anterior</span> : null}
+
                         </span>
                       </>
                     )}
@@ -343,4 +356,6 @@ EmbarquesModal.propTypes = {
   setHorario: PropTypes.func.isRequired,
   setPrecoUnitario: PropTypes.func.isRequired,
   setTaxa: PropTypes.func.isRequired,
+  estadoDestino: PropTypes.string.isRequired,
+  cidadesDiaAnterior: PropTypes.array.isRequired,
 };

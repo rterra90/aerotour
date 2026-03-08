@@ -3840,7 +3840,9 @@
     setHorario,
     variacoesSelecionadas,
     setPrecoUnitario,
-    setTaxa
+    setTaxa,
+    estadoDestino,
+    cidadesDiaAnterior
   }) => {
     const [visible, setVisible] = React.useState(false);
     const [embarquesNoPeriodo, setEmbarquesNoPeriodo] = React.useState([]);
@@ -4004,7 +4006,10 @@
             "data-modal": "embarque",
             onClick: (e) => e.stopPropagation(),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { children: "Selecione seu embarque" }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("h3", { children: [
+                "Selecione seu embarque - ",
+                preEmbarque[0] && preEmbarque[0].nome.split(" - ")[0]
+              ] }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("form", { className: "embarque-list", ref: embarqueForm, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
                   "select",
@@ -4041,7 +4046,10 @@
                           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "horarios", children: [
                             horariosDisponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
                               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Hor\xE1rio de embarque" }),
-                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "horario-single d-block text-center", children: horariosDisponiveis[0] })
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "horario-single d-block text-center", children: [
+                                horariosDisponiveis[0],
+                                estadoDestino === "rj" && preEmbarque[0] && cidadesDiaAnterior.includes(preEmbarque[0].nome.split(" - ")[0]) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "aviso-dia-anterior", children: "do dia anterior" }) : null
+                              ] })
                             ] }),
                             horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
                               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "title", children: "Selecione o hor\xE1rio" }),
@@ -4120,7 +4128,9 @@
     getVarIdByDate: import_prop_types2.default.func.isRequired,
     setHorario: import_prop_types2.default.func.isRequired,
     setPrecoUnitario: import_prop_types2.default.func.isRequired,
-    setTaxa: import_prop_types2.default.func.isRequired
+    setTaxa: import_prop_types2.default.func.isRequired,
+    estadoDestino: import_prop_types2.default.string.isRequired,
+    cidadesDiaAnterior: import_prop_types2.default.array.isRequired
   };
 
   // src/AppReservas/PaxModal.jsx
@@ -4915,7 +4925,7 @@
 
   // src/AppReservas/AppReservas.jsx
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
-  function AppReservas({ variacoes, embarques, productId, ajaxUrl }) {
+  function AppReservas({ variacoes, embarques, productId, ajaxUrl, estadoDestino }) {
     const [availableDates, setAvailableDates] = React.useState([]);
     const [selectedDates, setSelectedDates] = React.useState([]);
     const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -4937,6 +4947,7 @@
     const botaoContinuarRef = React.useRef();
     const dataBoxRef = React.useRef();
     const embarqueBoxRef = React.useRef();
+    const cidadesDiaAnterior = ["Campinas", "Limeira", "Americana", "Sumar\xE9", "Itu", "Salto", "Indaiatuba"];
     function calculaValorTotal() {
       const total = precoUnitario * passageiros.length * selectedDates.length;
       const formatar = (valor) => valor.toLocaleString("pt-BR", {
@@ -5270,7 +5281,9 @@
             setHorario,
             variacoesSelecionadas,
             setPrecoUnitario,
-            setTaxa
+            setTaxa,
+            estadoDestino,
+            cidadesDiaAnterior
           }
         ),
         dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
@@ -5327,7 +5340,8 @@
             variacoes: JSON.parse(reservas_app_root.dataset.variacoes),
             embarques: JSON.parse(reservas_app_root.dataset.embarques),
             productId: JSON.parse(reservas_app_root.dataset.productId),
-            ajaxUrl: reservas_app_root.dataset.ajaxUrl
+            ajaxUrl: reservas_app_root.dataset.ajaxUrl,
+            estadoDestino: reservas_app_root.dataset.estadoDestino
           }
         )
       );
