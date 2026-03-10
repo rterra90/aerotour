@@ -379,178 +379,55 @@ function personalizar_remetente_email($default)
 add_action('wp_ajax_send_email', 'ajax_send_email');
 function ajax_send_email()
 {
-  if (isset($_GET['template'])) {
-    $headers = [
-      'Content-Type: text/html; charset=UTF-8',
-      'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>'
-    ];
-    $template = sanitize_text_field($_GET['template']);
+  if (isset($_GET['template']) && current_user_can('manage_options')) {
 
-    if ($template === 'convite-grupo-wpp') {
-      $variation_id = $_GET['variation_id'];
+    // Define o template do e-mail
+    $template_name = sanitize_text_field($_GET['template']);
+
+    if ($template_name === 'convite-grupo-wpp') {
+      $variation_id = intval($_GET['variation_id']);
       $variation = get_post($variation_id);
+      if (!$variation) wp_send_json_error('Excursão ou template inválido.');
 
-      if ($variation) {
-        $emails = obter_emails_por_produto($variation_id);
+      // Coleta de dados da excursão
+      $link_wpp = get_post_meta($variation_id, 'link_wpp', true);
+      if (!$link_wpp) wp_send_json_error('Link do WhatsApp não configurado nesta excursão.');
 
-        // filtrar $emails retornando apenas o elementos a partir do index 43
-        // $emails = array_slice($emails, 83);
-        // $emails = ['rterragd@hotmail.com'];
+      $email_params = [
+        'nome_exc' => substr($variation->post_title, 0, -13), // Remove a data do título
+        'dia_exc'  => substr($variation->post_title, -10),
+        'link'     => $link_wpp
+      ];
 
-        //para ser consumido no template do e-mail
-        $email_params = [
-          'nome_exc' => substr($variation->post_title, 0, -13),
-          'dia_exc' => substr($variation->post_title, -10),
-          'link' => get_post_meta($variation_id, 'link_wpp', true)
-        ];
-        $subject =
-          'Grupo de WhatsApp - Excursão ' .
-          $email_params['nome_exc'] .
-          ' (' .
-          $email_params['dia_exc'] .
-          ') - Aerotour';
-        $email_body = get_email_body('email-convite-grupo-wpp', $email_params);
+      // Obtém os e-mail dos passageiros com conta no site
+      $emails = obter_emails_por_produto($variation_id);
 
-        $resultado_dos_envios = [];
-        foreach ($emails as $_i => $email) {
-          if ($_i !== 0) {
-            if ($_i % 10 === 0) {
-              sleep(10);
-            } //10 seg de pausa a cada 10 e-mails enviados
-          }
-          $resultado_dos_envios[] = [
-            'e-mail' => $email,
-            'resultado' => wp_mail($email, $subject, $email_body, $headers),
-            'timestamp' => time()
-          ];
+      $assunto = "Grupo de WhatsApp - Excursão {$email_params['nome_exc']} ({$email_params['dia_exc']}) - Aerotour";
+
+      $relatorio_final = [];
+
+      foreach ($emails as $index => $email) {
+        // Throttling: Pausa de 10 seg a cada 10 envios para evitar spam [cite: 49]
+        if ($index > 0 && $index % 10 === 0) {
+          sleep(10);
         }
 
-        wp_send_json_success($resultado_dos_envios);
-      } else {
-        wp_send_json_error('Excursão não encontrada');
-      }
-    } elseif ($template = 'follow-up-cupom') {
-      $codes = explode(',', $_GET['codes']);
+        // Chamada da FUNÇÃO GLOBAL de envio
+        $enviado = aer_send_email($email, $assunto, $template_name, $email_params);
 
-      function verificar_pedidos_user_cupom($cliente_id, $cupons_codigos)
-      {
-        // Obter todos os pedidos do cliente
-        $args = [
-          'customer_id' => $cliente_id,
-          'post_type' => 'shop_order',
-          'post_status' => ['wc-completed', 'wc-processing', 'wc-on-hold'] // Status relevantes
-        ];
-        $pedidos = wc_get_orders($args);
-
-        // Verificar se algum pedido utilizou os cupons especificados
-        foreach ($pedidos as $pedido) {
-          $cupons_utilizados = $pedido->get_coupon_codes(); // Obter códigos de cupons usados no pedido
-
-          // Checar se algum dos códigos corresponde aos fornecidos
-          foreach ($cupons_utilizados as $cupom) {
-            if (in_array($cupom, $cupons_codigos)) {
-              return $pedido->get_id(); // Retorna o ID do pedido que usou um dos cupons
-            }
-          }
-        }
-
-        return null; // Retorna null se nenhum pedido usou os cupons
-      }
-
-      $participantes = [];
-      foreach ($codes as $_code) {
-        $coupon = new WC_Coupon($_code);
-        $coupon_id = $coupon->get_id();
-        $allowed_customers = get_post_meta(
-          $coupon_id,
-          'allowed_customers',
-          true
-        );
-        if ($allowed_customers !== '') {
-          $allowed_customers_obj = json_decode($allowed_customers);
-        }
-        if (isset($allowed_customers_obj)) {
-          $participantes = array_merge($participantes, $allowed_customers_obj);
-        }
-      }
-
-      $participantes_emails_query = array_map(function ($_user_id) {
-        $usou_cupom = verificar_pedidos_user_cupom($_user_id, [
-          'roleta5',
-          'roleta10',
-          'roleta15',
-          'roleta20'
-        ]);
-        if ($usou_cupom) {
-          return $usou_cupom;
-        } else {
-          $dados_usuario = get_userdata((int) $_user_id);
-          if ($dados_usuario) {
-            return $dados_usuario->user_email;
-          } else {
-            return 'Usuário não encontrado';
-          }
-        }
-      }, $participantes);
-
-      $participantes_emails = array_values(
-        array_filter($participantes_emails_query, function ($_v) {
-          return !is_numeric($_v);
-        })
-      );
-      // $participantes_emails = ['rterragd@hotmail.com'];
-
-      foreach ($participantes_emails as $_i => $_email) {
-        //para ser consumido no template do e-mail
-        $user_destinatario = get_user_by('email', $_email);
-        $user_destinatario_cupons = get_user_meta(
-          $user_destinatario->ID,
-          'cupons',
-          true
-        );
-        $user_destinatario_cupons = json_decode($user_destinatario_cupons);
-
-        $cupons_da_campanha = ['3772', '3773', '3774', '3775'];
-        $interseccao = array_intersect(
-          $user_destinatario_cupons,
-          $cupons_da_campanha
-        );
-
-        if (is_array($interseccao) && sizeof($interseccao) > 0) {
-          $cupom_cliente = new WC_Coupon($interseccao[0]);
-          $cod_cupom_cliente = $cupom_cliente->get_code();
-        } else {
-          $cod_cupom_cliente = ' ';
-        }
-
-        $email_params = [
-          'nome_cliente' => $user_destinatario->first_name,
-          'cupom_cliente' => $cod_cupom_cliente
-        ];
-        $subject = 'Seu cupom da Aerotur está esperando por você!';
-        $email_body = get_email_body('email-follow-up-cupom', $email_params);
-
-        $resultado_dos_envios = [];
-        if ($_i !== 0) {
-          if ($_i % 10 === 0) {
-            sleep(10);
-          } //10 seg de pausa a cada 10 e-mails enviados
-        }
-        $resultado_dos_envios[] = [
-          'e-mail' => $_email,
-          'resultado' => wp_mail($_email, $subject, $email_body, $headers),
-          'timestamp' => time()
+        $relatorio_final[] = [
+          'email'     => $email,
+          'status'    => $enviado ? 'sucesso' : 'falha',
+          'timestamp' => date('H:i:s')
         ];
       }
 
-      wp_send_json_success($resultado_dos_envios);
+      wp_send_json_success($relatorio_final);
+      wp_die();
     }
-
-    // $conteudo_email = get_email_body($template);
   } else {
-    wp_send_json_error('Erro ao localizar template');
+    wp_send_json_error('Erro ao realizar esta ação.');
   }
-  wp_die();
 }
 
 function get_email_body($email_template, $email_params)

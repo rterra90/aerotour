@@ -110,6 +110,40 @@ require_once get_template_directory() . '/includes/afiliados/pdv-functions.php';
 // require_once get_template_directory() . '/includes/functions/contrato.php';
 
 
+// FUNÇÃO GLOBAL PARA RENDERIZAR E-MAILS
+function aer_render_email($template_name, $args = [])
+{
+  // Define o caminho para a pasta de emails
+  $template_path = __DIR__ . "/emails/{$template_name}.php";
+  // $css_path = __DIR__ . "/../emails/emails-estilo.css";
+
+  if (!file_exists($template_path)) {
+    return 'Template não encontrado.';
+  }
+
+  // Extrai o array $args para variáveis individuais (ex: $args['nome'] vira $nome)
+  extract($args);
+
+  ob_start();
+  include $template_path;
+  return ob_get_clean();
+}
+
+// FUNÇÃO GLOBAL DE ENVIO DE E-MAILS
+function aer_send_email($to, $subject, $template_name, $args = [])
+{
+  // Definição de body e headers
+  $body = aer_render_email($template_name, $args);
+  $headers = [
+    'Content-Type: text/html; charset=UTF-8',
+    'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>'
+  ];
+
+  // Disparo do e-mail
+  return wp_mail($to, $subject, $body, $headers);
+}
+
+
 
 
 /* Adiciona campos ao formulário de registro */

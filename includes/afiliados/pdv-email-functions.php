@@ -25,31 +25,18 @@ function enviar_email_venda_parceiro($order_id)
     return;
   }
 
-  // Recupera dados do parceiro
-  $email = get_post_meta($pdv->ID, 'pdv_email', true);
+  // Recupera dados do parceiro e calcula comissão
+  $email_pdv = get_post_meta($pdv->ID, 'pdv_email', true);
   $nome_contato = get_post_meta($pdv->ID, 'pdv_nome_contato', true);
   $nome_comercial = get_the_title($pdv->ID);
   $comissao_percentual = floatval(
     get_post_meta($pdv->ID, 'pdv_comissao', true) ?: 0
   );
-
-  // Calcula comissão
   $valor_total = $order->get_total();
   $valor_comissao = ($valor_total * $comissao_percentual) / 100;
 
-  // Caminho do template do email
-  // $template_path = locate_template('woocommerce/emails/email-pdv-venda.php');
-  // if (!$template_path) {
-  //   // fallback: se o template não existir, aborta
-  //   return;
-  // }
-
-  // Buffer de saída para capturar o HTML do template
-  // ob_start();
-  // include $template_path;
-  // $mensagem = ob_get_clean();
-  $assunto = 'Nova venda em seu PDV (#' . $order_id . ') - Aerotour';
-  $mensagem = montar_email_venda_parceiro([
+  // Define os argumentos
+  $args = [
     'nome_contato' => $nome_contato,
     'codigo_pdv' => $codigo_pdv,
     'nome_comercial' => $nome_comercial,
@@ -57,72 +44,26 @@ function enviar_email_venda_parceiro($order_id)
     'valor_total' => $valor_total,
     'comissao_percentual' => $comissao_percentual,
     'valor_comissao' => $valor_comissao
-  ]);
-
-  // Cabeçalhos do e-mail
-  $headers = [
-    'Content-Type: text/html; charset=UTF-8',
-    'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>'
   ];
 
+  //Define o Assunto do e-mail
+  $assunto = 'Nova venda em seu PDV (#' . $order_id . ') - Aerotour';
+
   // Envia o e-mail
-  if ($email) {
-    wp_mail($email, $assunto, $mensagem, $headers);
+  if ($email_pdv) {
+    aer_send_email($email_pdv, $assunto, 'email-venda-parceiro', $args);
   }
+
+  // $mensagem = montar_email_venda_parceiro($args);
+
+  // Cabeçalhos do e-mail
+  // $headers = [
+  //   'Content-Type: text/html; charset=UTF-8',
+  //   'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>'
+  // ];
+
+  // 
+  // if ($email) {
+  //   wp_mail($email_pdv, $assunto, $mensagem, $headers);
+  // }
 }
-
-function montar_email_venda_parceiro($dados)
-{
-  ob_start(); ?>
-    <div style="font-family:Arial,sans-serif;background:#f7f7f7;padding:20px;">
-      <div style="max-width:640px;margin:auto;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e0e0e0;">
-        <div style="background:#400f0f;color:#fff;padding:16px 24px;">
-          <h2 style="margin:0;">🎉 Nova venda em seu PDV, <?php echo esc_html(
-            $dados['nome_comercial']
-          ); ?>!</h2>
-        </div>
-        <div style="padding:24px;color:#333;">
-          <p>Um novo pedido de reservas no site da Aerotour foi registrado a partir do seu link de ponto de venda!</p>
-          
-          <table style="width:100%;border-collapse:collapse;margin-top:16px;">
-            <tr><td style="padding:8px;border-bottom:1px solid #eee;">🧾 <strong>Pedido:</strong></td><td style="padding:8px;border-bottom:1px solid #eee;">#<?php echo esc_html(
-              $dados['order_id']
-            ); ?></td></tr>
-            <tr><td style="padding:8px;border-bottom:1px solid #eee;">💰 <strong>Valor total:</strong></td><td style="padding:8px;border-bottom:1px solid #eee;">R$ <?php echo number_format(
-              $dados['valor_total'],
-              2,
-              ',',
-              '.'
-            ); ?></td></tr>
-            <tr><td style="padding:8px;border-bottom:1px solid #eee;">🏷️ <strong>Comissão (%):</strong></td><td style="padding:8px;border-bottom:1px solid #eee;"><?php echo number_format(
-              $dados['comissao_percentual'],
-              2,
-              ',',
-              '.'
-            ); ?>%</td></tr>
-            <tr><td style="padding:8px;border-bottom:1px solid #eee;">💸 <strong>Valor da comissão:</strong></td><td style="padding:8px;border-bottom:1px solid #eee;">R$ <?php echo number_format(
-              $dados['valor_comissao'],
-              2,
-              ',',
-              '.'
-            ); ?></td></tr>
-            <tr>
-              <td style="padding:8px;border-bottom:1px solid #eee;">🚍 <strong>Excursão:</strong></td><td  style="padding:8px;border-bottom:1px solid #eee;"><div style="display:flex; flex-direction:column;gap:4px"><p style="margin:0">Oasis em SP (23/11) x 2</p></div></td>
-            </tr>
-          </table>
-
-          <p style="margin-top:20px;color:#555;font-size:13px;">
-          Recomendamos que guarde este e-mail até o recebimento da comissão.
-        </p>
-
-          <p style="margin-top:24px;">Continue divulgando e boas vendas! 🚀</p>
-        </div>
-        <div style="background:#f0f0f0;padding:12px 24px;text-align:center;font-size:13px;color:#666;">
-          Este é um e-mail automático da Aerotour Excursões.
-        </div>
-      </div>
-    </div>
-    <?php return ob_get_clean();
-}
-
-?>

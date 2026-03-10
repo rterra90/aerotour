@@ -212,7 +212,7 @@ const EmbarquesModal = ({
         data-modal="embarque"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3>Selecione seu embarque - {preEmbarque[0] && preEmbarque[0].nome.split(' - ')[0]}</h3>
+        <h3>Selecione seu embarque</h3>
         
         <form className="embarque-list" ref={embarqueForm}>
           <select

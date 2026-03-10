@@ -317,44 +317,99 @@ function painel_passageiros()
 
       /* ENVIA EMAIL LINK WPP */
       function enviaEmailLinkWpp(button) {
-        if (button.innerText === 'Clique aqui para continuar >>') {
-          // //   const emails = JSON.parse(button.dataset.emails);
-          // //   const excName = button.dataset.excName ? button.dataset.excName : 'Evento teste';
-          // //   const excData = button.dataset.excData ? button.dataset.excData : '01/01/1999';
-          // //   const _link = button.dataset.link ? button.dataset.link : 'https://linkteste';
-          const variationId = button.dataset.variationId;
-          button.innerText = "Aguarde..."
-          jQuery(function($) {
-            $.ajax({
-              url: '<?php echo admin_url('admin-ajax.php'); ?>',
-              type: 'GET',
-              data: {
-                'action': 'send_email',
-                'template': 'convite-grupo-wpp',
-                'variation_id': variationId,
-              },
-              success: async function({
-                success,
-                data
-              }) {
-                const containerResultados = button.closest('dialog').querySelector('.email-results');
+        if (button.innerText !== 'Clique aqui para continuar >>') return;
 
-                if (success) {
-                  const envioSucesso = data.filter((_result) => _result.resultado === true);
-                  const envioErro = data.filter((_result) => _result.resultado === false);
-                  containerResultados.children[0].innerText = `${envioSucesso.length} e-mails enviados com sucesso`;
-                  containerResultados.children[1].innerText = `${envioErro.length} falhas no envio`;
-                } else {
-                  containerResultados.children[1].innerText = `Erro na solicitação. Nenhum e-mail foi enviado`;
-                }
-                button.remove();
-              },
-              error: function(error) {
-                console.log('response error:  ' + error);
-              }
-            });
-          })
-        }
+        const variationId = button.dataset.variationId;
+        const containerResultados = button.closest('dialog').querySelector('.email-results');
+
+        button.innerText = "🚀 Enviando... Por favor, aguarde.";
+        button.style.opacity = "0.5";
+        button.style.pointerEvents = "none";
+
+        jQuery.ajax({
+          url: '<?php echo admin_url('admin-ajax.php'); ?>',
+          type: 'GET',
+          data: {
+            'action': 'send_email',
+            'template': 'convite-grupo-wpp',
+            'variation_id': variationId,
+          },
+          success: function(response) {
+            if (response.success) {
+              const logs = response.data;
+              const sucessos = logs.filter(l => l.status === 'sucesso').length;
+
+              // Gerando o Relatório Completo
+              let htmlRelatorio = `
+                    <div style="margin-top:20px; border-top: 1px solid #eee; padding-top:10px;">
+                        <strong style="color: green;">✅ ${sucessos} e-mails enviados com sucesso.</strong>
+                        <div style="max-height: 200px; overflow-y: auto; margin-top:10px; font-size: 12px;">
+                            <table style="width:100%; border-collapse: collapse;">
+                                <tr style="background:#f9f9f9;">
+                                    <th style="text-align:left; padding:5px;">E-mail</th>
+                                    <th style="text-align:right; padding:5px;">Status</th>
+                                </tr>
+                                ${logs.map(log => `
+                                    <tr>
+                                        <td style="padding:5px; border-bottom:1px solid #f0f0f0;">${log.email}</td>
+                                        <td style="padding:5px; border-bottom:1px solid #f0f0f0; text-align:right; color: ${log.status === 'sucesso' ? 'green' : 'red'};">
+                                            ${log.status.toUpperCase()}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </table>
+                        </div>
+                    </div>`;
+
+              containerResultados.innerHTML = htmlRelatorio;
+            } else {
+              containerResultados.innerHTML = `<p style="color:red;">❌ Erro: ${response.data}</p>`;
+            }
+            button.remove();
+          },
+          error: function() {
+            containerResultados.innerHTML = `<p style="color:red;">❌ Erro crítico na comunicação com o servidor.</p>`;
+            button.innerText = "Erro no envio";
+          }
+        });
+
+
+
+
+        // if (button.innerText === 'Clique aqui para continuar >>') {
+        //   const variationId = button.dataset.variationId;
+        //   button.innerText = "Aguarde..."
+        //   jQuery(function($) {
+        //     $.ajax({
+        //       url: '<?php echo admin_url('admin-ajax.php'); ?>',
+        //       type: 'GET',
+        //       data: {
+        //         'action': 'send_email',
+        //         'template': 'convite-grupo-wpp',
+        //         'variation_id': variationId,
+        //       },
+        //       success: async function({
+        //         success,
+        //         data
+        //       }) {
+        //         const containerResultados = button.closest('dialog').querySelector('.email-results');
+
+        //         if (success) {
+        //           const envioSucesso = data.filter((_result) => _result.resultado === true);
+        //           const envioErro = data.filter((_result) => _result.resultado === false);
+        //           containerResultados.children[0].innerText = `${envioSucesso.length} e-mails enviados com sucesso`;
+        //           containerResultados.children[1].innerText = `${envioErro.length} falhas no envio`;
+        //         } else {
+        //           containerResultados.children[1].innerText = `Erro na solicitação. Nenhum e-mail foi enviado`;
+        //         }
+        //         button.remove();
+        //       },
+        //       error: function(error) {
+        //         console.log('response error:  ' + error);
+        //       }
+        //     });
+        //   })
+        // }
       }
 
 

@@ -4006,10 +4006,7 @@
             "data-modal": "embarque",
             onClick: (e) => e.stopPropagation(),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("h3", { children: [
-                "Selecione seu embarque - ",
-                preEmbarque[0] && preEmbarque[0].nome.split(" - ")[0]
-              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { children: "Selecione seu embarque" }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("form", { className: "embarque-list", ref: embarqueForm, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
                   "select",
