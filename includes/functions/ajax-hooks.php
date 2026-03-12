@@ -912,7 +912,7 @@ function criar_campanha_cupons()
 // ENVIA E-MAILS DE LINK DE CONVITE GRUPO WPP (NOVO)
 // 1. Hook para buscar a lista de e-mails (ou simular)
 add_action('wp_ajax_get_email_targets', function () {
-  $is_test = $_GET['is_test'] == 'true' ? true : false;
+  $is_test = $_GET['is_test'] == 1 ? true : false;
   $targets = [];
   if ($is_test) {
     $qty = intval($_GET['test_qty']);
@@ -927,7 +927,7 @@ add_action('wp_ajax_get_email_targets', function () {
       'targets' => $targets,
     ]);
   } else {
-    $variation_id = intval($_GET['variationId']);
+    $variation_id = intval($_GET['variation_id']);
     $variation = get_post($variation_id);
     if (!$variation) wp_send_json_error('Excursão inválida.');
 

@@ -96,7 +96,64 @@ function painel_passageiros()
                     )
                   );
                   ?>
-                  <div class="email-wpp-link-container">
+                  <div class="aer-email-wpp-panel">
+                    <h4><span class="dashicons dashicons-whatsapp"></span> Notificação de Grupo WhatsApp</h4>
+                    <p class="aer-description">
+                      Esta ferramenta envia automaticamente um e-mail com o link do grupo de WhatsApp para todos os passageiros confirmados nesta variação.
+                    </p>
+
+                    <div class="test-mode-selector">
+                      <select id="envio-mode-<?= $variacao['variation_id']; ?>" onchange="toggleTestSettings(this, '<?= $variacao['variation_id']; ?>')" style="font-size: 12px;">
+                        <option value="real">🚀 Modo Real (Envio para Clientes)</option>
+                        <option value="teste">🧪 Modo Simulação (Teste de Interface)</option>
+                      </select>
+
+                      <div id="test-settings-<?= $variacao['variation_id']; ?>" class="test-settings-grid">
+                        <div>
+                          <label>Total Emails</label>
+                          <input type="number" class="test-qty" value="10">
+                        </div>
+                        <div>
+                          <label>Qtd. Falhas</label>
+                          <input type="number" class="test-errors" value="2">
+                        </div>
+                        <div>
+                          <label>Delay (ms)</label>
+                          <input type="number" class="test-delay" value="300" step="100">
+                        </div>
+                      </div>
+                    </div>
+
+                    <span class="btn-aer-primary" onclick="handleEmailWppDialog('<?= $variacao['variation_id']; ?>')">
+                      Configurar e Iniciar Envio
+                    </span>
+
+                    <dialog id="email-wpp-<?= $variacao['variation_id'] ?>" class="aer-dialog">
+                      <h3 style="margin-top:0;">Processando Envios</h3>
+                      <p style="font-size:12px; color:#666;">Link destino: <code><?= $link_grupo_wpp; ?></code></p>
+
+                      <div class="progress-wrapper">
+                        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px;">
+                          <span class="status-label">Aguardando início...</span>
+                          <span class="counter-label">0/0</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                          <div class="progress-bar-fill"></div>
+                        </div>
+                      </div>
+
+                      <div class="log-container">
+                        <table class="log-table"></table>
+                      </div>
+
+                      <div style="margin-top:20px; display:flex; gap:10px; justify-content: flex-end;">
+                        <div class="btn-aer-cancel" onclick="cancelarEnvio('<?= $variacao['variation_id']; ?>')">Parar Envio</div>
+                        <div class="btn-aer-primary start-btn" onclick="executarFluxoEnvio(this, '<?= $variacao['variation_id']; ?>')">Confirmar e Enviar</div>
+                        <div class="closeModalBtn" onclick="handleEmailWppDialog('<?= $variacao['variation_id']; ?>')" style="border:none; background:none; color:#999; cursor:pointer;">Fechar</div>
+                      </div>
+                    </dialog>
+                  </div>
+                  <!-- <div class="email-wpp-link-container">
                     <span class="email-link-wpp-btn" onclick="handleEmailWppDialog('<?= $variacao['variation_id']; ?>')">Notificar passageiros</span>
                     <dialog id="email-wpp-<?= $variacao['variation_id'] ?>" style="width: 400px; border-radius: 8px; border: 1px solid #ccc; padding: 20px;">
 
@@ -135,7 +192,7 @@ function painel_passageiros()
 
                       <span class="closeModalBtn" onclick="handleEmailWppDialog('<?= $variacao['variation_id']; ?>')" style="display: block; text-align: center; margin-top: 15px; font-size: 12px; color: #666; cursor: pointer;">Fechar</span>
                     </dialog>
-                  </div>
+                  </div> -->
 
                 </div>
 
@@ -339,94 +396,203 @@ function painel_passageiros()
         })
       }
 
-      /* ENVIA EMAIL LINK WPP */
-      async function enviaEmailLinkWpp(button) {
-        const dialog = button.closest('dialog');
-        const containerResultados = dialog.querySelector('.email-results');
-        const progressContainer = dialog.querySelector('.progress-container');
-        const progressBar = dialog.querySelector('.progress-bar');
-        const progressText = dialog.querySelector('.progress-text');
-        const progressCounts = dialog.querySelector('.progress-counts');
+      const cancelTokens = {};
+
+      function toggleTestSettings(select, varId) {
+        const settings = document.getElementById(`test-settings-${varId}`);
+        settings.style.display = (select.value === 'teste') ? 'grid' : 'none';
+      }
+
+      function cancelarEnvio(varId) {
+        cancelTokens[varId] = true;
+        const dialog = document.getElementById(`email-wpp-${varId}`);
+        dialog.querySelector('.status-label').innerText = "Interrompendo...";
+        dialog.querySelector('.status-label').style.color = "orange";
+      }
+
+      /* EXECUTAR FLUXO DE ENVIO DE EMAIL WPP */
+      async function executarFluxoEnvio(btn, varId) {
+        console.log('iniciou fluxo')
+        const dialog = document.getElementById(`email-wpp-${varId}`);
+        console.log(dialog)
+        const mode = document.getElementById(`envio-mode-${varId}`).value;
+        console.log(mode)
+        const isTest = mode === 'teste';
+
+        // UI Elements
+        const progressBar = dialog.querySelector('.progress-bar-fill');
+        const statusLabel = dialog.querySelector('.status-label');
+        const counterLabel = dialog.querySelector('.counter-label');
+        const logTable = dialog.querySelector('.log-table');
+        const cancelBtn = dialog.querySelector('.btn-aer-cancel');
+
+        // Reset e Preparação
+        cancelTokens[varId] = false;
+        btn.style.display = 'none';
+        cancelBtn.style.display = 'block';
+        logTable.innerHTML = '';
+        progressBar.style.width = '0%';
 
         const config = {
-          variationId: button.dataset.variationId,
-          is_test: dialog.querySelector('.is-test-mode').checked,
-          test_qty: dialog.querySelector('.test-qty').value,
-          test_errors: dialog.querySelector('.test-errors').value,
-          delay: dialog.querySelector('.test-delay').value
+          action: 'get_email_targets',
+          variation_id: varId,
+          is_test: isTest ? 1 : 0,
+          test_qty: document.querySelector(`#test-settings-${varId} .test-qty`).value,
+          test_errors: document.querySelector(`#test-settings-${varId} .test-errors`).value
         };
 
-        // UI Inicial
-        button.style.display = 'none';
-        progressContainer.style.display = 'block';
-        containerResultados.innerHTML = `<table style="width:100%; font-size:11px; border-collapse:collapse;" class="log-table"></table>`;
-        const logTable = containerResultados.querySelector('.log-table');
 
         try {
-          // 1. Obter Lista de Alvos
+          statusLabel.innerText = "Buscando lista de passageiros...";
           const response = await jQuery.ajax({
             url: '<?php echo admin_url('admin-ajax.php'); ?>',
-            data: {
-              action: 'get_email_targets',
-              ...config
-            }
+            data: config
           });
 
           if (!response.success) throw new Error(response.data);
 
           const targets = response.data.targets;
-          // const targets = [{
-          //   email: 'teste@teste.xyz'
-          // }];
           const total = targets.length;
-          let sucessos = 0;
-
-          // 2. Processar Sequencialmente o envio de e-mails
-          const emailParams = response.data.email_params;
+          const delay = parseInt(document.querySelector(`#test-settings-${varId} .test-delay`).value) || 0;
 
           for (let i = 0; i < total; i++) {
+            // Verifica se o usuário clicou em cancelar
+            if (cancelTokens[varId]) {
+              statusLabel.innerText = "Envio cancelado pelo usuário.";
+              break;
+            }
+
             const current = targets[i];
-            const resEnvio = await jQuery.ajax({
+            statusLabel.innerText = `Enviando para ${current.email}...`;
+
+            const res = await jQuery.ajax({
               url: '<?php echo admin_url('admin-ajax.php'); ?>',
               data: {
                 action: 'send_single_email',
                 email: current.email,
-                is_test: config.is_test ? 1 : 0,
+                is_test: isTest ? 1 : 0,
                 should_fail: current.should_fail ? 1 : 0,
-                variation_id: config.variationId,
-                delay: config.delay,
-                email_params: emailParams
+                variation_id: varId
               }
             });
 
-            // Atualizar UI
-            if (resEnvio.success) sucessos++;
-            const percent = Math.round(((i + 1) / total) * 100);
+            if (isTest && delay > 0) await new Promise(r => setTimeout(r, delay));
 
-            progressBar.style.width = percent + '%';
-            progressText.innerText = `Processando: ${percent}%`;
-            progressCounts.innerText = `${i + 1} / ${total}`;
+            // Atualiza UI
+            const pct = Math.round(((i + 1) / total) * 100);
+            progressBar.style.width = pct + '%';
+            counterLabel.innerText = `${i + 1} / ${total}`;
 
-            // Adicionar linha no log
-            logTable.innerHTML += `
+            logTable.insertAdjacentHTML('afterbegin', `
                 <tr>
-                    <td style="padding:2px; border-bottom:1px solid #eee;">${current.email}</td>
-                    <td style="text-align:right; color:${resEnvio.success ? 'green' : 'red'};">
-                        ${resEnvio.success ? '✓' : '✗'}
+                    <td style="color:#666;">${current.email}</td>
+                    <td style="text-align:right; font-weight:bold; color:${res.success ? '#25d366' : '#f44336'}">
+                        ${res.success ? 'OK' : 'ERRO'}
                     </td>
-                </tr>`;
-
-            // Auto-scroll do log
-            containerResultados.scrollTop = containerResultados.scrollHeight;
+                </tr>
+            `);
           }
 
-          progressText.innerText = "Concluído!";
-          progressText.style.color = "green";
+          if (!cancelTokens[varId]) {
+            statusLabel.innerText = "Processo concluído com sucesso!";
+            statusLabel.style.color = "#25d366";
+          }
 
         } catch (err) {
-          containerResultados.innerHTML = `<p style="color:red;">Erro: ${err.message}</p>`;
+          statusLabel.innerText = "Erro fatal no processo.";
+          console.error(err);
+        } finally {
+          cancelBtn.style.display = 'none';
         }
       }
+      /* ENVIA EMAIL LINK WPP */
+      // async function enviaEmailLinkWpp(button) {
+      //   const dialog = button.closest('dialog');
+      //   const containerResultados = dialog.querySelector('.email-results');
+      //   const progressContainer = dialog.querySelector('.progress-container');
+      //   const progressBar = dialog.querySelector('.progress-bar');
+      //   const progressText = dialog.querySelector('.progress-text');
+      //   const progressCounts = dialog.querySelector('.progress-counts');
+
+      //   const config = {
+      //     variation_id: button.dataset.variationId,
+      //     is_test: dialog.querySelector('.is-test-mode').checked,
+      //     test_qty: dialog.querySelector('.test-qty').value,
+      //     test_errors: dialog.querySelector('.test-errors').value,
+      //     delay: dialog.querySelector('.test-delay').value
+      //   };
+
+      //   // UI Inicial
+      //   button.style.display = 'none';
+      //   progressContainer.style.display = 'block';
+      //   containerResultados.innerHTML = `<table style="width:100%; font-size:11px; border-collapse:collapse;" class="log-table"></table>`;
+      //   const logTable = containerResultados.querySelector('.log-table');
+
+      //   try {
+      //     // 1. Obter Lista de Alvos
+      //     const response = await jQuery.ajax({
+      //       url: '<?php echo admin_url('admin-ajax.php'); ?>',
+      //       data: {
+      //         action: 'get_email_targets',
+      //         ...config
+      //       }
+      //     });
+
+      //     if (!response.success) throw new Error(response.data);
+
+      //     const targets = response.data.targets;
+      //     // const targets = [{
+      //     //   email: 'teste@teste.xyz'
+      //     // }];
+      //     const total = targets.length;
+      //     let sucessos = 0;
+
+      //     // 2. Processar Sequencialmente o envio de e-mails
+      //     const emailParams = response.data.email_params;
+
+      //     for (let i = 0; i < total; i++) {
+      //       const current = targets[i];
+      //       const resEnvio = await jQuery.ajax({
+      //         url: '<?php echo admin_url('admin-ajax.php'); ?>',
+      //         data: {
+      //           action: 'send_single_email',
+      //           email: current.email,
+      //           is_test: config.is_test ? 1 : 0,
+      //           should_fail: current.should_fail ? 1 : 0,
+      //           variation_id: config.variationId,
+      //           delay: config.delay,
+      //           email_params: emailParams
+      //         }
+      //       });
+
+      //       // Atualizar UI
+      //       if (resEnvio.success) sucessos++;
+      //       const percent = Math.round(((i + 1) / total) * 100);
+
+      //       progressBar.style.width = percent + '%';
+      //       progressText.innerText = `Processando: ${percent}%`;
+      //       progressCounts.innerText = `${i + 1} / ${total}`;
+
+      //       // Adicionar linha no log
+      //       logTable.innerHTML += `
+      //           <tr>
+      //               <td style="padding:2px; border-bottom:1px solid #eee;">${current.email}</td>
+      //               <td style="text-align:right; color:${resEnvio.success ? 'green' : 'red'};">
+      //                   ${resEnvio.success ? '✓' : '✗'}
+      //               </td>
+      //           </tr>`;
+
+      //       // Auto-scroll do log
+      //       containerResultados.scrollTop = containerResultados.scrollHeight;
+      //     }
+
+      //     progressText.innerText = "Concluído!";
+      //     progressText.style.color = "green";
+
+      //   } catch (err) {
+      //     containerResultados.innerHTML = `<p style="color:red;">Erro: ${err.message}</p>`;
+      //   }
+      // }
 
 
       document.querySelectorAll('.meta_encerrar_vendas_var_input').forEach(inp => inp.addEventListener('change', ({

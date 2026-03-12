@@ -240,3 +240,63 @@ input:checked + ul.main-embarques-list .slider {
 input:checked + ul.main-embarques-list .slider::before {
   transform: translateX(20px);
 }
+
+
+/* WPP */
+/* Container Principal */
+    .aer-email-wpp-panel {
+        background: #fff;
+        border: 1px solid #ccd0d4;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px 0;
+        max-width: 600px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .aer-email-wpp-panel h4 { margin-top: 0; color: #400f0f; display: flex; align-items: center; gap: 8px; }
+    .aer-description { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 20px; }
+    
+    /* Configurações de Teste */
+    .test-mode-selector { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+    .aer-email-wpp-panel .test-mode-selector select{
+      float: none
+    }
+    .test-settings-grid { 
+        display: none; 
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 10px; 
+        background: #fff5f5; 
+        padding: 15px; 
+        border-radius: 6px; 
+        border: 1px dashed #400f0f;
+        margin-top: 10px;
+    }
+    .test-settings-grid label { display: block; font-size: 11px; font-weight: bold; color: #400f0f; margin-bottom: 4px; }
+    .test-settings-grid input { width: 100%; }
+
+    /* Dialog e Progresso */
+    .aer-dialog { width: 450px; border-radius: 12px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 25px; }
+    .aer-dialog::backdrop { background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); }
+    
+    .progress-wrapper { margin: 20px 0; }
+    .progress-bar-bg { width: 100%; background: #eee; height: 12px; border-radius: 6px; overflow: hidden; position: relative; }
+    .progress-bar-fill { width: 0%; height: 100%; background: #25d366; transition: width 0.3s ease; }
+    
+    /* Logs e Tabela */
+    .log-container { 
+        max-height: 200px; 
+        overflow-y: auto; 
+        border: 1px solid #eee; 
+        border-radius: 4px; 
+        margin-top: 15px; 
+        font-family: monospace; 
+        font-size: 11px; 
+    }
+    .log-table { width: 100%; border-collapse: collapse; }
+    .log-table td { padding: 6px 10px; border-bottom: 1px solid #f9f9f9; }
+
+    /* Botões */
+    .btn-aer-primary { background: #400f0f; color: white; padding: 10px 20px; border-radius: 4px; cursor: pointer; border: none; font-weight: 600; }
+    .btn-aer-primary:hover { background: #5a1616; }
+    .btn-aer-cancel { background: #f44336; color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer; border: none; font-size: 12px; display: none; }
