@@ -98,18 +98,42 @@ function painel_passageiros()
                   ?>
                   <div class="email-wpp-link-container">
                     <span class="email-link-wpp-btn" onclick="handleEmailWppDialog('<?= $variacao['variation_id']; ?>')">Notificar passageiros</span>
-                    <dialog id="email-wpp-<?= $variacao['variation_id'] ?>">
-                      <b>Atenção!</b>
-                      <p>Essa ação eviará um e-mail com o link de acesso ao grupo no WhatsApp para todos os passageiros dessa excursão que têm conta no site.</p>
-                      <p>Link: <span><?= $link_grupo_wpp; ?></span></p>
-                      <span class="confirma-envio-email" data-variation-id="<?= $variacao['variation_id']; ?>" data-link="<?= $link_grupo_wpp; ?>" onclick="enviaEmailLinkWpp(this)">Clique aqui para continuar >></span>
+                    <dialog id="email-wpp-<?= $variacao['variation_id'] ?>" style="width: 400px; border-radius: 8px; border: 1px solid #ccc; padding: 20px;">
 
-                      <div class="email-results">
-                        <p class="success"></p>
-                        <p class="error"></p>
+                      <b style="color: #400f0f; font-size: 1.2em;">Notificar Passageiros</b>
+                      <p style="font-size: 14px; margin-top: 10px;">Link: <code style="background: #eee; padding: 2px 5px;"><?= $link_grupo_wpp; ?></code></p>
+
+                      <div class="test-simulation-box" style="margin: 15px 0; padding: 12px; border: 1px dashed #400f0f; background: #fff5f5; border-radius: 6px;">
+                        <label style="font-size: 12px; font-weight: bold; color: #400f0f; display: block; margin-bottom: 5px;">
+                          <input type="checkbox" class="is-test-mode"> 🧪 ATIVAR MODO SIMULAÇÃO
+                        </label>
+                        <div style="display: flex; gap: 10px; font-size: 11px;">
+                          <span>Qtd: <input style="width: 60px;" type="number" class="test-qty" value="15" style="width: 40px;"></span>
+                          <span>Falhas: <input style="width: 60px;" type="number" class="test-errors" value="3" style="width: 40px;"></span>
+                          <span>Delay (ms): <input step="50" style="width: 80px;" type="number" class="test-delay" value="300" style="width: 50px;" title="Delay entre cada envio"></span>
+                        </div>
                       </div>
 
-                      <span class="closeModalBtn" onclick="handleEmailWppDialog('<?= $variacao['variation_id']; ?>')">Fechar</span>
+                      <div class="progress-container" style="display:none; margin: 20px 0;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                          <span class="progress-text">Processando: 0%</span>
+                          <span class="progress-counts">0 / 0</span>
+                        </div>
+                        <div style="width: 100%; background: #eee; border-radius: 10px; height: 10px; overflow: hidden;">
+                          <div class="progress-bar" style="width: 0%; height: 100%; background: #25d366; transition: width 0.3s;"></div>
+                        </div>
+                      </div>
+
+                      <span class="confirma-envio-email"
+                        data-variation-id="<?= $variacao['variation_id']; ?>"
+                        onclick="enviaEmailLinkWpp(this)"
+                        style="display: block; background: #400f0f; color: #fff; text-align: center; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+                        Iniciar Envio >>
+                      </span>
+
+                      <div class="email-results" style="margin-top: 15px;"></div>
+
+                      <span class="closeModalBtn" onclick="handleEmailWppDialog('<?= $variacao['variation_id']; ?>')" style="display: block; text-align: center; margin-top: 15px; font-size: 12px; color: #666; cursor: pointer;">Fechar</span>
                     </dialog>
                   </div>
 
@@ -316,100 +340,92 @@ function painel_passageiros()
       }
 
       /* ENVIA EMAIL LINK WPP */
-      function enviaEmailLinkWpp(button) {
-        if (button.innerText !== 'Clique aqui para continuar >>') return;
+      async function enviaEmailLinkWpp(button) {
+        const dialog = button.closest('dialog');
+        const containerResultados = dialog.querySelector('.email-results');
+        const progressContainer = dialog.querySelector('.progress-container');
+        const progressBar = dialog.querySelector('.progress-bar');
+        const progressText = dialog.querySelector('.progress-text');
+        const progressCounts = dialog.querySelector('.progress-counts');
 
-        const variationId = button.dataset.variationId;
-        const containerResultados = button.closest('dialog').querySelector('.email-results');
+        const config = {
+          variationId: button.dataset.variationId,
+          is_test: dialog.querySelector('.is-test-mode').checked,
+          test_qty: dialog.querySelector('.test-qty').value,
+          test_errors: dialog.querySelector('.test-errors').value,
+          delay: dialog.querySelector('.test-delay').value
+        };
 
-        button.innerText = "🚀 Enviando... Por favor, aguarde.";
-        button.style.opacity = "0.5";
-        button.style.pointerEvents = "none";
+        // UI Inicial
+        button.style.display = 'none';
+        progressContainer.style.display = 'block';
+        containerResultados.innerHTML = `<table style="width:100%; font-size:11px; border-collapse:collapse;" class="log-table"></table>`;
+        const logTable = containerResultados.querySelector('.log-table');
 
-        jQuery.ajax({
-          url: '<?php echo admin_url('admin-ajax.php'); ?>',
-          type: 'GET',
-          data: {
-            'action': 'send_email',
-            'template': 'convite-grupo-wpp',
-            'variation_id': variationId,
-          },
-          success: function(response) {
-            if (response.success) {
-              const logs = response.data;
-              const sucessos = logs.filter(l => l.status === 'sucesso').length;
-
-              // Gerando o Relatório Completo
-              let htmlRelatorio = `
-                    <div style="margin-top:20px; border-top: 1px solid #eee; padding-top:10px;">
-                        <strong style="color: green;">✅ ${sucessos} e-mails enviados com sucesso.</strong>
-                        <div style="max-height: 200px; overflow-y: auto; margin-top:10px; font-size: 12px;">
-                            <table style="width:100%; border-collapse: collapse;">
-                                <tr style="background:#f9f9f9;">
-                                    <th style="text-align:left; padding:5px;">E-mail</th>
-                                    <th style="text-align:right; padding:5px;">Status</th>
-                                </tr>
-                                ${logs.map(log => `
-                                    <tr>
-                                        <td style="padding:5px; border-bottom:1px solid #f0f0f0;">${log.email}</td>
-                                        <td style="padding:5px; border-bottom:1px solid #f0f0f0; text-align:right; color: ${log.status === 'sucesso' ? 'green' : 'red'};">
-                                            ${log.status.toUpperCase()}
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </table>
-                        </div>
-                    </div>`;
-
-              containerResultados.innerHTML = htmlRelatorio;
-            } else {
-              containerResultados.innerHTML = `<p style="color:red;">❌ Erro: ${response.data}</p>`;
+        try {
+          // 1. Obter Lista de Alvos
+          const response = await jQuery.ajax({
+            url: '<?php echo admin_url('admin-ajax.php'); ?>',
+            data: {
+              action: 'get_email_targets',
+              ...config
             }
-            button.remove();
-          },
-          error: function() {
-            containerResultados.innerHTML = `<p style="color:red;">❌ Erro crítico na comunicação com o servidor.</p>`;
-            button.innerText = "Erro no envio";
+          });
+
+          if (!response.success) throw new Error(response.data);
+
+          const targets = response.data.targets;
+          // const targets = [{
+          //   email: 'teste@teste.xyz'
+          // }];
+          const total = targets.length;
+          let sucessos = 0;
+
+          // 2. Processar Sequencialmente o envio de e-mails
+          const emailParams = response.data.email_params;
+
+          for (let i = 0; i < total; i++) {
+            const current = targets[i];
+            const resEnvio = await jQuery.ajax({
+              url: '<?php echo admin_url('admin-ajax.php'); ?>',
+              data: {
+                action: 'send_single_email',
+                email: current.email,
+                is_test: config.is_test ? 1 : 0,
+                should_fail: current.should_fail ? 1 : 0,
+                variation_id: config.variationId,
+                delay: config.delay,
+                email_params: emailParams
+              }
+            });
+
+            // Atualizar UI
+            if (resEnvio.success) sucessos++;
+            const percent = Math.round(((i + 1) / total) * 100);
+
+            progressBar.style.width = percent + '%';
+            progressText.innerText = `Processando: ${percent}%`;
+            progressCounts.innerText = `${i + 1} / ${total}`;
+
+            // Adicionar linha no log
+            logTable.innerHTML += `
+                <tr>
+                    <td style="padding:2px; border-bottom:1px solid #eee;">${current.email}</td>
+                    <td style="text-align:right; color:${resEnvio.success ? 'green' : 'red'};">
+                        ${resEnvio.success ? '✓' : '✗'}
+                    </td>
+                </tr>`;
+
+            // Auto-scroll do log
+            containerResultados.scrollTop = containerResultados.scrollHeight;
           }
-        });
 
+          progressText.innerText = "Concluído!";
+          progressText.style.color = "green";
 
-
-
-        // if (button.innerText === 'Clique aqui para continuar >>') {
-        //   const variationId = button.dataset.variationId;
-        //   button.innerText = "Aguarde..."
-        //   jQuery(function($) {
-        //     $.ajax({
-        //       url: '<?php echo admin_url('admin-ajax.php'); ?>',
-        //       type: 'GET',
-        //       data: {
-        //         'action': 'send_email',
-        //         'template': 'convite-grupo-wpp',
-        //         'variation_id': variationId,
-        //       },
-        //       success: async function({
-        //         success,
-        //         data
-        //       }) {
-        //         const containerResultados = button.closest('dialog').querySelector('.email-results');
-
-        //         if (success) {
-        //           const envioSucesso = data.filter((_result) => _result.resultado === true);
-        //           const envioErro = data.filter((_result) => _result.resultado === false);
-        //           containerResultados.children[0].innerText = `${envioSucesso.length} e-mails enviados com sucesso`;
-        //           containerResultados.children[1].innerText = `${envioErro.length} falhas no envio`;
-        //         } else {
-        //           containerResultados.children[1].innerText = `Erro na solicitação. Nenhum e-mail foi enviado`;
-        //         }
-        //         button.remove();
-        //       },
-        //       error: function(error) {
-        //         console.log('response error:  ' + error);
-        //       }
-        //     });
-        //   })
-        // }
+        } catch (err) {
+          containerResultados.innerHTML = `<p style="color:red;">Erro: ${err.message}</p>`;
+        }
       }
 
 
@@ -425,55 +441,6 @@ function painel_passageiros()
         if (dialogElement.open) dialogElement.close();
         else {
           dialogElement.showModal();
-          dialogElement.classList.add('loading')
-          const enviarEmailBtn = document.querySelector('.confirma-envio-email');
-          enviarEmailBtn.dataset.variationId = _var_id;
-          jQuery(function($) {
-            $.ajax({
-              url: '<?php echo admin_url('admin-ajax.php'); ?>',
-              type: 'GET',
-              data: {
-                'action': 'get_reservas',
-                'variation_id': _var_id,
-              },
-              success: async function(response) {
-                const exc_name = Object.values(response.data[1])[0][0];
-                const exc_data = Object.values(response.data[1])[0][1];
-                const _user_ids = response.data[0].flatMap((_r) => {
-                  if (_r.user_id != '0') { //se o usuário possui conta no site
-                    if (_r.status !== 'cancel') return +_r.user_id; //se a reserva não está 'cancel', retorna o email
-                  }
-                  return []; //se não possui conta no site
-                });
-                // console.log(_user_ids);
-                jQuery(function($) {
-                  $.ajax({
-                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
-                    type: 'GET',
-                    data: {
-                      action: 'get_customers',
-                      param: 'e-mail',
-                      ids: _user_ids //[1, 2, 3]
-                    },
-                    success: async function(_resp) {
-                      dialogElement.classList.remove('loading');
-                      enviarEmailBtn.dataset.emails = JSON.stringify(_resp.data);
-                      enviarEmailBtn.dataset.excName = exc_name;
-                      enviarEmailBtn.dataset.excData = exc_data;
-                    },
-                    error: function(_error) {
-                      console.log('response error 2:  ' + _error);
-                    }
-                  })
-                })
-
-              },
-              error: function(error) {
-                console.log('response error:  ' + error);
-              }
-            });
-          })
-
         }
       }
 

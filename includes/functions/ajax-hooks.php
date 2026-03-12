@@ -30,8 +30,6 @@ function solicitar_alteracao_embarque()
 
   $sent = wp_mail($to, $subject, $message);
 
-  // $sent_test = true; // Simula envio bem-sucedido para testes
-
   if ($sent) {
     wp_send_json_success();
   } else {
@@ -376,72 +374,88 @@ function personalizar_remetente_email($default)
   return 'contato@aerotour.com.br';
 }
 
-add_action('wp_ajax_send_email', 'ajax_send_email');
-function ajax_send_email()
-{
-  if (isset($_GET['template']) && current_user_can('manage_options')) {
+// add_action('wp_ajax_send_email', 'ajax_send_email');
+// function ajax_send_email()
+// {
+//   if (isset($_GET['template']) && current_user_can('manage_options')) {
+//     $is_test = intval($_GET['is_test'] ?? 0);
+//     // Define o template do e-mail
+//     $template_name = sanitize_text_field($_GET['template']);
 
-    // Define o template do e-mail
-    $template_name = sanitize_text_field($_GET['template']);
+//     if ($template_name === 'convite-grupo-wpp') {
 
-    if ($template_name === 'convite-grupo-wpp') {
-      $variation_id = intval($_GET['variation_id']);
-      $variation = get_post($variation_id);
-      if (!$variation) wp_send_json_error('Excursão ou template inválido.');
+//       if ($is_test === 1) {
+//         // --- FLUXO DE SIMULAÇÃO ---
+//         $total = intval($_GET['test_qty'] ?: 10);
+//         $erros_desejados = intval($_GET['test_errors'] ?: 0);
 
-      // Coleta de dados da excursão
-      $link_wpp = get_post_meta($variation_id, 'link_wpp', true);
-      if (!$link_wpp) wp_send_json_error('Link do WhatsApp não configurado nesta excursão.');
+//         for ($i = 0; $i < $total; $i++) {
+//           $resultado_dos_envios[] = [
+//             'e-mail' => "simulado-{$i}@exemplo.com.br",
+//             'resultado' => ($i < $erros_desejados) ? false : true, // Primeiros X falham
+//             'timestamp' => time()
+//           ];
+//         }
+//         wp_send_json_success($resultado_dos_envios);
+//       } else {
+//         $variation_id = intval($_GET['variation_id']);
+//         $variation = get_post($variation_id);
+//         if (!$variation) wp_send_json_error('Excursão ou template inválido.');
 
-      $email_params = [
-        'nome_exc' => substr($variation->post_title, 0, -13), // Remove a data do título
-        'dia_exc'  => substr($variation->post_title, -10),
-        'link'     => $link_wpp
-      ];
+//         // Coleta de dados da excursão
+//         $link_wpp = get_post_meta($variation_id, 'link_wpp', true);
+//         if (!$link_wpp) wp_send_json_error('Link do WhatsApp não configurado nesta excursão.');
 
-      // Obtém os e-mail dos passageiros com conta no site
-      $emails = obter_emails_por_produto($variation_id);
+//         $email_params = [
+//           'nome_exc' => substr($variation->post_title, 0, -13), // Remove a data do título
+//           'dia_exc'  => substr($variation->post_title, -10),
+//           'link'     => $link_wpp
+//         ];
 
-      $assunto = "Grupo de WhatsApp - Excursão {$email_params['nome_exc']} ({$email_params['dia_exc']}) - Aerotour";
+//         // Obtém os e-mail dos passageiros com conta no site
+//         $emails = obter_emails_por_produto($variation_id);
 
-      $relatorio_final = [];
+//         $assunto = "Grupo de WhatsApp - Excursão {$email_params['nome_exc']} ({$email_params['dia_exc']}) - Aerotour";
 
-      foreach ($emails as $index => $email) {
-        // Throttling: Pausa de 10 seg a cada 10 envios para evitar spam [cite: 49]
-        if ($index > 0 && $index % 10 === 0) {
-          sleep(10);
-        }
+//         $relatorio_final = [];
 
-        // Chamada da FUNÇÃO GLOBAL de envio
-        $enviado = aer_send_email($email, $assunto, $template_name, $email_params);
+//         foreach ($emails as $index => $email) {
+//           // Throttling: Pausa de 10 seg a cada 10 envios para evitar spam [cite: 49]
+//           if ($index > 0 && $index % 10 === 0) {
+//             sleep(10);
+//           }
 
-        $relatorio_final[] = [
-          'email'     => $email,
-          'status'    => $enviado ? 'sucesso' : 'falha',
-          'timestamp' => date('H:i:s')
-        ];
-      }
+//           // Chamada da FUNÇÃO GLOBAL de envio
+//           $enviado = aer_send_email($email, $assunto, $template_name, $email_params);
 
-      wp_send_json_success($relatorio_final);
-      wp_die();
-    }
-  } else {
-    wp_send_json_error('Erro ao realizar esta ação.');
-  }
-}
+//           $relatorio_final[] = [
+//             'email'     => $email,
+//             'status'    => $enviado ? 'sucesso' : 'falha',
+//             'timestamp' => date('H:i:s')
+//           ];
+//         }
 
-function get_email_body($email_template, $email_params)
-{
-  $arquivo_email = dirname(__DIR__, 2) . '/emails/' . $email_template . '.php'; // AQUI
+//         wp_send_json_success($relatorio_final);
+//       }
+//       wp_die();
+//     }
+//   } else {
+//     wp_send_json_error('Erro ao realizar esta ação.');
+//   }
+// }
 
-  if (file_exists($arquivo_email)) {
-    ob_start(); // Inicia o buffer para capturar a saída do arquivo
-    include $arquivo_email;
-    return ob_get_clean(); // Retorna o conteúdo como string e limpa o buffer
-  } else {
-    return 'Template não encontrado.';
-  }
-}
+// function get_email_body($email_template, $email_params)
+// {
+//   $arquivo_email = dirname(__DIR__, 2) . '/emails/' . $email_template . '.php'; // AQUI
+
+//   if (file_exists($arquivo_email)) {
+//     ob_start(); // Inicia o buffer para capturar a saída do arquivo
+//     include $arquivo_email;
+//     return ob_get_clean(); // Retorna o conteúdo como string e limpa o buffer
+//   } else {
+//     return 'Template não encontrado.';
+//   }
+// }
 
 function obter_emails_por_produto($produto_id)
 {
@@ -471,15 +485,19 @@ function obter_emails_por_produto($produto_id)
 
   // Passo 2: Obter os e-mails dos usuários correspondentes
   if (!empty($user_ids)) {
-    // Transformar a array de user_ids em uma lista separada por vírgulas para usar na consulta IN()
-    // $placeholders = implode(',', array_fill(0, count($user_ids), '%d'));
-    // $query = "SELECT user_email FROM wp_users WHERE ID IN ($placeholders)";
-    // $emails = $wpdb->get_col($wpdb->prepare($query, $user_ids));
 
-    foreach ($user_ids as $_id) {
-      $user = get_userdata($_id);
-      $emails[] = $user->user_email;
-    }
+    // ABORDAGEM NO PADRÃO WP, MAS COM POUCO MENOS PERFORMANCE
+    $args = [
+      'include' => $user_ids,
+      'fields'  => ['user_email']
+    ];
+    $users = get_users($args);
+    $emails = array_column($users, 'user_email');
+
+    //ABORDAGEM COM MELHOR PERFORMANCE, MAS FORA DO PADRAO WP
+    // $placeholders = implode(',', array_fill(0, count($user_ids), '%d'));
+    // $query = "SELECT user_email FROM {$wpdb->users} WHERE ID IN ($placeholders)";
+    // $emails = $wpdb->get_col($wpdb->prepare($query, $user_ids));
   }
 
   //remover valores duplicados de $emails
@@ -890,3 +908,77 @@ function criar_campanha_cupons()
     wp_send_json_error('Erro na criação da campanha...');
   }
 }
+
+// ENVIA E-MAILS DE LINK DE CONVITE GRUPO WPP (NOVO)
+// 1. Hook para buscar a lista de e-mails (ou simular)
+add_action('wp_ajax_get_email_targets', function () {
+  $is_test = $_GET['is_test'] == 'true' ? true : false;
+  $targets = [];
+  if ($is_test) {
+    $qty = intval($_GET['test_qty']);
+    $errors = intval($_GET['test_errors']);
+    for ($i = 0; $i < $qty; $i++) {
+      $targets[] = [
+        'email' => "teste-{$i}@aerotour.com.br",
+        'should_fail' => ($i < $errors) // Os primeiros X falham
+      ];
+    }
+    wp_send_json_success([
+      'targets' => $targets,
+    ]);
+  } else {
+    $variation_id = intval($_GET['variationId']);
+    $variation = get_post($variation_id);
+    if (!$variation) wp_send_json_error('Excursão inválida.');
+
+    $link_wpp = get_post_meta($variation_id, 'link_wpp', true);
+    if (!$link_wpp) wp_send_json_error('Link do WhatsApp não configurado nesta excursão.');
+
+    $email_params = [
+      'nome_exc' => substr($variation->post_title, 0, -13), // Remove a data do título
+      'dia_exc'  => substr($variation->post_title, -10),
+      'link'     => $link_wpp
+    ];
+
+    $emails = obter_emails_por_produto($variation_id);
+    foreach ($emails as $e) {
+      $targets[] = ['email' => $e, 'should_fail' => 0];
+    }
+
+    // $targets = array(
+    //   ['email' => 'rterragd@hotmail.com', 'should_fail' => 0],
+    //   ['email' => 'rterra@rterra.xyz', 'should_fail' => 0]
+    // ); // TESTE
+
+    wp_send_json_success([
+      'targets' => $targets,
+      'email_params' => $email_params
+    ]);
+  }
+});
+
+// 2. Hook para enviar um único e-mail
+add_action('wp_ajax_send_single_email', function () {
+  $is_test = $_GET['is_test'];
+  $delay = intval($_GET['delay'] ?: 0);
+
+  if ($is_test) {
+    if ($delay > 0) usleep($delay * 1000); // Converte ms para microsegundos
+    $should_fail = intval($_GET['should_fail']);
+
+    if ($should_fail) wp_send_json_error();
+    else wp_send_json_success();
+  } else {
+    // Lógica real de envio usando a função global aer_send_email
+    $email = sanitize_email($_GET['email']);
+    $email_params = $_GET['email_params'];
+
+    $subject = "Grupo de WhatsApp - Excursão {$email_params['nome_exc']} ({$email_params['dia_exc']}) - Aerotour";
+
+    wp_send_json_success(); // TESTE
+
+    // $enviado = aer_send_email($email, $subject, 'convite-grupo-wpp', $email_params);
+    // if ($enviado) wp_send_json_success();
+    // else wp_send_json_error();
+  }
+});

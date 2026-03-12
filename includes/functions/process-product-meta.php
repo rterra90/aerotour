@@ -184,41 +184,6 @@ function process_product_meta($id)
       } else {
         if (!empty($post_value)) {
           update_post_meta($id, $meta_key, $post_value);
-
-          /* ************** */
-          // if($meta_key === 'exc_embarques'){
-          //   // $obj_post_value = json_decode($post_value);
-          //   // $obj_post_value['novo'] = 'testando';
-          //   // $final_obj_post_value = json_encode($obj_post_value);
-
-          //   // foreach($post_value as $_i => $_embarque){
-          //   //   array_push($exc_emb_post_value, 'testes');
-          //   //   // array_push($exc_emb_post_value, $_embarque);
-          //   //   // $emb_opcoes = array();
-          //   //   // $_final = array();
-          //   //   // foreach($_embarque -> horarios as $hor_obj){
-          //   //   //   $_hor = $hor_obj -> horario;
-          //   //   //   foreach($hor_obj -> disponibilidade as $_dispon){
-          //   //   //     $_status = $_dispon -> status == 'disponivel' ? 'ativo' : 'inativo';
-          //   //   //     $_dia = $_dispon -> disp_dia;
-          //   //   //     $_final = [dia => $_dia, horario => $_hor, status => $_status];
-          //   //   //     array_push($emb_opcoes, $_final);
-          //   //   //   }
-
-          //   //   //   $exc_emb_post_value[$_i]['opcoes'] = $emb_opcoes;
-          //   //   // }
-          //   // }
-
-          //   // update_post_meta($id, $meta_key, $aa);
-          //   // update_post_meta($id, $meta_key, json_encode($obj_post_value, JSON_UNESCAPED_UNICODE));
-          //   update_post_meta($id, $meta_key, $meta_key);
-
-          // }else{
-          //   update_post_meta($id, $meta_key, $post_value);
-
-          // }
-
-          /* ************** */
         }
       }
     }
@@ -237,8 +202,6 @@ function process_product_meta($id)
     }
   }
 
-  // $embarques_exc_string = json_encode($embarques_exc, JSON_UNESCAPED_UNICODE);
-  // if(sizeof($embarques_exc) > 0) update_post_meta($id, 'exc_embarques', $embarques_exc_string);
 }
 
 // Atualiza o meta '_dia_iso' automaticamente quando uma variação é salva
