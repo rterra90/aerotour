@@ -1,4 +1,7 @@
 <?php
+
+use Pelago\Emogrifier\CssInliner;
+
 $root_url = get_stylesheet_directory_uri();
 
 // 1. Criar o Widget no Dashboard
@@ -115,7 +118,7 @@ function aer_render_email($template_name, $args = [])
 {
   // Define o caminho para a pasta de emails
   $template_path = __DIR__ . "/emails/{$template_name}.php";
-  // $css_path = __DIR__ . "/../emails/emails-estilo.css";
+  $css_path = __DIR__ . "/emails/emails-estilos.css";
 
   if (!file_exists($template_path)) {
     return 'Template não encontrado.';
@@ -126,7 +129,24 @@ function aer_render_email($template_name, $args = [])
 
   ob_start();
   include $template_path;
-  return ob_get_clean();
+  $html = ob_get_clean();
+  // return ob_get_clean();
+
+  // Se existir um arquivo CSS, injetamos ele para o processamento
+
+
+  if (file_exists($css_path)) {
+
+    $css = file_get_contents($css_path);
+
+    // Se você não usa Composer, uma alternativa é injetar o <style> 
+    // temporariamente para o cliente, ou usar um conversor.
+    // Aqui, vamos envolver o HTML com o estilo para garantir a leitura.
+    $html = "<html><head><style>{$css}</style></head><body>{$html}</body></html>";
+    $html_com_estilo = CssInliner::fromHtml($html)->inlineCss($css)->render();
+  }
+
+  return $html_com_estilo;
 }
 
 // FUNÇÃO GLOBAL DE ENVIO DE E-MAILS

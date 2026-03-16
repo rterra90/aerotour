@@ -1,0 +1,9 @@
+/* emails/emails-estilo.css */
+.email-container { font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px; }
+.email-box { max-width: 640px; margin: auto; background: #fff; border-radius: 10px; border: 1px solid #e0e0e0; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);}
+.header { background: #400f0f; color: #fff; padding: 16px 24px; }
+.content { padding: 24px; color: #333; }
+.table-data { width: 100%; border-collapse: collapse; margin-top: 16px; }
+.table-data td { padding: 8px; border-bottom: 1px solid #eee; }
+.footer { background: #f0f0f0; padding: 12px 24px; text-align: center; font-size: 13px; color: #666; }
+
