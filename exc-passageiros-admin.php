@@ -453,6 +453,7 @@ function painel_passageiros()
 
           const targets = response.data.targets;
           const total = targets.length;
+          const emailParams = response.data.email_params;
           const delay = parseInt(document.querySelector(`#test-settings-${varId} .test-delay`).value) || 0;
 
           for (let i = 0; i < total; i++) {
@@ -472,7 +473,8 @@ function painel_passageiros()
                 email: current.email,
                 is_test: isTest ? 1 : 0,
                 should_fail: current.should_fail ? 1 : 0,
-                variation_id: varId
+                variation_id: varId,
+                email_params: emailParams,
               }
             });
 

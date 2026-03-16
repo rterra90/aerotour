@@ -57,7 +57,7 @@ $user = wp_get_current_user();
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Aerotour Excursões",
-      "image": "https://aerotour.com.br/wp-content/themes/Aerotour/assets/images/main.png",
+      "image": "https://aerotour.com.br/wp-content/themes/Aerotour/assets/images/logo-padrao.png",
       "@id": "https://www.aerotour.com.br/",
       "url": "https://www.aerotour.com.br/",
       "telephone": "+55-19-99747-7465",

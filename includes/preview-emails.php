@@ -17,7 +17,7 @@ add_action('init', function () {
         break;
 
       case 'convite-grupo-wpp':
-        $html = aer_render_email('email-convite-grupo-wpp', [
+        $html = aer_render_email('convite-grupo-wpp', [
           'nome_exc' => 'Rock in River 2026',
           'dia_exc'  => '15/11/2025',
           'link'     => 'https://linkteste'

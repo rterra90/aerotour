@@ -19,7 +19,22 @@
 <div class="email-container">
   <div class="email-box">
     <div style="text-align: center; padding: 30px 0 20px;">
-      <img src="https://aerotour.com.br/wp-content/themes/Aerotour/assets/images/aerotour-logo.svg" alt="Aerotour Excursões" style="max-width: 180px;">
+      <div class="logo-container">
+        <img src="<?= get_stylesheet_directory_uri(); ?>/assets/images/logo-padrao.png"
+          alt="Aerotour Excursões"
+          class="light-img"
+          width="180"
+          style="display: block; max-width: 180px; margin: 0 auto">
+
+        <div class="dark-img-wrapper" style="display:none; overflow:hidden; width:0px; max-height:0px;">
+          <img src="<?= get_stylesheet_directory_uri(); ?>/assets/images/logo-dark-mode.png"
+            alt="Aerotour Excursões"
+            class="dark-img"
+            width="180"
+            style="display: block; max-width: 180px; margin: 0 auto">
+        </div>
+      </div>
+
     </div>
 
     <div class="content">

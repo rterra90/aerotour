@@ -943,11 +943,11 @@ add_action('wp_ajax_get_email_targets', function () {
     $emails = obter_emails_por_produto($variation_id);
     foreach ($emails as $e) {
       $targets[] = ['email' => $e, 'should_fail' => 0];
-    }
+    } // REAL
 
     // $targets = array(
     //   ['email' => 'rterragd@hotmail.com', 'should_fail' => 0],
-    //   ['email' => 'rterra@rterra.xyz', 'should_fail' => 0]
+    //   ['email' => 'rterragd2@gmail.com', 'should_fail' => 0],
     // ); // TESTE
 
     wp_send_json_success([
@@ -975,10 +975,10 @@ add_action('wp_ajax_send_single_email', function () {
 
     $subject = "Grupo de WhatsApp - Excursão {$email_params['nome_exc']} ({$email_params['dia_exc']}) - Aerotour";
 
-    wp_send_json_success(); // TESTE
+    // wp_send_json_success(); // TESTE
 
-    // $enviado = aer_send_email($email, $subject, 'convite-grupo-wpp', $email_params);
-    // if ($enviado) wp_send_json_success();
-    // else wp_send_json_error();
+    $enviado = aer_send_email($email, $subject, 'convite-grupo-wpp', $email_params);
+    if ($enviado) wp_send_json_success();
+    else wp_send_json_error();
   }
 });

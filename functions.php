@@ -117,7 +117,7 @@ require_once get_template_directory() . '/includes/afiliados/pdv-functions.php';
 function aer_render_email($template_name, $args = [])
 {
   // Define o caminho para a pasta de emails
-  $template_path = __DIR__ . "/emails/{$template_name}.php";
+  $template_path = __DIR__ . "/emails/email-{$template_name}.php";
   $css_path = __DIR__ . "/emails/emails-estilos.css";
 
   if (!file_exists($template_path)) {
@@ -142,7 +142,7 @@ function aer_render_email($template_name, $args = [])
     // Se você não usa Composer, uma alternativa é injetar o <style> 
     // temporariamente para o cliente, ou usar um conversor.
     // Aqui, vamos envolver o HTML com o estilo para garantir a leitura.
-    $html = "<html><head><style>{$css}</style></head><body>{$html}</body></html>";
+    $html = "<html><meta name='color-scheme' content='light dark'><meta name='supported-color-schemes' content='light dark'><head><style>{$css}</style></head><body>{$html}</body></html>";
     $html_com_estilo = CssInliner::fromHtml($html)->inlineCss($css)->render();
   }
 

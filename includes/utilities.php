@@ -36,6 +36,38 @@ function slugify($str, $delimiter = '-')
   return $slug;
 }
 
+/**
+ * Gera o HTML do logo da Aerotour com suporte a Dark Mode para e-mails.
+ * * @param int $width Largura do logo em pixels.
+ * @return string HTML formatado.
+ */
+function get_dark_mode_logo($width = 180)
+{
+  // Caminho dinâmico para a pasta de imagens do seu tema
+  $theme_url = get_stylesheet_directory_uri();
+  $logo_padrao = $theme_url . '/assets/images/logo-padrao.png';
+  $logo_dark = $theme_url . '/assets/images/logo-dark-mode.png';
+
+  ob_start(); ?>
+  <div class="logo-container" style="text-align: center; padding-bottom: 20px;">
+    <img src="<?php echo esc_url($logo_padrao); ?>"
+      alt="Aerotour Excursões"
+      class="light-img"
+      width="<?php echo esc_attr($width); ?>"
+      style="display: inline-block; max-width: <?php echo esc_attr($width); ?>px; border: 0; height: auto;">
+
+    <div class="dark-img-wrapper" style="display:none; overflow:hidden; width:0px; max-height:0px; line-height:0px; visibility:hidden;">
+      <img src="<?php echo esc_url($logo_dark); ?>"
+        alt="Aerotour Excursões"
+        class="dark-img"
+        width="<?php echo esc_attr($width); ?>"
+        style="display: block; max-width: <?php echo esc_attr($width); ?>px; border: 0; height: auto; margin: 0 auto;">
+    </div>
+  </div>
+<?php
+  return ob_get_clean();
+}
+
 function cpf_mask($value)
 {
   $_cpf = preg_replace("/\D/", '', $value);
