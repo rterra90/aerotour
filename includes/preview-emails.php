@@ -48,6 +48,40 @@ add_action('init', function () {
         ));
         $html = ob_get_clean();
         break;
+
+      case 'novo-pedido':
+        // 1. Instancia a classe de e-mail do WooCommerce
+        $wc_emails = WC()->mailer()->get_emails();
+        $email_obj = $wc_emails['WC_Email_Customer_Completed_Order'];
+
+        // 2. Busca o último pedido real do site para usar como base no preview
+        // Se não houver pedidos, você pode precisar criar um pedido de teste manual
+        $customer_orders = wc_get_orders(array('limit' => 1, 'status' => 'completed'));
+
+        if (! empty($customer_orders)) {
+          $order = $customer_orders[0];
+        } else {
+          echo "Nenhum pedido concluído encontrado para gerar o preview.";
+          break;
+        }
+
+        // 3. Define o cabeçalho (puxando das configurações do WC ou fixo)
+        $email_heading = $email_obj->get_heading();
+        $email_obj->object = $order; // Vincula o pedido ao objeto de e-mail
+
+        // Captura o buffer do template original do WC (ou seu override)
+        ob_start();
+        wc_get_template('emails/customer-completed-order.php', array(
+          'order'              => $order,
+          'email_heading'      => $email_heading,
+          'sent_to_admin'      => false,
+          'plain_text'         => false,
+          'email'              => $email_obj,
+          'additional_content' => $email_obj->get_additional_content(),
+
+        ));
+        $html = ob_get_clean();
+        break;
     }
 
     if ($html) {

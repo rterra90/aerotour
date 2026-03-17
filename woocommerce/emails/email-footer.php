@@ -18,7 +18,7 @@ if (! defined('ABSPATH')) exit;
 
   <div style="margin-top: 10px;">
     <a href="<?php echo esc_url(home_url()); ?>" style="color: #ffffff; text-decoration: none; margin: 0 10px; font-size: 12px; border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px;">Nosso Site</a>
-    <a href="https://www.instagram.com/aerotourexcursoes/" style="color: #ffffff; text-decoration: none; margin: 0 10px; font-size: 12px; border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px;">Instagram</a>
+    <a href="https://www.instagram.com/aerotour_excursoes/" style="color: #ffffff; text-decoration: none; margin: 0 10px; font-size: 12px; border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px;">Instagram</a>
   </div>
 </div>
 

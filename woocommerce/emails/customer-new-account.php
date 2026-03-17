@@ -48,7 +48,7 @@ do_action('woocommerce_email_header', $email_heading, $email); ?>
 		</div>
 
 		<div style="flex: 1 1 150px">
-			<a href="https://facebook.com/aerotourexcursoes" style="text-decoration: none; margin: 0 10px;">
+			<a href="https://facebook.com/aerotour_campinas" style="text-decoration: none; margin: 0 10px;">
 				<img src="https://cdn-icons-png.flaticon.com/512/174/174848.png" width="30" alt="Facebook" style="vertical-align: middle;">
 				<span style="color: #400f0f; font-weight: bold; font-size: 14px; margin-left: 5px;">Facebook</span>
 			</a>
