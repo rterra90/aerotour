@@ -59,6 +59,20 @@ class Modal {
   }
 
   /**
+   * Novo método para buscar o arquivo HTML externo
+   */
+  async #fetchTemplate(contentType) {
+    try {
+      const response = await fetch(`${this.#templatePath}/${contentType}.php`);
+      if (!response.ok) throw new Error("Template não encontrado");
+      return await response.text();
+    } catch (error) {
+      console.error(error);
+      return `<p>Erro ao carregar conteúdo.</p>`;
+    }
+  }
+
+  /**
    * Método privado para renderizar o conteúdo com base no tipo.
    * @param {string} contentType - O tipo de conteúdo (ex: 'alerta', 'confirmacao', 'info').
    * @param {Object} data - Dados adicionais a serem usados na renderização.
@@ -94,8 +108,6 @@ class Modal {
 
   //   return html;
   // }
-
-  
   async #renderContent(contentType, data = {}) {
     let html = await this.#fetchTemplate(contentType);
 

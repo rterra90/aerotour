@@ -23,6 +23,31 @@ add_action('init', function () {
           'link'     => 'https://linkteste'
         ]);
         break;
+
+      case 'novo-usuario':
+        // Instancia a classe do e-mail do WooCommerce
+        $wc_email = WC()->mailer()->emails['WC_Email_Customer_New_Account'];
+
+        // Dados fictícios para o preview
+        $user_id = get_current_user_id();
+        $user = get_userdata($user_id);
+
+        // Gera o heading e o conteúdo
+        $email_heading = $wc_email->get_heading();
+
+        // Captura o buffer do template original do WC (ou seu override)
+        ob_start();
+        wc_get_template('emails/customer-new-account.php', array(
+          'user_login'    => $user->user_login,
+          'user_pass'     => '********',
+          'blogname'      => get_bloginfo('name'),
+          'email_heading' => $email_heading,
+          'sent_to_admin' => false,
+          'plain_text'    => false,
+          'email'         => $wc_email,
+        ));
+        $html = ob_get_clean();
+        break;
     }
 
     if ($html) {

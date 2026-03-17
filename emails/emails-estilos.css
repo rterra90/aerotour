@@ -31,6 +31,12 @@
     .dark-img {
         display: block !important;
     }
+
+    /* Garante que o botão principal não suma no modo escuro */
+    a[style*="background-color: #400f0f"] {
+        background-color: #400f0f !important;
+        color: #ffffff !important;
+    }
 }
 
 /* Suporte para Outlook App (Android/iOS) */

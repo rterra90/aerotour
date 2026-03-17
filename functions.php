@@ -163,6 +163,26 @@ function aer_send_email($to, $subject, $template_name, $args = [])
   return wp_mail($to, $subject, $body, $headers);
 }
 
+// FUNÇÃO QUE ESTILIZA OS EMAILS PADRÃO DO WOOCOMMERCE
+add_filter('woocommerce_email_styles', 'custom_woocommerce_email_styles', 999, 2);
+function custom_woocommerce_email_styles($css, $email)
+{
+  $custom_css = "
+        .email-box { background-color: #ffffff !important; }
+        h1 { font-family: Raleway, Arial, sans-serif; }
+        a { color: #400f0f; text-decoration: underline; }
+        
+        /* Proteção Dark Mode que definimos antes */
+        @media (prefers-color-scheme: dark) {
+            .email-container { background-color: #1a1a1a !important; }
+            .email-box { background-color: #ffffff !important; }
+            .light-img { display: none !important; }
+            .dark-img-wrapper { display: block !important; width: auto !important; max-height: none !important; }
+        }
+    ";
+  return $css . $custom_css;
+}
+
 
 
 
