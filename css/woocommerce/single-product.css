@@ -1,13 +1,23 @@
-@import url(galeria.css);
 @import url(app-reservas/app-reservas-main.css);
-@import url(../includes/sticky-tag.css);
+/* @import url(../includes/sticky-tag.css); */
 @import url(../includes/embaques-section.css);
+
+/* BANNER WIDE DE ANÚNCIOS */
 #topAdBanner {
   width: fit-content;
   margin: 0 auto;
 }
+#topAdBanner img {
+  display: block;
+  max-width: 860px;
+  width: 100%;
+  cursor: pointer;
+}
 #topAdBanner small {
   font-size: 0.575rem;
+}
+#modal-promo-rir .modal-content{
+  opacity: 1
 }
 
 /* SEÇÃO STATUS DE RESERVAS*/
@@ -510,7 +520,9 @@ dl#principaisDuvidasContent .resposta {
     padding: 0px;
   }
 }
-.FeedLayout__wrapper {
+
+/* SEÇÃO INSTAGRAM */
+/* .FeedLayout__wrapper {
   background-color: rgb(215 215 215) !important;
 }
 .instagram-feed .spotlight-instagram-feed {
@@ -552,7 +564,33 @@ dl#principaisDuvidasContent .resposta {
   background-color: none !important;
   color: rgb(29 29 29) !important;
   padding: 0;
+} */
+
+/* SEÇÃO FOTOS DAS EXCURSÕES */
+#secaoFotos .carousel-inner {
+  display: flex;
 }
+#secaoFotos .carousel {
+  height: 420px;
+  box-sizing: border-box;
+}
+#secaoFotos .carousel-item {
+  max-height: 420px;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+@media (max-width: 576px) {
+  #secaoFotos {
+    margin-bottom: 12px;
+  }
+  #secaoFotos .carousel {
+    height: 320px;
+  }
+  #secaoFotos .carousel-item {
+    max-height: 320px;
+  }
+}
+
 @media (max-width: 768px) {
   .aviso-ultimas-vagas {
     margin: 0 auto;

@@ -1,5 +1,5 @@
 /* modal */
-.modal-overlay {
+#newReservasContainer .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -15,12 +15,12 @@
   transition: opacity 300ms ease, visibility 300ms ease;
 }
 
-.modal-overlay.show {
+#newReservasContainer .modal-overlay.show {
   opacity: 1;
   visibility: visible;
 }
 
-.modal-content {
+#newReservasContainer .modal-content {
   background: white;
   border-radius: 12px;
   padding: 20px;
@@ -33,17 +33,17 @@
   transition: all 300ms ease;
 }
 
-.modal-content.show {
+#newReservasContainer .modal-content.show {
   transform: translateY(0);
   opacity: 1;
 }
 
-.modal-content.hide {
+#newReservasContainer .modal-content.hide {
   transform: translateY(-30px);
   opacity: 0;
 }
 
-.modal-close {
+#newReservasContainer .modal-close {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -53,27 +53,27 @@
   cursor: pointer;
 }
 
-.modal-content form {
+#newReservasContainer .modal-content form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.modal-buttons {
+#newReservasContainer .modal-buttons {
   display: flex;
   gap: 12px;
   margin-top: 12px;
   justify-content: flex-end;
 }
 
-.modal-buttons button {
+#newReservasContainer .modal-buttons button {
   padding: 5px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.modal-buttons button.saveBtn {
+#newReservasContainer .modal-buttons button.saveBtn {
   background-color: var(--aer-accent);
   color: #f9f9f9;
   border: none;
@@ -84,14 +84,14 @@
   box-shadow: 0 4px 10px rgba(49, 130, 206, 0.2);
   transition: background-color 0.3s, box-shadow 0.3s;
 }
-.modal-buttons button.saveBtn:hover {
+#newReservasContainer .modal-buttons button.saveBtn:hover {
   box-shadow: 0 6px 14px rgba(49, 130, 206, 0.3);
 }
-.modal-buttons button.saveBtn:disabled:hover {
+#newReservasContainer .modal-buttons button.saveBtn:disabled:hover {
   background-color: #e2e8f0;
   box-shadow: unset;
 }
-.modal-buttons button.saveBtn:disabled {
+#newReservasContainer .modal-buttons button.saveBtn:disabled {
   background-color: #e2e8f0;
   color: #a0aec0;
   border: none;
@@ -108,10 +108,10 @@
   text-align: center;
 }
 /* MODAL DATAS */
-.modal-content[data-modal='dates'] .date-list {
+#newReservasContainer .modal-content[data-modal='dates'] .date-list {
   padding: 8px;
 }
-.modal-content .date-list label {
+#newReservasContainer .modal-content .date-list label {
   display: flex;
   font-size: 0.875rem;
   flex-direction: row;
@@ -122,7 +122,7 @@
   margin-bottom: 4px;
   position: relative;
 }
-.modal-content .date-list label[data-desconto-antecipado='true']::after {
+#newReservasContainer .modal-content .date-list label[data-desconto-antecipado='true']::after {
   content: '5% OFF';
   background-color: var(--aer-accent);
   color: var(--aer-text-light);
@@ -134,25 +134,25 @@
   font-size: 0.575rem;
   border-radius: 0.25rem;
 }
-.modal-content .desconto-data-limite p {
+#newReservasContainer .modal-content .desconto-data-limite p {
   text-align: center;
   margin: -10px 0 0 0;
   font-size: 0.875rem;
   color: #4f3939;
 }
-.modal-content[data-modal='dates'] .date-list label.disabled {
+#newReservasContainer .modal-content[data-modal='dates'] .date-list label.disabled {
   cursor: not-allowed;
   color: #737373;
   background: #ededed;
   border-color: #c3c3c3;
   text-decoration: line-through;
 }
-.modal-content[data-modal='dates'] .date-list label.disabled span {
+#newReservasContainer .modal-content[data-modal='dates'] .date-list label.disabled span {
   color: #a5a5a5;
   text-decoration: line-through;
 }
 
-.date-list label[data-ultimas='true']::after {
+#newReservasContainer .date-list label[data-ultimas='true']::after {
   content: attr(data-ultimas-vagas);
   color: #212121;
   font-size: 0.65rem;
@@ -160,11 +160,11 @@
   background-color: #dcdd81;
   border-radius: 0.3rem;
 }
-.date-list label[data-ultimas='true'][data-esgotado='true']::after {
+#newReservasContainer .date-list label[data-ultimas='true'][data-esgotado='true']::after {
   content: 'Vagas esgotadas';
   background-color: #f87171;
 }
-.date-list.many label[data-ultimas='true']::after {
+#newReservasContainer .date-list.many label[data-ultimas='true']::after {
   position: absolute;
   right: 14px;
   top: -9px;
@@ -184,7 +184,7 @@
     font-size: 1rem;
   }
 }
-.modal-content[data-modal='embarque'] select {
+#newReservasContainer .modal-content[data-modal='embarque'] select {
   appearance: none;
   background-color: #f7fafc;
   border: 1px solid #cbd5e0;
@@ -198,7 +198,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
-.modal-content[data-modal='embarque'] select:focus {
+#newReservasContainer .modal-content[data-modal='embarque'] select:focus {
   outline: none;
   border-color: #3182ce;
   box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
@@ -303,7 +303,7 @@
 }
 
 /* MODAL DATAS */
-.date-list {
+#newReservasContainer .date-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -312,7 +312,7 @@
   padding: 0 16px;
 }
 
-.date-list > label {
+#newReservasContainer .date-list > label {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -325,24 +325,24 @@
   font-size: 16px;
 }
 
-.date-list > label:hover {
+#newReservasContainer .date-list > label:hover {
   background-color: #edf2f7;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.date-list > label input[type='checkbox'] {
+#newReservasContainer .date-list > label input[type='checkbox'] {
   width: 20px;
   height: 20px;
   accent-color: #3182ce;
   cursor: pointer;
 }
 
-.date-list > label span {
+#newReservasContainer .date-list > label span {
   flex: 1;
   color: #2d3748;
 }
 /* Estilo padrão: lista vertical */
-.date-list {
+#newReservasContainer .date-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -352,7 +352,7 @@
 }
 
 /* Estilo para quando houver muitas opções */
-.date-list.many {
+#newReservasContainer .date-list.many {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
@@ -360,7 +360,7 @@
 }
 
 /* Estilo dos itens */
-.date-list > label {
+#newReservasContainer .date-list > label {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -373,35 +373,35 @@
   font-size: 16px;
 }
 
-.date-list > label:hover {
+#newReservasContainer .date-list > label:hover {
   background-color: #edf2f7;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.date-list > label input[type='checkbox'] {
+#newReservasContainer .date-list > label input[type='checkbox'] {
   width: 20px;
   height: 20px;
   accent-color: #3182ce;
   cursor: pointer;
 }
 
-.date-list > label span {
+#newReservasContainer .date-list > label span {
   flex: 1;
   color: #2d3748;
 }
 
 /* Mobile-friendly */
 @media (max-width: 380px) {
-  .date-list.many {
+  #newReservasContainer .date-list.many {
     grid-template-columns: 1fr; /* Volta para uma coluna no mobile */
   }
 
-  .date-list > label {
+  #newReservasContainer .date-list > label {
     padding: 16px;
     font-size: 18px;
   }
 
-  .date-list > label input[type='checkbox'] {
+  #newReservasContainer .date-list > label input[type='checkbox'] {
     width: 24px;
     height: 24px;
   }
@@ -421,23 +421,23 @@
 }
 
 /* PASSAGEIRO MODAL */
-.modal-content #paxForm label {
+#newReservasContainer .modal-content #paxForm label {
   display: flex;
   flex-direction: column;
   font-size: 14px;
   color: #374151;
 }
 
-.modal-content #paxForm input.input-error {
+#newReservasContainer .modal-content #paxForm input.input-error {
   border: 1px solid #f87171;
   background-color: #f8717112;
 }
-.modal-content #paxForm input.input-attention {
+#newReservasContainer .modal-content #paxForm input.input-attention {
   border: 1px solid #d2d379;
   background-color: #e4fb2412;
 }
 
-.modal-content #paxForm input {
+#newReservasContainer .modal-content #paxForm input {
   padding: 8px 12px;
   margin-top: 4px;
   border: 1px solid #cbd5e0;
@@ -481,14 +481,14 @@
   flex: 1;
 }
 
-.modal-content #paxForm .custom-select {
+#newReservasContainer .modal-content #paxForm .custom-select {
   position: relative;
   height: fit-content;
   font-size: 0.85rem;
   min-width: 116px;
   width: fit-content;
 }
-.modal-content #paxForm .custom-select button {
+#newReservasContainer .modal-content #paxForm .custom-select button {
   background-color: #f3f3f3;
   padding: 2px 10px;
   width: 100%;
@@ -499,7 +499,7 @@
   box-shadow: -1px 1px 4px #c5c5c5;
   border-radius: 0.2rem;
 }
-.modal-content #paxForm .custom-select button::after {
+#newReservasContainer .modal-content #paxForm .custom-select button::after {
   content: '▼';
   display: inline-block;
   position: absolute;
@@ -507,21 +507,21 @@
   font-size: 0.85rem;
   opacity: 0.7;
 }
-.modal-content #paxForm .custom-select ul {
+#newReservasContainer .modal-content #paxForm .custom-select ul {
   border-radius: 0.25rem;
   box-shadow: -1px 1px 2px #b1b1b1;
   background-color: #f9f9f9;
   position: absolute;
   width: 100%;
 }
-.modal-content #paxForm .custom-select li {
+#newReservasContainer .modal-content #paxForm .custom-select li {
   padding: 4px 10px;
   cursor: pointer;
 }
-.modal-content #paxForm .custom-select li:hover {
+#newReservasContainer .modal-content #paxForm .custom-select li:hover {
   background-color: #efefef;
 }
-.modal-content #paxForm .modal-buttons {
+#newReservasContainer .modal-content #paxForm .modal-buttons {
   justify-content: space-between;
   align-items: center;
 }

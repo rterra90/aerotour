@@ -85,6 +85,8 @@ $user = wp_get_current_user();
     $codigo_pdv = sanitize_text_field($_COOKIE['parceiro_pdv']);
     $nome_pdv = obter_nome_pdv_por_codigo($codigo_pdv);
   ?>
+
+    <!-- TROCAR POR MODAL BOOTSTRAP -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         // salva em localStorace chave 'pdv_alert_popup' com valor false apenas se 'pdv_alert_popup' não estiver definido
@@ -99,6 +101,8 @@ $user = wp_get_current_user();
         }
       });
     </script>
+
+    <!-- FIM TROCAR POR MODAL BOOTSTRAP -->
   <?php
   } else {
   ?>
