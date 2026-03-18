@@ -297,7 +297,7 @@ endif; ?>
 		})
 	})
 </script>
-<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/react_apps/third_party_login.js"></script>
+<!-- <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/react_apps/third_party_login.js"></script> -->
 <script>
 	function showTab(tabId) {
 		document.querySelectorAll('.login-box').forEach(box => {

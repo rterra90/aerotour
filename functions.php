@@ -172,6 +172,7 @@ function custom_woocommerce_email_styles($css, $email)
         h1 { font-family: Raleway, Arial, sans-serif; }
         a { color: #400f0f; text-decoration: underline; }
         
+        
         /* Proteção Dark Mode que definimos antes */
         @media (prefers-color-scheme: dark) {
             .email-container { background-color: #1a1a1a !important; }

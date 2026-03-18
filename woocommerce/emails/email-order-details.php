@@ -179,17 +179,6 @@ $text_align = is_rtl() ? 'right' : 'left';
 
   ?>
 
-
-  <script>
-    async function copyToClipboard(textToCopy, element) {
-      try {
-        await navigator.clipboard.writeText(textToCopy);
-        element.innerText = 'COPIADO';
-      } catch (err) {
-        console.error('Falha ao copiar: ', err);
-      }
-    }
-  </script>
 </div>
 
 <?php do_action('woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text, $email); ?>

@@ -1,6 +1,6 @@
 import React from 'React';
 import ReactDOM from 'react-dom/client';
-import axios from 'axios';
+// import axios from 'axios';
 import { gapi } from 'gapi-script';
 import { jwtDecode } from 'jwt-decode';
 import {
@@ -21,7 +21,10 @@ const AppGoogle = ({ clientId }) => {
 
     const loading = document.createElement('span');
     loading.classList.add('loadingElement');
-    document.querySelector('.registrar .aer-box').appendChild(loading);
+
+
+    document.querySelector('.login-box#cadastro #thirdPartyLogin').innerHTML = '';
+    document.querySelector('.login-box#cadastro #thirdPartyLogin').appendChild(loading);
 
     const registerForm = document.querySelector('form.register');
 
@@ -29,11 +32,10 @@ const AppGoogle = ({ clientId }) => {
 
     registerForm[0].setAttribute('value', decoded.given_name);
     registerForm[1].setAttribute('value', decoded.family_name);
-    ('');
     registerForm[2].setAttribute('value', decoded.email);
     registerForm[3].setAttribute('value', decoded.email);
     registerForm[5].checked = true;
-    registerForm[10].click();
+    registerForm.submit();
   };
   const onFailure = (res) => {
     console.log('LOGIN ERROR! res: ', res);

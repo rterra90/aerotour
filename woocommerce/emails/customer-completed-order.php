@@ -58,7 +58,7 @@ $customer_name = $order->get_billing_first_name();
         </tr>
         <tr>
             <td style="padding: 10px 0; vertical-align: top;">
-                <span style="background: #400f0f; color: #fff; border-radius: 50%; width: 25px; height: 25px; display: block; text-align: center; font-weight: bold; line-height: 25px;">3</span>
+                <span style="background: #400f0f; color: #fff; border-radius: 50%; width: 25px; height: 25px; display: block; text-align: center; font-weight: bold; line-height: 25px;">4</span>
             </td>
             <td style="padding: 10px 0; font-size: 14px; color: #444;">
                 <strong>Suporte:</strong> Se precisar alterar o ponto de embarque ou cancelar, utilize o painel do cliente, na página <em>Minhas reservas</em>. Para dúvidas adicionais, contate-nos por e-mail ou WhatsApp.
