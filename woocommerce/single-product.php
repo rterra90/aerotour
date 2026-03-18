@@ -64,12 +64,11 @@ $excursao = excursao_formatada(get_the_ID());
 // Define se exibe número de lugares vendidos
 $show_vendidos = get_post_meta($excursao['id'], 'show_vendidos', true);
 
-//Define a propriedade 'encerrar_vendas' em cada variação
+//Define as propriedades 'encerrar_vendas' e 'dia' em cada variação
 foreach ($excursao['variacoes'] as $i => $var) {
-  $excursao['variacoes'][$i]['encerrar_vendas'] =
-    get_post_meta($var['variation_id'], 'encerrar_vendas', true) === 'yes'
-    ? true
-    : false;
+  $excursao['variacoes'][$i]['encerrar_vendas'] = get_post_meta($var['variation_id'], 'encerrar_vendas', true) === 'yes' ? true : false;
+  $att_dia = $var['attributes']['attribute_dia'];
+  $excursao['variacoes'][$i]['dia'] = $att_dia;
 }
 
 //Define e ordena a array de datas
@@ -194,17 +193,8 @@ if (has_term('rock-in-rio', 'product_cat')) {
             <div class="share">
               <span>Compartilhe</span>
               <div class="share-icons d-flex gap-2">
-                <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons(
-                                                                                                                                            'whatsapp',
-                                                                                                                                            18,
-                                                                                                                                            18
-                                                                                                                                          ) ?></a>
-                <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons(
-                                                                                                                          'instagram',
-                                                                                                                          18,
-                                                                                                                          18
-                                                                                                                        ) ?>
-                </a>
+                <a href="https://api.whatsapp.com/send?text=<?php echo get_permalink(); ?>" aria-label="Botão compartilhar pelo WhatsApp"><?= aer_icons('whatsapp', 18, 18) ?></a>
+                <a href="https://www.instagram.com/aerotour_excursoes/" aria-label="Botão compartilhar pelo Instagram"><?= aer_icons('instagram', 18, 18) ?></a>
                 <a href="https://www.facebook.com/aerotourcampinas/" aria-label="Botão compartilhar pelo Facebook">
                   <?= aer_icons('facebook', 18, 18) ?>
                 </a>
@@ -220,34 +210,101 @@ if (has_term('rock-in-rio', 'product_cat')) {
         </div>
 
 
-        <!-- CONTADOR DE RESERVAS -->
+        <!-- BADGES DE DISPONIBILIDADE -->
         <div class="status-badges-container">
-          <!-- Aviso de últimas vagas -->
-          <!-- se houver apenas uma variação e ela tiver menos de 10 vagas disponíveis -->
           <?php
-          $variacoes_disp = array_filter($excursao['variacoes'], function ($_var) {
-            return get_post_meta($_var['variation_id'], 'encerrar_vendas', true) !==
-              'yes';
-          });
+          if (count($excursao['variacoes']) > 1) {
 
-          if (count($variacoes_disp) == 1) {
-            $vaga_var = $variacoes_disp[0];
-            $disponibilidade_html = $vaga_var['availability_html'];
+            $statuses = []; // Armazenará os tipos de status encontrados
+            $total_vars = count($excursao['variacoes']);
+
+            foreach ($excursao['variacoes'] as $_var) {
+              $disponibilidade_html = $_var['availability_html'];
+              preg_match('/\d+/', strip_tags($disponibilidade_html), $matches);
+              $vagas = isset($matches[0]) ? (int) $matches[0] : 0;
+
+              if (!$_var['encerrar_vendas']) {
+                if ($vagas > 10) {
+                  $statuses[] = array('dia' => $_var['dia'], 'label' => "Vagas disponíveis", 'slug' => 'disponivel');
+                } elseif ($vagas > 0 && $vagas <= 10) {
+                  $statuses[] = array('dia' => $_var['dia'], 'label' => "Últimas vagas", 'slug' => 'ultimas');
+                } else {
+                  $statuses[] = array('dia' => $_var['dia'], 'label' => "Esgotado", 'slug' => 'esgotado');
+                }
+              }
+            }
+
+            // Lógica de exibição baseada na contagem de tipos de status
+            $mapped = array_map(function ($_s) {
+              return $_s['slug'];
+            }, $statuses);
+
+            $todos_status_iguais = count(array_unique($mapped)) === 1;
+
+            // if (count(array_unique($mapped)) === 1) print_r('tudo igual');
+            // else print_r('diferentes');
+
+            // $unique_count = count($statuses);
+
+            if ($todos_status_iguais) {
+              // Caso 1, 2 e 3: Tudo igual
+              $tipo = $mapped[0];
+              echo "<div class='badge-excursao badge-$tipo'>{$statuses[0]['label']}</div>";
+            } else {
+              // Caso 4: Status Mistos - Slider Horizontal
+
+              echo '<div class="badge-slider-container">';
+              echo '<div class="badge-slider-track">';
+              foreach ($statuses as $status_obj) {
+                $badge_dia = substr($status_obj['dia'], 0, -5);
+                $label = $status_obj['label'];
+                $slug = $status_obj['slug'];
+                echo "<div class='badge-excursao badge-item multi-badges badge-$slug'><span>$badge_dia</span>$label</div>";
+              }
+              echo '</div>';
+              echo '</div>';
+            }
+
+            // verifica se a largura de  badge-slider-track é maior do que a largura de badge-slider-container e, se sim, aplica a classe .overflowing para ativar a animação
+          ?>
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                const container = document.querySelector('.badge-slider-container');
+                const track = document.querySelector('.badge-slider-track');
+
+                if (track.offsetWidth > container.offsetWidth) {
+                  container.classList.add('overflowing');
+
+                }
+              });
+            </script>
+          <?php
+
+          } else {
+            // Captura a disponibilidade da variação única
+            $disponibilidade_html = $excursao['variacoes'][0]['availability_html'];
             preg_match('/\d+/', strip_tags($disponibilidade_html), $matches);
             $vagas_disponiveis = isset($matches[0]) ? (int) $matches[0] : 0;
 
-            if ($vagas_disponiveis > 0 && $vagas_disponiveis <= 10) { ?>
-              <div class="aviso-ultimas-vagas <?= $show_vendidos === 'yes'
-                                                ? 'left'
-                                                : '' ?>">
-                <strong class="d-block">Últimos lugares!</strong> Apenas <?= $vagas_disponiveis ?> vagas disponíveis!
-              </div>
-            <?php } elseif (!$vagas_disponiveis) { ?>
-              <div class="aviso-ultimas-vagas aviso-esgotado">
-                <strong class="d-block">Esgotado!</strong> Não temos mais lugares disponíveis...
-              </div>
-          <?php }
+            // Lógica de exibição seguindo o novo estilo de badges
+            if (!$excursao['variacoes'][0]['encerrar_vendas']) {
+              if ($vagas_disponiveis > 10) {
+                // Caso: Mais de 10 vagas
+                echo '<div class="badge-excursao badge-disponivel">Vagas disponíveis</div>';
+              } elseif ($vagas_disponiveis > 0 && $vagas_disponiveis <= 10) {
+                // Caso: Entre 1 e 10 vagas (Gera urgência)
+                echo '<div class="badge-excursao badge-ultimas">Últimas vagas: ' . $vagas_disponiveis . ' restantes</div>';
+              } else {
+                // Caso: Esgotado
+                echo '<div class="badge-excursao badge-esgotado">Esgotado</div>';
+              }
+            }
           }
+
+
+
+
+
           ?>
           <!-- Contador de reservas realizadas -->
           <?php if ($show_vendidos === 'yes') { ?>

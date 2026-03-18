@@ -1,5 +1,4 @@
 @import url(app-reservas/app-reservas-main.css);
-/* @import url(../includes/sticky-tag.css); */
 @import url(../includes/embaques-section.css);
 
 /* BANNER WIDE DE ANÚNCIOS */
@@ -21,30 +20,122 @@
 }
 
 /* SEÇÃO STATUS DE RESERVAS*/
-/* Badges */
-/* .vagas-disponiveis {
-  display: inline-block;
-  padding: 0.4em 0.8em;
-  background-color: #28a745;
-  color: #fff;
-  font-weight: bold;
-  font-size: 0.9rem;
-  border-radius: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Estilo Base das Badges */
+.badge-excursao {
+    padding: 6px 13px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    display: inline-block;
+    white-space: nowrap;
 }
 
-.vagas-disponiveis:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-} */
- 
+.badge-disponivel { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
+.badge-ultimas { background: #fef7e0; color: #b8860b; border: 1px solid #daa520; }
+.badge-esgotado { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
+
+/* Container do Slider */
+:root {
+    --slider-pause: 4s; /* Tempo parado nas extremidades */
+    --slider-speed: 5s; /* Tempo do deslize suave */
+}
+
+.badge-slider-container {
+    width: 300px;
+    overflow: hidden;
+    position: relative;
+}
+.badge-slider-container.overflowing{
+ /* Aplicando o gradiente que criamos anteriormente */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.badge-slider-track {
+    display: flex;
+    gap: 10px;
+    width: max-content; /* Garante que o track tenha a largura real das badges */
+    padding: 4px 0px;
+    
+    /* Aplicação da animação */
+    /* animation: none */
+}
+.badge-slider-container.overflowing .badge-slider-track{
+    animation: slide-back-and-forth 16s ease-in-out infinite;
+    padding: 4px 12px;
+
+
+}
+
+@keyframes slide-back-and-forth {
+    /* 0% a 18% -> Parado no início (aprox. 3s de 16s) */
+    0%, 18% {
+        transform: translateX(0);
+    }
+    /* 18% a 45% -> Desliza até o fim */
+    45%, 70% {
+        /* Move o track para a esquerda até o limite do container pai */
+        transform: translateX(calc(-100% + 300px)); /* 80px compensa o padding lateral */
+    }
+    /* 70% a 95% -> Volta para o início */
+    95%, 100% {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 500px) {
+    .badge-slider-container {
+        width: 100%;
+    }
+    .badge-slider-container.overflowing .badge-slider-track{
+      padding: 4px 0px;
+    }
+    .badge-slider-container.overflowing{
+ /* Aplicando o gradiente que criamos anteriormente */
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+    @keyframes slide-back-and-forth {
+    /* 0% a 18% -> Parado no início (aprox. 3s de 16s) */
+    0%, 18% {
+        transform: translateX(0);
+    }
+    /* 18% a 45% -> Desliza até o fim */
+    45%, 70% {
+        /* Move o track para a esquerda até o limite do container pai */
+        transform: translateX(calc(-100% + 380px)); /* 80px compensa o padding lateral */
+    }
+    /* 70% a 95% -> Volta para o início */
+    95%, 100% {
+        transform: translateX(0);
+    }
+}
+}
+
+/* Pausa a animação quando o usuário passa o mouse (opcional, mas recomendado) */
+.badge-slider-container:hover .badge-slider-track {
+    animation-play-state: paused;
+}
+
+.badge-item {
+    flex-shrink: 0;
+}
+.badge-excursao.multi-badges{
+  font-size: .75rem;
+
+}
+.badge-excursao.multi-badges span{
+  display: block;
+  font-size: .65rem;
+}
+
+
 .status-badges-container{
     display: flex;
     justify-content: space-between;
     align-items: center;
+
 }
  /* Contador decrescente de últimas vagas*/
 
@@ -63,26 +154,7 @@
 margin-right: 5px;
 filter: contrast(0.675);
 }
-.aviso-ultimas-vagas {
-  background-color: #fff8cc;
-  border: 1px solid #ffd700;
-  padding: 6px 10px;  
-  border-radius: 6px;
-  font-size: 0.85rem;
-  width: fit-content;
-  color: #a67c00;
-  margin: unset;
-  font-size: 0.775rem;
-}
 
-.aviso-ultimas-vagas.aviso-esgotado {
-  background-color: #ffe5e5;
-  border: 1px solid #cc0000;
-  color: #971710;
-}
-.aviso-ultimas-vagas strong {
-  font-size: 0.85rem;
-}
 .box1,
 .box2 {
   grid-row: span 2;
