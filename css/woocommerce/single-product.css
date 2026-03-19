@@ -24,7 +24,7 @@
 .badge-excursao {
     padding: 6px 13px;
     border-radius: 5px;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 13px;
     text-transform: uppercase;
     display: inline-block;
@@ -34,6 +34,7 @@
 .badge-disponivel { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
 .badge-ultimas { background: #fef7e0; color: #b8860b; border: 1px solid #daa520; }
 .badge-esgotado { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
+.badge-encerrado { background-color: #95a5a6; color: #fff; border: 1px solid #e0e0e0; }
 
 /* Container do Slider */
 :root {

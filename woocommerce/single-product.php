@@ -158,8 +158,15 @@ if (has_term('rock-in-rio', 'product_cat')) {
         <div id="topAdBanner">
           <img src="<?= get_stylesheet_directory_uri() ?>/assets/banners/BannerAerotourArteCult-2.gif" alt="Promoção Aerotour + ArteCult + Bandas Novas" data-bs-toggle="modal" data-bs-target="#modal-promo-rir">
         </div>
-    <?php
+      <?php
       }
+    } else if ($excursao['id'] == 6495) {
+      ?>
+      <div id="topAdBanner">
+        <img src="<?= get_stylesheet_directory_uri() ?>/assets/banners/banner_jb.gif" alt="Promoção Aerotour + JBSP Fã Clube Jonas Brothets" data-bs-toggle="modal" data-bs-target="#modal-promo-jb">
+      </div>
+
+    <?php
     }
     ?>
 
@@ -234,52 +241,51 @@ if (has_term('rock-in-rio', 'product_cat')) {
               }
             }
 
-            // Lógica de exibição baseada na contagem de tipos de status
-            $mapped = array_map(function ($_s) {
-              return $_s['slug'];
-            }, $statuses);
-
-            $todos_status_iguais = count(array_unique($mapped)) === 1;
-
-            // if (count(array_unique($mapped)) === 1) print_r('tudo igual');
-            // else print_r('diferentes');
-
-            // $unique_count = count($statuses);
-
-            if ($todos_status_iguais) {
-              // Caso 1, 2 e 3: Tudo igual
-              $tipo = $mapped[0];
-              echo "<div class='badge-excursao badge-$tipo'>{$statuses[0]['label']}</div>";
+            // Se todas as variações tiverem vendas encerradas, exibe um badge geral de "Esgotado"
+            if (count($statuses) === 0) {
+              echo "<div class='badge-excursao badge-encerrado'>Reservas encerradas</div>";
             } else {
-              // Caso 4: Status Mistos - Slider Horizontal
+              // Lógica de exibição baseada na contagem de tipos de status
+              $mapped = array_map(function ($_s) {
+                return $_s['slug'];
+              }, $statuses);
 
-              echo '<div class="badge-slider-container">';
-              echo '<div class="badge-slider-track">';
-              foreach ($statuses as $status_obj) {
-                $badge_dia = substr($status_obj['dia'], 0, -5);
-                $label = $status_obj['label'];
-                $slug = $status_obj['slug'];
-                echo "<div class='badge-excursao badge-item multi-badges badge-$slug'><span>$badge_dia</span>$label</div>";
-              }
-              echo '</div>';
-              echo '</div>';
-            }
+              $todos_status_iguais = count(array_unique($mapped)) === 1;
 
-            // verifica se a largura de  badge-slider-track é maior do que a largura de badge-slider-container e, se sim, aplica a classe .overflowing para ativar a animação
-          ?>
-            <script>
-              document.addEventListener('DOMContentLoaded', function() {
-                const container = document.querySelector('.badge-slider-container');
-                const track = document.querySelector('.badge-slider-track');
+              if ($todos_status_iguais) {
+                // Caso 1, 2 e 3: Tudo igual
+                $tipo = $mapped[0];
+                echo "<div class='badge-excursao badge-$tipo'>{$statuses[0]['label']}</div>";
+              } else {
+                // Caso 4: Status Mistos - Slider Horizontal
 
-                if (track.offsetWidth > container.offsetWidth) {
-                  container.classList.add('overflowing');
-
+                echo '<div class="badge-slider-container">';
+                echo '<div class="badge-slider-track">';
+                foreach ($statuses as $status_obj) {
+                  $badge_dia = substr($status_obj['dia'], 0, -5);
+                  $label = $status_obj['label'];
+                  $slug = $status_obj['slug'];
+                  echo "<div class='badge-excursao badge-item multi-badges badge-$slug'><span>$badge_dia</span>$label</div>";
                 }
-              });
-            </script>
-          <?php
+                echo '</div>';
+                echo '</div>';
+              }
 
+              // verifica se a largura de  badge-slider-track é maior do que a largura de badge-slider-container e, se sim, aplica a classe .overflowing para ativar a animação
+          ?>
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  const container = document.querySelector('.badge-slider-container');
+                  const track = document.querySelector('.badge-slider-track');
+
+                  if (track.offsetWidth > container.offsetWidth) {
+                    container.classList.add('overflowing');
+
+                  }
+                });
+              </script>
+          <?php
+            }
           } else {
             // Captura a disponibilidade da variação única
             $disponibilidade_html = $excursao['variacoes'][0]['availability_html'];
@@ -288,16 +294,18 @@ if (has_term('rock-in-rio', 'product_cat')) {
 
             // Lógica de exibição seguindo o novo estilo de badges
             if (!$excursao['variacoes'][0]['encerrar_vendas']) {
-              if ($vagas_disponiveis > 10) {
-                // Caso: Mais de 10 vagas
+              if ($vagas_disponiveis >= 10) {
+                // Caso: Mais de 9 vagas
                 echo '<div class="badge-excursao badge-disponivel">Vagas disponíveis</div>';
-              } elseif ($vagas_disponiveis > 0 && $vagas_disponiveis <= 10) {
-                // Caso: Entre 1 e 10 vagas (Gera urgência)
-                echo '<div class="badge-excursao badge-ultimas">Últimas vagas: ' . $vagas_disponiveis . ' restantes</div>';
+              } elseif ($vagas_disponiveis > 0 && $vagas_disponiveis < 10) {
+                // Caso: Entre 1 e 9 vagas (Gera urgência)
+                echo '<div class="badge-excursao badge-ultimas">Últimas ' . $vagas_disponiveis . ' vagas restantes</div>';
               } else {
                 // Caso: Esgotado
                 echo '<div class="badge-excursao badge-esgotado">Esgotado</div>';
               }
+            } else {
+              echo '<div class="badge-excursao badge-encerrado">Reservas encerradas</div>';
             }
           }
 
