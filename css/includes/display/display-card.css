@@ -110,9 +110,9 @@ body {
 }
 
 /* Cores por Status */
-.excursion-card .badge-disponivel { background-color: #2ecc71; color: #fff; }
-.excursion-card .badge-esgotado   { background-color: #e74c3c; color: #fff; visibility: visible!important;}
-.excursion-card .badge-encerrado  { background-color: #95a5a6; color: #fff; visibility: visible!important;}
+.badge-disponivel { background-color: #2ecc71; color: #fff; display: none;}
+.badge-esgotado   { background-color: #e74c3c; color: #fff; visibility: visible!important;}
+.badge-encerrado  { background-color: #95a5a6; color: #fff; visibility: visible!important;}
 
 /* Overlay Visual para Status Negativos */
 .status-esgotado .image-container img,
