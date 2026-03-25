@@ -1,7 +1,15 @@
-body {
-  background-color: #e7e7e7;
-  background-color: #111111;
+/* Variáveis para utilizar nos cards */
+:root {
+  --card-border-radius: 1rem;
+  --card-dark-bg: #1a1a1a;
+  --card-dark-bg-2: #222222;
+  --card-dark-text: #c7c7c7;
+  --card-dark-text-2: #6d6d6d;
+  --card-light-bg: #e7e7e7;
+  --card-light-bg-2: #d6d6d6;
+  --card-light-text: #3d3d3d;
 }
+
 /* Estado inicial: Invisível e deslocado para cima */
 .reveal-card {
     opacity: 0;
@@ -35,44 +43,75 @@ body {
 .display-flex-child {
   padding: 0 6px;
 }
+
+/* DEFAULT CARD */
+.default-card{
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    border-radius: var(--card-border-radius);
+    height: 100%;
+    overflow: hidden;
+}
+.default-card .image-container {
+    height: 180px;
+    overflow: hidden;
+}
+.default-card .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.default-card .date-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #ffffff;
+    backdrop-filter: blur(10px);
+    padding: 8px 15px;
+    border-radius: var(--card-border-radius);
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 2;
+    min-width: 60px;
+}
+.default-card .date-badge .day {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #212529;
+    line-height: 1;
+}
+.default-card .date-badge .month {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--aer-accent);
+}
+
+/* Card de exccursão */
 .excursion-card {
   width: 100%;
   max-width: 320px;
-  border-radius: 14px;
-  overflow: hidden;
-  height: 100%;
   display: flex;
   flex-direction: column;/* Container do Grid */
-.display-flex-child {
-  padding: 10px; /* Espaçamento leve entre colunas [cite: 15] */
-  display: flex;
 }
-
-/* Card Principal */
-.excursion-card {
-  width: 100%;
-  background-color: #161616; /* Fundo padrão Dark [cite: 27] */
-  color: #e7e7e7;
-  border-radius: 16px; /* Bordas mais arredondadas e modernas [cite: 16] */
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Sombra mais profunda [cite: 16] */
-}
-
 .excursion-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  /* box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); */
+  box-shadow: 0 0px 8px 1px rgb(0 0 0 / 13%);
 }
-
+.excursion-card .info > div{
+  padding-left: 20px;
+  padding-right: 20px;
+}
 /* Container da Imagem */
 .excursion-card .image-container {
   position: relative;
   width: 100%;
-  height: 180px; /* Altura fixa para manter uniformidade na galeria [cite: 17] */
-  overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .excursion-card .image-container img {
@@ -87,24 +126,38 @@ body {
 }
 
 /* Sistema de Badges Modernizado */
-.excursion-card .badge {
-    position: absolute;
-    top: 16px;
-    left: 0;
-    color: #fff;
-    padding: 8px 16px;
-    font-size: .9em;
-    border-radius: 0 4px 4px 0;
-    font-weight: 700;
-    z-index: 2;
-    visibility: hidden;
-    letter-spacing: .07rem;
-    text-transform: uppercase;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
-
+.excursion-card .date-badge{
+  backdrop-filter: blur(2px);
+  background: #ffffffcf;
+}
+.excursion-card .date-badge .date-range .day{
+  font-size: 1.1rem;
+}
+.excursion-card .date-badge .date-range-multi .day{
+  font-size: 1rem;
+}
+.excursion-card .date-badge .date-range .day span{
+  font-size: .775rem;
 }
 
+.excursion-card .date-badge .date-range-multi .month{
+  font-size: .525rem
+}
+.excursion-card .date-badge hr{
+      margin: 0;
+    color: #000000;
+    transform: rotate(135deg);
+}
+.excursion-card .date-badge .date-range-multi > div{
+    position: relative;
 
+}
+.excursion-card .date-badge .date-range-multi .first-date{
+    left: -8px;
+}
+.excursion-card .date-badge .date-range-multi .second-date{
+    left: 8px;
+}
 .excursion-card img.encerrado{
   filter: contrast(.5);
 }
@@ -122,88 +175,120 @@ body {
 
 /* Área de Informações */
 .excursion-card .info {
-  padding: 16px;
+  justify-content: space-between;
+  text-align: left;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; 
+  padding-bottom: 10px;
 }
 
-.excursion-card .title {
-  font-size: 1.15rem; 
+ .excursion-card .title{
+  font-size: 1.25rem; 
   font-weight: 700;
   line-height: 1.3; 
   min-height: 3em; /* Garante alinhamento mesmo com títulos curtos */
 }
 
 .excursion-card .title span {
-  display: inline-block;
-  font-size: 0.7rem;
-  background: #400f0f; 
-  padding: 2px 8px; 
-  border-radius: 4px; 
-  margin-bottom: 6px;
+  display: block;
   font-weight: 600;
+  font-size: 0.85rem;
 }
+.excursion-card .title a{
+      overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+.excursion-card.light .title{
 
-/* Datas e Localização com Ícones Imaginários (via CSS) */
-.excursion-card .dates, 
+}
 .excursion-card .location {
   font-size: 0.85rem; 
-  color: #aaa;
   margin-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
+  padding: 16px 18px;
+  background-color: var(--card-dark-bg-2);
 }
-
-.excursion-card .location p {
-  margin: 0;
-  color: #fff;
-  font-weight: 500; 
+.excursion-card.light .location{
+  background-color: var(--card-light-bg-2);
+}
+.excursion-card .location .location-inner{
+    align-items: start;
+  display: flex;
+}
+.excursion-card .location .location-icon{
+  width:24px;
+}
+.excursion-card .location .location-icon i{
+      font-size: 1.5rem;
+    opacity: .25;
+}
+.excursion-card .location .location-text{
+  width: calc(100% - 24px);
+  padding-left: 8px;
+}
+.excursion-card .location .location-text p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1rem;
+        white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /* width: calc(100% - 32px); */
 }
 
 .excursion-card .location span {
   font-size: 0.75rem; 
-  color: #888;
+  color: #6d6d6d;
+}
+
+/* Features list */
+.excursion-card .features{
+ padding-top: 14px;
+}
+.excursion-card .features ul{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.excursion-card .features li{
+  font-size: .825rem;
 }
 
 /* Botão CTA */
 .excursion-card .cta {
-  margin-top: auto; /* Empurra o botão sempre para o rodapé do card  */
   background: #400f0f; 
-  border: none; 
-  border-radius: 10px; 
+  border-radius: var(--card-border-radius); 
   transition: all 0.3s ease; 
+  font-size: 0.825rem;
+  padding: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+    color: #fff;
+  border: none;
+  display: block;
+  width: calc(100% - 20px);
+  margin: 20px auto 0px;
+}
+
+.excursion-card .cta:hover {
+  background-color: #5a1a1a;
 }
 
 .excursion-card .cta a {
   display: block;
-  padding: 12px;
   color: #fff;
   text-decoration: none;
   font-weight: 700;
   font-size: 0.85rem; 
   text-align: center;
-}
-
-.excursion-card .cta:hover {
-  background: #5a1a1a; 
-  transform: scale(1.02);
-}
-
+} 
 /* Variação Light  */
-.excursion-card.light {
-  background-color: #ffffff; 
-  color: #1a1a1a; 
-  border: 1px solid #ddd; 
-}
-
 .excursion-card.light button.cta a {
     color: #400f0f;
 }
-
-.excursion-card.light .location p { color: #1a1a1a; }
-.excursion-card.light .dates { color: #555; }
 
 /* Responsividade Mobile [cite: 31, 32] */
 @media (max-width: 576px) {
@@ -215,93 +300,23 @@ body {
     font-size: 1rem;
   }
 }
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.excursion-card .image-container {
-  max-width: 95%;
-  border-radius: 14px;
-  overflow: hidden;
-  margin: 8px auto 0;
-  max-height: 120px;
-  position: relative;
-}
-
-.excursion-card .image-container img {
-  width: 100%;
-}
-
-.excursion-card .title {
-  padding: 8px 0;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border-radius: 4px;
-  line-height: 1.15;
-}
-.excursion-card .title span {
-  color: #e7e7e7;
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  background-color: #400f0f;
-  width: fit-content;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-bottom: 3px;
-}
 
 
-
-.excursion-card .info {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 12px 16px;
-  text-align: left;
-  font-family: 'Segoe UI', sans-serif;
-}
-.excursion-card .info .location p {
-  margin-bottom: -4px;
-}
-.excursion-card .info .location span {
-  font-size: 0.825rem;
-}
-.excursion-card .info .dates,
-.excursion-card .info .location {
-  font-size: 0.9rem;
-}
-
-.excursion-card .cta {
-  background-color: #400f0f;
-  color: #fff;
-  border: none;
-  padding: 0px 16px;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 12px auto 2px;
-  transition: background-color 0.3s ease;
-  display: block;
-  width: 100%;
-}
-
-.excursion-card .cta:hover {
-  background-color: #5a1a1a;
-}
 
 /* Variações de fundo */
 .excursion-card.dark {
-  background-color: #161616;
-  color: #c7c7c7;
-  border: 2px solid #202020;
+  background-color: var(--card-dark-bg);
+  color: var(--card-dark-text);
 }
 
 .excursion-card.light {
-  background-color: #e7e7e7;
-  color: #111;
+  background-color: var(--card-light-bg);
+  color: var(--card-light-text);
   border: 2px solid #d9d9d9;
+}
+.excursion-card.light .title{
+  color: var(--card-light-text);
+
 }
 
 .excursion-card.light .title-overlay {
@@ -319,11 +334,13 @@ body {
   color: var(--aer-accent);
   background-color: unset;
 }
+
 @media (max-width: 576px) {
-  .excursion-card .info {
-    padding: 8px;
+  .excursion-card .location .location-text p {
+    font-size: .875rem;
   }
 }
+
 @media (max-width: 460px) {
   .display-flex-child {
     display: flex;
@@ -331,12 +348,6 @@ body {
   }
   .excursion-card {
     max-width: unset;
-  }
-  .excursion-card .image-container {
-    margin: 0 auto;
-    max-width: unset;
-    width: 100%;
-    max-height: unset;
   }
 }
 

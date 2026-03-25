@@ -1,3 +1,5 @@
+
+
 #archive-product {
   background-color: #111111;
   padding: 40px 0;
@@ -93,6 +95,11 @@
     background: #222;
     color: #fff;
     border-color: #666;
+}
+
+/* Lista de cards */
+.archive-container .excursion-card .title{
+  font-size: 1.15rem;
 }
 .archive-container .content-area ul.products .row > div {
   width: 33.3%;

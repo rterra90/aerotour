@@ -378,7 +378,6 @@ a.remove-coupon-link {
     padding: 10px 0 20px;
   }
   #carrinho-container .coupon #coupon_inputs {
-    height: 0px;
     overflow: hidden;
     transition: 0.3s;
     display: flex;
@@ -401,6 +400,7 @@ a.remove-coupon-link {
   #carrinho-container .coupon button {
     font-size: 0.725rem;
     width: 35%;
+    padding: 6px
   }
   a.woocommerce-remove-coupon {
     font-size: 0.6rem;
