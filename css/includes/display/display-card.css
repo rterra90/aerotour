@@ -158,14 +158,27 @@
 .excursion-card .date-badge .date-range-multi .second-date{
     left: 8px;
 }
-.excursion-card img.encerrado{
-  filter: contrast(.5);
+.excursion-card img.encerrado, .excursion-card img.esgotado{
+filter: grayscale(1);
 }
 
+
+.card-disp-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 3;
+padding: 8px 22px;
+font-size: .85rem;
+  border-radius: var(--card-border-radius);
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 /* Cores por Status */
 .badge-disponivel { background-color: #2ecc71; color: #fff; display: none;}
 .badge-esgotado   { background-color: #e74c3c; color: #fff; visibility: visible!important;}
 .badge-encerrado  { background-color: #95a5a6; color: #fff; visibility: visible!important;}
+.badge-ultimas-vagas { background-color: #d1af3c; color: #fff;  visibility: visible!important;}  
 
 /* Overlay Visual para Status Negativos */
 .status-esgotado .image-container img,
@@ -296,9 +309,9 @@
     height: 150px;
   }
   
-  .excursion-card .title {
+  /* .excursion-card .title {
     font-size: 1rem;
-  }
+  } */
 }
 
 

@@ -13,37 +13,46 @@ $img_url = wp_get_attachment_image_src(
 
 // 1. Lógica de Status e Badges
 $variacoes = $excursao->get_available_variations();
-$status_final = 'disponivel'; // Default
-$tem_vagas = false;
-$vendas_encerradas = true;
 
-foreach ($variacoes as $var) {
-  $vagas = $var['max_qty'] > 0 ? $var['max_qty'] : 0; // Verifica estoque da variação
-  $encerrado =
-    get_post_meta($var['variation_id'], 'encerrar_vendas', true) === 'yes';
-
-  if (!$encerrado) {
-    $vendas_encerradas = false;
-    if ($var['is_in_stock']) {
-      $tem_vagas = true;
+$disponibilidades = [];
+foreach ($variacoes as $v) {
+  if (get_post_meta($v['variation_id'], 'encerrar_vendas', true) !== 'yes') {
+    if (isset($v['max_qty'])) {
+      $disponibilidades[] = empty($v['max_qty']) ? 0 : $v['max_qty'];
     }
   }
 }
 
-// Definição da Badge
-if ($vendas_encerradas) {
+$ultimos = array_filter($disponibilidades, function ($d) {
+  $r = $d < 10 && $d > 0;
+  return $r;
+});
+
+$esgotado = count(array_filter($disponibilidades, function ($v) {
+  return $v !== 0;
+})) === 0;
+
+$show_badge = false;
+$disponivel = true;
+$badge_class = '';
+$badge_label = '';
+if (empty($variacoes)) {
+  $badge_label = 'Em breve...';
+  $badge_class = 'em-breve';
+} elseif (empty($disponibilidades)) {
+  $badge_label = 'Vendas encerradas';
   $badge_class = 'encerrado';
-  $badge_label = 'Vendas Encerradas';
-} elseif (!$tem_vagas) {
-  $badge_class = 'esgotado';
+  $disponivel = false;
+  $show_badge = true;
+} elseif (!empty($ultimos)) {
+  $badge_label = 'Últimas vagas!';
+  $badge_class = 'ultimas-vagas';
+  $show_badge = true;
+} elseif ($esgotado) {
   $badge_label = 'Esgotado';
-} elseif ($tem_vagas) {
-  $badge_class = 'disponivel';
-  $badge_label = 'Vagas disponíveis';
-} else {
-  // Aqui você pode adicionar lógica para "Últimas Vagas" se o estoque for baixo
-  $badge_class = '';
-  $badge_label = 'Reservas disponíveis';
+  $badge_class = 'esgotado';
+  $disponivel = false;
+  $show_badge = true;
 }
 
 $datas_array = '';
@@ -85,7 +94,7 @@ if (isset($excursao->attributes['dia'])) {
   });
 }
 ?>
-<div class="col-lg-3 col-md-4 col-sm-5 col-8 display-flex-child reveal-card"
+<div class="col-lg-3 col-md-4 col-sm-5 col-9 display-flex-child reveal-card"
   style="--card-delay: <?= $card_index ?? 0 ?>;"
   data-nome="<?= esc_attr($excursao->get_name()) ?>"
   data-id="<?= $excursao->get_id() ?>">
@@ -137,13 +146,14 @@ if (isset($excursao->attributes['dia'])) {
           ?>
 
         </div>
+        <?php if ($show_badge): ?>
+          <div class="badge card-disp-badge badge-<?= $badge_class ?>"><?= $badge_label ?></div>
+        <?php endif; ?>
       </a>
 
 
 
-      <?php if ($badge_label): ?>
-        <div class="badge badge-<?= $badge_class ?>"><?= $badge_label ?></div>
-      <?php endif; ?>
+
 
     </div>
     <div class="info">
@@ -185,9 +195,7 @@ if (isset($excursao->attributes['dia'])) {
       <!-- Botão -->
       <button class="cta">
         <a href="<?= $excursao->get_permalink() ?>" aria-label="Ver detalhes de <?= $excursao->get_name() ?>">
-          <?= $badge_class === 'disponivel'
-            ? '+ infos e reservas'
-            : 'Ver detalhes' ?>
+          <?= $disponivel ? '+ infos e reservas' : 'Ver detalhes' ?>
         </a>
       </button>
     </div>

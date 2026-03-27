@@ -32,9 +32,9 @@
 }
 
 .badge-disponivel { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
-.badge-ultimas { background: #fef7e0; color: #b8860b; border: 1px solid #daa520; }
+.badge-ultimas { background: #fef7e0; color: #b8860b; border: 1px solid #d1af3c; }
 .badge-esgotado { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
-.badge-encerrado { background-color: #95a5a6; color: #fff; border: 1px solid #e0e0e0; }
+.badge-encerrado { background: #f5f5f5; color: #9e9e9e; border: 1px solid #e0e0e0; }
 
 /* Container do Slider */
 :root {
