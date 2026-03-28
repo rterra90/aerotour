@@ -26514,7 +26514,7 @@
     const [profile, setProfile] = import_React.default.useState([]);
     const onSuccess = async (res) => {
       const container = document.getElementById("thirdPartyLogin");
-      container.innerHTML = "<span>Autenticando...</span>";
+      container.innerHTML = '<span style="display:block;text-align:center;">Autenticando...</span>';
       try {
         const response = await fetch("/wp-json/aerotour/v1/google-login", {
           method: "POST",

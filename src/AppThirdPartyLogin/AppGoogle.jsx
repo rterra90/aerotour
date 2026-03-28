@@ -17,7 +17,7 @@ const AppGoogle = ({ clientId }) => {
   const onSuccess = async (res) => {
     // Mostra um loading simples
     const container = document.getElementById('thirdPartyLogin');
-    container.innerHTML = '<span>Autenticando...</span>';
+    container.innerHTML = '<span style="display:block;text-align:center;">Autenticando...</span>';
 
     try {
       const response = await fetch('/wp-json/aerotour/v1/google-login', {
