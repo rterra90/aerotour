@@ -114,8 +114,8 @@ if (isset($excursao->attributes['dia'])) {
             $dia = explode('/', $datas_array[0])[0];
             $mes = explode('/', $datas_array[0])[1];
           ?>
-            <span class="day">16</span>
-            <span class="month"> Mai </span>
+            <span class="day"><?= $dia ?></span>
+            <span class="month"> <?= $mes ?> </span>
           <?php
           } elseif (count($datas_array) > 1) {
             $dia_inicial = explode('/', $datas_array[0])[0];
