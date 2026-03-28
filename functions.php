@@ -906,8 +906,10 @@ function aer_atualizar_data_limite_produto($product_id)
 // Executa sempre que um produto for salvo/atualizado
 add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');
 
+// ENDPOINTS PARA CONSUMIR A REST API
 require_once get_template_directory() . '/endpoints/cupom_update.php';
 require_once get_template_directory() . '/endpoints/api_campanhas_get.php';
+require_once get_template_directory() . '/endpoints/api_google_login.php';
 require_once get_template_directory() .
   '/endpoints/participantes_roleta_put.php';
 require_once get_template_directory() . '/endpoints/api_user_get.php';

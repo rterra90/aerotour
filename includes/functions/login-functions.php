@@ -90,58 +90,56 @@ function verificar_usuario_logado()
     $user = wp_get_current_user();
     $_cpf = get_user_meta($user->ID, 'cpf', true);
     $_username = $user->user_login;
-    if ($_cpf === '') {
-      if (!str_contains($_username, '@')) {
-        update_user_meta($user->ID, 'cpf', $_username);
+    if ($_cpf === '') { // se o usuário nao tem meta CPF salvo
+      if (!str_contains($_username, '@')) { // se o username for CPF (usuário antigo)
+        update_user_meta($user->ID, 'cpf', $_username); // atualiza o meta CPF para o mesmo valor que está no username 
       }
     }
   }
 
-  if (isset($_POST['register_method'])) {
-    if ($_POST['register_method'] === '_google_register') {
-      $email = $_POST['email'];
-      $user = get_user_by('email', $email);
-      if ($user) {
-        // Usuário já existe, faça login
-        wp_set_current_user($user->ID);
-        wp_set_auth_cookie($user->ID);
-        wp_redirect(home_url() . '/minha-conta');
-        exit();
-      } else {
-        // Usuário não existe, registrar
+  // if (isset($_POST['register_method'])) {
+  //   if ($_POST['register_method'] === '_google_register') {
+  //     $email = $_POST['email'];
+  //     $user = get_user_by('email', $email);
+  //     if ($user) {
+  //       // Usuário já existe, faça login
+  //       wp_set_current_user($user->ID);
+  //       wp_set_auth_cookie($user->ID);
+  //       wp_redirect(home_url() . '/minha-conta');
+  //       exit();
+  //     } else {
+  //       // Usuário não existe, registrar
 
-        // Dados do novo usuário
-        $_pass = wp_generate_password();
-        $user_data = [
-          'user_login' => $_POST['username'],
-          'first_name' => $_POST['billing_first_name'],
-          'last_name' => $_POST['billing_last_name'],
-          'display_name' => $_POST['billing_first_name'],
-          'user_pass' => wp_generate_password(), // Gera uma senha aleatória
-          'user_email' => $_POST['email'],
-          'user_nicename' => $_POST['billing_first_name'],
-          'role' => 'subscriber' // Defina a função de usuário desejada
-        ];
+  //       // Dados do novo usuário
+  //       $_pass = wp_generate_password();
+  //       $user_data = [
+  //         'user_login' => $_POST['username'],
+  //         'first_name' => $_POST['billing_first_name'],
+  //         'last_name' => $_POST['billing_last_name'],
+  //         'display_name' => $_POST['billing_first_name'],
+  //         'user_pass' => wp_generate_password(), // Gera uma senha aleatória
+  //         'user_email' => $_POST['email'],
+  //         'user_nicename' => $_POST['billing_first_name'],
+  //         'role' => 'subscriber' // Defina a função de usuário desejada
+  //       ];
 
-        // Insira o novo usuário
-        $registered_user_id = wp_insert_user($user_data);
-        update_user_meta(
-          $registered_user_id,
-          'billing_first_name',
-          sanitize_text_field($_POST['billing_first_name'])
-        );
-        update_user_meta(
-          $registered_user_id,
-          'billing_last_name',
-          sanitize_text_field($_POST['billing_last_name'])
-        );
-        wp_set_current_user($registered_user_id);
-        wp_set_auth_cookie($registered_user_id);
-        wp_redirect(home_url() . '/minha-conta');
-        exit();
-      }
-    }
-  }
+  //       // Insira o novo usuário
+  //       $registered_user_id = wp_insert_user($user_data);
+  //       update_user_meta(
+  //         $registered_user_id,
+  //         'billing_first_name',
+  //         sanitize_text_field($_POST['billing_first_name'])
+  //       );
+  //       update_user_meta(
+  //         $registered_user_id,
+  //         'billing_last_name',
+  //         sanitize_text_field($_POST['billing_last_name'])
+  //       );
+  //       wp_set_current_user($registered_user_id);
+  //       wp_set_auth_cookie($registered_user_id);
+  //       wp_redirect(home_url() . '/minha-conta');
+  //       exit();
+  //     }
+  //   }
+  // }
 }
-
-?>

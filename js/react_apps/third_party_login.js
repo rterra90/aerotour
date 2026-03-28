@@ -26506,78 +26506,31 @@
   var InvalidTokenError = class extends Error {
   };
   InvalidTokenError.prototype.name = "InvalidTokenError";
-  function b64DecodeUnicode(str) {
-    return decodeURIComponent(atob(str).replace(/(.)/g, (m2, p) => {
-      let code = p.charCodeAt(0).toString(16).toUpperCase();
-      if (code.length < 2) {
-        code = "0" + code;
-      }
-      return "%" + code;
-    }));
-  }
-  function base64UrlDecode(str) {
-    let output = str.replace(/-/g, "+").replace(/_/g, "/");
-    switch (output.length % 4) {
-      case 0:
-        break;
-      case 2:
-        output += "==";
-        break;
-      case 3:
-        output += "=";
-        break;
-      default:
-        throw new Error("base64 string is not of the correct length");
-    }
-    try {
-      return b64DecodeUnicode(output);
-    } catch (err) {
-      return atob(output);
-    }
-  }
-  function jwtDecode(token, options) {
-    if (typeof token !== "string") {
-      throw new InvalidTokenError("Invalid token specified: must be a string");
-    }
-    options || (options = {});
-    const pos = options.header === true ? 0 : 1;
-    const part = token.split(".")[pos];
-    if (typeof part !== "string") {
-      throw new InvalidTokenError(`Invalid token specified: missing part #${pos + 1}`);
-    }
-    let decoded;
-    try {
-      decoded = base64UrlDecode(part);
-    } catch (e) {
-      throw new InvalidTokenError(`Invalid token specified: invalid base64 for part #${pos + 1} (${e.message})`);
-    }
-    try {
-      return JSON.parse(decoded);
-    } catch (e) {
-      throw new InvalidTokenError(`Invalid token specified: invalid json for part #${pos + 1} (${e.message})`);
-    }
-  }
 
   // src/AppThirdPartyLogin/AppGoogle.jsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var AppGoogle = ({ clientId }) => {
     const [user, setUser] = import_React.default.useState([]);
     const [profile, setProfile] = import_React.default.useState([]);
-    const onSuccess = (res) => {
-      const decoded = jwtDecode(res.credential);
-      document.querySelector("form.register").style.display = "none";
-      const loading = document.createElement("span");
-      loading.classList.add("loadingElement");
-      document.querySelector(".login-box#cadastro #thirdPartyLogin").innerHTML = "";
-      document.querySelector(".login-box#cadastro #thirdPartyLogin").appendChild(loading);
-      const registerForm = document.querySelector("form.register");
-      registerForm[7].setAttribute("value", "_google_register");
-      registerForm[0].setAttribute("value", decoded.given_name);
-      registerForm[1].setAttribute("value", decoded.family_name);
-      registerForm[2].setAttribute("value", decoded.email);
-      registerForm[3].setAttribute("value", decoded.email);
-      registerForm[5].checked = true;
-      registerForm.submit();
+    const onSuccess = async (res) => {
+      const container = document.getElementById("thirdPartyLogin");
+      container.innerHTML = "<span>Autenticando...</span>";
+      try {
+        const response = await fetch("/wp-json/aerotour/v1/google-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: res.credential })
+          // Envia o JWT íntegro
+        });
+        const data = await response.json();
+        if (data.success) {
+          window.location.href = data.redirect;
+        } else {
+          alert("Erro no login: " + data.message);
+        }
+      } catch (error) {
+        console.error("Erro na requisi\xE7\xE3o:", error);
+      }
     };
     const onFailure = (res) => {
       console.log("LOGIN ERROR! res: ", res);

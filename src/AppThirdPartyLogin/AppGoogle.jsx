@@ -14,28 +14,28 @@ const AppGoogle = ({ clientId }) => {
   const [user, setUser] = React.useState([]);
   const [profile, setProfile] = React.useState([]);
 
-  const onSuccess = (res) => {
-    const decoded = jwtDecode(res.credential);
+  const onSuccess = async (res) => {
+    // Mostra um loading simples
+    const container = document.getElementById('thirdPartyLogin');
+    container.innerHTML = '<span>Autenticando...</span>';
 
-    document.querySelector('form.register').style.display = 'none';
+    try {
+      const response = await fetch('/wp-json/aerotour/v1/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: res.credential }) // Envia o JWT íntegro
+      });
 
-    const loading = document.createElement('span');
-    loading.classList.add('loadingElement');
+      const data = await response.json();
 
-
-    document.querySelector('.login-box#cadastro #thirdPartyLogin').innerHTML = '';
-    document.querySelector('.login-box#cadastro #thirdPartyLogin').appendChild(loading);
-
-    const registerForm = document.querySelector('form.register');
-
-    registerForm[7].setAttribute('value', '_google_register');
-
-    registerForm[0].setAttribute('value', decoded.given_name);
-    registerForm[1].setAttribute('value', decoded.family_name);
-    registerForm[2].setAttribute('value', decoded.email);
-    registerForm[3].setAttribute('value', decoded.email);
-    registerForm[5].checked = true;
-    registerForm.submit();
+      if (data.success) {
+        window.location.href = data.redirect; // Redireciona para /minha-conta
+      } else {
+        alert('Erro no login: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
   };
   const onFailure = (res) => {
     console.log('LOGIN ERROR! res: ', res);
