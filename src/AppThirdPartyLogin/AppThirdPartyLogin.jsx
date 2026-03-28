@@ -4,18 +4,24 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import AppGoogle from './AppGoogle.jsx';
 
 function AppThirdPartyLogin() {
-  const clientId =
-    '131198865017-ohp88m555fk17nj5c744au3k8vogu332.apps.googleusercontent.com';
+  const [clientID, setClientID] = React.useState(null);
+
+    React.useEffect(() => {
+setClientID(window.themeLinks.gLoginClientId);
+    }, [])
   return (
     <>
-      <GoogleOAuthProvider clientId={clientId}>
-        <AppGoogle clientId={clientId} />
-      </GoogleOAuthProvider>
+    {clientID ? <GoogleOAuthProvider clientId={clientID}>
+        <AppGoogle clientId={clientID} />
+      </GoogleOAuthProvider> : <p className="text-center">Client ID não configurado.</p>}
+      
     </>
   );
 }
-
-const tplogin_app_root = document.getElementById('thirdPartyLogin');
-if (tplogin_app_root) {
-  ReactDOM.createRoot(tplogin_app_root).render(<AppThirdPartyLogin />);
+window.addEventListener('load', () => {
+  const tplogin_app_root = document.getElementById('thirdPartyLogin');
+  if (tplogin_app_root) {
+    ReactDOM.createRoot(tplogin_app_root).render(<AppThirdPartyLogin />);
 }
+});
+

@@ -86,6 +86,7 @@ wp_localize_script('theme-links', 'themeLinks', [
   'siteUrl' => get_site_url(),
   'cartUrl' => wc_get_cart_url(),
   'stylesheetUrl' => get_stylesheet_directory_uri(),
+  'gLoginClientId' => get_option('google_client_id') ?: null,
 ]);
 
 // ÁREA DE INCLUDES
@@ -925,6 +926,8 @@ if (is_admin()) {
   require_once get_template_directory() .
     '/includes/admin-pages/embarques/embarques-admin.php'; //página Embarques
   require_once get_template_directory() .
+    '/includes/admin-pages/google-integrations-settings-admin.php'; //página Embarques
+  require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/home-cards-widget.php'; // widget home cards
   require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/campanhas_cupons_widget.php'; // widget campanhas cupons
@@ -932,9 +935,67 @@ if (is_admin()) {
     '/includes/admin-pages/cancelamentos-admin.php';
   require_once get_template_directory() .
     '/includes/admin-pages/exc-embarques-admin.php';
+  require_once get_template_directory() .
+    '/includes/google-integrations-functions.php';
 
   //   require_once get_template_directory() .
   // '/includes/admin-pages/fluxo-adicionar-excursao.php'; // widget check-in
+
+  function register_custom_settings()
+  {
+    register_setting('glogin_group', 'google_login_enabled');
+    register_setting('glogin_group', 'google_client_id');
+    register_setting('glogin_group', 'google_client_secret');
+
+    add_settings_section(
+      'google_login_section',
+      'Configurações de Google Login',
+      'glogin_section_callback',
+      'google-integrations-settings'
+    );
+
+    // Campo: Ativar/Desativar (Switch)
+    add_settings_field(
+      'google_login_enabled',
+      'Ativar Google Login',
+      'glogin_render_switch_field',
+      'google-integrations-settings',
+      'google_login_section'
+    );
+
+    // Campo: Client ID com ajuda
+    add_settings_field(
+      'google_client_id',
+      'Google Client ID',
+      'glogin_render_id_field',
+      'google-integrations-settings',
+      'google_login_section',
+      ['label_for' => 'google_client_id']
+    );
+
+    // Campo: Client Secret
+    add_settings_field(
+      'google_client_secret',
+      'Google Client Secret',
+      'glogin_render_secret_field',
+      'google-integrations-settings',
+      'google_login_section',
+      ['label_for' => 'google_client_secret', 'type' => 'password']
+    );
+  }
+  add_action('admin_init', 'register_custom_settings');
+
+  /**
+   * Renderiza o input (Helper)
+   */
+  // function admin_render_input_field($args)
+  // {
+  //   $option = get_option($args['label_for']);
+  //   $type = isset($args['type']) ? $args['type'] : 'text';
+  //   echo '<input type="' . esc_attr($type) . '" name="' . esc_attr($args['label_for']) . '" value="' . esc_attr($option) . '" class="regular-text">';
+  // }
+
+
 
   //ADMIN CUSTOM SCRIPTS
   function admin_custom_scripts()
@@ -991,8 +1052,8 @@ if (is_admin()) {
   add_action('admin_enqueue_scripts', 'admin_custom_scripts');
 
   // ADMIN MENU
-  add_action('admin_menu', 'admin_menu_embarques');
-  function admin_menu_embarques()
+  add_action('admin_menu', 'admin_menu_custom_options');
+  function admin_menu_custom_options()
   {
     add_menu_page(
       'Embarques',
@@ -1020,6 +1081,15 @@ if (is_admin()) {
       'reservas_admin_page',
       'dashicons-money-alt',
       25
+    );
+    add_menu_page(
+      'Integrações Google',      // Título da página
+      'Google Setup',            // Nome no menu
+      'manage_options',          // Capacidade necessária
+      'google-integrations-settings', // Slug do menu
+      'render_google_integrations_page',  // Função que renderiza o HTML
+      'dashicons-google',        // Ícone
+      80                         // Posição no menu
     );
   }
 

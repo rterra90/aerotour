@@ -167,15 +167,8 @@ $user = wp_get_current_user();
     <div class="topbar d-flex justify-between py-3">
       <div class="logo">
         <a href="<?= get_home_url() ?>">
-          <img src="<?= esc_url(
-                      get_theme_mod('aer_logo')
-                    ) ?>" alt="<?= esc_attr(
-                                  get_post_meta(
-                                    attachment_url_to_postid(get_theme_mod('aer_logo')),
-                                    '_wp_attachment_image_alt',
-                                    true
-                                  )
-                                ) ?>">
+          <img src="<?= esc_url(get_theme_mod('aer_logo')) ?>"
+            alt="<?= esc_attr(get_post_meta(attachment_url_to_postid(get_theme_mod('aer_logo')), '_wp_attachment_image_alt', true)) ?>">
         </a>
       </div>
       <div class="navbar-flex-wrapper">

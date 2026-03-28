@@ -13,8 +13,6 @@ function handle_google_login_api($request)
   $id_token = $params['token'];
 
   // 1. Validar o token com o Google
-  // Profissionalmente, você usaria a biblioteca Google_Client, 
-  // mas aqui faremos uma verificação via API remota do Google:
   $response = wp_remote_get("https://oauth2.googleapis.com/tokeninfo?id_token=" . $id_token);
 
   if (is_wp_error($response)) {
@@ -23,7 +21,7 @@ function handle_google_login_api($request)
 
   $payload = json_decode(wp_remote_retrieve_body($response), true);
 
-  // Verifica se o Client ID do token é o seu mesmo [cite: 20]
+  // Verifica se o Client ID do token é o seu mesmo
   if ($payload['aud'] !== '131198865017-ohp88m555fk17nj5c744au3k8vogu332.apps.googleusercontent.com') {
     return new WP_Error('invalid_token', 'Token inválido', ['status' => 403]);
   }
@@ -33,24 +31,33 @@ function handle_google_login_api($request)
 
   if (!$user) {
     // Criar usuário se não existir
-    $user_id = wp_insert_user([
-      'user_login' => $email, // Usar email como login é mais seguro que o username do formulário
-      'user_email' => $email,
-      'first_name' => $payload['given_name'],
-      'last_name'  => $payload['family_name'],
-      'user_pass'  => wp_generate_password(),
-      'role'       => 'subscriber'
-    ]);
+    $_POST['terms'] = 1; // Aceita os termos
+    $customer_id = wc_create_new_customer($email, $email, wp_generate_password());
 
-    if (is_wp_error($user_id)) {
-      return $user_id;
+    if (is_wp_error($customer_id)) {
+      return $customer_id;
     }
+
+    // Salvar dadods padrão do usuário
+    $userdata = array(
+      'ID'         => $customer_id,
+      'first_name' => sanitize_text_field($payload['given_name']),
+      'last_name'  => sanitize_text_field($payload['family_name']),
+      'display_name' => sanitize_text_field($payload['given_name']),
+    );
+    wp_update_user($userdata);
+
+    // 3. Salvar metadados de cobrança (Billing)
+    // Importante fazer isso antes do redirecionamento para que o perfil esteja completo
+    update_user_meta($customer_id, 'billing_first_name', $userdata['first_name']);
+    update_user_meta($customer_id, 'billing_last_name', $userdata['last_name']);
+
     $user = get_user($user_id);
   }
 
   // 2. Logar o usuário
-  wp_set_current_user($user->ID);
-  wp_set_auth_cookie($user->ID, true);
+  wp_set_current_user($customer_id);
+  wp_set_auth_cookie($customer_id, true);
 
   return [
     'success' => true,

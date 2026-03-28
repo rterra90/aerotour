@@ -26559,13 +26559,18 @@
   // src/AppThirdPartyLogin/AppThirdPartyLogin.jsx
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   function AppThirdPartyLogin() {
-    const clientId = "131198865017-ohp88m555fk17nj5c744au3k8vogu332.apps.googleusercontent.com";
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_jsx_runtime2.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(GoogleOAuthProvider, { clientId, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AppGoogle_default, { clientId }) }) });
+    const [clientID, setClientID] = import_React2.default.useState(null);
+    import_React2.default.useEffect(() => {
+      setClientID(window.themeLinks.gLoginClientId);
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_jsx_runtime2.Fragment, { children: clientID ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(GoogleOAuthProvider, { clientId: clientID, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AppGoogle_default, { clientId: clientID }) }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "text-center", children: "Client ID n\xE3o configurado." }) });
   }
-  var tplogin_app_root = document.getElementById("thirdPartyLogin");
-  if (tplogin_app_root) {
-    import_client2.default.createRoot(tplogin_app_root).render(/* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AppThirdPartyLogin, {}));
-  }
+  window.addEventListener("load", () => {
+    const tplogin_app_root = document.getElementById("thirdPartyLogin");
+    if (tplogin_app_root) {
+      import_client2.default.createRoot(tplogin_app_root).render(/* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AppThirdPartyLogin, {}));
+    }
+  });
 })();
 /*! Bundled license information:
 

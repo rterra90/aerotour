@@ -20,8 +20,8 @@
         <div class="footer-general-left">
           <div class="footer-general d-flex">
             <div class="footer-general-pagamento">
-              <span class="mp"><img alt="Ícone do PIX" src="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/mp-footer.png" /></span>
-              <span><img alt="Ícone do Mercado Pago" src="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/pix-footer.webp" /></span>
+              <span class="mp"><img alt="Ícone do Mercado Pago" src="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/mp-footer.webp" /></span>
+              <span><img alt="Ícone do pix" src="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/pix-footer.webp" /></span>
             </div>
             <div class="footer-general-seguranca">
               <span><img alt="Ícone do Selo de Segurança SSL" src="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/selo-ssl.png" /></span>

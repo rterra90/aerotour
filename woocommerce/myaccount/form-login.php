@@ -297,7 +297,13 @@ endif; ?>
 		})
 	})
 </script>
-<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/react_apps/third_party_login.js"></script>
+<?php
+if (get_option('google_login_enabled') == 1) {
+?>
+	<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/react_apps/third_party_login.js"></script>
+<?php
+}
+?>
 <script>
 	function showTab(tabId) {
 		document.querySelectorAll('.login-box').forEach(box => {
