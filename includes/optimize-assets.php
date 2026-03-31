@@ -69,7 +69,10 @@ function aer_get_segmented_css()
       'condition' => is_account_page(),
       'files' => [
         '/css/woocommerce/form-edit-account.min.css',
-        '/css/woocommerce/orders.min.css'
+        '/css/woocommerce/orders.min.css',
+        '/css/minha-conta.min.css',
+        '/css/account/account-menu.min.css',
+        '/css/account/dashboard.min.css'
       ]
     ],
     // Estilos para página contato

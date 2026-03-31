@@ -55,7 +55,8 @@ add_action('woocommerce_account_menu_items', 'custom_account_menu');
 function custom_account_menu($menu_links)
 {
   unset($menu_links['downloads']);
-  $menu_links['customer-logout'] = 'Sair';
+  unset($menu_links['customer-logout']);
+  // $menu_links['customer-logout'] = 'Sair';
   $menu_links = array_slice($menu_links, 0, 5, true)
     + array('minhas-reservas' => 'Minhas reservas')
     + array_slice($menu_links, 5, NULL, true);

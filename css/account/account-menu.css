@@ -1,4 +1,109 @@
-/* sidemenu */
+/* Container do Menu */
+  .account-navigation-wrapper{
+    flex: 0 0 176px;
+  }
+	@media(max-width: 768px){
+  	.account-navigation-wrapper{
+    	flex: 0 0 148px;
+		}
+	}
+	@media(max-width: 576px){
+		.account-navigation-wrapper{
+			flex-basis: unset;
+		}
+  	.account-navigation-wrapper .ae-account-navigation ul{
+    	grid-template-columns: repeat(4, 1fr);
+		}
+		.ae-account-navigation .ae-nav-label{
+			font-size: .675rem;
+		}
+		.account-navigation-wrapper .ae-account-navigation li a{
+			padding: 10px;
+		}
+	}
+	.ae-account-navigation ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		gap: 12px;
+		padding: 0;
+		list-style: none;
+		margin-bottom: 40px;
+	}
+
+	/* Item Individual (Card) */
+	.ae-account-navigation li a {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 20px 10px;
+		background: #fff;
+		border: 1px solid #eee;
+		border-radius: 12px;
+		text-decoration: none;
+		color: #444;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		height: 100%;
+		text-align: center;
+	}
+
+	/* Ícones */
+	.ae-nav-icon svg {
+		width: 28px;
+		height: 28px;
+		margin-bottom: 10px;
+		stroke: #666;
+		transition: stroke 0.3s;
+	}
+
+	/* Label */
+	.ae-nav-label {
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		line-height: 1.25;
+	}
+
+	/* Efeito Hover e Ativo */
+	.ae-account-navigation li.is-active a,
+	.ae-account-navigation li a:hover {
+		background: var(--aer-accent);
+		border-color: var(--aer-accent);
+		color: #fbfbfb;
+		box-shadow: 0 8px 20px rgba(64, 15, 15, 0.2);
+	}
+
+	.ae-account-navigation li.is-active svg,
+	.ae-account-navigation li a:hover svg {
+		stroke: #fbfbfb;
+	}
+
+	/* Ajuste para Mobile */
+	@media (max-width: 480px) {
+		.ae-account-navigation ul {
+			grid-template-columns: repeat(2, 1fr);
+			/* 2 colunas no celular */
+			gap: 10px;
+		}
+	}
+
+
+	.woocommerce-MyAccount-navigation-link.woocommerce-MyAccount-navigation-link--edit-address {
+  display: none;
+}
+.woocommerce-MyAccount-navigation-link--dashboard {order: 1}
+.woocommerce-MyAccount-navigation-link--minhas-reservas {order: 2}
+.woocommerce-MyAccount-navigation-link--orders {order: 3}
+.woocommerce-MyAccount-navigation-link--edit-account {order: 4}
+
+/* .woocommerce-MyAccount-navigation-link--account-details {order: 5} */
+.woocommerce-MyAccount-navigation-link--customer-logout,
+.woocommerce-MyAccount-navigation-link--customer-logout:hover {
+  order: 6;
+  border-bottom: none !important;
+}
+/* sidemenu
 .woocommerce-MyAccount-navigation-link.woocommerce-MyAccount-navigation-link--edit-address {
   display: none;
 }
@@ -22,27 +127,7 @@
 .woocommerce-MyAccount-navigation ul li {
   overflow: hidden;
 }
-.woocommerce-MyAccount-navigation-link--dashboard {
-  order: 1;
-}
-.woocommerce-MyAccount-navigation-link--orders {
-  order: 2;
-}
-.woocommerce-MyAccount-navigation-link--edit-account {
-  order: 4;
-}
-.woocommerce-MyAccount-navigation-link--minhas-reservas {
-  order: 3;
-}
-.woocommerce-MyAccount-navigation-link--account-details {
-  order: 5;
-}
-.woocommerce-MyAccount-navigation-link--customer-logout,
-.woocommerce-MyAccount-navigation-link--customer-logout:hover {
-  order: 6;
-  border-bottom: none !important;
-  border-radius: 0 0 10px 10px;
-}
+
 
 .woocommerce-MyAccount-navigation-link:first-of-type a {
   border-radius: 10px 10px 0 0;
@@ -78,4 +163,4 @@
   .woocommerce-MyAccount-navigation a {
     border-bottom: none;
   }
-}
+} */

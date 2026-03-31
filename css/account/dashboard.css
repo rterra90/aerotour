@@ -1,22 +1,387 @@
-#painel-dashboard {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+#account-dashboard{
+    background-color: #fbfbfb;
+    padding: 20px 26px;
+    border-radius: 12px;
+}
+#account-dashboard h2{
+  font-size: 1.4rem;
+}
+#account-dashboard h3 {
+    font-size: 1.025rem;
+}
+#account-dashboard .dashboard-btn {
+    display: block;
+    text-align: center;
+    color: #400f0f;
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background .3s;
+    font-size: .775rem;
+    border: 1px solid;
+    line-height: 1;
 }
 
-#painel-dashboard > * {
-  background-color: var(--aer-bg-white);
-  border-radius: 0.5rem;
-  padding: 15px;
-  box-shadow: 2px 2px 6px 0px #d5d5d5;
+#account-dashboard .dashboard-btn:hover {
+    text-decoration: underline;
 }
 
-#painel-dashboard > * h3 {
-  text-transform: uppercase;
-}
-
-@media (max-width: 576px) {
-  #painel-dashboard {
-    grid-template-columns: 1fr;
+@media(max-width: 576px){
+  #account-dashboard .dashboard-btn{
+    display: inline;
+    border: none;
+    padding: 0;
   }
+}
+/* Exemplo de estilização simplificada para o Dashboard */
+.dashboard-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dashboard-section {
+    width: 100%;
+    padding-top: 20px;
+    box-shadow: 0 -1px 0px 0px #dddddd;
+    margin-bottom: 30px;
+}
+
+.dashboard-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+}
+
+.dashboard-card.alert { border-left: 4px solid #ffcc00; }
+.dashboard-card.priority { border-left: 4px solid #e74c3c; }
+
+.dashboard-card h3 { margin-bottom: 15px; font-size: 1.1rem; }
+.ae-btn-link { color: #007cba; text-decoration: underline; font-weight: 500; }
+
+/* ALERTA DE PEDIDO PENDENTE */
+.order-pending-alert{
+    border-top: 5px solid #e74c3c; /* Vermelho alerta para urgência */
+    background: #f3f3f3;
+    width: 100%;
+padding: 4px 110px 4px 14px;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+.order-pending-alert .badge-alert {
+    background: #e74c3c;
+    color: #f3f3f3;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.order-pending-alert p {
+  font-size: .9rem;
+  margin-bottom: 2px;
+    line-height: 1.25;
+
+}
+.order-pending-alert .card-note {
+    color: #777;
+    font-style: italic;
+    line-height: 1.25;
+}
+
+.order-pending-alert .alert-actions{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+@media(max-width: 576px){
+  .order-pending-alert{
+    padding: 4px 14px
+  }
+  .order-pending-alert .alert-actions{
+        position: static;
+    transform: unset;
+  }
+}
+
+
+/* CARD PRÓXIMA VIAGEM - DASHBOARD */
+.next-trip-card {
+    display: flex;
+    padding: 0;
+    overflow: hidden;
+    /* max-height: 92px; */
+    align-items: stretch;
+}
+
+.next-trip-img{
+  width: 250px;
+}
+.next-trip-card img {
+    width: 100%;
+}
+
+.next-trip-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.next-trip-content h4{
+  font-size: 1.25rem;
+}
+.next-trip-actions{
+      display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 12px;
+}
+.next-trip-date{
+  font-family: monospace;
+    font-size: .9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.next-trip-actions.mobile{
+  display: none;
+}
+
+@media(max-width: 1024px){
+  .next-trip-img{
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 12px;
+  }
+  .next-trip-img img{
+    border-radius: 12px;
+  }
+}
+
+@media(max-width: 768px) {
+  .next-trip-content h4{
+    margin-bottom: 0px;
+    font-size: 1.075rem;
+  }
+  .next-trip-actions.desktop{
+    display: none;
+  }
+  .next-trip-actions.mobile{
+    display: block;
+  }
+  .next-trip-img{
+    width: 35%;
+  }
+  .next-trip-date{
+    font-size: .725rem;
+  }
+
+}
+@media(max-width: 576px){
+  #account-dashboard{
+    padding: 20px;
+}
+  #account-dashboard h3{
+font-size: .925rem;
+  }
+  .next-trip-img{
+  width: 44%;
+  }
+   .next-trip-content{
+    padding: 14px;
+   }
+  .next-trip-content h4{
+    margin-bottom: 0px;
+    font-size: .975rem;
+  }
+
+}
+
+/* CUPONS */
+/* ESTILIZAÇÃO DA SEÇÃO DE CUPONS */
+.coupon-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px dashed #400f0f !important; /* Estilo de cupom destacado [cite: 35] */
+    background-color: #fffcfc !important; /* Fundo levemente avermelhado */
+    gap: 12px;
+    overflow: hidden;
+    position: relative;
+}
+.coupon-card::after{
+      content: '';
+    width: 10px;
+    height: 100px;
+    background: var(--aer-accent);
+    position: absolute;
+    transform: rotate(45deg);
+    top: -20px;
+    left: 26px;
+}
+.coupon-card + .coupon-card {
+    margin-top: 12px;
+}
+.coupon-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+@media(min-width: 577px){
+  .coupon-header {
+    margin-left: 30px;
+}
+}
+
+.coupon-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #400f0f; [cite: 37]
+}
+
+.coupon-code {
+    background: #400f0f;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: 700;
+    letter-spacing: .12rem;
+    color: var(--aer-text-light);
+    text-transform: uppercase;
+}
+
+.coupon-description {
+    font-size: 0.875rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.coupon-expiry {
+    color: #888;
+    font-style: italic;
+}
+.coupon-expiry small{
+  font-size: .7rem;
+}
+/* Ajustes Responsivos [cite: 16, 26] */
+@media(max-width: 576px) {
+    .coupon-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 18px;
+    }
+    
+    .coupon-header {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .coupon-actions {
+        width: 100%;
+    }
+}
+/* ALERTS */
+.account-alert{
+  position: relative;
+  padding: .75rem .75rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  font-size: .85rem;
+}
+@media(max-width: 576px){
+  .woocommerce-MyAccount-wrapper{
+   flex-direction: column;
+  }
+  .account-alert{
+    font-size: .775rem;
+  }
+}
+.account-alert.alert-dismissible{
+  padding-right: 2.5rem;
+}
+.account-alert:focus-visible{
+  outline: none;
+}
+.account-alert > div{
+  line-height: 1.25;
+}
+.account-alert.friendly{
+    color: #466695;
+    background-color: #e4efff;
+    border-color: #d6e7ff;
+}
+.alert-dismissible .btn-close{
+  padding: 4px;
+  height: .5rem;
+  width: .5rem;
+  transform: translateY(-50%);
+  top: 50%;
+  right: 10px;
+}
+/* EMPTY PLACEHOLDER */
+.dashboard-empty-placeholder {
+    grid-column: 1 / -1; /* Ocupa a largura total do grid */
+    padding: 60px 20px !important;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-placeholder-content {
+    max-width: 450px;
+}
+
+.dashboard-placeholder-icon svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    opacity: 0.35;
+}
+
+.dashboard-empty-placeholder h3 {
+    color: #400f0f;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.dashboard-empty-placeholder p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Botão de Destaque */
+.ae-btn-primary {
+    display: inline-block;
+    background-color: #400f0f;
+    color: #fff !important;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(64, 15, 15, 0.2);
+}
+
+.ae-btn-primary:hover {
+    background-color: #5a1616;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(64, 15, 15, 0.3);
 }

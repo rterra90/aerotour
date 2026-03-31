@@ -1,20 +1,18 @@
-@import './account/account-menu.css';
 @import './account/minhas-reservas.css';
 @import './account/cupons.css';
-@import './account/dashboard.css';
 
-body.woocommerce-account .index-inner > h1 {
-  display: none;
+.woocommerce-MyAccount-wrapper{
+  display: flex;
+  gap: 2.5rem;
 }
-.woocommerce-account.logged-in .woocommerce {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 30px;
-}
-@media (max-width: 567px) {
-  .woocommerce-account.logged-in .woocommerce {
-    grid-template-columns: 1fr;
+@media(max-width: 768px){
+  .woocommerce-MyAccount-wrapper{
+    gap: 1.25rem
   }
+}
+
+.woocommerce-MyAccount-content{
+  flex-grow: 1;
 }
 
 /* dashboard */
@@ -48,8 +46,5 @@ body.woocommerce-account .index-inner > h1 {
   .woocommerce-account.logged-in .woocommerce {
     gap: 10px;
     display: block;
-  }
-  .woocommerce-MyAccount-content {
-    padding: 30px 0;
   }
 }
