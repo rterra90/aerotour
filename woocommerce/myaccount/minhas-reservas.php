@@ -137,13 +137,13 @@ foreach ($ativas_agrupadas as $reserva_ativa) {
 
 
 ?>
-<section id="minhas-reservas" class="container">
+<section id="minhas-reservas">
   <div class="page-header mb-3">
-    <h1 class="fw-bold">Minhas Reservas</h1>
+    <h2 class="fw-bold">Minhas Reservas</h2>
     <p class="text-muted">Gerencie suas próximas viagens com a Aerotour.</p>
   </div>
   <div class="reservas-wrapper py-3">
-    <h2 class="mb-4 fw-bold">Próximas Excursões</h2>
+    <h3 class="mb-3">Próximas Excursões<?= count($futuras) > 1 ? ' (' . count($futuras) . ')' : ''; ?></h3>
 
     <?php if (count($futuras) > 0): ?>
       <div class="row overflow-auto g-4">
@@ -174,7 +174,7 @@ foreach ($ativas_agrupadas as $reserva_ativa) {
 
   <?php if (count($passadas) > 0): ?>
     <div id="reservas_passadas_container" class="pt-4">
-      <h2 class="mb-4 fw-bold text-muted">Viagens Anteriores</h2>
+      <h3 class="mb-4 text-muted">Viagens Anteriores</h3>
       <div class="row g-3 pb-2">
         <?php foreach (array_reverse($passadas) as $res_p): ?>
           <div class="col-12">
@@ -209,9 +209,9 @@ foreach ($ativas_agrupadas as $reserva_ativa) {
         role="button"
         aria-expanded="false">
 
-        <h2 class="h5 fw-bold text-muted mb-0">
+        <h3 class="h5 text-muted mb-0">
           Reservas canceladas (<?= count($canceladas_agrupadas); ?>)
-        </h2>
+        </h3>
 
         <i class="transition-icon">
           < </i>

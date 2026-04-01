@@ -2,9 +2,26 @@
   .account-navigation-wrapper{
     flex: 0 0 176px;
   }
+	.ae-account-navigation ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		gap: 12px;
+		padding: 0;
+		list-style: none;
+		margin-bottom: 40px;
+	}
+
 	@media(max-width: 768px){
   	.account-navigation-wrapper{
-    	flex: 0 0 148px;
+    	flex: 0 0 130px;
+		}
+		.ae-account-navigation ul{
+		grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+
+		}
+		.ae-nav-label{
+			font-size: .775rem;
+			
 		}
 	}
 	@media(max-width: 576px){
@@ -20,14 +37,6 @@
 		.account-navigation-wrapper .ae-account-navigation li a{
 			padding: 10px;
 		}
-	}
-	.ae-account-navigation ul {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-		gap: 12px;
-		padding: 0;
-		list-style: none;
-		margin-bottom: 40px;
 	}
 
 	/* Item Individual (Card) */

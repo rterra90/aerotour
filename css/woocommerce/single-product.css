@@ -138,6 +138,11 @@
     align-items: center;
 
 }
+@media(max-width: 576px){
+  .status-badges-container{
+    flex-direction: column-reverse;
+  }
+}
  /* Contador decrescente de últimas vagas*/
 
 /* Contador de reservas realizadas */

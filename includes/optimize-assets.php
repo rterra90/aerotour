@@ -72,7 +72,8 @@ function aer_get_segmented_css()
         '/css/woocommerce/orders.min.css',
         '/css/minha-conta.min.css',
         '/css/account/account-menu.min.css',
-        '/css/account/dashboard.min.css'
+        '/css/account/dashboard.min.css',
+        '/css/account/minhas-reservas.min.css'
       ]
     ],
     // Estilos para página contato

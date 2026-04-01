@@ -1,11 +1,4 @@
-#account-dashboard{
-    background-color: #fbfbfb;
-    padding: 20px 26px;
-    border-radius: 12px;
-}
-#account-dashboard h2{
-  font-size: 1.4rem;
-}
+
 #account-dashboard h3 {
     font-size: 1.025rem;
 }
@@ -190,9 +183,6 @@ padding: 4px 110px 4px 14px;
 
 }
 @media(max-width: 576px){
-  #account-dashboard{
-    padding: 20px;
-}
   #account-dashboard h3{
 font-size: .925rem;
   }

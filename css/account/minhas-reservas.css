@@ -5,13 +5,11 @@ main {
 #minhas-reservas {
   position: relative;
 }
-#minhas-reservas h2 {
-  font-size: 1rem;
-}
-
 /* Container Principal */
-#minhas-reservas {
-    /* min-height: 100vh; */
+#minhas-reservas h3 {
+    text-transform: uppercase;
+    font-size: .875rem;
+    letter-spacing: .05rem;
 }
 
 /* Modal de ações de minhas reservas (cancelar, alterar embarque, etc.) */
@@ -65,11 +63,12 @@ main {
 .reservas-wrapper .card-wrapper {
 /* max-width: 360px; */
     flex: 0 1 360px;
-    min-width: 300px;
+    min-width: 330px;
 
 }
 .reservas-wrapper .row{
     flex-wrap: nowrap;
+    padding-bottom: 16px;
 }
 /* Estilização do Card "Ticket" */
 .booking-card {
@@ -82,7 +81,7 @@ main {
 
 .booking-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+box-shadow: 0 4px 8px rgba(0,0,0,.1)!important;
 }
 
 /* Wrapper da Imagem e Badge de Data */
@@ -347,19 +346,7 @@ border: none;
 .past-booking-item .span-data{
   font-size: .75rem;
 }
-@media (max-width: 576px) {
-    .past-booking-item .p_info {
-        margin-left: 0 !important;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    .past-booking-item .p_status {
-        width: 100%;
-        text-align: left !important;
-        border-top: 1px solid #f8f9fa;
-        padding-top: 10px;
-    }
-}
+
 /* Container de Scroll Horizontal (Mobile) */
 @media (max-width: 768px) {
     .reservas-wrapper .row {
@@ -379,9 +366,23 @@ border: none;
     }
 
     .reservas-wrapper .card-wrapper {
-        flex: 0 0 75vw; /* Define a largura de 75 vw*/
         scroll-snap-align: center; /* Centraliza o card no toque */
         padding: 0;
     }
 }
-
+@media (max-width: 576px) {
+    .reservas-wrapper .card-wrapper {
+    min-width: 300px;
+    }
+    .past-booking-item .p_info {
+        margin-left: 0 !important;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .past-booking-item .p_status {
+        width: 100%;
+        text-align: left !important;
+        border-top: 1px solid #f8f9fa;
+        padding-top: 10px;
+    }
+}

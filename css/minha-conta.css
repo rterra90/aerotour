@@ -13,6 +13,13 @@
 
 .woocommerce-MyAccount-content{
   flex-grow: 1;
+      background-color: #fbfbfb;
+    padding: 20px 26px;
+    border-radius: 12px;
+overflow: hidden;
+}
+.woocommerce-MyAccount-content h2{
+  font-size: 1.4rem;
 }
 
 /* dashboard */
@@ -46,5 +53,8 @@
   .woocommerce-account.logged-in .woocommerce {
     gap: 10px;
     display: block;
+  }
+  .woocommerce-MyAccount-content{
+    padding: 20px;
   }
 }
