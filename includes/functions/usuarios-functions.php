@@ -207,7 +207,7 @@ function custom_user_profile_header_top()
 
     <div class="user-header-grid">
       <div class="info-item <?= empty($cpf) ? 'sem-info' : '' ?>">
-        <label>CPF <span class="clear-data-btn" data-customer-id="<?= $user_id; ?>" data-type="cpf">(Limpar)</span></label>
+        <label>CPF <?php if ($cpf) : ?><span class="clear-data-btn" data-customer-id="<?= $user_id; ?>" data-type="cpf">(Limpar)</span><?php endif; ?></label>
         <p><?php echo $cpf ? esc_html($cpf) : 'Não informado'; ?></p>
       </div>
 
@@ -219,6 +219,7 @@ function custom_user_profile_header_top()
             event.preventDefault();
             const customerId = _btn.dataset.customerId;
             const data_type = _btn.dataset.type;
+            const field = event.target.parentElement.nextElementSibling;
             jQuery(function($) {
               $.ajax({
                 url: themeLinks.ajaxUrl,
@@ -229,9 +230,7 @@ function custom_user_profile_header_top()
                   'type': data_type,
                 },
                 success: async function(response) {
-                  console.log(response);
-                  const field = event.target.parentElement.querySelector('p');
-                  field.innerText = "";
+                  field.innerHTML = "<p class='sem-info'>Não informado</p>";
                   alert(response.data);
                 },
                 error: function(error) {
@@ -344,7 +343,8 @@ function custom_user_profile_header_top()
       gap: 20px;
     }
 
-    .info-item.sem-info p {
+    .info-item.sem-info p,
+    .info-item p.sem-info {
       opacity: .3;
     }
 
@@ -362,6 +362,11 @@ function custom_user_profile_header_top()
       font-size: 15px;
       color: #2c3338;
       font-weight: 500;
+    }
+
+    .clear-data-btn:hover {
+      cursor: pointer;
+      text-decoration: underline;
     }
   </style>
 <?php

@@ -88,3 +88,7 @@ div#password-change-fields {
 #password-change-fields > p{
   font-size: .775rem;
 }
+
+.form-actions button{
+    border: none;
+}

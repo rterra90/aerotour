@@ -116,17 +116,11 @@ if (!empty($meta_cupons)) {
 	}
 }
 
-
+$show_dashboard = isset($variation_id_proxima) || count($cupons_ativos) > 0;
 ?>
 
-<script>
-	const redirect = window.sessionStorage.getItem('aer_redirect_after_login');
-	if (redirect) {
-		window.sessionStorage.removeItem('aer_redirect_after_login');
-		window.location.href = JSON.parse(redirect).url;
-	}
-</script>
-<div id="account-dashboard">
+
+<div id="account-dashboard" class="h-100">
 	<h2 class="mb-3">Olá, <?php echo esc_html($current_user->display_name); ?>!</h2>
 
 	<?php
@@ -147,7 +141,7 @@ if (!empty($meta_cupons)) {
 
 
 	<?php
-	if (false) {
+	if ($show_dashboard) {
 	?>
 		<div class="dashboard-flex">
 
@@ -261,9 +255,9 @@ if (!empty($meta_cupons)) {
 	<?php
 	} else {
 	?>
-		<div class="dashboard-empty-placeholder">
-			<div class="dashboard-placeholder-content">
-				<div class="dashboard-placeholder-icon">
+		<div class="account-empty-placeholder">
+			<div class="placeholder-content">
+				<div class="placeholder-icon">
 					<svg viewBox="0 0 24 24" fill="none" stroke="#400f0f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 						<circle cx="12" cy="12" r="10"></circle>
 						<path d="M16.2 7.8l-2 5.6-5.6 2 2-5.6 5.6-2z"></path>
@@ -272,7 +266,7 @@ if (!empty($meta_cupons)) {
 				<!-- <h3>Sua próxima aventura começa aqui!</h3> -->
 				<p>No momento, você não possui nenhuma excursão confirmada ou informação importante. Que tal conferir nossas próximas excursões?</p>
 
-				<a href="/excursoes" class="ae-btn-primary">
+				<a href="<?= esc_url(wc_get_page_permalink('shop')) ?>" class="ae-btn-primary">
 					Explorar Próximas Excursões
 				</a>
 			</div>
@@ -280,13 +274,19 @@ if (!empty($meta_cupons)) {
 	<?php
 	}
 	?>
-
+	<div class="account-dashboard-footer" style="margin-top: 30px;">
+		<p><small>Não é <strong><?php echo esc_html($current_user->display_name); ?></strong>? <a href="<?php echo esc_url(wc_logout_url()); ?>">Sair da conta</a></small></p>
+	</div>
 </div>
 
-<div class="ae-dashboard-footer" style="margin-top: 30px;">
-	<p><small>Não é <strong><?php echo esc_html($current_user->display_name); ?></strong>? <a href="<?php echo esc_url(wc_logout_url()); ?>">Sair da conta</a></small></p>
-</div>
 
+<script>
+	const redirect = window.sessionStorage.getItem('aer_redirect_after_login');
+	if (redirect) {
+		window.sessionStorage.removeItem('aer_redirect_after_login');
+		window.location.href = JSON.parse(redirect).url;
+	}
+</script>
 <?php
 do_action('woocommerce_account_dashboard');
 do_action('woocommerce_before_my_account');
