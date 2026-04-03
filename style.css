@@ -197,6 +197,10 @@ a.message-link {
   font-size: 0.725rem;
   padding-left: 5px;
 }
+.woocommerce-notices-wrapper .woocommerce-message{
+      background: #dee6f7;
+    border-color: #d6d9e1;
+}
 .woocommerce-notices-wrapper .woocommerce-error {
   background-color: #dba6a6;
   border-color: #cb8585;

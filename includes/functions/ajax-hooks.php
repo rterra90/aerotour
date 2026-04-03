@@ -2,6 +2,7 @@
 
 // FUNÇÃO CANCELAMENTO DE RESERVA
 require_once get_template_directory() . '/includes/functions/cancelamento-functions.php';
+require_once get_template_directory() . '/includes/functions/user-hooks.php';
 
 //ENVIA SOLICITAÇÃO DE TROCA DE EMBARQUE PARA O ADMINISTRADOR
 add_action('wp_ajax_solicitar_alteracao_embarque', 'solicitar_alteracao_embarque');

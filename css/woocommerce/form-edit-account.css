@@ -1,77 +1,90 @@
-.woocommerce-EditAccountForm input {
-  width: 80%;
+/* FORMULÁRIO MODERNO AEROTOUR */
+form.woocommerce-EditAccountForm{
+  padding-top: 1.25rem;
 }
-.woocommerce-EditAccountForm .fields-wrapper {
-  flex-direction: row-reverse;
+.form-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr; /* Dados ocupam mais espaço */
+    gap: 40px;
+    align-items: start;
 }
-.woocommerce-EditAccountForm .fields-container .row > div:not(:first-of-type) {
-  width: 50%;
-}
-.woocommerce-EditAccountForm fieldset.muda-senha {
-  padding: 10px;
-  background-color: var(--aer-bg-light);
-}
-.woocommerce-EditAccountForm .cpf-form {
-  background-color: #d5d5d5;
-  border-radius: 0.2rem;
-  margin: 10px 150px 30px 13px;
-  width: 37%;
-}
-.woocommerce-EditAccountForm .cpf-form p {
-  margin: 10px 0;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.02rem;
-  font-weight: 500;
-}
-.woocommerce-EditAccountForm button[type='submit'] {
-  margin: 20px 0 0 0;
-}
-form.edit-account .fields-container label {
-  display: block;
-  width: fit-content;
-  font-size: 0.625rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  margin-bottom: 2px;
-  color: #2b2b2b;
-  letter-spacing: 0.02rem;
-}
-.woocommerce-EditAccountForm .muda-senha-box label {
-  font-size: 0.775rem;
-  font-weight: 600;
-  margin-bottom: 2px;
-  color: #2b2b2b;
-  letter-spacing: 0.02rem;
+@media(max-width: 1024px){
+  .form-grid {
+    grid-template-columns: 1fr; /* Dados ocupam mais espaço */
 }
 
-@media (max-width: 576px) {
-  .woocommerce-EditAccountForm .fields-wrapper {
-    flex-direction: column-reverse;
-  }
-  .woocommerce-EditAccountForm .aer-text-input input {
+
+.form-section-card.security-section > div{
+     align-items: flex-start;
+}
+.form-section-card.security-section h3{
+  text-align: start;
+}
+}
+.form-section-card h3 {
+    color: #400f0f;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 12px;
+    margin-bottom: 24px !important;
+    font-size: 1.125rem;
+        width: 100%;
+}
+.form-section-card input:hover{
+  background-color: #f3f3f3;
+
+}
+.form-section-card label {
+    font-size: .9rem;
+    font-weight: 500;
+    letter-spacing: .025rem;
+}
+.form-section-card .document-selector .form-check-label{
+  font-size: .8rem;
+    font-weight: 300;
+
+}
+
+.security-section > div{
+     align-items: flex-start;
+    flex-direction: column;
+}
+
+/* Inputs Estilizados */
+.aer-text-input {
     width: 100%;
-    text-align: start;
-  }
-  .woocommerce-EditAccountForm .fields-container .row > div:not(.cpf-form) {
-    width: 100% !important;
-  }
-  .woocommerce-EditAccountForm .fields-container .row > div label {
-    font-size: 0.625rem;
-  }
-  .woocommerce-EditAccountForm .muda-senha-box {
-    position: static;
-  }
-  .woocommerce-EditAccountForm button[type='submit'] {
-    margin: 20px auto;
-    display: block;
-  }
-  .woocommerce-EditAccountForm input[name='data_nasc'],
-  .woocommerce-EditAccountForm input[name='rg_orgao_exp'],
-  .woocommerce-EditAccountForm input[name='billing_phone'],
-  .woocommerce-EditAccountForm input[name='rg'],
-  .woocommerce-EditAccountForm input[name='billing_city'],
-  .woocommerce-EditAccountForm input[name='account_email'] {
-    /* width: 240px; */
-  }
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fdfdfd;
+    transition: all 0.2s ease;
+}
+
+.aer-text-input:focus {
+    border-color: #400f0f;
+    box-shadow: 0 0 0 3px rgba(64, 15, 15, 0.1);
+    outline: none;
+}
+
+/* Botão Alternar Senha */
+.btn-toggle-password {
+    background: none;
+    border: none;
+    color: #007cba;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.btn-toggle-password:hover {
+    text-decoration: underline;
+}
+div#password-change-fields {
+    background: #efefef;
+    padding: 20px 24px;
+    border-radius: 12px;
+    box-shadow: 2px 2px 4px #dddddd;
+}
+#password-change-fields > p{
+  font-size: .775rem;
 }

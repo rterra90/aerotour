@@ -287,8 +287,6 @@ function add_fields_to_edit_account_form()
 {
   $campos = [
     ['Telefone', 'billing_phone'],
-    ['CPF', 'cpf'],
-    ['RG', 'rg'],
     ['Data de nascimento', 'data_nasc'],
     ['Cidade', 'billing_city']
   ];
@@ -314,31 +312,80 @@ function add_fields_to_edit_account_form()
 
 function save_account_details_form($customer_id)
 {
-  global $wpdb; // Acesso ao banco de dados do WordPress
-
   $campos = [
-    ['Telefone', 'billing_phone'],
-    ['CPF', 'cpf'],
-    ['RG', 'rg'],
-    ['Data de nascimento', 'data_nasc'],
-    ['Cidade', 'billing_city']
+    ['billing_phone'],
+    ['cpf'], // Onde salvamos CPF ou RNE
+    ['data_nasc'],
+    ['billing_city']
   ];
 
   foreach ($campos as $campo) {
-    $meta_key = $campo[1];
+    $meta_key = $campo[0];
 
     if (isset($_POST[$meta_key])) {
-      // Sanitização básica inicial
-      $_value = sanitize_text_field($_POST[$meta_key]);
+      $value = sanitize_text_field($_POST[$meta_key]);
 
-      // Atualiza no banco de dados
-      update_user_meta($customer_id, $meta_key, sanitize_text_field($_value));
+      // Se for o campo de documento, removemos pontuação e traços
+      if ($meta_key === 'cpf') {
+        // Remove tudo que não for letra ou número
+        $value = preg_replace('/[^A-Za-z0-9]/', '', $value);
+        // Garante que letras fiquem em maiúsculo (padrão RNE)
+        $value = strtoupper($value);
+      }
+
+      update_user_meta($customer_id, $meta_key, $value);
     }
   }
 }
 
 add_action('woocommerce_edit_account_form', 'add_fields_to_edit_account_form');
 add_action('woocommerce_save_account_details', 'save_account_details_form');
+
+
+/**
+ * 1. Validação dos documentos (CPF/RNE) antes de salvar
+ */
+add_action('woocommerce_save_account_details_errors', 'validar_documentos_aerotour', 10, 1);
+function validar_documentos_aerotour($errors)
+{
+  if (isset($_POST['cpf']) && !empty($_POST['cpf'])) {
+    $current_user_id = get_current_user_id();
+    $doc = sanitize_text_field($_POST['cpf']);
+    $tipo = isset($_POST['doc_type']) ? $_POST['doc_type'] : 'cpf';
+
+    // 1. Limpa o documento para comparação (apenas alfanumérico)
+    $clean_doc = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $doc));
+
+    // 2. Validação de Formato
+    if ($tipo === 'cpf') {
+      // Validação de CPF (Formato e Dígitos)
+      if (!validaCPF($doc)) {
+        $errors->add('error', 'O <strong>CPF</strong> informado é inválido. Por favor, verifique os números.');
+      }
+    } else {
+      // Validação de RNE (Formato: Letra + 6 ou 7 números + dígito/letra)
+      // Regex: Inicia com letra, segue com números, hífen e termina com letra ou número
+      if (!preg_match('/^[A-Z]\d{6,7}-[A-Z0-9]$/i', $doc)) {
+        $errors->add('error', 'O <strong>RNE/RNM</strong> informado não está no formato correto (Ex: V123456-7).');
+      }
+    }
+
+
+
+    // 3. Verificação de Unicidade no Banco de Dados
+    $user_query = new WP_User_Query(array(
+      'meta_key'     => 'cpf',
+      'meta_value'   => $clean_doc,
+      'exclude'      => array($current_user_id), // Ignora o próprio usuário atual
+      'number'       => 1,
+      'fields'       => 'ID'
+    ));
+
+    if (!empty($user_query->get_results())) {
+      $errors->add('error', 'Este <strong>CPF/RNE</strong> já está cadastrado em outra conta. Caso precise de ajuda, entre em contato.');
+    }
+  }
+}
 /* Fim Formulário de alteração de dados pessoais */
 
 /* Insere os dados do passageiro como meta do item do carrinho */

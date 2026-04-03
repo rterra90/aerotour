@@ -9,7 +9,7 @@ do_action('woocommerce_before_customer_login_form');
 
 <?php if ('yes' === get_option('woocommerce_enable_myaccount_registration')):
 endif; ?>
-<link rel="stylesheet" href="<?= get_stylesheet_directory_uri() ?>/css/form-login.min.css?ver=<?= time() ?>">
+
 <section id="form-login" class="container">
 
 	<!-- Título -->

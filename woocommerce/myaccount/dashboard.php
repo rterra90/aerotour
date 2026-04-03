@@ -147,7 +147,7 @@ if (!empty($meta_cupons)) {
 
 
 	<?php
-	if (true) {
+	if (false) {
 	?>
 		<div class="dashboard-flex">
 

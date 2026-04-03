@@ -68,6 +68,7 @@ function aer_get_segmented_css()
     'my_account' => [
       'condition' => is_account_page(),
       'files' => [
+        '/css/form-login.min.css',
         '/css/woocommerce/form-edit-account.min.css',
         '/css/woocommerce/orders.min.css',
         '/css/minha-conta.min.css',

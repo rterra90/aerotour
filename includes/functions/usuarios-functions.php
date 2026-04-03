@@ -207,9 +207,43 @@ function custom_user_profile_header_top()
 
     <div class="user-header-grid">
       <div class="info-item <?= empty($cpf) ? 'sem-info' : '' ?>">
-        <label>CPF</label>
+        <label>CPF <span class="clear-data-btn" data-customer-id="<?= $user_id; ?>" data-type="cpf">(Limpar)</span></label>
         <p><?php echo $cpf ? esc_html($cpf) : 'Não informado'; ?></p>
       </div>
+
+      <script>
+        const clearDataBtns = document.querySelectorAll('.clear-data-btn');
+
+        clearDataBtns.forEach(_btn => {
+          _btn.addEventListener('click', (event) => {
+            event.preventDefault();
+            const customerId = _btn.dataset.customerId;
+            const data_type = _btn.dataset.type;
+            jQuery(function($) {
+              $.ajax({
+                url: themeLinks.ajaxUrl,
+                type: 'POST',
+                data: {
+                  'action': 'clear_user_data',
+                  'user_id': customerId,
+                  'type': data_type,
+                },
+                success: async function(response) {
+                  console.log(response);
+                  const field = event.target.parentElement.querySelector('p');
+                  field.innerText = "";
+                  alert(response.data);
+                },
+                error: function(error) {
+                  console.log('response error:  ' + error);
+                  alert(error.data);
+                }
+              });
+            })
+          })
+        })
+      </script>
+
       <div class="info-item">
         <label>E-mail</label>
         <p><?php echo esc_html($email); ?></p>
@@ -221,7 +255,7 @@ function custom_user_profile_header_top()
       <div class="info-item <?= empty($data_nasc) ? 'sem-info' : '' ?>">
         <label>Nascimento</label>
         <p><?php echo $data_nasc ? esc_html($data_nasc) : 'Não informado'; ?></p>
-      </div>  
+      </div>
       <div class="info-item <?= empty($cidade) ? 'sem-info' : '' ?>">
         <label>Cidade</label>
         <p><?php echo $cidade ? esc_html($cidade) : 'Não informada'; ?></p>

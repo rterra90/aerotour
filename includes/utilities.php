@@ -73,6 +73,27 @@ function cpf_mask($value)
   $_cpf = preg_replace("/\D/", '', $value);
   return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "\$1.\$2.\$3-\$4", $_cpf);
 }
+function rne_mask($value)
+{
+  // Remove tudo que não for letra ou número
+  $_rne = preg_replace("/[^a-zA-Z0-9]/", '', $value);
+
+  // Se começar com letras → provável CRNM
+  if (preg_match('/^[a-zA-Z]{2}/', $_rne)) {
+    return preg_replace(
+      "/^([a-zA-Z]{2})(\d{3})(\d{3,4})$/",
+      "$1 $2.$3",
+      $_rne
+    );
+  }
+
+  // Caso contrário → RNE antigo (somente números)
+  return preg_replace(
+    "/^(\d{2})(\d{3})(\d{3,4})$/",
+    "$1.$2.$3",
+    $_rne
+  );
+}
 
 function formatar_local_embarque($embarque_element, $_i)
 {
