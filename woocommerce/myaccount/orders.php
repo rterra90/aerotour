@@ -38,42 +38,46 @@ do_action('woocommerce_before_account_orders', $has_orders); ?>
         $order = wc_get_order($customer_order); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
         $item_count = $order->get_item_count() - $order->get_item_count_refunded();
       ?>
-        <div class="table-row p-1 <?= $order->get_status(); ?>">
+        <div class="table-row p-1 <?= esc_attr($order->get_status()); ?>">
           <span class="order-number">
             <a href="<?php echo esc_url($order->get_view_order_url()); ?>">
-              <?php echo esc_html(_x('#', 'hash before order number', 'woocommerce') . $order->get_order_number()); ?>
-            </a></span>
+              #<?php echo esc_html($order->get_order_number()); ?>
+            </a>
+          </span>
+
           <span class="order-data">
-            <time datetime="<?php echo esc_attr($order->get_date_created()->date('c')); ?>"><?= $order->get_date_created()->date('d/m/Y'); ?></time>
+            <?= $order->get_date_created()->date('d/m/Y'); ?>
           </span>
+
           <span class="order-name">
-            <?php
-            foreach ($order->get_items() as $item) {
-              echo '<p class="mb-0">' . $item->get_product()->name . '</p>';
-            }
-
-            ?>
-
-
+            <?php foreach ($order->get_items() as $item) : ?>
+              <?php
+              $item_name = $item->get_product()->get_name();
+              $ultimosQuatro = substr($item_name, -4);
+              if (is_numeric($ultimosQuatro)) $item_name = substr($item_name, 0, -13);
+              ?>
+              <p><?= esc_html($item_name); ?></p>
+            <?php endforeach; ?>
           </span>
-          <span class="order-status"><?php echo esc_html(wc_get_order_status_name($order->get_status())); ?></span>
-          <span class="order-total"><?php
-                                    /* translators: 1: formatted order total 2: total order items */
-                                    echo wp_kses_post(sprintf(_n('%1$s', '%1$s', $item_count, 'woocommerce'), $order->get_formatted_order_total()));
-                                    ?></span>
-          <span class="order-buttons d-flex gap-3"><?php
-                                                    $actions = wc_get_account_orders_actions($order);
 
-                                                    if (! empty($actions)) {
+          <span class="order-status">
+            <?= esc_html(wc_get_order_status_name($order->get_status())); ?>
+          </span>
 
-                                                      foreach ($actions as $key => $action) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-                                                        if ($key !== 'cancel') {
-                                                          echo '<a href="' . esc_url($action['url']) . '" class="woocommerce-button' . esc_attr($wp_button_class) . ' button ' . sanitize_html_class($key) . '">' . aer_icons($action['name'], 15, 15) . '</a>';
-                                                        }
-                                                      }
-                                                    }
-                                                    ?></span>
-          <!-- <div class="w-100 mobile-order-options">options</div> -->
+          <span class="order-total">
+            <?= $order->get_formatted_order_total(); ?>
+          </span>
+
+          <span class="order-buttons d-flex gap-2">
+            <?php
+            $actions = wc_get_account_orders_actions($order);
+            foreach ($actions as $key => $action) {
+              if ($key !== 'cancel') {
+                echo '<a href="' . esc_url($action['url']) . '" class="button ' . sanitize_html_class($key) . '" title="' . esc_attr($action['name']) . '">' . aer_icons($key, 18, 18) . '</a>';
+              }
+            }
+            ?>
+          </span>
         </div>
       <?php
       }
