@@ -46,7 +46,13 @@ function aer_get_segmented_css()
     'product' => [
       'condition' => is_product(),
       'files' => [
-        // '/css/includes/product-details.min.css' // exemplo
+        '/css/woocommerce/single-product.min.css',
+        '/css/woocommerce/single-product.min.css',
+        '/css/react_apps/app_reservas/app-reservas.min.css',
+        '/css/react_apps/app_reservas/app-reservas-modal.min.css',
+        '/css/react_apps/app_reservas/app-reservas-modal-aviso.min.css',
+        '/css/react_apps/app_reservas/app-reservas-pax-card.min.css',
+        '/css/includes/modals/promo-modal.css' // if (has_term('rock-in-rio', 'product_cat'))
       ]
     ],
     // Estilos para Carrinho e Checkout

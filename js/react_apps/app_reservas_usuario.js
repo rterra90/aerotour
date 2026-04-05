@@ -4591,9 +4591,6 @@
   };
   var PaxModal_default = PaxModal;
 
-  // src/AppReservas/AppReservas.jsx
-  var import_prop_types8 = __toESM(require_prop_types());
-
   // src/AppReservas/PaxCard.jsx
   var import_prop_types5 = __toESM(require_prop_types());
   var import_jsx_runtime5 = __toESM(require_jsx_runtime());
@@ -4922,7 +4919,9 @@
 
   // src/AppReservas/AppReservas.jsx
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
-  function AppReservas({ variacoes, embarques, productId, ajaxUrl, estadoDestino }) {
+  function AppReservas() {
+    const { variacoes, embarques, productId, estadoDestino } = window.singleProductData;
+    const { ajaxUrl, cartUrl } = window.themeLinks;
     const [availableDates, setAvailableDates] = React.useState([]);
     const [selectedDates, setSelectedDates] = React.useState([]);
     const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -5035,7 +5034,7 @@
         setLoading(true);
       if (index >= selectedDates.length) {
         botaoContinuarRef.current.innerHTML = "Redirecionando para o carrinho...";
-        window.location.href = themeLinks.siteUrl + "/carrinho/";
+        window.location.href = cartUrl;
         return;
       }
       const submitQty = passageiros.length;
@@ -5319,28 +5318,12 @@
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "mensagem-encerrada", children: "Reservas encerradas para essa excurs\xE3o." }) })
     ] }) });
   }
-  AppReservas.propTypes = {
-    variacoes: import_prop_types8.default.array.isRequired,
-    embarques: import_prop_types8.default.array.isRequired,
-    nome: import_prop_types8.default.string,
-    ajaxUrl: import_prop_types8.default.string,
-    cartUrl: import_prop_types8.default.string,
-    productId: import_prop_types8.default.number.isRequired
-  };
-  var reservas_app_root = document.getElementById("reserva_app");
+  AppReservas.propTypes = {};
   addEventListener("DOMContentLoaded", () => {
+    const reservas_app_root = document.getElementById("reserva_app");
     if (reservas_app_root) {
       ReactDOM.createRoot(reservas_app_root).render(
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-          AppReservas,
-          {
-            variacoes: JSON.parse(reservas_app_root.dataset.variacoes),
-            embarques: JSON.parse(reservas_app_root.dataset.embarques),
-            productId: JSON.parse(reservas_app_root.dataset.productId),
-            ajaxUrl: reservas_app_root.dataset.ajaxUrl,
-            estadoDestino: reservas_app_root.dataset.estadoDestino
-          }
-        )
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(AppReservas, {})
       );
     }
   });

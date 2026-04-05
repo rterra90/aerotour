@@ -89,12 +89,16 @@ wp_localize_script('theme-links', 'themeLinks', [
   'gLoginClientId' => get_option('google_client_id') ?: null,
 ]);
 
+
+
 // ÁREA DE INCLUDES
 require_once get_template_directory() . '/includes/header-functions.php';
 require_once get_template_directory() . '/includes/woocommerce-functions.php';
 require_once get_template_directory() . '/includes/utilities.php';
 require_once get_template_directory() . '/includes/functions/ajax-hooks.php';
 require_once get_template_directory() . '/includes/functions/usuarios-functions.php';
+require_once get_template_directory() . '/includes/classes/helper-single-product.php';
+require_once get_template_directory() . '/includes/classes/render-components-single-product.php';
 
 require_once get_template_directory() . '/admin-head-scripts.php';
 require_once get_template_directory() . '/admin-footer-scripts.php';

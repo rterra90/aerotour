@@ -4,7 +4,7 @@
 import DatesModal from './DatesModal.jsx';
 import EmbarqueModal from './EmbarqueModal.jsx';
 import PaxModal from './PaxModal.jsx';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import PaxCard from './PaxCard.jsx';
 import AvisosModal from './AvisosModal.jsx'; // Ensure this path is correct
 import PrecoReservas from './PrecoReservas.jsx'; // Ensure this path is correct
@@ -14,7 +14,10 @@ import {
   dataTemDescontoHoje,
 } from '../Utilities';
 
-function AppReservas({ variacoes, embarques, productId, ajaxUrl, estadoDestino }) {
+function AppReservas() {
+  const { variacoes, embarques, productId, estadoDestino } = window.singleProductData;
+  const {ajaxUrl, cartUrl} = window.themeLinks;
+
   const [availableDates, setAvailableDates] = React.useState([]);
   const [selectedDates, setSelectedDates] = React.useState([]);
   const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -145,61 +148,61 @@ function AppReservas({ variacoes, embarques, productId, ajaxUrl, estadoDestino }
     });
   }, []);
 
-function submitToCart(index = 0) {
-  if (!loading) setLoading(true);
+  function submitToCart(index = 0) {
+    if (!loading) setLoading(true);
 
-  if (index >= selectedDates.length) {
-    botaoContinuarRef.current.innerHTML = 'Redirecionando para o carrinho...';
-    window.location.href = themeLinks.siteUrl + '/carrinho/';
-    return;
-  }
+    if (index >= selectedDates.length) {
+      botaoContinuarRef.current.innerHTML = 'Redirecionando para o carrinho...';
+      window.location.href = cartUrl;
+      return;
+    }
 
-  const submitQty = passageiros.length;
-  const submitTaxa = taxa;
-  const submitEmbarque = embarque ? embarque[0].embarqueId : null;
-  const submitHorario = horario;
-  const submitPax = passageiros.length > 0 ? JSON.stringify(passageiros) : null;
+    const submitQty = passageiros.length;
+    const submitTaxa = taxa;
+    const submitEmbarque = embarque ? embarque[0].embarqueId : null;
+    const submitHorario = horario;
+    const submitPax = passageiros.length > 0 ? JSON.stringify(passageiros) : null;
 
-  const _date = selectedDates[index];
-  const submitVarId = getVarIdByDate(_date);
+    const _date = selectedDates[index];
+    const submitVarId = getVarIdByDate(_date);
 
-  const lastSelectedDate = selectedDates[selectedDates.length - 1];
-  const hasDiscount = discountCost ? convertDate(lastSelectedDate, 'iso') : false;
+    const lastSelectedDate = selectedDates[selectedDates.length - 1];
+    const hasDiscount = discountCost ? convertDate(lastSelectedDate, 'iso') : false;
 
-  $.ajax({
-    type: 'POST',
-    url: ajaxUrl,
-    dataType: 'json', // importante para interpretar resposta WooCommerce
-    data: {
-      action: 'add_variation_to_cart',
-      product_id: productId,
-      variation_id: submitVarId,
-      quantity: submitQty,
-      taxa: submitTaxa,
-      embarque: submitEmbarque,
-      horario: submitHorario,
-      passageiros: submitPax,
-      desconto_antecipado: hasDiscount,
-    },
-    success: function (response) {
-      // WooCommerce retorna { error: true, messages: "..."} quando bloqueia
-      if (response.error) {
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      dataType: 'json', // importante para interpretar resposta WooCommerce
+      data: {
+        action: 'add_variation_to_cart',
+        product_id: productId,
+        variation_id: submitVarId,
+        quantity: submitQty,
+        taxa: submitTaxa,
+        embarque: submitEmbarque,
+        horario: submitHorario,
+        passageiros: submitPax,
+        desconto_antecipado: hasDiscount,
+      },
+      success: function (response) {
+        // WooCommerce retorna { error: true, messages: "..."} quando bloqueia
+        if (response.error) {
+          setLoading(false);
+          setAvisosModalOpen('ja-adicionado-carrinho');
+
+          return; // interrompe fluxo
+        }
+
+        // se deu certo, chama próxima
+        submitToCart(index + 1);
+      },
+      error: function (xhr, status, error) {
+        console.error('Erro AJAX:', error);
         setLoading(false);
-        setAvisosModalOpen('ja-adicionado-carrinho');
-
-        return; // interrompe fluxo
-      }
-
-      // se deu certo, chama próxima
-      submitToCart(index + 1);
-    },
-    error: function (xhr, status, error) {
-      console.error('Erro AJAX:', error);
-      setLoading(false);
-      // não prossegue em caso de erro
-    },
-  });
-}
+        // não prossegue em caso de erro
+      },
+    });
+  }
 
   function openDateModal() {
     setDateModalOpen(true);
@@ -499,26 +502,13 @@ function submitToCart(index = 0) {
   );
 }
 
-AppReservas.propTypes = {
-  variacoes: PropTypes.array.isRequired,
-  embarques: PropTypes.array.isRequired,
-  nome: PropTypes.string,
-  ajaxUrl: PropTypes.string,
-  cartUrl: PropTypes.string,
-  productId: PropTypes.number.isRequired,
-};
+AppReservas.propTypes = {};
 
-const reservas_app_root = document.getElementById('reserva_app');
 addEventListener('DOMContentLoaded', () => {
+const reservas_app_root = document.getElementById('reserva_app');
   if (reservas_app_root) {
     ReactDOM.createRoot(reservas_app_root).render(
-      <AppReservas
-        variacoes={JSON.parse(reservas_app_root.dataset.variacoes)}
-        embarques={JSON.parse(reservas_app_root.dataset.embarques)}
-        productId={JSON.parse(reservas_app_root.dataset.productId)}
-        ajaxUrl={reservas_app_root.dataset.ajaxUrl}
-        estadoDestino={reservas_app_root.dataset.estadoDestino}
-      />,
+      <AppReservas />,
     );
   }
 });

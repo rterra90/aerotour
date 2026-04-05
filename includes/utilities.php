@@ -246,3 +246,8 @@ function sanitizar_termo($str)
   $str = preg_replace('/[^a-z0-0]/', '', $str); // Remove tudo que não for letra ou número
   return $str;
 }
+
+/**
+ * Remove o Schema de Produto do Yoast para evitar duplicidade com o nosso customizado
+ */
+add_filter('wpseo_schema_needs_product', '__return_false');

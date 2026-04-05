@@ -1,4 +1,7 @@
 <?php
+// FUNÇÕES DA PÁGINA SINGLE-PRODUCT
+require_once get_template_directory() . '/includes/woocommerce/single-product-functions.php';
+
 
 //ADICIONAR SUPORTE WOOCOMMERCE
 function aerotour_add_woocommercer_support()
@@ -23,6 +26,7 @@ add_action(
   },
   100
 );
+
 
 // Registrar endpoint para "Minhas reservas"
 add_action('init', 'add_endpoints');

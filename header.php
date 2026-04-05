@@ -52,21 +52,24 @@ $user = wp_get_current_user();
   <script src="<?= get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js?ver=<?= aer_get_asset_version(
                                                                                       '/cards-slider.js'
                                                                                     ) ?>" defer></script>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Aerotour Excursões",
-      "image": "https://aerotour.com.br/wp-content/themes/Aerotour/assets/images/logo-padrao.png",
-      "@id": "https://www.aerotour.com.br/",
-      "url": "https://www.aerotour.com.br/",
-      "telephone": "+55-19-99747-7465",
-      "sameAs": [
-        "https://www.facebook.com/aerotourcampinas",
-        "https://www.instagram.com/aerotour_excursoes"
-      ]
-    }
-  </script>
+
+  <?php if (is_front_page()): ?>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Aerotour Excursões",
+        "image": "https://aerotour.com.br/wp-content/themes/Aerotour/assets/images/logo-padrao.png",
+        "@id": "https://www.aerotour.com.br/",
+        "url": "https://www.aerotour.com.br/",
+        "telephone": "+55-19-99747-7465",
+        "sameAs": [
+          "https://www.facebook.com/aerotourcampinas",
+          "https://www.instagram.com/aerotour_excursoes"
+        ]
+      }
+    </script>
+  <?php endif; ?>
 
   <!-- Mercado Pago (Apenas no Checkout) -->
   <?php if (is_checkout()): ?>
