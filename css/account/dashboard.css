@@ -298,7 +298,7 @@ font-size: .925rem;
   margin-bottom: 1rem;
   border: 1px solid transparent;
   border-radius: 0.25rem;
-  font-size: .85rem;
+  font-size: .825rem;
 }
 @media(max-width: 576px){
   .woocommerce-MyAccount-wrapper{
@@ -329,6 +329,13 @@ font-size: .925rem;
   transform: translateY(-50%);
   top: 50%;
   right: 10px;
+}
+.completar-dados-alert a{
+  font-size: .675rem;
+  font-weight: 500;
+  display: inline-block;
+  margin: 0 0 0 4px;
+  text-decoration: underline;
 }
 
 /* Botão de Destaque */

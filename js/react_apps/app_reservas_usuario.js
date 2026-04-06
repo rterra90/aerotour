@@ -4305,6 +4305,19 @@
     value = value.replace(/(\d)(\d{4})$/, "$1-$2");
     return value;
   };
+  var formatarDataISO = (data) => {
+    if (!data)
+      return "";
+    const [dia, mes, ano] = data.split("/");
+    return `${ano}-${mes}-${dia}`;
+  };
+  var isDataISO = (str) => /^\d{4}-\d{2}-\d{2}$/.test(str);
+  var nomeValido = (str) => {
+    if (!str || typeof str !== "string")
+      return false;
+    const palavras = str.trim().split(/\s+/).filter((p) => p.length > 1 || p.toLowerCase() === "e");
+    return palavras.length >= 2;
+  };
 
   // src/AppReservas/PaxModal.jsx
   var import_jsx_runtime4 = __toESM(require_jsx_runtime());
@@ -4313,7 +4326,8 @@
     paxModalOpen,
     selectedDates,
     convertDate: convertDate2,
-    setPassageiros
+    setPassageiros,
+    passageiros
   }) => {
     const [formMode, setFormMode] = React.useState("");
     const [formData, setFormData] = React.useState({
@@ -4328,6 +4342,47 @@
     const [formErrors, setFormErrors] = React.useState([]);
     const { validarCPF, validarMaioridade } = useValidations_default();
     const [visible, setVisible] = React.useState(false);
+    const [useAccountData, setUseAccountData] = React.useState(false);
+    const { userData } = window.singleProductData;
+    const canShowAutofill = React.useMemo(() => {
+      if (!userData || !userData.cpf)
+        return false;
+      return !passageiros.some((pax) => pax.cpf === cpfMask(userData.cpf));
+    }, [userData, passageiros]);
+    function handleAutofillChange(e) {
+      const checked = e.target.checked;
+      setUseAccountData(checked);
+      if (checked && userData) {
+        setFormData((prev) => ({
+          ...prev,
+          nome_completo: userData.nome_completo || "",
+          cpf: cpfMask(userData.cpf) || "",
+          celular: celularMask(userData.celular) || "",
+          data_nascimento: formatarDataISO(userData.data_nascimento) || ""
+        }));
+        setFormErrors(() => {
+          const errors = [];
+          if (!userData.nome_completo || !nomeValido(userData.nome_completo))
+            errors.push("nome_completo");
+          if (!userData.cpf || !validarCPF(cpfMask(userData.cpf)))
+            errors.push("cpf");
+          if (!userData.celular || celularMask(userData.celular).length < 14)
+            errors.push("celular");
+          if (!userData.data_nascimento || !isDataISO(formatarDataISO(userData.data_nascimento)))
+            errors.push("data_nascimento");
+          return errors;
+        });
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          nome_completo: "",
+          cpf: "",
+          celular: "",
+          data_nascimento: ""
+        }));
+        setFormErrors(["nome_completo", "cpf", "celular", "data_nascimento"]);
+      }
+    }
     function closePaxModal() {
       setVisible(false);
       setTimeout(() => {
@@ -4433,7 +4488,7 @@
         }
       });
     }
-    function handleSubmitPaxForm(_mode) {
+    function savePax(_mode) {
       if (formErrors.length === 0) {
         if (_mode == "add") {
           setPassageiros((_current) => {
@@ -4505,9 +4560,21 @@
                   id: "paxForm",
                   onSubmit: (e) => {
                     e.preventDefault();
-                    handleSubmitPaxForm(formMode);
+                    savePax(formMode);
                   },
                   children: [
+                    canShowAutofill && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "autofill-container mt-2", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { className: "modern-checkbox-label", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+                        "input",
+                        {
+                          type: "checkbox",
+                          checked: useAccountData,
+                          onChange: handleAutofillChange
+                        }
+                      ),
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "checkbox-custom" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "label-text", children: "Usar meus dados de cadastro" })
+                    ] }) }),
                     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { children: [
                       "Nome:",
                       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
@@ -4587,6 +4654,7 @@
     setPassageiros: import_prop_types4.default.func.isRequired,
     paxModalOpen: import_prop_types4.default.array.isRequired,
     selectedDates: import_prop_types4.default.array.isRequired,
+    passageiros: import_prop_types4.default.array.isRequired,
     convertDate: import_prop_types4.default.func.isRequired
   };
   var PaxModal_default = PaxModal;
@@ -5302,6 +5370,7 @@
             setPaxModalOpen,
             paxModalOpen,
             selectedDates,
+            passageiros,
             setPassageiros,
             convertDate
           }

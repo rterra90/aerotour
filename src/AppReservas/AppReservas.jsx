@@ -475,6 +475,7 @@ function AppReservas() {
                 setPaxModalOpen={setPaxModalOpen}
                 paxModalOpen={paxModalOpen}
                 selectedDates={selectedDates}
+                passageiros={passageiros}
                 setPassageiros={setPassageiros}
                 convertDate={convertDate}
               />

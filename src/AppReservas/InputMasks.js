@@ -46,3 +46,24 @@ export const dataMask = (value) => {
 
   return valor;
 };
+
+export const formatarDataISO = (data) => {
+  if (!data) return '';
+
+  const [dia, mes, ano] = data.split('/');
+
+  return `${ano}-${mes}-${dia}`;
+};
+
+export const isDataISO = (str) => /^\d{4}-\d{2}-\d{2}$/.test(str);
+
+export const nomeValido = (str) => {
+  if (!str || typeof str !== 'string') return false;
+
+  const palavras = str
+    .trim()
+    .split(/\s+/)
+    .filter(p => p.length > 1 || p.toLowerCase() === 'e');
+
+  return palavras.length >= 2;
+};

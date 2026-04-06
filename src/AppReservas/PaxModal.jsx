@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import CustomSelectPaxModal from './CustomSelectPaxModal.jsx';
 import useValidations from '../Hooks/useValidations';
-import { cpfMask, celularMask, dataMask } from '../AppReservas/InputMasks';
+import { cpfMask, celularMask, formatarDataISO, isDataISO, nomeValido } from '../AppReservas/InputMasks';
 
 const PaxModal = ({
   setPaxModalOpen,
@@ -11,6 +11,7 @@ const PaxModal = ({
   selectedDates,
   convertDate,
   setPassageiros,
+  passageiros
 }) => {
   const [formMode, setFormMode] = React.useState('');
   const [formData, setFormData] = React.useState({
@@ -25,6 +26,61 @@ const PaxModal = ({
   const [formErrors, setFormErrors] = React.useState([]);
   const { validarCPF, validarMaioridade } = useValidations();
   const [visible, setVisible] = React.useState(false);
+  const [useAccountData, setUseAccountData] = React.useState(false);
+
+  // Dados do usuário logado
+  const { userData } = window.singleProductData;
+
+  // Lógica para verificar se o checkbox deve aparecer
+  // 1. Usuário precisa estar logado (userData existe)
+  // 2. O CPF do usuário logado não pode estar na lista de passageiros já adicionados
+  const canShowAutofill = React.useMemo(() => {
+    if (!userData || !userData.cpf) return false;
+    return !passageiros.some(pax => pax.cpf === cpfMask(userData.cpf));
+    // return true;
+
+  }, [userData, passageiros]);
+
+// Função para preencher os dados quando o checkbox é marcado
+  function handleAutofillChange(e) {
+    const checked = e.target.checked;
+    setUseAccountData(checked);
+
+    if (checked && userData) {
+      setFormData(prev => ({
+        ...prev,
+        nome_completo: userData.nome_completo || '',
+        cpf: cpfMask(userData.cpf) || '',
+        celular: celularMask(userData.celular) || '',
+        data_nascimento: formatarDataISO(userData.data_nascimento) || '',
+      }));
+
+      setFormErrors(() => {
+        const errors = [];
+        if(!userData.nome_completo || !nomeValido(userData.nome_completo)) errors.push('nome_completo');
+        if(!userData.cpf || !validarCPF(cpfMask(userData.cpf))) errors.push('cpf');
+        if(!userData.celular || celularMask(userData.celular).length < 14) errors.push('celular')
+        if(!userData.data_nascimento || !isDataISO(formatarDataISO(userData.data_nascimento))) errors.push('data_nascimento')
+
+          return errors;
+      })
+
+    } else {
+      // Opcional: Limpar se desmarcar (ou manter o que foi preenchido)
+      setFormData(prev => ({
+        ...prev,
+        nome_completo: '',
+        cpf: '',
+        celular: '',
+        data_nascimento: '',
+      }));
+        setFormErrors(['nome_completo', 'cpf', 'celular', 'data_nascimento']);
+
+    }
+  }
+
+
+  
 
   function closePaxModal() {
     setVisible(false);
@@ -139,7 +195,7 @@ const PaxModal = ({
     });
   }
 
-  function handleSubmitPaxForm(_mode) {
+  function savePax(_mode) {
     if (formErrors.length === 0) {
       if (_mode == 'add') {
         setPassageiros((_current) => {
@@ -214,9 +270,27 @@ const PaxModal = ({
           id="paxForm"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmitPaxForm(formMode);
+            savePax(formMode);
           }}
         >
+
+
+{/* CHECKBOX MODERNO DE AUTO-PREENCHIMENTO */}
+          {canShowAutofill && (
+            <div className="autofill-container mt-2">
+              <label className="modern-checkbox-label">
+                <input 
+                  type="checkbox" 
+                  checked={useAccountData} 
+                  onChange={handleAutofillChange} 
+                />
+                <span className="checkbox-custom"></span>
+                <span className="label-text">Usar meus dados de cadastro</span>
+              </label>
+            </div>
+          )}
+
+
           <label>
             Nome:
             <input
@@ -306,6 +380,7 @@ PaxModal.propTypes = {
   setPassageiros: PropTypes.func.isRequired,
   paxModalOpen: PropTypes.array.isRequired,
   selectedDates: PropTypes.array.isRequired,
+  passageiros: PropTypes.array.isRequired,
   convertDate: PropTypes.func.isRequired,
 };
 

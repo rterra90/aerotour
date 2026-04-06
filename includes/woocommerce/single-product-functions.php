@@ -38,15 +38,21 @@ add_action('wp_enqueue_scripts', function () {
 
   // 4. Passa os dados necessários (o que estava nos data-attributes)
   global $post;
+  $current_user = wp_get_current_user();
+  $user_id = $current_user->ID;
   $excursao = Aerotour_Helper::get_formatted_excursion_data($post->ID); // Sua função de lógica
 
   wp_localize_script('aer-reserva-app', 'singleProductData', [
     'variacoes' => $excursao['variacoes'],
     'embarques' => $excursao['embarques'],
     'productId' => $excursao['id'],
-    // 'cartUrl'   => wc_get_cart_url(),
-    // 'ajaxUrl'   => admin_url('admin-ajax.php'),
-    'estadoDestino' => has_term('rock-in-rio', 'product_cat', $post->ID) ? 'rj' : 'sp'
+    'estadoDestino' => has_term('rock-in-rio', 'product_cat', $post->ID) ? 'rj' : 'sp',
+    'userData' => $user_id ? [
+      'nome_completo'   => $current_user->first_name . ' ' . $current_user->last_name,
+      'cpf'             => get_user_meta($user_id, 'cpf', true), // Ajuste a meta_key se for outra
+      'celular'         => get_user_meta($user_id, 'billing_phone', true),
+      'data_nascimento' => get_user_meta($user_id, 'data_nasc', true),
+    ] : null,
   ]);
 });
 

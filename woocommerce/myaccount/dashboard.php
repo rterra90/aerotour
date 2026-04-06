@@ -131,16 +131,14 @@ $show_dashboard = isset($variation_id_proxima) || count($cupons_ativos) > 0;
 	$sobrenome = get_user_meta($user_id, 'last_name', true);
 	$telefone = get_user_meta($user_id, 'billing_phone', true);
 
-	if (false) {
-		if (empty($cpf) || empty($data_nasc) || empty($sobrenome) || empty($telefone)) : ?>
-			<div class="account-alert friendly alert-dismissible d-flex align-items-center alert" role="alert">
-				<i class="bi bi-lightbulb-fill me-2"></i>
-				<div>Dica: Complete seu cadastro e finalize suas reservas de forma mais rápida utilizando seus dados cadastrais.</div>
-				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-			</div>
-	<?php endif;
-	}
-	?>
+
+	if (empty($cpf) || empty($data_nasc) || empty($sobrenome) || empty($telefone)) : ?>
+		<div class="account-alert friendly alert-dismissible d-flex align-items-center alert" role="alert">
+			<i class="bi bi-lightbulb-fill me-2"></i>
+			<div class="completar-dados-alert">Dica: Complete seu cadastro e finalize suas reservas de forma mais rápida utilizando seus dados cadastrais. <a href="<?= esc_url(wc_customer_edit_account_url()) ?>">(Editar dados)</a></div>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	<?php endif; ?>
 
 
 	<?php
