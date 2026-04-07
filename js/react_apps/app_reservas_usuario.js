@@ -4305,6 +4305,12 @@
     value = value.replace(/(\d)(\d{4})$/, "$1-$2");
     return value;
   };
+  var dataMask = (data) => {
+    if (!data)
+      return "";
+    const [ano, mes, dia] = data.split("-");
+    return `${dia}/${mes}/${ano}`;
+  };
   var formatarDataISO = (data) => {
     if (!data)
       return "";
@@ -4358,7 +4364,7 @@
           nome_completo: userData.nome_completo || "",
           cpf: cpfMask(userData.cpf) || "",
           celular: celularMask(userData.celular) || "",
-          data_nascimento: formatarDataISO(userData.data_nascimento) || ""
+          data_nascimento: userData.data_nascimento || ""
         }));
         setFormErrors(() => {
           const errors = [];
@@ -4420,9 +4426,9 @@
           break;
         }
         case "data_nascimento": {
-          const dataCompleta = target.value !== "";
-          atualizarErros(target.name, !dataCompleta);
-          setFormData({ ...formData, data_nascimento: target.value });
+          const dataFormatadaDMY = applyMask(target.value, "data");
+          atualizarErros(target.name, dataFormatadaDMY.length !== 10);
+          setFormData({ ...formData, data_nascimento: dataFormatadaDMY });
           break;
         }
         default:
@@ -4498,10 +4504,9 @@
             if (paxJaExiste) {
               alert("J\xE1 existe um passageiro com este CPF.");
               return _current;
-            } else {
-              setPaxModalOpen(false);
-              return [..._current, formData];
             }
+            setPaxModalOpen(false);
+            return [..._current, { ...formData, data_nascimento: formatarDataISO(formData.data_nascimento) }];
           });
         } else if (_mode == "edit") {
           const _index = paxModalOpen[3];
@@ -4515,8 +4520,9 @@
             } else {
               setPaxModalOpen(false);
               return _current.map((_pax, _i) => {
+                const _dn = isDataISO(formData.data_nascimento) ? formData.data_nascimento : formatarDataISO(formData.data_nascimento);
                 if (_i === _index)
-                  return formData;
+                  return { ...formData, data_nascimento: _dn };
                 else
                   return _pax;
               });
@@ -4621,10 +4627,10 @@
                       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         "input",
                         {
-                          type: "date",
+                          type: "text",
                           name: "data_nascimento",
                           maxLength: "10",
-                          value: formData.data_nascimento,
+                          value: isDataISO(formData.data_nascimento) ? dataMask(formData.data_nascimento) : formData.data_nascimento,
                           onChange: inputChange,
                           onBlur: inputBlur
                         }

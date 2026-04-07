@@ -241,11 +241,19 @@ class Aerotour_Template
       <div id="topAdBanner">
         <img src="<?= $theme_uri ?>/assets/banners/banner_jb.gif"
           alt="Promoção Aerotour + JBSP Fã Clube Jonas Brothets"
-          data-bs-toggle="modal"
-          data-bs-target="#modal-promo-jb"
           style="cursor: pointer;">
       </div>
-    <?php endif;
+    <?php
+    elseif ($product_id == 6174) : ?>
+      <div id="topAdBanner">
+        <img src="<?= $theme_uri ?>/assets/banners/bts-cupom.gif"
+          alt="Banner promocional cupom ARMYS7"
+          style="cursor: pointer;">
+      </div>
+    <?php
+
+
+    endif;
   }
 
   public static function render_product_modals($excursao)

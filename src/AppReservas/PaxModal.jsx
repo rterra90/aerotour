@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 import CustomSelectPaxModal from './CustomSelectPaxModal.jsx';
 import useValidations from '../Hooks/useValidations';
-import { cpfMask, celularMask, formatarDataISO, isDataISO, nomeValido } from '../AppReservas/InputMasks';
+import { cpfMask, celularMask, formatarDataISO, isDataISO, nomeValido, dataMask } from '../AppReservas/InputMasks';
 
 const PaxModal = ({
   setPaxModalOpen,
@@ -52,7 +52,7 @@ const PaxModal = ({
         nome_completo: userData.nome_completo || '',
         cpf: cpfMask(userData.cpf) || '',
         celular: celularMask(userData.celular) || '',
-        data_nascimento: formatarDataISO(userData.data_nascimento) || '',
+        data_nascimento: userData.data_nascimento || '',
       }));
 
       setFormErrors(() => {
@@ -118,9 +118,9 @@ const PaxModal = ({
         break;
       }
       case 'data_nascimento': {
-        const dataCompleta = target.value !== '';
-        atualizarErros(target.name, !dataCompleta);
-        setFormData({ ...formData, data_nascimento: target.value });
+        const dataFormatadaDMY = applyMask(target.value, 'data');
+        atualizarErros(target.name, dataFormatadaDMY.length !== 10);
+        setFormData({ ...formData, data_nascimento: dataFormatadaDMY });
         break;
       }
 
@@ -206,10 +206,11 @@ const PaxModal = ({
           if (paxJaExiste) {
             alert('Já existe um passageiro com este CPF.');
             return _current;
-          } else {
-            setPaxModalOpen(false);
-            return [..._current, formData];
-          }
+          }  
+
+          setPaxModalOpen(false);
+          return [..._current, { ...formData, data_nascimento: formatarDataISO(formData.data_nascimento) }];
+
         });
       } else if (_mode == 'edit') {
         const _index = paxModalOpen[3];
@@ -226,7 +227,8 @@ const PaxModal = ({
           } else {
             setPaxModalOpen(false);
             return _current.map((_pax, _i) => {
-              if (_i === _index) return formData;
+              const _dn = isDataISO(formData.data_nascimento) ? formData.data_nascimento : formatarDataISO(formData.data_nascimento)
+              if (_i === _index) return {...formData, data_nascimento: _dn};
               else return _pax;
             });
           }
@@ -328,10 +330,10 @@ const PaxModal = ({
           <label>
             Data de nascimento:
             <input
-              type="date"
+              type="text"
               name="data_nascimento"
               maxLength="10"
-              value={formData.data_nascimento}
+              value={isDataISO(formData.data_nascimento) ? dataMask(formData.data_nascimento) : formData.data_nascimento}
               onChange={inputChange}
               onBlur={inputBlur}
             />
