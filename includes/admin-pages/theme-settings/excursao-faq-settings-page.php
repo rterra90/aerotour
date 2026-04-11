@@ -8,7 +8,7 @@ add_action('admin_init', function () {
 
 function render_excursao_faq_settings_page()
 {
-  $grupos_faq = get_option('grupos_faq', []);
+  $grupos_faq = get_option('grupos_faq_1', []);
   $faq_padrao = get_option('faq_padrao', '');
 
   // Lista de ícones sugeridos (Travel & Support)
@@ -20,8 +20,14 @@ function render_excursao_faq_settings_page()
     <div class="settings-page-content">
       <div class="content-header">
         <?php $parent_url = menu_page_url('config-excursao', false); ?>
-        <h2><a href="<?= $parent_url; ?>">Excursão</a> > Principais Dúvidas (FAQ)</h2>
-        <p class="description">Crie conjuntos de perguntas e respostas frequentes. Marque a estrela para definir o FAQ padrão.</p>
+        <div>
+          <h2><a href="<?= $parent_url; ?>">Excursão</a> > Principais Dúvidas (FAQ)</h2>
+          <p class="description">Crie conjuntos de perguntas e respostas frequentes. Marque a estrela para definir o FAQ padrão.</p>
+        </div>
+        <div>
+          <button type="button" id="add-novo-faq" class="button button-primary large"> + Criar Novo Set de FAQ </button>
+        </div>
+
       </div>
 
       <form method="post" action="options.php" id="aerotour-faq-form">
@@ -77,12 +83,16 @@ function render_excursao_faq_settings_page()
                   <button type="button" class="button button-secondary add-faq-item"> + Adicionar Pergunta </button>
                 </div>
               </div>
-          <?php endforeach;
-          endif; ?>
-        </div>
+            <?php endforeach;
+          else: ?>
+            <div class="settings-empty-placeholder faq">
+              <span class="dashicons dashicons-editor-help"></span>
+              <h4>Seu Gerenciador de FAQ está vazio</h4>
+              <p>Crie grupos de perguntas e respostas para automatizar o suporte das suas viagens e eventos.</p>
+            </div>
 
-        <div style="margin-top: 30px;">
-          <button type="button" id="add-novo-faq" class="button button-primary large"> + Criar Novo Set de FAQ </button>
+          <?php
+          endif; ?>
         </div>
 
         <div class="form-footer"><?php submit_button('Salvar Todos os FAQs'); ?></div>
@@ -235,6 +245,9 @@ function render_excursao_faq_settings_page()
       $(document).on('click', '.remove-grupo', function() {
         if (confirm('Tem certeza que deseja excluir este conjunto de FAQ?')) {
           $(this).closest('.grupo-card').remove();
+
+          // Mostra o placeholder se o tamanho for 0, esconde se for maior que 0
+          $('.settings-empty-placeholder').toggle($("#container-faq .grupo-card").length === 0);
         }
       });
 
@@ -296,6 +309,8 @@ function render_excursao_faq_settings_page()
                       </div>
                   </div>`;
         $('#container-faq').append(html);
+        $('.settings-empty-placeholder')[0].style.display = 'none';
+
         $('.sortable-faq').sortable({
           handle: '.card-handle',
           axis: 'y'

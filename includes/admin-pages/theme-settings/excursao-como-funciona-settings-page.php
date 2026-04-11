@@ -26,9 +26,16 @@ function render_excursao_como_funciona_settings_page()
     <div class="settings-page-content">
       <div class="content-header">
         <?php $parent_url = menu_page_url('config-excursao', false); ?>
-        <h2><a href="<?= $parent_url; ?>">Excursão</a> > Como funciona</h2>
-        <p class="description">Crie conjuntos de instruções sobre o funcionamento das excursões. Marque a estrela para definir o conjunto padrão.</p>
+        <div>
+          <h2><a href="<?= $parent_url; ?>">Excursão</a> > Como funciona</h2>
+          <p class="description">Crie conjuntos de instruções sobre o funcionamento das excursões. Marque a estrela para definir o conjunto padrão.</p>
+        </div>
+        <div>
+          <button type="button" id="add-novo-grupo" class="button button-primary large"> + Criar novo grupo de instruções </button>
+        </div>
       </div>
+
+
       <form method="post" action="options.php" id="como-funciona-sets-form">
         <?php settings_fields('opt_excursao_como_funciona'); ?>
         <input type="hidden" name="como_funciona_set_padrao" id="input_set_padrao" value="<?php echo esc_attr($set_padrao); ?>">
@@ -103,7 +110,15 @@ function render_excursao_como_funciona_settings_page()
                   <button type="button" class="button button-secondary add-frase"> + Adicionar Frase </button>
                 </div>
               </div>
-          <?php endforeach;
+            <?php endforeach;
+          else: ?>
+            <div class="settings-empty-placeholder como-funciona">
+              <span class="dashicons dashicons-format-aside"></span>
+              <h4>Nenhum set de orientações encontrado</h4>
+              <p>Organize as instruções da sua excursão em grupos. Comece criando o seu primeiro conjunto no botão abaixo.</p>
+            </div>
+
+          <?php
           endif; ?>
         </div>
 
@@ -303,6 +318,8 @@ function render_excursao_como_funciona_settings_page()
                     </div>
                 </div>`;
         $('#container-grupos').append(html);
+
+        $('.settings-empty-placeholder')[0].style.display = 'none';
         initSortable();
       });
 
@@ -343,7 +360,14 @@ function render_excursao_como_funciona_settings_page()
       // Remover Grupo
       $(document).on('click', '.remove-grupo', function(e) {
         e.stopPropagation();
-        if (confirm('Excluir este set de orientações?')) $(this).closest('.grupo-card').remove();
+        if (confirm('Excluir este set de orientações?')) {
+          $(this).closest('.grupo-card').remove();
+
+          // Mostra o placeholder se o tamanho for 0, esconde se for maior que 0
+          $('.settings-empty-placeholder').toggle($("#container-grupos .grupo-card").length === 0);
+        }
+
+
       });
 
       // Toggle Destaque

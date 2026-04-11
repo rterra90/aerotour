@@ -157,6 +157,8 @@ display: inline-block;
       margin-bottom: 30px;
       border-bottom: 1px solid #eee;
       padding-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
     }
 
     .content-header h2 {
@@ -336,3 +338,41 @@ display: inline-block;
         width: 80%;
       }
     }
+
+    /* EMPTY PLACEHOLDER CONTAINER */
+    .settings-empty-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border: 2px dashed #d1d1d1;
+    border-radius: 8px;
+    margin: 20px 0;
+    color: #50575e;
+}
+
+.settings-empty-placeholder .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #dc3545; /* Cor padrão do seu sistema */
+    margin-bottom: 15px;
+    opacity: 0.6;
+}
+
+.settings-empty-placeholder h4 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    color: #2c3338;
+}
+
+.settings-empty-placeholder p {
+    max-width: 400px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #646970;
+}
