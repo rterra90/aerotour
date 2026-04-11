@@ -603,7 +603,13 @@ dl#principaisDuvidasContent .resposta {
 .FeedHeader__info-row {
   margin: 0 !important;
 }
-.instagram-feed a {
+
+.instagram-feed .LoadMoreButton {
+  background-color: none !important;
+  color: rgb(29 29 29) !important;
+  padding: 0;
+} */
+ .instagram-feed a {
   background: linear-gradient(
     45deg,
     #f09433,
@@ -627,11 +633,6 @@ dl#principaisDuvidasContent .resposta {
     max-width: 420px;
     width: 100%;;
 }
-.instagram-feed .LoadMoreButton {
-  background-color: none !important;
-  color: rgb(29 29 29) !important;
-  padding: 0;
-} */
 
 /* SEÇÃO FOTOS DAS EXCURSÕES */
 #secaoFotos .carousel-inner {

@@ -74,6 +74,7 @@ $is_encerrada = Aerotour_Helper::is_excursion_closed($product->get_id());
     <!-- FIM BOTÃO WHATSAPP -->
 
     <?php Aerotour_Template::render_related_excursions(); ?>
+    <?php Aerotour_Template::render_product_footer(); ?>
   </div>
 </section>
 <?php Aerotour_Template::render_product_modals($excursao); ?>

@@ -47,8 +47,7 @@ class Aerotour_Template
 
   public static function render_info_grid($excursao)
   {
-    $datas = $excursao['datas'];
-?>
+    $datas = $excursao['datas']; ?>
 
     <div class="box box1">
       <div class="label"><?= aer_icons('calendar-red', 22, 22) ?>
@@ -292,6 +291,63 @@ class Aerotour_Template
           <button class="close-modal" type="button" data-bs-dismiss="modal">Fechar</button>
         </div>
 
+      </div>
+    </div>
+  <?php
+  }
+
+  public static function render_product_footer()
+  {
+  ?>
+    <!-- SOCIAL FOOTER -->
+    <div id="social-footer" class="d-flex mt-sm-4 mt-5">
+      <div class="instagram-feed col-md-6">
+        <h2 class="bg-title">Siga a Aerotour</h2>
+        <!-- botão com ícone para o instagram -->
+        <a href="https://www.instagram.com/aerotour_excursoes/" target="_blank" class="instagram-btn mb-3" aria-label="Link para o Instagram da Aerotour">
+          <?= aer_icons('instagram', 20, 20) ?> @aerotour_excursoes </a>
+      </div>
+      <div id="secaoFotos" col-md-6">
+        <h2 class="bg-title">Fotos das excursões</h2>
+        <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/jorgeemateus.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/linkinpark.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/redhot.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/knotfest19.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/anitta.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/straykids06.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/bmth.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/evanescence.webp" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/equipe_aerotour.webp" class="d-block w-100" alt="...">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
       </div>
     </div>
 <?php

@@ -86,10 +86,8 @@ function render_excursao_como_funciona_settings_page()
                               <input type="text" name="como_funciona_sets[<?php echo $id_grupo; ?>][frases][texto_secundario][]" value="<?php echo esc_attr($f['texto_secundario']); ?>" placeholder="Texto secundário / descrição..." />
                               <div class="media-upload-wrapper">
                                 <input type="hidden" name="como_funciona_sets[<?php echo $id_grupo; ?>][frases][icone][]" class="icone-url" value="<?php echo esc_attr($f['icone']); ?>" />
-
                                 <div class="media-actions" style="display: flex; gap: 5px; align-items: center;">
                                   <button type="button" class="button select-media-btn">Selecionar Ícone</button>
-
                                   <button type="button" class="button-link custom-remove-media" style="color: #a00; text-decoration: none; <?php echo empty($f['icone']) ? 'display:none;' : ''; ?>">
                                     Remover
                                   </button>
@@ -343,7 +341,7 @@ function render_excursao_como_funciona_settings_page()
                         </div>
                         <div class="row-extra" style="display:none;">
                             <input type="text" name="como_funciona_sets[${gid}][frases][texto_secundario][]" placeholder="Texto secundário..." />
-                            <input type="text" name="como_funciona_sets[${gid}][frases][icone][]" placeholder="Ícone (ex: dashicons-clock)..." class="code-input" />
+                            <div class="media-upload-wrapper"> <input type="hidden" name="como_funciona_sets[${gid}][frases][icone][]" class="icone-url" value="" /> <div class="media-actions" style="display: flex; gap: 5px; align-items: center;"> <button type="button" class="button select-media-btn">Selecionar Ícone</button> <button type="button" class="button-link custom-remove-media" style="color: #a00; text-decoration: none;"> Remover </button> </div>
                         </div>
                     </div>
                 </div>`;

@@ -616,46 +616,47 @@ if (has_term('rock-in-rio', 'product_cat')) {
           </button>
         </div>
       </div>
+    </div>
 
 </section>
 
-  <!-- MODAL ROCK IN RIO ARTECULT -->
-  <div class="modal fade" id="modal-promo-rir" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
+<!-- MODAL ROCK IN RIO ARTECULT -->
+<div class="modal fade" id="modal-promo-rir" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
 
-        <div class="modal-header">
-          <h5 class="modal-title">Aerotour, ArteCult e Bandas Novas no Rock in Rio 2026!</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body artecult-promo">
-          <p>Aproveite o cupom exclusivo para seguidores e ganhe até 10% de desconto na sua reserva!*</p>
-          <small>*Cupom promocional de 5% + desconto de reserva antecipada até 30 dias antes da viagem.</small>
-
-          <style>
-
-          </style>
-          <ul>
-            <li>
-              <div>Siga as páginas da Aerotour <a href="https://instagram.com/aerotour_excursoes" target="_blank" aria-label="Link para seguir a Aerotour">(@aerotour_excursoes)</a>, ArteCult <a href="https://instagram.com/artecult" target="_blank" aria-label="Link para seguir a ArteCult">(@artecult)</a> e Bandas Novas <a href="https://instagram.com/bandasnovas.oficial" target="_blank" aria-label="Link para seguir a Bandas Novas">(@bandasnovas.oficial)</a> no Instagram</div>
-            </li>
-            <li>
-              <div><a href="https://aerotour.com.br" target="_blank" aria-label="Link para se cadastrar no site da Aerotour">Cadastre-se </a> no site da Aerotour</div>
-            </li>
-            <li>
-              <div>Envie seu <i>@username</i> para o e-mail da Aerotour (contato@aerotour.com.br). Utilize seu e-mail do cadastro aqui no site.</div>
-            </li>
-            <li>Aguarde nosso retorno com a liberação do cupom e utilize no carrinho.</li>
-          </ul>
-          <div class="promo-email-cta">
-            <a href="mailto:contato@aerotour.com.br?subject=Promoção%20Aerotour,%20ArteCult%20e%20Bandas%20novas%20no%20Rock%20In%20Rio&body=Olá,%0AGostaria%20de%20participar%20da%20promoção.%0AMeu%20@%20no%20Instagram%20é:%20">Já sigo as páginas, quero enviar meu @ para participar! >></a>
-          </div>
-        </div>
-        <button class="close-modal" type="button" data-bs-dismiss="modal">Fechar</button>
+      <div class="modal-header">
+        <h5 class="modal-title">Aerotour, ArteCult e Bandas Novas no Rock in Rio 2026!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body artecult-promo">
+        <p>Aproveite o cupom exclusivo para seguidores e ganhe até 10% de desconto na sua reserva!*</p>
+        <small>*Cupom promocional de 5% + desconto de reserva antecipada até 30 dias antes da viagem.</small>
 
+        <style>
+
+        </style>
+        <ul>
+          <li>
+            <div>Siga as páginas da Aerotour <a href="https://instagram.com/aerotour_excursoes" target="_blank" aria-label="Link para seguir a Aerotour">(@aerotour_excursoes)</a>, ArteCult <a href="https://instagram.com/artecult" target="_blank" aria-label="Link para seguir a ArteCult">(@artecult)</a> e Bandas Novas <a href="https://instagram.com/bandasnovas.oficial" target="_blank" aria-label="Link para seguir a Bandas Novas">(@bandasnovas.oficial)</a> no Instagram</div>
+          </li>
+          <li>
+            <div><a href="https://aerotour.com.br" target="_blank" aria-label="Link para se cadastrar no site da Aerotour">Cadastre-se </a> no site da Aerotour</div>
+          </li>
+          <li>
+            <div>Envie seu <i>@username</i> para o e-mail da Aerotour (contato@aerotour.com.br). Utilize seu e-mail do cadastro aqui no site.</div>
+          </li>
+          <li>Aguarde nosso retorno com a liberação do cupom e utilize no carrinho.</li>
+        </ul>
+        <div class="promo-email-cta">
+          <a href="mailto:contato@aerotour.com.br?subject=Promoção%20Aerotour,%20ArteCult%20e%20Bandas%20novas%20no%20Rock%20In%20Rio&body=Olá,%0AGostaria%20de%20participar%20da%20promoção.%0AMeu%20@%20no%20Instagram%20é:%20">Já sigo as páginas, quero enviar meu @ para participar! >></a>
+        </div>
+      </div>
+      <button class="close-modal" type="button" data-bs-dismiss="modal">Fechar</button>
     </div>
+
   </div>
+</div>
 </div>
 <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/single-product.js?ver=<?= time() ?>"></script>
 <script src="<?php echo get_stylesheet_directory_uri(); ?>/js/react_apps/app_reservas_usuario.js?ver=<?= time() ?>"></script>

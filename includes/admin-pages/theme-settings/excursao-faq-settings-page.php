@@ -8,7 +8,7 @@ add_action('admin_init', function () {
 
 function render_excursao_faq_settings_page()
 {
-  $grupos_faq = get_option('grupos_faq_1', []);
+  $grupos_faq = get_option('grupos_faq', []);
   $faq_padrao = get_option('faq_padrao', '');
 
   // Lista de ícones sugeridos (Travel & Support)
