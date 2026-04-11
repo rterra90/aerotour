@@ -7,6 +7,7 @@
 /* @import './admin/check-in-modal.css'; */
 @import './admin/buttons.css';
 @import './admin/product_post/meta-pontos-embarque-exc.css';
+@import './admin/theme-settings.css';
 
 /* Input de texto estilizado */
 input.merged-text-input {

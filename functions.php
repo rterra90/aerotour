@@ -112,7 +112,6 @@ require_once get_template_directory() . '/includes/functions/sort-excursoes.php'
 require_once get_template_directory() . '/includes/functions/coupons-functions.php';
 require_once get_template_directory() . '/includes/functions/blog.php';
 require_once get_template_directory() . '/includes/functions/general-customize.php';
-require_once get_template_directory() . '/includes/functions/process-product-meta.php';
 require_once get_template_directory() . '/includes/afiliados/pdv-functions.php';
 
 // require_once get_template_directory() . '/includes/functions/contrato.php';
@@ -969,7 +968,14 @@ require_once get_template_directory() . '/endpoints/api_user_get.php';
 
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN
 if (is_admin()) {
-  // include_once get_template_directory() . '/includes/admin-pages/panel-widgets/gerenciar-exc-widgets.php'; // widget check-in
+
+  // CONFIGURAÇÕES DO TEMA
+  require_once get_template_directory() .
+    '/includes/admin-pages/theme-settings.php';
+
+  // CUSTOMIZAÇÕES EM CREATE/EDIT PRODUCT PAGE
+  require_once get_template_directory() . '/includes/functions/create-edit-product-functions.php';
+
   require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/check-in/check-in-widget.php'; // widget check-in
   require_once get_template_directory() .
@@ -977,7 +983,7 @@ if (is_admin()) {
   require_once get_template_directory() .
     '/includes/admin-pages/embarques/embarques-admin.php'; //página Embarques
   require_once get_template_directory() .
-    '/includes/admin-pages/google-integrations-settings-admin.php'; //página Embarques
+    '/includes/admin-pages/google-integrations-settings-admin.php'; //Google integrations setting page
   require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/home-cards-widget.php'; // widget home cards
   require_once get_template_directory() .
@@ -1220,5 +1226,26 @@ if (is_admin()) {
     </script>
 <?php
   }
+
+  // Permitir upload de SVG
+  add_filter('upload_mimes', function ($mimes) {
+    $mimes['svg'] = 'image/svg+xml';
+    return $mimes;
+  });
+
+  // Corrigir exibição do SVG na biblioteca de mídia
+  add_filter('wp_prepare_attachment_for_js', function ($response, $attachment, $meta) {
+    if ($response['mime'] === 'image/svg+xml' && empty($response['sizes'])) {
+      $response['sizes'] = [
+        'full' => [
+          'url' => $response['url'],
+          'width' => 100,
+          'height' => 100,
+          'orientation' => 'portrait',
+        ]
+      ];
+    }
+    return $response;
+  }, 10, 3);
 }
 ?>

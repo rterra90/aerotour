@@ -36,17 +36,13 @@ $user = wp_get_current_user();
   $focus_img = $hero['focus'] ?? '';
 
   if ($background_img) { ?>
-    <link rel="preload" as="image" href="<?= esc_url(
-                                            $background_img
-                                          ) ?>" fetchpriority="high"><?php }
+    <link rel="preload" as="image" href="<?= esc_url($background_img) ?>" fetchpriority="high"><?php }
 
-                                                                    if ($focus_img) { ?>
-    <link rel="preload" as="image" href="<?= esc_url(
-                                                                        $focus_img
-                                                                      ) ?>" fetchpriority="high"><?php }
-                                                                                                  ?>
+  if ($focus_img) { ?>
+    <link rel="preload" as="image" href="<?= esc_url($focus_img) ?>" fetchpriority="high"><?php }
+           
 
-  <?php $campanhas_ativas = aer_get_active_campaigns(); ?>
+  $campanhas_ativas = aer_get_active_campaigns(); ?>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
   <script src="<?= get_stylesheet_directory_uri() ?>/js/helper/cards-slider.js?ver=<?= aer_get_asset_version(

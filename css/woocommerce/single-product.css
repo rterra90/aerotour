@@ -401,6 +401,10 @@ filter: contrast(0.675);
 .tab-content.tab-como-funciona ul {
   font-size: 0.925rem;
 }
+ul li#sem-padrao-placeholder{
+padding: 30px 0;
+text-align: center;
+}
 /* Estilo para navegadores WebKit (Chrome, Edge, Safari) */
 .tab-content::-webkit-scrollbar {
   width: 8px;
@@ -421,7 +425,7 @@ filter: contrast(0.675);
   background-color: #0056b3;
 }
 
-/* PRINCIPAIS DÚVIDAS */
+/* TAB PRINCIPAIS DÚVIDAS */
 dl#principaisDuvidasContent {
   padding: 8px 0 0 10px;
 }
@@ -996,3 +1000,43 @@ dl#principaisDuvidasContent .resposta {
     padding: 3px 8px;
   }
 }
+
+/* TAB COMO FUNCIONA */
+.item-destaque {
+    background: #f9f9f9;
+    padding: 16px 16px 16px 32px;
+    position: relative;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    transition: transform 0.3s ease;
+    box-shadow: 0px 0px 4px 2px #f0f0f0;
+    margin-bottom: 16px;
+  }
+  .item-destaque:hover {
+    box-shadow: 0px 0px 2px 2px #f0f0f0;
+    transform: translateY(-3px);
+    border: none;
+    background: #f6f6f6;
+  }
+  .item-destaque::before {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 60%;
+    background: var(--aer-accent);
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .item-destaque p {
+    margin-bottom: 0;
+    font-size: .95rem;
+  }
+  .item-destaque strong,
+  .item-destaque h4 {
+    color: var(--aer-accent);
+  }
+  .item-destaque h4 {
+    font-size: 1.25rem;
+  }

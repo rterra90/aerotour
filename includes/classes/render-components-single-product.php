@@ -112,7 +112,6 @@ class Aerotour_Template
 
     <section id="informacoes-excursao">
       <h2>Informações sobre a excursão</h2>
-
       <div class="tab-container">
         <div class="tab-nav">
           <button class="tab-btn active" data-tab="tab1" onclick="gtag('event', 'tab_como_funciona', {
@@ -135,14 +134,11 @@ class Aerotour_Template
         </div>
 
         <?php
-        if ($is_rir) {
-          get_template_part('woocommerce/single-product/tab', 'como-funciona-rir');
-        } else {
-          get_template_part('woocommerce/single-product/tab', 'como-funciona');
-        }
-        ?>
+        // TAB COMO FUNCIONA content 
+        $como_funciona_set_name = get_post_meta($product_id, 'como_funciona_set', true);
+        get_template_part('woocommerce/single-product/tab', 'como-funciona', ['set_escolhido' => $como_funciona_set_name]);
 
-        <?php
+        // TAB EMBARQUES content 
         $tab_embarque_slug = $is_rir ? 'embarques-rir' : 'embarques';
         get_template_part(
           'woocommerce/single-product/tab',
@@ -151,7 +147,9 @@ class Aerotour_Template
         );
         ?>
 
-        <?php get_template_part('woocommerce/single-product/tab', 'duvidas'); ?>
+        <?php
+        $grupo_escolhido_id = get_post_meta($product_id, 'grupo_faq', true);
+        get_template_part('woocommerce/single-product/tab', 'duvidas', ['grupo_escolhido' => $grupo_escolhido_id]); ?>
       </div>
     </section>
 

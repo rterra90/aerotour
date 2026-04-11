@@ -82,6 +82,7 @@
 
   .rir-feature-box p {
     margin-bottom: 0;
+        font-size: .95rem;
   }
 
   .rir-feature-box strong,
@@ -93,10 +94,6 @@
 
   .rir-feature-box h4 {
     font-size: 1.25rem;
-  }
-
-  .rir-feature-box p {
-    font-size: .95rem;
   }
 
   .rir-section-title {

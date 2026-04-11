@@ -26,33 +26,43 @@ function aer_get_seo_description()
  */
 function aer_get_hero_data()
 {
+    delete_transient('aer_featured_trip');
   $featured_data = get_transient('aer_featured_trip');
-
+   
   if (false === $featured_data) {
+      $hoje = date('Ymd'); // Formato yyyymmdd igual ao seu meta_value
     $excursoes_hero = wc_get_products([
-      'orderby' => 'date',
-      'order' => 'DESC',
-      'status' => 'publish',
-      'limit' => 5,
-      'featured' => true
-    ]);
+    'status'      => 'publish',
+    'limit'       => 1,
+    'featured'    => true,
+    'meta_query'  => [
+        [
+            'key'     => 'data_limite_excursao',
+            'value'   => date('Ymd'),
+            'compare' => '>=',
+            'type'    => 'NUMERIC'
+        ]
+    ],
+    'orderby'     => 'meta_value_num',
+    'meta_key'    => 'data_limite_excursao', // Necessário para o orderby saber qual meta usar
+    'order'       => 'ASC',
+]);
 
     $featured_data = ['bg' => '', 'focus' => ''];
 
-    foreach ($excursoes_hero as $_exc) {
-      $id = $_exc->get_id();
-      $featured_data = [
-        'bg' => wp_get_attachment_image_src(
-          get_post_meta($id, 'dest_img_1_id', true),
-          'full'
-        )[0],
-        'focus' => wp_get_attachment_image_src(
-          get_post_meta($id, 'dest_img_2_id', true),
-          'large'
-        )[0]
-      ];
-      break;
-    }
+    if (!empty($excursoes_hero)) {
+            $proxima_exc = $excursoes_hero[0];
+            $id = $proxima_exc->get_id();
+            
+
+            $bg_src = wp_get_attachment_image_src(get_post_meta($id, 'dest_img_1_id', true), 'full');
+            $focus_src = wp_get_attachment_image_src(get_post_meta($id, 'dest_img_2_id', true), 'large');
+
+            $featured_data = [
+                'bg'    => $bg_src ? $bg_src[0] : '',
+                'focus' => $focus_src ? $focus_src[0] : ''
+            ];
+        }
     set_transient('aer_featured_trip', $featured_data, DAY_IN_SECONDS);
   }
   return $featured_data;
