@@ -24,7 +24,7 @@ function render_excursao_como_funciona_settings_page()
     <?php render_settings_header('excursao-como-funciona'); ?>
 
     <div class="settings-page-content">
-      <div class="content-header">
+      <div class="content-header flex">
         <?php $parent_url = menu_page_url('config-excursao', false); ?>
         <div>
           <h2><a href="<?= $parent_url; ?>">Excursão</a> > Como funciona</h2>

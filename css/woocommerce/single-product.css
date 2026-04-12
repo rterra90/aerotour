@@ -639,8 +639,8 @@ dl#principaisDuvidasContent .resposta {
   display: flex;
 }
 #secaoFotos .carousel {
-  height: 420px;
   box-sizing: border-box;
+  margin-top: 16px;
 }
 #secaoFotos .carousel-item {
   max-height: 420px;

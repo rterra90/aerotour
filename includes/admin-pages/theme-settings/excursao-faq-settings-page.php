@@ -18,7 +18,7 @@ function render_excursao_faq_settings_page()
     <?php render_settings_header('excursao-faq'); ?>
 
     <div class="settings-page-content">
-      <div class="content-header">
+      <div class="content-header flex">
         <?php $parent_url = menu_page_url('config-excursao', false); ?>
         <div>
           <h2><a href="<?= $parent_url; ?>">Excursão</a> > Principais Dúvidas (FAQ)</h2>
@@ -310,15 +310,20 @@ function render_excursao_faq_settings_page()
                   </div>`;
         $('#container-faq').append(html);
         $('.settings-empty-placeholder')[0].style.display = 'none';
+      });
 
+      function initSortable() {
         $('.sortable-faq').sortable({
           handle: '.card-handle',
           axis: 'y'
         });
-      });
+      }
+      initSortable();
+
     });
   </script>
 <?php
+
 }
 
 

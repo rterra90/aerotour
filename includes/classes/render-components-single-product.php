@@ -298,6 +298,8 @@ class Aerotour_Template
 
   public static function render_product_footer()
   {
+    // Verifica se a exibição da galeria está ativa nas configurações
+    $exibir_galeria = get_option('exibir_galeria_excursao', '1');
   ?>
     <!-- SOCIAL FOOTER -->
     <div id="social-footer" class="d-flex mt-sm-4 mt-5">
@@ -307,48 +309,48 @@ class Aerotour_Template
         <a href="https://www.instagram.com/aerotour_excursoes/" target="_blank" class="instagram-btn mb-3" aria-label="Link para o Instagram da Aerotour">
           <?= aer_icons('instagram', 20, 20) ?> @aerotour_excursoes </a>
       </div>
-      <div id="secaoFotos" col-md-6">
-        <h2 class="bg-title">Fotos das excursões</h2>
-        <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/jorgeemateus.webp" class="d-block w-100" alt="...">
+
+      <?php if ($exibir_galeria === '1') : ?>
+        <div id="secaoFotos" class="col-md-6">
+          <h2 class="bg-title">Fotos das excursões</h2>
+          <?php
+          // Busca e reindexa o array imediatamente
+          $galeria = get_option('galeria_excursao', []);
+          if (!empty($galeria)) {
+            $galeria = array_values($galeria);
+          }
+
+          if (!empty($galeria)) :
+          ?>
+            <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                <?php foreach ($galeria as $index => $item) : ?>
+                  <div class="carousel-item <?= ($index === 0) ? 'active' : ''; ?>">
+                    <img src="<?= esc_url($item['url']); ?>" class="d-block w-100" alt="<?= esc_attr($item['legenda']); ?>">
+
+                    <?php if (!empty($item['legenda'])) : ?>
+                      <div class="carousel-caption d-none d-md-block" style="background: rgba(0,0,0,0.5); border-radius: 8px; padding: 5px 15px;">
+                        <p class="mb-0"><?= esc_html($item['legenda']); ?></p>
+                      </div>
+                    <?php endif; ?>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
             </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/linkinpark.webp" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/redhot.webp" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/knotfest19.webp" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/anitta.webp" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/straykids06.webp" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/bmth.webp" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/evanescence.webp" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="<?= get_stylesheet_directory_uri() ?>/assets/images/galeria/equipe_aerotour.webp" class="d-block w-100" alt="...">
-            </div>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
+          <?php else : ?>
+            <p class="text-muted">Nenhuma foto disponível na galeria.</p>
+          <?php endif; ?>
         </div>
-      </div>
+      <?php endif; ?>
     </div>
 <?php
   }

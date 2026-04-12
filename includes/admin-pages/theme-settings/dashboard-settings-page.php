@@ -2,6 +2,9 @@
 // Callback da Página Inicial (Dashboard)
 function render_admin_dashboard_page()
 {
+  add_action('admin_init', function () {
+    register_setting('opt_theme_geral', 'numero_wpp');
+  });
 ?>
   <div class="wrap">
     <?php render_settings_header('dashboard'); ?>

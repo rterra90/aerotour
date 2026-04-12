@@ -154,9 +154,10 @@ display: inline-block;
     }
 
     .content-header {
-      margin-bottom: 30px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 20px;
+      margin-bottom: 30px
+
+    }
+    .content-header.flex{
       display: flex;
       justify-content: space-between;
     }
@@ -169,6 +170,12 @@ display: inline-block;
     .content-header h2 a{
       color: unset;
       cursor: pointer;
+    }
+
+    .settings-section{
+    background-color: #ffffff;
+    padding: 10px 20px;
+    border-top: 1px solid #e7e7e7;
     }
 
     /* ESTILOS DE GRUPOS PARA COMO FUNCIONA E FAQ*/
