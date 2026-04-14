@@ -58,19 +58,29 @@ $is_encerrada = Aerotour_Helper::is_excursion_closed($product->get_id());
     </section>
 
     <!-- BOTÃO WHATSAPP -->
-    <div id="exc-wpp-cta" class="desktop">
-      <a href="https://api.whatsapp.com/send?phone=5519997477465&text=Olá. Estive no site da Aerotour e gostaria de saber mais sobre a excursão <?= $excursao['nome'] ?>" aria-label="Botão para chamar no WhatsApp">
-        <div role="button" class="mt-5">
-          <div class="wpp-icon">
-            <?= aer_icons('whatsapp', 30, 30) ?>
+    <?php
+    $numero_wpp =  get_option('contato_whatsapp', '');
+    $exibir_botao_wpp   = get_option('exibir_botao_whatsapp_excursao', '');
+    $texto_custom    = get_option('texto_whatsapp_excursao', 'Olá, gostaria de saber mais sobre a excursão [NOME_EXCURSAO].');
+
+    // Faz a substituição da flag pelo nome real
+    $mensagem_final = str_replace('[NOME_EXCURSAO]', $excursao['nome'], $texto_custom);
+
+    if ($numero_wpp && $exibir_botao_wpp) : ?>
+      <div id="exc-wpp-cta" class="desktop">
+        <a href="https://api.whatsapp.com/send?phone=<?= $numero_wpp ?>&text=<?= $mensagem_final ?>" aria-label="Botão para chamar no WhatsApp">
+          <div role="button" class="mt-5">
+            <div class="wpp-icon">
+              <?= aer_icons('whatsapp', 30, 30) ?>
+            </div>
+            <div class="wpp-text">
+              <p>Dúvidas?</p>
+              <span>Fale conosco no WhatsApp!</span>
+            </div>
           </div>
-          <div class="wpp-text">
-            <p>Dúvidas?</p>
-            <span>Fale conosco no WhatsApp!</span>
-          </div>
-        </div>
-      </a>
-    </div>
+        </a>
+      </div>
+    <?php endif; ?>
     <!-- FIM BOTÃO WHATSAPP -->
 
     <?php Aerotour_Template::render_related_excursions(); ?>

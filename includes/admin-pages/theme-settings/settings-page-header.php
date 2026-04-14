@@ -33,10 +33,10 @@ function render_settings_header($current_page = '')
           </a>
         </div>
       </div>
-      <!-- <a href="admin.php?page=tema-geral-settings" class="nav-tab <?php echo $current_page == 'dashboard' ? 'nav-tab-active' : ''; ?>">
-        Dashboard
+      <a href="admin.php?page=config-contato" class="nav-tab <?php echo $current_page == 'contato' ? 'nav-tab-active' : ''; ?>">
+        Contato
       </a>
-      <a href="admin.php?page=config-pagina-excursao" class="nav-tab <?php echo $current_page == 'excursao' ? 'nav-tab-active' : ''; ?>">
+      <!-- <a href="admin.php?page=config-pagina-excursao" class="nav-tab <?php echo $current_page == 'excursao' ? 'nav-tab-active' : ''; ?>">
         Página da Excursão
       </a>
       <a href="#" class="nav-tab">Checkout (Em breve)</a> -->

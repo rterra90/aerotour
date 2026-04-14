@@ -10,6 +10,8 @@ require_once get_template_directory() .
   '/includes/admin-pages/theme-settings/excursao-como-funciona-settings-page.php'; // SUB "Página da excursão > Como Funciona"
 require_once get_template_directory() .
   '/includes/admin-pages/theme-settings/excursao-faq-settings-page.php'; // SUB "Página da excursão > FAQ"
+require_once get_template_directory() .
+  '/includes/admin-pages/theme-settings/contato-settings-page.php'; // SUB "Contato"
 
 /**
  * Cria o menu e submenus de configuração do tema
@@ -24,6 +26,16 @@ add_action('admin_menu', function () {
     'render_admin_dashboard_page', // Função que desenha a página inicial
     'dashicons-admin-appearance',
     30
+  );
+
+  // Submenu: Contato
+  add_submenu_page(
+    'tema-geral-settings', // slug do menu pai
+    'Configurações de contato',
+    'Contato',
+    'manage_options',
+    'config-contato', // slug
+    'render_contato_settings_page'
   );
 
   // Submenu: Página da Excursão

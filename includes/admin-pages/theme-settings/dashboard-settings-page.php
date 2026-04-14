@@ -6,21 +6,18 @@ function render_admin_dashboard_page()
     register_setting('opt_theme_geral', 'numero_wpp');
   });
 ?>
-  <div class="wrap">
+  <div class="wrap aerotour-admin-wrapper">
     <?php render_settings_header('dashboard'); ?>
 
-    <div class="aerotour-settings-content">
-      <h2>Bem-vindo</h2>
-      <p>Utilize o menu acima para navegar entre as seções de personalização do seu tema.</p>
-
-      <div class="welcome-panel" style="margin-top: 20px;">
-        <div class="welcome-panel-content">
-          <h3>Atalhos Rápidos</h3>
-          <ul>
-            <li><a href="admin.php?page=config-pagina-excursao" class="welcome-icon dashicons-edit">Configurar Tab "Como Funciona"</a></li>
-          </ul>
-        </div>
+    <div class="settings-page-content">
+      <div class="content-header">
+        <h2>Configurações do site</h2>
       </div>
+
+      <h3>Atalhos Rápidos</h3>
+      <ul>
+        <li><a href="admin.php?page=config-pagina-excursao" class="welcome-icon dashicons-edit">Configurar Tab "Como Funciona"</a></li>
+      </ul>
     </div>
   </div>
 <?php
