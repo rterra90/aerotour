@@ -241,13 +241,7 @@ class Aerotour_Template
           style="cursor: pointer;">
       </div>
     <?php
-    elseif ($product_id == 6174) : ?>
-      <div id="topAdBanner">
-        <img src="<?= $theme_uri ?>/assets/banners/bts-cupom.gif"
-          alt="Banner promocional cupom ARMYS7"
-          style="cursor: pointer;">
-      </div>
-    <?php
+
 
 
     endif;

@@ -35,7 +35,7 @@ $texto_whatsapp     = get_option('texto_whatsapp_excursao', $texto_padrao);
             <span>
               <strong>Atenção:</strong> Nenhum número de WhatsApp configurado.
               O botão <strong>não aparecerá</strong> na página enquanto isso.
-              <a href="<?php echo admin_url('admin.php?page=config-contatos'); ?>" style="text-decoration: none; font-weight: 600; margin-left: 5px;">
+              <a href="<?php echo admin_url('admin.php?page=config-contato'); ?>" style="text-decoration: none; font-weight: 600; margin-left: 5px;">
                 Configurar número agora →
               </a>
             </span>
