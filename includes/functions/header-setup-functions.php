@@ -26,46 +26,69 @@ function aer_get_seo_description()
  */
 function aer_get_hero_data()
 {
-    delete_transient('aer_featured_trip');
+  delete_transient('aer_featured_trip');
   $featured_data = get_transient('aer_featured_trip');
-   
+
   if (false === $featured_data) {
-      $hoje = date('Ymd'); // Formato yyyymmdd igual ao seu meta_value
+    $hoje = date('Ymd'); // Formato yyyymmdd igual ao seu meta_value
     $excursoes_hero = wc_get_products([
-    'status'      => 'publish',
-    'limit'       => 1,
-    'featured'    => true,
-    'meta_query'  => [
+      'status'      => 'publish',
+      'limit'       => 1,
+      'featured'    => true,
+      'meta_query'  => [
         [
-            'key'     => 'data_limite_excursao',
-            'value'   => date('Ymd'),
-            'compare' => '>=',
-            'type'    => 'NUMERIC'
+          'key'     => 'data_limite_excursao',
+          'value'   => date('Ymd'),
+          'compare' => '>=',
+          'type'    => 'NUMERIC'
         ]
-    ],
-    'orderby'     => 'meta_value_num',
-    'meta_key'    => 'data_limite_excursao', // Necessário para o orderby saber qual meta usar
-    'order'       => 'ASC',
-]);
+      ],
+      'orderby'     => 'meta_value_num',
+      'meta_key'    => 'data_limite_excursao', // Necessário para o orderby saber qual meta usar
+      'order'       => 'ASC',
+    ]);
 
     $featured_data = ['bg' => '', 'focus' => ''];
 
+    $opt_featured_data = [
+      'bg_desktop' => '',
+      'bg_mobile'  => '',
+      'focus'      => ''
+    ];
+
     if (!empty($excursoes_hero)) {
-            $proxima_exc = $excursoes_hero[0];
-            $id = $proxima_exc->get_id();
-            
+      $proxima_exc = $excursoes_hero[0];
+      $id = $proxima_exc->get_id();
+      $bg_id = get_post_meta($id, 'dest_img_1_id', true);
+      $focus_id = get_post_meta($id, 'dest_img_2_id', true);
 
-            $bg_src = wp_get_attachment_image_src(get_post_meta($id, 'dest_img_1_id', true), 'full');
-            $focus_src = wp_get_attachment_image_src(get_post_meta($id, 'dest_img_2_id', true), 'large');
+      // Busca os diferentes tamanhos da mesma imagem de fundo
+      $bg_desktop_src = wp_get_attachment_image_src($bg_id, 'full');
+      $bg_mobile_src  = wp_get_attachment_image_src($bg_id, 'hero_mobile'); // O tamanho que criamos
 
-            $featured_data = [
-                'bg'    => $bg_src ? $bg_src[0] : '',
-                'focus' => $focus_src ? $focus_src[0] : ''
-            ];
-        }
+      // Fallback: se o hero_mobile não existir, usa o 'medium_large' do WP
+      if (!$bg_mobile_src) {
+        $bg_mobile_src = wp_get_attachment_image_src($bg_id, 'medium_large');
+      }
+
+
+      $bg_src = wp_get_attachment_image_src($bg_id, 'full');
+      $focus_src = wp_get_attachment_image_src($focus_id, 'large');
+
+      $featured_data = [
+        'bg'    => $bg_src ? $bg_src[0] : '',
+        'focus' => $focus_src ? $focus_src[0] : ''
+      ];
+
+      $opt_featured_data = [
+        'bg_desktop' => $bg_desktop_src ? $bg_desktop_src[0] : '',
+        'bg_mobile'  => $bg_mobile_src ? $bg_mobile_src[0] : '',
+        'focus'      => $focus_src ? $focus_src[0] : ''
+      ];
+    }
     set_transient('aer_featured_trip', $featured_data, DAY_IN_SECONDS);
   }
-  return $featured_data;
+  return $opt_featured_data;
 }
 
 /**

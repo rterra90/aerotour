@@ -32,15 +32,39 @@ $user = wp_get_current_user();
 
   <?php
   $hero = aer_get_hero_data();
-  $background_img = $hero['bg'] ?? '';
-  $focus_img = $hero['focus'] ?? '';
+  $bg_desktop = esc_url($hero['bg_desktop']);
+  $bg_mobile  = esc_url($hero['bg_mobile']);
 
-  if ($background_img) { ?>
-    <link rel="preload" as="image" href="<?= esc_url($background_img) ?>" fetchpriority="high"><?php }
+  ?>
+  <style>
+    /* Garante que o CSS peça exatamente o que foi pré-carregado */
+    .carousel-item.featured-bg {
+      background-image: url('<?= $bg_mobile ?>');
+    }
 
-  if ($focus_img) { ?>
-    <link rel="preload" as="image" href="<?= esc_url($focus_img) ?>" fetchpriority="high"><?php }
-           
+    @media (min-width: 769px) {
+      .carousel-item.featured-bg {
+        background-image: url('<?= $bg_desktop ?>');
+      }
+    }
+  </style>
+
+  <?php
+
+  // Preload Inteligente para o Background
+  if ($bg_mobile) { ?>
+    <link class="opt" rel="preload" as="image" href="<?= esc_url($hero['bg_mobile']) ?>" fetchpriority="high" media="(max-width: 768px)">
+  <?php }
+
+  if ($bg_desktop) { ?>
+    <link class="opt" rel="preload" as="image" href="<?= esc_url($hero['bg_desktop']) ?>" fetchpriority="high" media="(min-width: 769px)">
+  <?php }
+
+  // Preload para a imagem de foco (logo/artista) - geralmente a mesma para ambos
+  if ($hero['focus']) { ?>
+    <link rel="preload" as="image" href="<?= esc_url($hero['focus']) ?>" fetchpriority="high">
+  <?php }
+
 
   $campanhas_ativas = aer_get_active_campaigns(); ?>
 
@@ -106,35 +130,23 @@ $user = wp_get_current_user();
   } else {
   ?>
     <script>
-      //remove a chave 'pdv_alert_popup' do localStorage
       localStorage.removeItem('pdv_alert_popup');
     </script>
   <?php
-  } ?>
-
-  <?php
-  if (
-    !is_user_logged_in() &&
-    get_option('new_register_coupon_status') &&
-    get_option('new_register_coupon_status')['status'] === 'ativado'
-  ) { ?>
-    <div id="top-header">Cadastre-se e ganhe um <strong>cupom de 10%</strong> para sua próxima reserva. É por tempo limitado!</div>
-  <?php }
-  $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-  if (strpos($url, '/blog/') !== false) {
-    echo '';
-  } else {
-  ?>
-    <div id="top-header">
-      <h1 class="mb-0 h6">Excursões para shows eventos é com a Aerotour!</h1>
-    </div>
-  <?php
   }
-  ?>
-  <header class="<?= is_front_page() ? '' : 'inner-header' ?>" id="aer_header">
+
+  $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
+  $show_top_header = get_theme_mod('theme_show_top_header', true);
+  $top_header_text = get_theme_mod('theme_top_header_text', "Seja bem vindo ao nosso site!");
+
+  if ($show_top_header) : ?>
+    <div id="top-header">
+      <h1 class="mb-0 h6"><?= $top_header_text; ?></h1>
+    </div>
+  <?php endif; ?>
+
+  <header class="main-header-modern <?= $show_top_header ? 'has-top-header ' : ''; ?><?= $header_type_class; ?> <?= is_front_page() ? 'is-on-home' : 'is-inner-page'; ?>" id="aer_header">
     <?php // Tenta obter as campanhas ativas do cache primeiro
-
-
     $campanhas_ativas = get_transient('aer_campanhas_ativas');
     if ($campanhas_ativas === false) {
       // Se não estiver no cache, faz a consulta ao banco de dados
@@ -153,94 +165,145 @@ $user = wp_get_current_user();
       ); // Salva o resultado no cache por 1 hora (3600 segundos)
       set_transient('aer_campanhas_ativas', $campanhas_ativas, HOUR_IN_SECONDS);
     }
-    ?> <?php if (isset($campanhas_ativas[0])) {
-          $campanha_atual = $campanhas_ativas[0];
-          include 'includes/modals/roleta.php';
-          // if(is_user_logged_in()){
-          //   if(wp_get_current_user() -> ID == 42  || wp_get_current_user() -> ID == 70)
-          //   include 'includes/modals/roleta.php';
-          // }
-        } ?>
+    ?>
 
-
-    <div class="topbar d-flex justify-between py-3">
-      <div class="logo">
+    <div class="topbar d-flex justify-content-between align-items-center py-3">
+      <div class="header-logo">
         <a href="<?= get_home_url() ?>">
-          <img src="<?= esc_url(get_theme_mod('aer_logo')) ?>"
-            alt="<?= esc_attr(get_post_meta(attachment_url_to_postid(get_theme_mod('aer_logo')), '_wp_attachment_image_alt', true)) ?>">
+          <img src="<?= esc_url(get_theme_mod('aer_logo')) ?>" alt="Aerotour">
         </a>
       </div>
-      <div class="navbar-flex-wrapper">
-        <nav class="navbar navbar-expand-lg d-flex justify-content-end">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
 
-            <!-- Verificar a necessidade de incluir a classe nav-item do bootstrap nas li's -->
-            <?php wp_nav_menu([
-              'menu' => 'principal',
-              'container' => 'ul',
-              'menu_class' => 'navbar-nav d-flex'
-            ]); ?>
-          </div>
-        </nav>
-        <div class="user">
-          <?= !is_user_logged_in()
-            ? '<a href="' . wc_get_page_permalink('myaccount') . '">'
-            : '' ?>
-          <div class="topbar-user-wrapper">
-            <div class="<?= is_user_logged_in()
-                          ? 'usuario-logado'
-                          : '' ?> d-flex">
-
-              <div class="saudacao d-flex align-items-center gap-2"><?= aer_icons(
-                                                                      'user',
-                                                                      16,
-                                                                      16
-                                                                    ) ?><span><?= is_user_logged_in()
-                                                                                ? $user->display_name
-                                                                                : 'Olá, visitante' ?></span></div>
-              <?php if (is_user_logged_in()) { ?>
-                <div class="user-menu-container user-menu-btn" data-dropdown-target="user-menu-modal">
-
-                  <?php wp_nav_menu([
-                    'menu' => 'Usuário header',
-                    'container_id' => 'user-menu-modal',
-                    'container_class' => 'd-none'
-                  ]); ?>
-                </div>
-              <?php } ?>
-            </div>
-
-          </div>
-          <?= !is_user_logged_in() ? '</a>' : '' ?>
-
+      <div class="header-hub">
+        <div class="header-status-greeting d-none d-md-block">
+          <a href="<?= wc_get_page_permalink('myaccount') ?>">
+            <?= is_user_logged_in() ? 'Olá, <strong>' . wp_get_current_user()->display_name . '</strong>' : 'Olá, <strong>visitante</strong>' ?>
+          </a>
         </div>
+
+        <?php
+        $menu_style = get_theme_mod('theme_menu_style', 'menu-dropdown');
+        $target_id  = ($menu_style === 'menu-offcanvas') ? 'navOffcanvasMenu' : 'navModernDropdown';
+        ?>
+
+        <div class="header-actions-wrapper d-flex align-items-center gap-2">
+          <?php $notifications_count = 0; ?>
+          <?php if (false) : ?>
+            <div class="action-icon notification-icon">
+              <i class="bi bi-bell"></i>
+              <?php if ($notifications_count > 0) : ?> <span class="action-badge"><?= $notifications_count; ?></span> <?php endif; ?>
+            </div>
+          <?php endif; ?>
+
+          <div class="action-icon account-icon">
+            <a href="<?= wc_get_page_permalink('myaccount') ?>"><i class="bi bi-person"></i></a>
+          </div>
+
+          <div class="action-icon cart-icon">
+            <?php $cart_count = (int) WC()->cart->get_cart_contents_count(); ?>
+            <a href="<?= wc_get_cart_url(); ?>">
+              <i class="bi bi-cart"></i>
+              <?php if ($cart_count > 0) : ?> <span class="action-badge"><?= $cart_count; ?></span> <?php endif; ?>
+
+            </a>
+          </div>
+
+          <button class="navbar-toggler" type="button"
+            data-bs-toggle="<?= ($menu_style === 'menu-offcanvas') ? 'offcanvas' : 'collapse'; ?>"
+            data-bs-target="#<?= $target_id; ?>"
+            aria-controls="<?= $target_id; ?>">
+            <span class="navbar-toggler-icon"><i class="bi bi-list"></i></span>
+          </button>
+        </div>
+
+        <?php if ($menu_style === 'menu-offcanvas') : ?>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="navOffcanvasMenu" aria-labelledby="navOffcanvasMenuLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="navOffcanvasMenuLabel">Menu</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="offcanvas-body">
+              <?php theme_render_menu_content(); // Função auxiliar para evitar repetição 
+              ?>
+            </div>
+          </div>
+        <?php else : ?>
+          <div class="collapse navbar-collapse" id="navModernDropdown">
+            <div class="dropdown-content-inner">
+              <?php theme_render_menu_content(); ?>
+            </div>
+          </div>
+        <?php endif; ?>
       </div>
-      <div class="topbar-social">
-        <a href="https://www.facebook.com/aerotourcampinas/" target="_blank" aria-label="Ícone do Facebook"><?= aer_icons(
-                                                                                                              'facebook',
-                                                                                                              26,
-                                                                                                              26
-                                                                                                            ) ?></a>
-        <a href="https://www.instagram.com/aerotour_excursoes/" target="_blank" aria-label="Ícone do Instagram"><?= aer_icons(
-                                                                                                                  'instagram',
-                                                                                                                  26,
-                                                                                                                  26
-                                                                                                                ) ?></a>
-      </div>
+
+      <?php
+      function theme_render_menu_content()
+      { ?>
+        <div class="user-dropdown-section">
+          <?php if (is_user_logged_in()) : ?>
+            <a href="<?= wc_get_page_permalink('myaccount') ?>" class="user-link"><i class="bi bi-person"></i> Minha Conta</a>
+          <?php else : ?>
+            <a href="<?= wc_get_page_permalink('myaccount') ?>" class="user-link login-btn">Entrar / Cadastrar</a>
+          <?php endif; ?>
+        </div>
+
+        <hr class="dropdown-divider">
+
+        <?php wp_nav_menu([
+          'menu' => 'principal',
+          'container' => 'ul',
+          'menu_class' => 'navbar-nav'
+        ]); ?>
+
+        <hr class="dropdown-divider">
+
+        <div class="d-flex justify-content-between align-items-center px-1">
+          <div class="color-scheme-wrapper">
+            <button id="theme-switcher" class="theme-toggle-btn">
+              <div class="toggle-track">
+                <i class="bi bi-brightness-low"></i>
+                <i class="bi bi-moon"></i>
+                <div class="toggle-thumb"></div>
+              </div>
+            </button>
+          </div>
+          <div class="social-dropdown-links d-flex gap-3">
+            <a href="<?= get_option('contato_facebook'); ?>" target="_blank"><?= aer_icons('facebook', 20, 20) ?></a>
+            <a href="<?= get_option('contato_instagram'); ?>" target="_blank"><?= aer_icons('instagram', 20, 20) ?></a>
+          </div>
+        </div>
+      <?php } ?>
+
     </div>
-
     <script>
-      const loginInputs = document.querySelectorAll('#loginform .input');
+      // Ajustes Dark/Light Mode
+      document.addEventListener('DOMContentLoaded', function() {
+        const themeBtn = document.getElementById('theme-switcher');
+        const body = document.body;
 
-      function handleLoginClass(event) {
-        event.currentTarget.value !== '' ? event.currentTarget.classList.add('preenchido') : event.currentTarget.classList.remove('preenchido');
-      }
-      loginInputs.forEach(input => {
-        input.addEventListener('focus', handleLoginClass);
-        input.addEventListener('blur', handleLoginClass);
+        // 1. Verifica se já existe uma preferência salva
+        const savedTheme = localStorage.getItem('aerotour-theme') || 'theme-dark';
+        body.classList.add(savedTheme);
+
+        themeBtn.addEventListener('click', function() {
+          if (body.classList.contains('theme-dark')) {
+            body.classList.replace('theme-dark', 'theme-light');
+            localStorage.setItem('aerotour-theme', 'theme-light');
+          } else {
+            body.classList.replace('theme-light', 'theme-dark');
+            localStorage.setItem('aerotour-theme', 'theme-dark');
+          }
+        });
+      });
+
+      // Header fixo
+      window.addEventListener('scroll', function() {
+        const header = document.querySelector('#aer_header.header-fixed');
+        if (header) {
+          if (window.scrollY > 26) header.classList.add('scrolled');
+          else header.classList.remove('scrolled');
+        }
+
       });
     </script>
   </header>

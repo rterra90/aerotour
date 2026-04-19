@@ -7,8 +7,22 @@
   min-height: 540px;
   height: 80vh;
 }
-#main-banner {
-  margin-top: -106px;
+#main-banner.header-static {
+  margin-top: -102px;
+}
+/* @media(max-width: 768px){
+  #main-banner.header-static {
+  margin-top: -88px;
+}
+}
+@media(max-width: 576px){
+  #main-banner.header-static {
+  margin-top: -88px;
+}
+} */
+#main-banner.header-fixed{
+  margin-top: 0px;
+
 }
 
 #main-banner .carousel {
@@ -153,6 +167,9 @@
   }
 }
 @media (max-width: 768px) {
+  #main-banner.header-static{
+    margin-top: -88px;
+  }
   .carousel-img.desktop {
     display: none;
   }
@@ -190,8 +207,8 @@
     min-height: 500px;
     max-height: 680px;
   }
-  #main-banner {
-    margin-top: -71px;
+  #main-banner.header-static {
+    margin-top: -80px;
   }
   #main-banner .carousel-indicators {
     margin-bottom: 0;

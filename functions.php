@@ -4,7 +4,10 @@ use Pelago\Emogrifier\CssInliner;
 
 $root_url = get_stylesheet_directory_uri();
 
-// 1. Criar o Widget no Dashboard
+// Adiciona um tamanho focado em mobile (proporção vertical/centralizada)
+add_image_size('hero_mobile', 600, 900, true); // O 'true' força o corte (crop) central
+
+// 1. Criar o Widget de inserção de reservas em massa no Dashboard
 add_action('wp_dashboard_setup', 'aer_add_csv_import_widget');
 
 function aer_add_csv_import_widget()

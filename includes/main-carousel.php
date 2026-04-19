@@ -1,17 +1,21 @@
-<div id="main-banner" class="d-flex justify-content-center mb-3">
+<?php
+$header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
+?>
+<div id="main-banner" class="d-flex justify-content-center mb-3 <?= $header_type_class; ?>">
   <div id="hero" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <?php
       $i_button = 0;
       foreach (aer_proximas_excursoes($excursoes, 'destaque') as $excursao) {
         if (get_post_meta($excursao->get_id())['destaque'][0] === 'yes') { ?>
-            <button type="button" data-bs-target="#hero" data-bs-slide-to="<?= $i_button ?>" class="<?= $i_button ===
-0
-  ? 'active'
-  : '' ?>" aria-current="<?= $i_button === 0
-  ? 'true'
-  : '' ?>" aria-label="<?= $excursao->get_name() ?>"></button>
-            <?php $i_button++;}
+          <button type="button" data-bs-target="#hero" data-bs-slide-to="<?= $i_button ?>" class="<?= $i_button ===
+                                                                                                    0
+                                                                                                    ? 'active'
+                                                                                                    : '' ?>" aria-current="<?= $i_button === 0
+                                                                                                                              ? 'true'
+                                                                                                                              : '' ?>" aria-label="<?= $excursao->get_name() ?>"></button>
+      <?php $i_button++;
+        }
       }
       ?>
     </div>
@@ -65,74 +69,75 @@
                 $estoque > 0 ? $estoque . ' vagas' : 'esgotado';
             }
           }
-          ?>
-          <div class="carousel-item<?= $i_main === 0
-            ? ' active'
-            : '' ?>" style="background-image: url('<?= $background_img ?>')">
+      ?>
+          <div
+            class="carousel-item<?= $i_main === 0 ? ' featured-bg active' : '' ?>" <?php if ($i_main > 0): ?>
+            style="background-image: url('<?= esc_url($background_img) ?>')"
+            <?php endif ?>>
 
             <div class="carousel-item-flex d-flex hero-container">
               <div class="carousel-info">
                 <span data-animate class="pre-title" style="animation-delay:.5s">Excursão</span>
                 <h3 data-animate style="animation-delay:.8s"><a href="<?= get_permalink(
-                  $excursao->get_id()
-                ) ?>"><?= $excursao->get_name() ?></a></h3>
+                                                                        $excursao->get_id()
+                                                                      ) ?>"><?= $excursao->get_name() ?></a></h3>
 
                 <div class="d-flex">
                   <div class="carousel-img mobile">
                     <?php if ($i_main == 0) { ?>
                       <img data-animate style="animation-delay:1.5s" src="<?= $focus_img ?>" alt="<?= $excursao->get_name() ?>">
-                      <?php } else { ?>
+                    <?php } else { ?>
                       <img loading="lazy" data-animate style="animation-delay:1.5s" src="<?= $focus_img ?>" alt="<?= $excursao->get_name() ?>">
-                      <?php } ?>
+                    <?php } ?>
                   </div>
                   <div>
                     <div class="data-local" data-animate style="animation-delay:1s">
                       <div><?= aer_icons('calendar', 18, 18) ?><span><?php
-$datas_array = $excursao->attributes['dia']['options'];
-foreach ($excursao->attributes['dia']['options'] as $i => $data) {
-  if ($i === 0) {
-    echo substr($data, 0, 5);
-  } elseif ($i === sizeof($datas_array) - 1) {
-    echo ' e ' . substr($data, 0, 5);
-  } else {
-    echo ', ' . substr($data, 0, 5);
-  }
-}
-?></span>
+                                                                      $datas_array = $excursao->attributes['dia']['options'];
+                                                                      foreach ($excursao->attributes['dia']['options'] as $i => $data) {
+                                                                        if ($i === 0) {
+                                                                          echo substr($data, 0, 5);
+                                                                        } elseif ($i === sizeof($datas_array) - 1) {
+                                                                          echo ' e ' . substr($data, 0, 5);
+                                                                        } else {
+                                                                          echo ', ' . substr($data, 0, 5);
+                                                                        }
+                                                                      }
+                                                                      ?></span>
                       </div>
                       <div><?= aer_icons(
-                        'pin',
-                        18,
-                        18
-                      ) ?><span><?= get_post_meta(
-  $excursao->get_id(),
-  'local_evento',
-  true
-) ?></span></div>
+                              'pin',
+                              18,
+                              18
+                            ) ?><span><?= get_post_meta(
+                                        $excursao->get_id(),
+                                        'local_evento',
+                                        true
+                                      ) ?></span></div>
 
                     </div>
-                  </div>  
+                  </div>
                 </div>
-                
+
                 <div class="carousel-buttons" data-animate style="animation-delay:1.5s">
-                    <a data-btn-reactive aria-label="Informações e reservas" href="<?= get_permalink(
-                      $excursao->get_id()
-                    ) ?>">Informações e reservas</a>
-                  </div> 
+                  <a data-btn-reactive aria-label="Informações e reservas" href="<?= get_permalink(
+                                                                                    $excursao->get_id()
+                                                                                  ) ?>">Informações e reservas</a>
+                </div>
               </div>
               <div class="carousel-img desktop">
                 <a href="<?= get_permalink($excursao->get_id()) ?>">
                   <?php if ($i_main == 0) { ?>
-                      <img data-animate style="animation-delay:1.5s" src="<?= $focus_img ?>" alt="<?= $excursao->get_name() ?>">
-                      <?php } else { ?>
-                      <img loading="lazy" data-animate style="animation-delay:1.5s" src="<?= $focus_img ?>" alt="<?= $excursao->get_name() ?>">
-                      <?php } ?>
-                  
+                    <img data-animate style="animation-delay:1.5s" src="<?= $focus_img ?>" alt="<?= $excursao->get_name() ?>">
+                  <?php } else { ?>
+                    <img loading="lazy" data-animate style="animation-delay:1.5s" src="<?= $focus_img ?>" alt="<?= $excursao->get_name() ?>">
+                  <?php } ?>
+
                 </a>
               </div>
             </div>
           </div>
-            <?php $i_main++;
+      <?php $i_main++;
         }
       }
       ?>

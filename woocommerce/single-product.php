@@ -9,9 +9,10 @@ get_header();
 // A lógica pesada agora vem via helper/controller
 $excursao = Aerotour_Helper::get_formatted_excursion_data(get_the_ID());
 $is_encerrada = Aerotour_Helper::is_excursion_closed($product->get_id());
+$header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
 ?>
 
-<section id="content-event" class="pb-5 aer-bg-light">
+<section id="content-event" class="<?= $header_type_class; ?> pb-5 aer-bg-light">
   <div class="hero-img">
     <img class="main-image"
       src="<?= $excursao['img'] ?>"
