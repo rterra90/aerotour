@@ -250,6 +250,9 @@ body.theme-dark {
 .offcanvas .btn-close{
   background: none;
 }
+.offcanvas .btn-close i{
+  color: var(--nav-text)
+}
 .offcanvas-title{
   color: var(--nav-text);
 }

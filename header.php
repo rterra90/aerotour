@@ -170,7 +170,7 @@ $user = wp_get_current_user();
     <div class="topbar d-flex justify-content-between align-items-center py-3">
       <div class="header-logo">
         <a href="<?= get_home_url() ?>">
-          <img src="<?= esc_url(get_theme_mod('aer_logo')) ?>" alt="Aerotour">
+          <img src="<?= esc_url(get_theme_mod('aer_logo')) ?>" alt="Logo <?= bloginfo('name'); ?>">
         </a>
       </div>
 
