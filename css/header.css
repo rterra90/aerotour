@@ -48,7 +48,21 @@ top: 37px;
 top: 0px;
 }
 #content-event.header-fixed .hero-img{
+  /* margin-top: 100px; */
+}
+
+.main-header-modern.is-inner-page.header-fixed + section, .main-header-modern.is-inner-page.header-fixed + main {
   margin-top: 100px;
+}
+@media(max-width: 768px){
+  .main-header-modern.is-inner-page.header-fixed + section, .main-header-modern.is-inner-page.header-fixed + main {
+  margin-top: 86px;
+}
+}
+@media(max-width: 567px){
+  .main-header-modern.is-inner-page.header-fixed + section, .main-header-modern.is-inner-page.header-fixed + main {
+  margin-top: 80px;
+}
 }
 /* Ajuste do Dropdown para acompanhar o modo */
 

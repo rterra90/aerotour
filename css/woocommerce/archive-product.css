@@ -229,7 +229,7 @@
 }
 @media (max-width: 767px) {
   #archive-product {
-    padding: 60px 0 40px;
+    /* padding: 60px 0 40px; */
   }
   #archive-product > .archive-container {
     flex-direction: column-reverse;
@@ -260,6 +260,9 @@
 }
 
 @media (max-width: 586px) {
+  #archive-product {
+    padding: 20px 0;
+  }
   .archive-container .content-area ul.products .row {
     padding: 0 10px;
     justify-content: space-between;
