@@ -1,15 +1,111 @@
+/* DETALHES DE COBRANÇA */
 #customer_details label {
   display: block;
 }
-
-#customer_details input {
-  border: 3px solid var(--aer-bg-light);
-  padding: 3px;
-  border-radius: 0.3rem;
-  text-align: center;
-  font-size: 0.9rem;
+.woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper {
+    display: none;
+}
+.woocommerce-billing-fields__field-wrapper input.input-text {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    background-color: #fff;
   width: 100%;
 }
+
+.woocommerce-billing-fields__field-wrapper input.input-text:focus {
+    border-color: #701c1c; /* Cor do seu tema */
+    outline: none;
+}
+
+/* Container de Resumo */
+#billing-summary-section {
+  display: none;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.summary-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+.edit-billing{
+  cursor: pointer;
+}
+.edit-billing:hover {
+    text-decoration: underline;
+    opacity: 1;
+}
+#edit-billing-data{
+  margin: 0 0 0 auto;
+      background: none;
+    border-radius: .4rem;
+    padding: 1px 10px;
+    border: 1px solid var(--aer-bg-dark);
+    font-size: .75rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    opacity: .75;
+    transition: .2s;
+}
+
+
+
+.summary-content {
+      font-family: sans-serif;
+    font-size: .8rem;
+}
+.summary-content p {
+    margin: 5px 0;
+    font-size: .875rem;
+    color: #555;
+}
+.summary-content p.summary-name{
+  font-size: 1rem;
+}
+.edit-billing-phone{
+    font-size: .7rem;
+    font-style: italic;
+    opacity: .75;
+    letter-spacing: .03rem;
+    position: relative;
+    bottom: 1px;
+    padding-left: 4px;
+}
+/* Estilo para o campo com erro */
+.input-error {
+    border-color: #e3342f !important;
+    background-color: #fff5f5 !important;
+}
+
+.cpf-error-message {
+    color: #e3342f;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+
+
+
+
+/* PAGAMENTO */
 .cart_collaterals_pdv p {
   text-align: start;
   text-transform: uppercase;

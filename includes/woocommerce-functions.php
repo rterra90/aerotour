@@ -2,6 +2,9 @@
 // FUNÇÕES DA PÁGINA SINGLE-PRODUCT
 require_once get_template_directory() . '/includes/woocommerce/single-product-functions.php';
 
+// FUNÇÕES DA PÁGINA CHECKOUT
+require_once get_template_directory() . '/includes/woocommerce/checkout-functions.php';
+
 
 //ADICIONAR SUPORTE WOOCOMMERCE
 function aerotour_add_woocommercer_support()
@@ -40,19 +43,6 @@ function minhas_reservas_endpoint_page_create()
   wc_get_template('myaccount/minhas-reservas.php');
 }
 
-// Remove campos desnecessários do checkout
-add_filter('woocommerce_checkout_fields', 'custom_override_checkout_fields');
-function custom_override_checkout_fields($fields)
-{
-  unset($fields['billing']['billing_company']); //remover empresa
-  unset($fields['billing']['billing_address_1']); //remover endereço 1
-  unset($fields['billing']['billing_address_2']); //remover endereço 2
-  unset($fields['billing']['billing_city']); //remover cidade
-  unset($fields['billing']['billing_postcode']); //remover cep
-  unset($fields['billing']['billing_country']); //remover país 
-  unset($fields['billing']['billing_state']); //remover estado
-  return $fields;
-}
 
 // Modifica os itens do menu da conta do usuário
 add_action('woocommerce_account_menu_items', 'custom_account_menu');

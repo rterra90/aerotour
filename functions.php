@@ -706,7 +706,7 @@ function custom_checkout_field_validation()
       }
     } else {
       wc_add_notice(
-        'Por favor, verifique o CPF informado nos dados de faturamento.',
+        'Por favor, verifique o CPF informado nos Detalhes de cobrança.',
         'error'
       );
     }

@@ -9,6 +9,8 @@ String.prototype.slugify = function (separator = '-') {
     .replace(/\s+/g, separator);
 };
 
+// // //
+// MÁSCARAS DE INPUT
 function celularMask(value) {
   if (!value) {
     return '';
@@ -101,26 +103,61 @@ function dataMask(value) {
   return value.slice(0, 10);
 }
 
+// Função para limpar a máscara e obter apenas os dígitos
 function cleanMask(value) {
   return value ? value.replace(/\D/g, '') : '';
 }
-
+// Função para aplicar a máscara correta com base no tipo
 function applyMask(value, type) {
   switch (type) {
     case 'cpf':
       return d_CPFMask(value);
-      break;
 
     case 'rne':
       return RNEMask(value);
-      break;
 
     case 'phone':
       return celularMask(value)
-      break;
 
      case 'data':
       return dataMask(value)
-      break;
   }
+}
+
+
+// // //
+// VALIDAÇÕES DE INPUTS
+function validarCPF(cpf) {
+  cpf = cpf.replace(/\D/g, '');
+
+  if (cpf.length !== 11) return false;
+
+  // Bloqueia CPFs repetidos
+  if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+  const numeros = cpf.split('').map(Number);
+
+  // Primeiro dígito
+  let soma = 0;
+  for (let i = 0; i < 9; i++) {
+    soma += numeros[i] * (10 - i);
+  }
+
+  let resto = (soma * 10) % 11;
+  if (resto === 10) resto = 0;
+
+  if (resto !== numeros[9]) return false;
+
+  // Segundo dígito
+  soma = 0;
+  for (let i = 0; i < 10; i++) {
+    soma += numeros[i] * (11 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  if (resto === 10) resto = 0;
+
+  if (resto !== numeros[10]) return false;
+
+  return true;
 }
