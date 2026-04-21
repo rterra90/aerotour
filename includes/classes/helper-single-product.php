@@ -159,3 +159,31 @@ class Aerotour_Helper
     ];
   }
 }
+
+
+/**
+ * Ajusta a Tag Canonical para produtos de excursões passadas
+ */
+add_filter('wpseo_canonical', 'ajustar_canonical_excursao_passada'); // Yoast SEO
+add_filter('rank_math/frontend/canonical', 'ajustar_canonical_excursao_passada'); // Rank Math
+add_filter('get_canonical_url', 'ajustar_canonical_excursao_passada', 10, 2); // WordPress Nativo
+
+function ajustar_canonical_excursao_passada($canonical_url)
+{
+  if (! is_product()) return $canonical_url;
+
+  $novo_evento_id = get_post_meta(get_the_ID(), 'more_recent_event_id', true);
+
+  if ($novo_evento_id) {
+    // Verifica a data limite do novo evento
+    $data_limite = get_post_meta($novo_evento_id, 'data_limite_excursao', true);
+    $hoje = date('Ymd');
+
+    // Só altera o canonical se o novo evento ainda for futuro ou hoje
+    if (! $data_limite || $data_limite >= $hoje) {
+      return get_permalink($novo_evento_id);
+    }
+  }
+
+  return $canonical_url;
+}

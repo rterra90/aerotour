@@ -4,6 +4,29 @@ add_action('woocommerce_product_options_advanced', 'exc_advanced_details');
 function exc_advanced_details()
 {
 ?>
+  <!-- Eventos anteriores -->
+  <div class="options_group options_group_anteriores">
+    <p class="form-field">
+      <label for="previous_event_ids">
+        <p>Excursões anteriores para direcionar tráfego</p>
+      </label>
+      <select id="meta_previous_event_ids" name="meta_previous_event_ids[]" class="wc-product-search" multiple="multiple" style="width: 50%;" data-placeholder="<?php esc_attr_e('Busque pelas excursões passadas...', 'woocommerce'); ?>" data-action="woocommerce_json_search_products_and_variations">
+        <?php
+        $product_ids = get_post_meta(get_the_ID(), 'previous_event_ids', true);
+
+        if (! empty($product_ids)) {
+          foreach ($product_ids as $product_id) {
+            $product = wc_get_product($product_id);
+            if (is_object($product)) {
+              echo '<option value="' . esc_attr($product_id) . '" selected="selected">' . wp_kses_post($product->get_formatted_name()) . '</option>';
+            }
+          }
+        }
+        ?>
+      </select>
+      <?= wc_help_tip('Selecione os produtos antigos. Nestes produtos, um aviso será exibido redirecionando para esta página atual.'); ?>
+    </p>
+  </div>
   <!-- Local do evento -->
   <div class="options_group options_group_local_evento">
     <?php woocommerce_wp_text_input([
@@ -188,42 +211,73 @@ function exc_advanced_details()
 }
 
 //SALVA AS METAS PERSONALIZADAS
-add_action('woocommerce_process_product_meta', 'process_product_meta');
-function process_product_meta($id)
+add_action('woocommerce_process_product_meta', 'process_product_meta_optimized');
+
+function process_product_meta_optimized($id)
 {
+  // 1. Campos que devem ser limpos/deletados se não estiverem no $_POST
+  if (!isset($_POST['meta_previous_event_ids'])) {
+    delete_post_meta($id, 'previous_event_ids');
+  }
+
+  if (!isset($_POST['meta_destaque'])) {
+    update_post_meta($id, 'destaque', '');
+  }
+
+  // 2. Itera sobre o POST apenas uma vez
   foreach ($_POST as $post_key => $post_value) {
-    if (str_starts_with($post_key, 'meta_')) {
-      //filtra a chave que será atualizada
-      $meta_key = str_replace('meta_', '', $post_key);
+    // Filtra apenas chaves que começam com 'meta_'
+    if (!str_starts_with($post_key, 'meta_')) {
+      continue;
+    }
 
-      // filtra o último termo do nome da chave
-      $last_key_word = explode('_', $meta_key)[sizeof(explode('_', $meta_key)) - 1];
+    // Remove o prefixo 'meta_' para obter a chave real
+    $clean_key = str_replace('meta_', '', $post_key);
 
-      if (is_numeric($last_key_word)) {
-        $_to_remove = '_' . $last_key_word;
-        $_var_id = $last_key_word;
-        $meta_key = str_replace($_to_remove, '', $meta_key);
-        if (!empty($post_value)) {
-          update_post_meta($_var_id, $meta_key, $post_value);
-        }
-      } else {
-        if (!empty($post_value)) {
-          update_post_meta($id, $meta_key, $post_value);
-        }
+    /**
+     * LÓGICA PARA PRODUTOS FILHOS (IDs NUMÉRICOS NO FINAL)
+     * Ex: meta_campo_customizado_123 -> extrai 'campo_customizado' e '123'
+     */
+    if (preg_match('/(.+)_(\d+)$/', $clean_key, $matches)) {
+      $meta_key = $matches[1];
+      $child_id = $matches[2];
+
+      if (!empty($post_value)) {
+        update_post_meta($child_id, $meta_key, $post_value);
       }
+      continue; // Pula para a próxima iteração
     }
 
-    if (str_starts_with($post_key, 'passageiros_var_')) {
-      $var_id = str_replace(
-        '_',
-        '/',
-        str_replace('passageiros_var_', '', $post_key)
-      );
-      update_post_meta($var_id, 'passageiros', $post_value);
-    }
+    /**
+     * LÓGICA PARA EVENTOS PASSADOS (Sincronização de IDs)
+     */
+    if ($clean_key === 'previous_event_ids') {
+      $new_event_ids = array_map('intval', (array) $post_value);
 
-    if (!isset($_POST['meta_destaque'])) {
-      update_post_meta($id, 'destaque', '');
+      // Limpa vínculos antigos de quem apontava para este produto [cite: 7, 8]
+      $old_links = get_posts([
+        'post_type'  => 'product',
+        'meta_query' => [['key' => 'more_recent_event_id', 'value' => $id]],
+        'fields'     => 'ids',
+        'posts_per_page' => -1
+      ]);
+
+      foreach ($old_links as $old_id) {
+        delete_post_meta($old_id, 'more_recent_event_id');
+      }
+
+      // Injeta o vínculo nos novos produtos selecionados [cite: 9, 10]
+      foreach ($new_event_ids as $event_id) {
+        update_post_meta($event_id, 'more_recent_event_id', $id);
+      }
+
+      // Salva a lista no próprio produto [cite: 11]
+      update_post_meta($id, 'previous_event_ids', $new_event_ids);
+    } else {
+      // SALVAMENTO PADRÃO para outros campos meta_ 
+      // Certifique-se de sanitizar conforme o tipo de dado
+      $sanitized_value = is_array($post_value) ? array_map('sanitize_text_field', $post_value) : sanitize_text_field($post_value);
+      update_post_meta($id, $clean_key, $sanitized_value);
     }
   }
 }
@@ -235,13 +289,6 @@ add_action(
   10,
   2
 );
-
-// add_action(
-//   'woocommerce_save_product_variation',
-//   'aer_save_dia_iso_meta',
-//   10,
-//   2
-// );
 
 function aer_save_dia_iso_meta($variation_id, $i)
 {

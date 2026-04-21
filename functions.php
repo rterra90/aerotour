@@ -102,6 +102,8 @@ require_once get_template_directory() . '/includes/functions/ajax-hooks.php';
 require_once get_template_directory() . '/includes/functions/usuarios-functions.php';
 require_once get_template_directory() . '/includes/classes/helper-single-product.php';
 require_once get_template_directory() . '/includes/classes/render-components-single-product.php';
+require_once get_template_directory() . '/includes/footer-scripts.php';
+
 
 require_once get_template_directory() . '/admin-head-scripts.php';
 require_once get_template_directory() . '/admin-footer-scripts.php';

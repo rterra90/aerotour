@@ -13,7 +13,6 @@ $user = wp_get_current_user();
   <meta name="copyright" content="© <?= date('Y') ?> Aerotour Excursões" />
   <meta name='impact-site-verification' value='add848c6-76d4-4a87-bb61-581c82810766'>
   <title><?= wp_title('|', true, 'right') ?></title>
-  <link rel="canonical" href="<?= esc_url(get_permalink(get_the_ID())) ?>" />
   <link rel="shortcut icon" href="<?= get_stylesheet_directory_uri() ?>/assets/images/icones/aer-favicon.png" type="image/x-icon">
 
   <!-- Estilo principal -->
