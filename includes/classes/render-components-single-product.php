@@ -113,23 +113,26 @@ class Aerotour_Template
       <h2>Informações sobre a excursão</h2>
       <div class="tab-container">
         <div class="tab-nav">
-          <button class="tab-btn active" data-tab="tab1" onclick="gtag('event', 'tab_como_funciona', {
-                        'event_category': 'ads',
-                        'event_label': 'tab_como_funciona',
-                        'value': 1
-                    })">Como funciona</button>
+          <button class="tab-btn active" data-tab="tab1" onclick="window.dataLayer = window.dataLayer || [];
+           window.dataLayer.push({
+               'event': 'interacao_tabs',
+               'tab_name': 'tab_como_funciona',
+               'tab_title': 'Como funciona'
+           });">Como funciona</button>
 
-          <button class="tab-btn" data-tab="tab2" onclick="gtag('event', 'tab_locais_embarque', {
-                        'event_category': 'ads',
-                        'event_label': 'tab_locais_embarque',
-                        'value': 1
-                    })">Locais de embarque</button>
+          <button class="tab-btn" data-tab="tab2" onclick="window.dataLayer = window.dataLayer || [];
+           window.dataLayer.push({
+               'event': 'interacao_tabs',
+               'tab_name': 'tab_embarques',
+               'tab_title': 'Locais de embarque'
+           });">Locais de embarque</button>
 
-          <button class="tab-btn" data-tab="tab3" onclick="gtag('event', 'tab_principais_duvidas', {
-                        'event_category': 'ads',
-                        'event_label': 'tab_principais_duvidas',
-                        'value': 1
-                    })">Principais dúvidas</button>
+          <button class="tab-btn" data-tab="tab3" onclick="window.dataLayer = window.dataLayer || [];
+           window.dataLayer.push({
+               'event': 'interacao_tabs',
+               'tab_name': 'tab_principais_duvidas',
+               'tab_title': 'Principais dúvidas'
+           });">Principais dúvidas</button>
         </div>
 
         <?php
