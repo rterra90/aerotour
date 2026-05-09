@@ -988,8 +988,6 @@ if (is_admin()) {
   require_once get_template_directory() .
     '/includes/admin-pages/embarques/embarques-admin.php'; //página Embarques
   require_once get_template_directory() .
-    '/includes/admin-pages/google-integrations-settings-admin.php'; //Google integrations setting page
-  require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/home-cards-widget.php'; // widget home cards
   require_once get_template_directory() .
     '/includes/admin-pages/panel-widgets/campanhas_cupons_widget.php'; // widget campanhas cupons
@@ -997,8 +995,6 @@ if (is_admin()) {
     '/includes/admin-pages/cancelamentos-admin.php';
   require_once get_template_directory() .
     '/includes/admin-pages/exc-embarques-admin.php';
-  require_once get_template_directory() .
-    '/includes/google-integrations-functions.php';
 
   //   require_once get_template_directory() .
   // '/includes/admin-pages/fluxo-adicionar-excursao.php'; // widget check-in
@@ -1099,15 +1095,6 @@ if (is_admin()) {
       'reservas_admin_page',
       'dashicons-money-alt',
       25
-    );
-    add_menu_page(
-      'Integrações Google',      // Título da página
-      'Google Setup',            // Nome no menu
-      'manage_options',          // Capacidade necessária
-      'google-integrations-settings', // Slug do menu
-      'render_google_integrations_page',  // Função que renderiza o HTML
-      'dashicons-google',        // Ícone
-      80                         // Posição no menu
     );
   }
 
