@@ -17,7 +17,7 @@ function render_excursao_settings_page()
   $galeria = array_values($galeria);
   // wp_enqueue_media(); // Garante o seletor de mídia do WP
 ?>
-  <div class="wrap aerotour-admin-wrapper">
+  <div class="wrap theme-admin-wrapper">
 
     <!-- Adiciona o cabeçalho de navegação das configurações do tema -->
     <?php render_settings_header('excursao-geral'); ?>

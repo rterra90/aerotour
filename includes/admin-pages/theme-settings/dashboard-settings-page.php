@@ -6,7 +6,7 @@ function render_admin_dashboard_page()
     register_setting('opt_theme_geral', 'numero_wpp');
   });
 ?>
-  <div class="wrap aerotour-admin-wrapper">
+  <div class="wrap theme-admin-wrapper">
     <?php render_settings_header('dashboard'); ?>
 
     <div class="settings-page-content">

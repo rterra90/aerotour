@@ -128,27 +128,33 @@ function aer_inject_tracking_scripts()
   $whitelist = array('127.0.0.1', '::1');
   $localhost_url = $_SERVER['HTTP_HOST'] === 'localhost';
   $is_localhost = in_array($_SERVER['REMOTE_ADDR'], $whitelist) || $localhost_url;
+  $gtm_id = get_option('theme_gtm_id');
+  $gtm_enabled = get_option('gtm_enabled');
 
   if (current_user_can('administrator')) {
     return;
   } ?>
+
   <!-- Google Tag Manager -->
-  <script>
-    (function(w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js'
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src =
-        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-W8B65D68');
-  </script>
+  <?php if ($gtm_enabled && !empty($gtm_id)) : ?>
+    <script>
+      (function(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          'gtm.start': new Date().getTime(),
+          event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', '<?php echo esc_js($gtm_id); ?>');
+    </script>
+  <?php endif ?>
+
   <!-- End Google Tag Manager -->
 
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1239QYGYB"></script>
@@ -189,3 +195,15 @@ function aer_inject_tracking_scripts()
 <?php
 }
 add_action('wp_head', 'aer_inject_tracking_scripts');
+
+// Tag Noscript (Início do Body)
+add_action('wp_body_open', 'theme_inject_gtm_body');
+function theme_inject_gtm_body()
+{
+  $gtm_id = get_option('theme_gtm_id');
+  if (empty($gtm_id)) return;
+?>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo esc_attr($gtm_id); ?>"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<?php
+}

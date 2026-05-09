@@ -16,7 +16,7 @@ function render_contato_settings_page()
   }
   settings_errors('aerotour_messages');
 ?>
-  <div class="wrap aerotour-admin-wrapper">
+  <div class="wrap theme-admin-wrapper">
     <?php render_settings_header('contato'); ?>
 
     <div class="settings-page-content">

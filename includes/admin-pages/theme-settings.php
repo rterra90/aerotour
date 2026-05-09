@@ -1,6 +1,8 @@
 <?php
 
 require_once get_template_directory() .
+  '/includes/admin-pages/theme-settings/helper-theme-settings.php'; // Funções utilitárias do painel de configurações
+require_once get_template_directory() .
   '/includes/admin-pages/theme-settings/settings-page-header.php'; // Cabeçalho das configurações com submenu
 require_once get_template_directory() .
   '/includes/admin-pages/theme-settings/dashboard-settings-page.php'; // DASHBOARD das configurações do tema
@@ -12,6 +14,8 @@ require_once get_template_directory() .
   '/includes/admin-pages/theme-settings/excursao-faq-settings-page.php'; // SUB "Página da excursão > FAQ"
 require_once get_template_directory() .
   '/includes/admin-pages/theme-settings/contato-settings-page.php'; // SUB "Contato"
+require_once get_template_directory() .
+  '/includes/admin-pages/theme-settings/integracoes-settings-page.php'; // SUB "Integrações"
 
 /**
  * Cria o menu e submenus de configuração do tema
@@ -26,6 +30,16 @@ add_action('admin_menu', function () {
     'render_admin_dashboard_page', // Função que desenha a página inicial
     'dashicons-admin-appearance',
     30
+  );
+
+  // Submenu: Integrações
+  add_submenu_page(
+    'tema-geral-settings', // slug do menu pai
+    'Integrações com ferramentas',
+    'Integrações',
+    'manage_options',
+    'config-integracoes', // slug
+    'render_integrations_settings_page'
   );
 
   // Submenu: Contato

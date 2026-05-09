@@ -36,10 +36,9 @@ function render_settings_header($current_page = '')
       <a href="admin.php?page=config-contato" class="nav-tab <?php echo $current_page == 'contato' ? 'nav-tab-active' : ''; ?>">
         Contato
       </a>
-      <!-- <a href="admin.php?page=config-pagina-excursao" class="nav-tab <?php echo $current_page == 'excursao' ? 'nav-tab-active' : ''; ?>">
-        Página da Excursão
+      <a href="admin.php?page=config-integracoes" class="nav-tab <?php echo $current_page == 'integracoes' ? 'nav-tab-active' : ''; ?>">
+        Integrações
       </a>
-      <a href="#" class="nav-tab">Checkout (Em breve)</a> -->
     </nav>
   </div>
 <?php

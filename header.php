@@ -102,6 +102,8 @@ $user = wp_get_current_user();
 
 <body <?php body_class(); ?>>
 
+  <?php wp_body_open(); ?>
+
   <?php if (isset($_COOKIE['parceiro_pdv'])) {
 
     $codigo_pdv = sanitize_text_field($_COOKIE['parceiro_pdv']);

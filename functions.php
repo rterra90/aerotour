@@ -1003,50 +1003,6 @@ if (is_admin()) {
   //   require_once get_template_directory() .
   // '/includes/admin-pages/fluxo-adicionar-excursao.php'; // widget check-in
 
-  function register_custom_settings()
-  {
-    register_setting('glogin_group', 'google_login_enabled');
-    register_setting('glogin_group', 'google_client_id');
-    register_setting('glogin_group', 'google_client_secret');
-
-    add_settings_section(
-      'google_login_section',
-      'Configurações de Google Login',
-      'glogin_section_callback',
-      'google-integrations-settings'
-    );
-
-    // Campo: Ativar/Desativar (Switch)
-    add_settings_field(
-      'google_login_enabled',
-      'Ativar Google Login',
-      'glogin_render_switch_field',
-      'google-integrations-settings',
-      'google_login_section'
-    );
-
-    // Campo: Client ID com ajuda
-    add_settings_field(
-      'google_client_id',
-      'Google Client ID',
-      'glogin_render_id_field',
-      'google-integrations-settings',
-      'google_login_section',
-      ['label_for' => 'google_client_id']
-    );
-
-    // Campo: Client Secret
-    add_settings_field(
-      'google_client_secret',
-      'Google Client Secret',
-      'glogin_render_secret_field',
-      'google-integrations-settings',
-      'google_login_section',
-      ['label_for' => 'google_client_secret', 'type' => 'password']
-    );
-  }
-  add_action('admin_init', 'register_custom_settings');
-
   /**
    * Renderiza o input (Helper)
    */
