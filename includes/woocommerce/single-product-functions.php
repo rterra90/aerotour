@@ -53,6 +53,7 @@ add_action('wp_enqueue_scripts', function () {
       'celular'         => get_user_meta($user_id, 'billing_phone', true),
       'data_nascimento' => get_user_meta($user_id, 'data_nasc', true),
     ] : null,
+    'session_id' => (WC()->session) ? WC()->session->get_customer_id() : 'guest_' . uniqid()
   ]);
 });
 

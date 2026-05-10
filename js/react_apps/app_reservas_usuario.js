@@ -4333,7 +4333,9 @@
     selectedDates,
     convertDate: convertDate2,
     setPassageiros,
-    passageiros
+    passageiros,
+    variacoesSelecionadas,
+    embarqueId
   }) => {
     const [formMode, setFormMode] = React.useState("");
     const [formData, setFormData] = React.useState({
@@ -4350,6 +4352,7 @@
     const [visible, setVisible] = React.useState(false);
     const [useAccountData, setUseAccountData] = React.useState(false);
     const { userData } = window.singleProductData;
+    const currentSessionId = window.singleProductData?.session_id || "anon_lead";
     const canShowAutofill = React.useMemo(() => {
       if (!userData || !userData.cpf)
         return false;
@@ -4494,6 +4497,28 @@
         }
       });
     }
+    const syncLeadWithServer = async (paxData) => {
+      try {
+        const rootUrl = window.themeLinks.siteUrl;
+        const response = await fetch(`${rootUrl}/wp-json/aerotour/v1/save-lead`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...paxData,
+            variation_id: variacoesSelecionadas,
+            // ID da excursão atual
+            embarque: embarqueId,
+            // Ponto de embarque selecionado
+            session_id: currentSessionId
+            // Um ID único para esta navegação
+          })
+        });
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Erro ao salvar lead:", error);
+      }
+    };
     function savePax(_mode) {
       if (formErrors.length === 0) {
         if (_mode == "add") {
@@ -4505,6 +4530,7 @@
               alert("J\xE1 existe um passageiro com este CPF.");
               return _current;
             }
+            syncLeadWithServer(formData);
             setPaxModalOpen(false);
             return [..._current, { ...formData, data_nascimento: formatarDataISO(formData.data_nascimento) }];
           });
@@ -4661,7 +4687,9 @@
     paxModalOpen: import_prop_types4.default.array.isRequired,
     selectedDates: import_prop_types4.default.array.isRequired,
     passageiros: import_prop_types4.default.array.isRequired,
-    convertDate: import_prop_types4.default.func.isRequired
+    convertDate: import_prop_types4.default.func.isRequired,
+    variacoesSelecionadas: import_prop_types4.default.array.isRequired,
+    embarqueId: import_prop_types4.default.number
   };
   var PaxModal_default = PaxModal;
 
@@ -5378,7 +5406,9 @@
             selectedDates,
             passageiros,
             setPassageiros,
-            convertDate
+            convertDate,
+            variacoesSelecionadas,
+            embarqueId: embarque[0].embarqueId
           }
         ),
         avisosModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(

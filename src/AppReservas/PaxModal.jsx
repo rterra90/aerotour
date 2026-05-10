@@ -11,7 +11,9 @@ const PaxModal = ({
   selectedDates,
   convertDate,
   setPassageiros,
-  passageiros
+  passageiros,
+  variacoesSelecionadas,
+  embarqueId
 }) => {
   const [formMode, setFormMode] = React.useState('');
   const [formData, setFormData] = React.useState({
@@ -30,6 +32,10 @@ const PaxModal = ({
 
   // Dados do usuário logado
   const { userData } = window.singleProductData;
+
+  // ID de sessão para referenciar leads
+  const currentSessionId = window.singleProductData?.session_id || 'anon_lead';
+
 
   // Lógica para verificar se o checkbox deve aparecer
   // 1. Usuário precisa estar logado (userData existe)
@@ -195,6 +201,29 @@ const PaxModal = ({
     });
   }
 
+  // Função auxiliar para enviar os dados do pax para leads_reservas
+  const syncLeadWithServer = async (paxData) => {
+    try {
+      const rootUrl = window.themeLinks.siteUrl;
+      const response = await fetch(`${rootUrl}/wp-json/aerotour/v1/save-lead`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...paxData,
+          variation_id: variacoesSelecionadas, // ID da excursão atual
+          embarque: embarqueId, // Ponto de embarque selecionado
+          session_id: currentSessionId, // Um ID único para esta navegação
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data)
+
+    } catch (error) {
+      console.error('Erro ao salvar lead:', error);
+    }
+  };
+
   function savePax(_mode) {
     if (formErrors.length === 0) {
       if (_mode == 'add') {
@@ -207,6 +236,9 @@ const PaxModal = ({
             alert('Já existe um passageiro com este CPF.');
             return _current;
           }  
+
+          // CHAMADA ASSÍNCRONA PARA O LEAD
+          syncLeadWithServer(formData);
 
           setPaxModalOpen(false);
           return [..._current, { ...formData, data_nascimento: formatarDataISO(formData.data_nascimento) }];
@@ -384,6 +416,8 @@ PaxModal.propTypes = {
   selectedDates: PropTypes.array.isRequired,
   passageiros: PropTypes.array.isRequired,
   convertDate: PropTypes.func.isRequired,
+  variacoesSelecionadas: PropTypes.array.isRequired,
+  embarqueId: PropTypes.number,
 };
 
 export default PaxModal;

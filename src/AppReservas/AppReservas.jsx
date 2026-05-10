@@ -478,6 +478,8 @@ function AppReservas() {
                 passageiros={passageiros}
                 setPassageiros={setPassageiros}
                 convertDate={convertDate}
+                variacoesSelecionadas={variacoesSelecionadas}
+                embarqueId={embarque[0].embarqueId}
               />
             )}
 

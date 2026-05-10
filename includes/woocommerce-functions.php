@@ -1,7 +1,17 @@
 <?php
+// // //
 // FUNÇÕES DA PÁGINA SINGLE-PRODUCT
+//Scripts gerais, como react, json-LD, e js da página
 require_once get_template_directory() . '/includes/woocommerce/single-product-functions.php';
 
+//Lógicas que lidam com as informações das excursões (embarques, datas, disponibilidade...)
+require_once get_template_directory() . '/includes/classes/helper-single-product.php';
+
+//Funções que renderizam as seções da página single-product
+require_once get_template_directory() . '/includes/classes/render-components-single-product.php';
+
+
+// // //
 // FUNÇÕES DA PÁGINA CHECKOUT
 require_once get_template_directory() . '/includes/woocommerce/checkout-functions.php';
 

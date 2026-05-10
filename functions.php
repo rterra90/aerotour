@@ -4,6 +4,17 @@ use Pelago\Emogrifier\CssInliner;
 
 $root_url = get_stylesheet_directory_uri();
 
+// ENDPOINTS PARA CONSUMIR A REST API
+require_once get_template_directory() . '/endpoints/cupom_update.php';
+require_once get_template_directory() . '/endpoints/cupom_update.php';
+require_once get_template_directory() . '/endpoints/api_campanhas_get.php';
+require_once get_template_directory() . '/endpoints/api_google_login.php';
+require_once get_template_directory() .
+  '/endpoints/participantes_roleta_put.php';
+require_once get_template_directory() . '/endpoints/api_user_get.php';
+require_once get_template_directory() . '/endpoints/api_leads_reserva.php';
+// require_once(get_template_directory() . '/endpoints/api_contratos_post.php');
+
 // Adiciona um tamanho focado em mobile (proporção vertical/centralizada)
 add_image_size('hero_mobile', 600, 900, true); // O 'true' força o corte (crop) central
 
@@ -95,13 +106,12 @@ wp_localize_script('theme-links', 'themeLinks', [
 
 
 // ÁREA DE INCLUDES
+require_once get_template_directory() . '/includes/theme-setup.php';
 require_once get_template_directory() . '/includes/header-functions.php';
 require_once get_template_directory() . '/includes/woocommerce-functions.php';
 require_once get_template_directory() . '/includes/utilities.php';
 require_once get_template_directory() . '/includes/functions/ajax-hooks.php';
 require_once get_template_directory() . '/includes/functions/usuarios-functions.php';
-require_once get_template_directory() . '/includes/classes/helper-single-product.php';
-require_once get_template_directory() . '/includes/classes/render-components-single-product.php';
 require_once get_template_directory() . '/includes/footer-scripts.php';
 
 
@@ -962,14 +972,7 @@ function aer_atualizar_data_limite_produto($product_id)
 // Executa sempre que um produto for salvo/atualizado
 add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');
 
-// ENDPOINTS PARA CONSUMIR A REST API
-require_once get_template_directory() . '/endpoints/cupom_update.php';
-require_once get_template_directory() . '/endpoints/api_campanhas_get.php';
-require_once get_template_directory() . '/endpoints/api_google_login.php';
-require_once get_template_directory() .
-  '/endpoints/participantes_roleta_put.php';
-require_once get_template_directory() . '/endpoints/api_user_get.php';
-// require_once(get_template_directory() . '/endpoints/api_contratos_post.php');
+
 
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN
 if (is_admin()) {
