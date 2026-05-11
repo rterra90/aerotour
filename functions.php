@@ -128,6 +128,7 @@ require_once get_template_directory() . '/includes/functions/coupons-functions.p
 require_once get_template_directory() . '/includes/functions/blog.php';
 require_once get_template_directory() . '/includes/functions/general-customize.php';
 require_once get_template_directory() . '/includes/afiliados/pdv-functions.php';
+require_once get_template_directory() . '/includes/admin-pages/leads-reservas/leads-reservas-functions.php';
 
 // require_once get_template_directory() . '/includes/functions/contrato.php';
 
