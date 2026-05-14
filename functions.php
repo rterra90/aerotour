@@ -439,6 +439,8 @@ add_action(
 );
 function insere_passageiro_order_pendente($order_id, $data)
 {
+  global $wpdb;
+  $leads_table_name = $wpdb->prefix . 'reserva_leads';
   $order_meta = [];
 
   //ajustar pdv
@@ -463,6 +465,24 @@ function insere_passageiro_order_pendente($order_id, $data)
 
   $order_meta = json_encode($order_meta, JSON_UNESCAPED_UNICODE);
   update_post_meta($order_id, 'passageiros_items_str', $order_meta);
+
+
+  foreach ($passageiros as $passageiro) {
+    if ($passageiro->cpf) {
+      $raw_cpf = preg_replace('/[^0-9]/is', '', $passageiro->cpf);
+      $db_update = $wpdb->update(
+        $leads_table_name,
+        array(
+          'status' => 'convertido',
+          'order_id' => $order_id,
+          'ultima_etapa' => 'Venda Concluída'
+        ),
+        array('passenger_cpf' => $raw_cpf), // Onde o CPF bater
+        array('%s', '%d', '%s'),
+        array('%s')
+      );
+    }
+  }
 }
 /* Fim Insere dados do passageiro como meta da order */
 

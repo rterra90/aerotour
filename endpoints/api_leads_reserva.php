@@ -19,11 +19,13 @@ function handle_save_lead($request)
   if (!is_array($variation_ids)) $variation_ids = array($variation_ids);
   $sanitized_variations = array_map('intval', $variation_ids);
 
+  $sanitized_cpf = preg_replace('/[^0-9]/is', '', $params['cpf']);
+
   $data = array(
     'variation_id'       => json_encode($sanitized_variations),
     'embarque'     => sanitize_text_field($params['embarque']),
     'passenger_name'     => sanitize_text_field($params['nome_completo']),
-    'passenger_cpf'      => sanitize_text_field($params['cpf']),
+    'passenger_cpf'      => $sanitized_cpf,
     'passenger_phone'    => sanitize_text_field($params['celular']),
     'session_id'         => sanitize_text_field($params['session_id']),
     'status'             => 'pendente'

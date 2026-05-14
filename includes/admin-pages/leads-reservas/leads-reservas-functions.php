@@ -81,7 +81,7 @@ function render_leads_page()
           <td id="cb" class="manage-column column-cb check-column">
             <input id="cb-select-all-1" type="checkbox">
           </td>
-          <th style="width: 8%">Data/Hora</th>
+          <th style="width: 8%">Status</th>
           <th>Passageiro</th>
           <th style="width: 15%">Contato / CPF</th>
           <th>Excursão</th>
@@ -94,6 +94,9 @@ function render_leads_page()
             $variation_ids = json_decode($lead->variation_id, true);
             $tour_info = 'N/A';
             $permalink = '#';
+
+            $status_class = ($lead->status == 'convertido') ? 'background: #d4edda; color: #155724;' : '';
+            $status_label = ($lead->status == 'convertido') ? '✅ (#' . $lead->order_id . ')' : '⏳ ' . $lead->ultima_etapa;
 
             if (!empty($variation_ids) && is_array($variation_ids)) {
               // Pegamos a primeira variação para descobrir o Produto Pai (Excursão)
@@ -124,11 +127,25 @@ function render_leads_page()
                                           <span style='display:block'>" . explode(" - ", $res)[1] . "</span>";
             }
         ?>
-            <tr>
+            <tr style='<?= $status_class ?>'>
               <th scope="row" class="check-column">
                 <input type="checkbox" name="lead[]" value="<?php echo $lead->id; ?>">
               </th>
-              <td><?php echo date('d/m/Y H:i', strtotime($lead->created_at)); ?></td>
+
+              <?php
+              if ($lead->status == 'convertido') {
+                $order = wc_get_order($lead->order_id);
+                if ($order) {
+                  $edit_order_url = $order->get_edit_order_url();
+                  $lead_status = '✅ (#' . $lead->order_id . ')';
+                }
+              } else {
+                $lead_status =  '⏳ Pendente<br />' .  preg_replace('/\/\d{4}/', '', date('d/m/Y H:i', strtotime($lead->created_at)));
+              }
+              ?>
+
+              <td><?php echo $lead_status; ?></td>
+
               <td><strong><?php echo esc_html($lead->passenger_name); ?></strong></td>
               <td>
                 <?php echo esc_html($lead->passenger_phone); ?><br />
