@@ -467,22 +467,7 @@ function insere_passageiro_order_pendente($order_id, $data)
   update_post_meta($order_id, 'passageiros_items_str', $order_meta);
 
 
-  foreach ($passageiros as $passageiro) {
-    if ($passageiro->cpf) {
-      $raw_cpf = preg_replace('/[^0-9]/is', '', $passageiro->cpf);
-      $db_update = $wpdb->update(
-        $leads_table_name,
-        array(
-          'status' => 'convertido',
-          'order_id' => $order_id,
-          'ultima_etapa' => 'Venda Concluída'
-        ),
-        array('passenger_cpf' => $raw_cpf), // Onde o CPF bater
-        array('%s', '%d', '%s'),
-        array('%s')
-      );
-    }
-  }
+  // update_lead_reserva('convertido', $passageiros, $order_id);
 }
 /* Fim Insere dados do passageiro como meta da order */
 
@@ -495,7 +480,6 @@ function pagamento_processing($order_id)
     $order->update_status('completed');
   }
 }
-
 add_action('woocommerce_order_status_completed', 'pagamento_completed_otimizado');
 
 function pagamento_completed_otimizado($order_id)
@@ -506,6 +490,12 @@ function pagamento_completed_otimizado($order_id)
   $passageiros_items = get_post_meta($order_id, 'passageiros_items', true);
 
   if (empty($passageiros_items)) return;
+
+  // Atualiza os leads para convertidos
+  foreach ($passageiros_items as $order_item) {
+    $passageiros = $order_item['passageiros'];
+    update_lead_reserva($passageiros, 'convertido', $order_id);
+  };
 
   $p_index = 0;
   foreach ($order->get_items() as $order_item) {

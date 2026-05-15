@@ -12,6 +12,8 @@ add_action('admin_menu', function () {
   );
 });
 
+
+// FUNÇÃO QUE RENDERIZA O CONTEÚDO DA PÁGINA DE LEADS DE RESERVAS ABANDONADAS
 function render_leads_page()
 {
   global $wpdb;
@@ -186,4 +188,33 @@ function render_leads_page()
     });
   </script>
 <?php
+}
+
+
+// FUNÇÃO QUE ATUALIZA O STATUS DE UM LEAD
+function update_lead_reserva(array $passageiros, string $status, $order_id = null)
+{
+  global $wpdb;
+  $leads_table_name = $wpdb->prefix . 'reserva_leads';
+
+  $ultima_etapa = ucfirst($status);
+
+  foreach ($passageiros as $passageiro) {
+    if ($passageiro->cpf) {
+      $raw_cpf = preg_replace('/[^0-9]/is', '', $passageiro->cpf);
+      $payload = array(
+        'status' => $status == 'convertido' ? $status : 'pendente',
+        'order_id' => $order_id,
+        'ultima_etapa' => $ultima_etapa
+      );
+
+      $db_update = $wpdb->update(
+        $leads_table_name,
+        $payload,
+        array('passenger_cpf' => $raw_cpf), // Onde o CPF bater
+        array('%s', '%d', '%s'),
+        array('%s')
+      );
+    }
+  }
 }
