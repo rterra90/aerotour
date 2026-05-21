@@ -411,7 +411,7 @@ function validar_documentos_aerotour($errors)
 add_filter(
   'woocommerce_add_cart_item_data',
   'insere_dados_passageiro_pedido',
-  10,
+  9,
   6
 );
 function insere_dados_passageiro_pedido(
@@ -420,7 +420,6 @@ function insere_dados_passageiro_pedido(
   $variation_id,
   $quantity
 ) {
-  global $wpdb;
   $cart_item_data['embarque'] = $_POST['embarque'];
   $cart_item_data['horario'] = $_POST['horario'];
   $cart_item_data['passageiros'] = $_POST['passageiros'];
@@ -429,6 +428,18 @@ function insere_dados_passageiro_pedido(
   return $cart_item_data;
 }
 /* Fim Insere os dados do passageiro como meta do item do carrinho */
+
+/* Ações após adicionar item ao carrinho */
+// add_action('woocommerce_add_to_cart', 'minha_acao_apos_adicionar', 10, 6);
+// function minha_acao_apos_adicionar($cart_item_key, $product_id, $quantity, $variation_id, $variation, mixed $cart_item_data)
+// {
+//   if (! isset($cart_item_data['passageiros']) || empty($cart_item_data['passageiros'])) {
+//     return;
+//   }
+//   $passageiros = wc_clean($cart_item_data['passageiros']);
+//   $passageiros = $cart_item_data['passageiros'];
+//   update_lead_reserva($passageiros, 'carrinho');
+// }
 
 /* Insere dados do passageiro como meta da order */
 add_action(
@@ -856,6 +867,10 @@ function filter_add_to_cart_validation(
     if (!$passed) {
       break;
     } // interrompe o loop
+
+
+
+
   }
 
   return $passed;
@@ -943,7 +958,7 @@ function filter_function_name($title, $sep, $seplocation)
 
 
 
-// Função para atualizar a data limite do produto pai baseada nas variações
+// Função para atualizar a data limite do produto pai baseada nas variações (utilities)
 function aer_atualizar_data_limite_produto($product_id)
 {
   $product = wc_get_product($product_id);

@@ -217,6 +217,10 @@ function ajax_add_variation_to_cart()
     ]);
   }
 
+  // $array_pasageiros = wc_clean(json_decode($passageiros));
+  // update_lead_reserva($array_pasageiros, 'carrinho');
+
+
   // Retorna fragments para atualizar mini-carrinho
   WC_AJAX::get_refreshed_fragments();
   wp_die();
