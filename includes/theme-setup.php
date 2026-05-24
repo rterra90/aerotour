@@ -1,6 +1,7 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * 
  * Criação da tabela personalizada 'reserva_leads' para armazenar informações de leads de reservas.
  */
@@ -69,6 +70,8 @@ add_action('after_switch_theme', 'create_theme_tables');
 
 
 /**
+=======
+>>>>>>> main
  * Registrar os plugins obrigatórios e recomendados para o tema Aerotour
  * utilizando a biblioteca TGM Plugin Activation.
  */
@@ -148,3 +151,7 @@ function registrar_plugins_obrigatorios() {
     tgmpa( $plugins, $config );
 }
 add_action( 'tgmpa_register', 'registrar_plugins_obrigatorios' );
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
