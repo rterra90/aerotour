@@ -98,7 +98,7 @@ wp_localize_script('theme-links', 'themeLinks', [
   'adminUrl' => admin_url(),
   'ajaxUrl' => admin_url('admin-ajax.php'),
   'siteUrl' => get_site_url(),
-  'cartUrl' => wc_get_cart_url(),
+  'cartUrl' => function_exists('wc_get_cart_url') ? wc_get_cart_url() : null,
   'stylesheetUrl' => get_stylesheet_directory_uri(),
   'gLoginClientId' => get_option('google_client_id') ?: null,
 ]);
