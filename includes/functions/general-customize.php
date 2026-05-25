@@ -4,15 +4,15 @@
 function theme_customizer($wp_customize)
 {
     // Adiciona o Campo de Upload para o logo principal
-    $wp_customize->add_setting('aer_logo', array(
+    $wp_customize->add_setting('theme_header_logo', array(
         'default'     => '',
         'transport'   => 'refresh',
     ));
 
-    $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'aer_logo', array(
+    $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'theme_header_logo', array(
         'label'      => "Upload do Logotipo",
         'section'    => 'title_tagline',
-        'settings'   => 'aer_logo',
+        'settings'   => 'theme_header_logo',
     )));
 
 

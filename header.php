@@ -171,7 +171,12 @@ $user = wp_get_current_user();
     <div class="topbar d-flex justify-content-between align-items-center py-3">
       <div class="header-logo">
         <a href="<?= get_home_url() ?>">
-          <img src="<?= esc_url(get_theme_mod('aer_logo')) ?>" alt="Logo <?= bloginfo('name'); ?>">
+          <?php
+          if(get_theme_mod('theme_header_logo')) : ?>
+          <img src="<?= esc_url(get_theme_mod('theme_header_logo')) ?>" alt="Logo <?= bloginfo('name'); ?>">
+          <?php else : ?>
+          <img src="<?= get_stylesheet_directory_uri(  ); ?>/assets/placeholders/header-logo-placeholder.png" alt="Logo placeholder">
+          <?php endif; ?>
         </a>
       </div>
 
