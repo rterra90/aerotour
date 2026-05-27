@@ -466,7 +466,7 @@ dl#principaisDuvidasContent .resposta {
   }
 }
 @media (min-width: 1080px) {
-  #content-event .excursao-wrapper {
+  #content-event .excursao-wrapper.has-image {
     margin-top: -92px;
   }
   #content-event .hero-img {

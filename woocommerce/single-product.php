@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Template para página de produto (Excursão)
  * Focado em LCP e Core Web Vitals
@@ -8,11 +7,13 @@ get_header();
 
 // A lógica pesada agora vem via helper/controller
 $excursao = Aerotour_Helper::get_formatted_excursion_data(get_the_ID());
-$is_encerrada = Aerotour_Helper::is_excursion_closed($product->get_id());
+$is_encerrada = Aerotour_Helper::is_excursion_closed(get_the_ID());
 $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
 ?>
 
 <section id="content-event" class="<?= $header_type_class; ?> pb-5 aer-bg-light">
+  <?php
+  if(isset($excursao['img'])) : ?>
   <div class="hero-img">
     <img class="main-image"
       src="<?= $excursao['img'] ?>"
@@ -20,8 +21,10 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
       fetchpriority="high"
       width="100%" height="100%">
   </div>
+  <?php endif; ?>
+  
 
-  <div class="container-xxl py-md-5 py-3 excursao-wrapper">
+  <div class="container-xxl py-md-5 py-3 excursao-wrapper <?= isset($excursao['img']) ? 'has-image' : ''; ?>">
     <?php wc_print_notices(); ?>
 
     <?php Aerotour_Template::render_partner_banners($excursao); ?>
