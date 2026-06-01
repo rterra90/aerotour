@@ -6,8 +6,8 @@ import EmbarqueModal from './EmbarqueModal.jsx';
 import PaxModal from './PaxModal.jsx';
 // import PropTypes from 'prop-types';
 import PaxCard from './PaxCard.jsx';
-import AvisosModal from './AvisosModal.jsx'; // Ensure this path is correct
-import PrecoReservas from './PrecoReservas.jsx'; // Ensure this path is correct
+import AvisosModal from './AvisosModal.jsx';
+import PrecoReservas from './PrecoReservas.jsx';
 import {
   convertDate,
   dataTrintaDiasAntes,
@@ -172,7 +172,7 @@ function AppReservas() {
     $.ajax({
       type: 'POST',
       url: ajaxUrl,
-      dataType: 'json', // importante para interpretar resposta WooCommerce
+      dataType: 'json',
       data: {
         action: 'add_variation_to_cart',
         product_id: productId,

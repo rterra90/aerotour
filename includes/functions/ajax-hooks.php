@@ -1,255 +1,270 @@
 <?php
 
 // FUNÇÃO CANCELAMENTO DE RESERVA
-require_once get_template_directory() . '/includes/functions/cancelamento-functions.php';
+require_once get_template_directory() .
+    '/includes/functions/cancelamento-functions.php';
 require_once get_template_directory() . '/includes/functions/user-hooks.php';
 
 //ENVIA SOLICITAÇÃO DE TROCA DE EMBARQUE PARA O ADMINISTRADOR
-add_action('wp_ajax_solicitar_alteracao_embarque', 'solicitar_alteracao_embarque');
+add_action(
+    'wp_ajax_solicitar_alteracao_embarque',
+    'solicitar_alteracao_embarque',
+);
 function solicitar_alteracao_embarque()
 {
-  $novo_ponto = sanitize_text_field($_POST['novo_ponto']);
-  $excursao   = sanitize_text_field($_POST['excursao']);
-  $data_v     = sanitize_text_field($_POST['data_viagem']);
-  $ponto_ant  = sanitize_text_field($_POST['ponto_atual']);
-  $order_id   = sanitize_text_field($_POST['order_id']);
-  $passageiros = $_POST['passageiros']; // Array
+    $novo_ponto = sanitize_text_field($_POST['novo_ponto']);
+    $excursao = sanitize_text_field($_POST['excursao']);
+    $data_v = sanitize_text_field($_POST['data_viagem']);
+    $ponto_ant = sanitize_text_field($_POST['ponto_atual']);
+    $order_id = sanitize_text_field($_POST['order_id']);
+    $passageiros = $_POST['passageiros']; // Array
 
-  $to = get_option('admin_email');
-  $subject = "Solicitação de Troca de Embarque - Pedido #$order_id";
+    $to = get_option('admin_email');
+    $subject = "Solicitação de Troca de Embarque - Pedido #$order_id";
 
-  $message = "Nova solicitação de alteração de embarque recebida:\n\n";
-  $message .= "Pedido: #$order_id\n";
-  $message .= "Excursão: $excursao ($data_v)\n";
-  $message .= "Ponto Atual: $ponto_ant\n";
-  $message .= "Novo Ponto Solicitado: $novo_ponto\n\n";
-  $message .= "Passageiros a serem alterados:\n";
+    $message = "Nova solicitação de alteração de embarque recebida:\n\n";
+    $message .= "Pedido: #$order_id\n";
+    $message .= "Excursão: $excursao ($data_v)\n";
+    $message .= "Ponto Atual: $ponto_ant\n";
+    $message .= "Novo Ponto Solicitado: $novo_ponto\n\n";
+    $message .= "Passageiros a serem alterados:\n";
 
-  foreach ($passageiros as $p) {
-    $message .= "- " . sanitize_text_field($p) . "\n";
-  }
+    foreach ($passageiros as $p) {
+        $message .= '- ' . sanitize_text_field($p) . "\n";
+    }
 
-  $sent = wp_mail($to, $subject, $message);
+    $sent = wp_mail($to, $subject, $message);
 
-  if ($sent) {
-    wp_send_json_success();
-  } else {
-    wp_send_json_error("Falha ao enviar e-mail.");
-  }
+    if ($sent) {
+        wp_send_json_success();
+    } else {
+        wp_send_json_error('Falha ao enviar e-mail.');
+    }
 }
 
 //ENVIA SUGESTÃO DE EXCURSÃO PARA EMAIL DO ADMINISTRADOR
 add_action('wp_ajax_processar_sugestao', 'ajax_processar_sugestao');
 function ajax_processar_sugestao()
 {
-  $sugestao = sanitize_text_field($_POST['sugestao_nome']);
-  $nome     = sanitize_text_field($_POST['usuario_nome']);
-  $email    = sanitize_email($_POST['usuario_email']);
-  $tel      = sanitize_text_field($_POST['usuario_tel']);
+    $sugestao = sanitize_text_field($_POST['sugestao_nome']);
+    $nome = sanitize_text_field($_POST['usuario_nome']);
+    $email = sanitize_email($_POST['usuario_email']);
+    $tel = sanitize_text_field($_POST['usuario_tel']);
 
-  if (empty($email) && empty($tel)) {
-    wp_send_json_error('Preencha pelo menos um contato (e-mail ou telefone).');
-  } else if (empty($nome)) {
-    wp_send_json_error('Preencha seu nome e pelo menos uma forma de contato.');
-  }
+    if (empty($email) && empty($tel)) {
+        wp_send_json_error(
+            'Preencha pelo menos um contato (e-mail ou telefone).',
+        );
+    } elseif (empty($nome)) {
+        wp_send_json_error(
+            'Preencha seu nome e pelo menos uma forma de contato.',
+        );
+    }
 
-  // 2. Configuração do E-mail
-  $para      = get_option('admin_email'); // Ou o e-mail da Aerotour: contato@aerotour.com.br
-  $assunto   = "🚀 Nova Sugestão de Excursão: " . $sugestao;
+    // 2. Configuração do E-mail
+    $para = get_option('admin_email'); // Ou o e-mail da Aerotour: contato@aerotour.com.br
+    $assunto = '🚀 Nova Sugestão de Excursão: ' . $sugestao;
 
-  // Corpo do e-mail em HTML
-  $mensagem  = "<html><body>";
-  $mensagem .= "<h2>Nova Sugestão Recebida pelo Site</h2>";
-  $mensagem .= "<p><strong>Sugestão:</strong> {$sugestao}</p>";
-  $mensagem .= "<hr>";
-  $mensagem .= "<p><strong>Dados do Cliente:</strong></p>";
-  $mensagem .= "<ul>";
-  $mensagem .= "<li><strong>Nome:</strong> {$nome}</li>";
-  $mensagem .= "<li><strong>E-mail:</strong> {$email}</li>";
-  $mensagem .= "<li><strong>WhatsApp:</strong> {$tel}</li>";
-  $mensagem .= "</ul>";
-  $mensagem .= "<p><em>Enviado via sistema nativo de sugestões Aerotour.</em></p>";
-  $mensagem .= "</body></html>";
+    // Corpo do e-mail em HTML
+    $mensagem = '<html><body>';
+    $mensagem .= '<h2>Nova Sugestão Recebida pelo Site</h2>';
+    $mensagem .= "<p><strong>Sugestão:</strong> {$sugestao}</p>";
+    $mensagem .= '<hr>';
+    $mensagem .= '<p><strong>Dados do Cliente:</strong></p>';
+    $mensagem .= '<ul>';
+    $mensagem .= "<li><strong>Nome:</strong> {$nome}</li>";
+    $mensagem .= "<li><strong>E-mail:</strong> {$email}</li>";
+    $mensagem .= "<li><strong>WhatsApp:</strong> {$tel}</li>";
+    $mensagem .= '</ul>';
+    $mensagem .=
+        '<p><em>Enviado via sistema nativo de sugestões Aerotour.</em></p>';
+    $mensagem .= '</body></html>';
 
-  $headers[] = 'Content-Type: text/html; charset=UTF-8';
-  $headers[] = 'From: Aerotour Site <' . get_option('admin_email') . '>';
-  $headers[] = 'Reply-To: ' . $nome . ' <' . $email . '>';
+    $headers[] = 'Content-Type: text/html; charset=UTF-8';
+    $headers[] = 'From: Aerotour Site <' . get_option('admin_email') . '>';
+    $headers[] = 'Reply-To: ' . $nome . ' <' . $email . '>';
 
-  // 3. Envio
-  $enviado = wp_mail($para, $assunto, $mensagem, $headers);
+    // 3. Envio
+    $enviado = wp_mail($para, $assunto, $mensagem, $headers);
 
-  if ($enviado) {
-    wp_send_json_success('Sugestão enviada com sucesso!');
-  } else {
-    wp_send_json_error('Erro interno ao enviar e-mail. Tente novamente.');
-  }
+    if ($enviado) {
+        wp_send_json_success('Sugestão enviada com sucesso!');
+    } else {
+        wp_send_json_error('Erro interno ao enviar e-mail. Tente novamente.');
+    }
 }
 
 //GET EM EXCURSÕES
 add_action('wp_ajax_get_excursoes', 'ajax_get_excursoes');
 function ajax_get_excursoes()
 {
-  global $wpdb;
-  // Verifica permissão — só admin ou editor, por exemplo
-  if (!current_user_can('manage_woocommerce')) {
-    wp_send_json_error('Permissão negada', 403);
-  }
-
-  // Busca todos os produtos publicados
-  $products = wc_get_products([
-    'status' => 'publish',
-    'limit' => -1
-  ]);
-
-  // Transforma em formato legível para o JS
-  $vars_atuais = [];
-  $vars_passadas = [];
-
-  foreach ($products as $product) {
-    $variacoes = $product->get_available_variations();
-    foreach ($variacoes as $var) {
-      $this_var = [];
-      $dia_var_dmy = $var['attributes']['attribute_dia']; // ex: '15/08/2025'
-      $dia_var_iso = data_to_iso($dia_var_dmy); // ex: '2025-08-15'
-
-      //adicionar a chave "dia" ao $this_var, preenchendo seu valor com $dia_var_iso
-      $this_var['dia'] = $dia_var_iso;
-      $this_var['nome'] = $product->get_name();
-      $this_var['variation_id'] = $var['variation_id'];
-      $this_var['parent_id'] = $product->get_id();
-      $this_var['edit_link'] = html_entity_decode(
-        get_edit_post_link($product->get_id())
-      );
-
-      //se $dia_var_iso for maior ou igual a hoje + 2 dias, adiciona em $vars_atuais, senão em $vars_passadas
-      if ((int) strtotime('now') < (int) strtotime($dia_var_iso) + 3600 * 48) {
-        //Adiciona quantidade de passageiros
-        $_v_id = $var['variation_id'];
-        $pax_qty = $wpdb->get_var(
-          $wpdb->prepare(
-            "SELECT COUNT(*) FROM aer_reservas WHERE variation_id = %d AND status != 'cancel'",
-            $_v_id
-          )
-        );
-        $this_var['pax_qty'] = intval($pax_qty);
-
-        $vars_atuais[] = $this_var;
-      } else {
-        $vars_passadas[] = $this_var;
-      }
+    global $wpdb;
+    // Verifica permissão — só admin ou editor, por exemplo
+    if (!current_user_can('manage_woocommerce')) {
+        wp_send_json_error('Permissão negada', 403);
     }
-  }
 
-  //ordenar $vars_atuais por data crescente, com base na chave 'dia'
-  usort($vars_atuais, function ($a, $b) {
-    return strtotime($a['dia']) - strtotime($b['dia']);
-  });
+    // Busca todos os produtos publicados
+    $products = wc_get_products([
+        'status' => 'publish',
+        'limit' => -1,
+    ]);
 
-  //ordenar $vars_passadas por data decrescente, com base na chave 'dia'
-  usort($vars_passadas, function ($a, $b) {
-    return strtotime($b['dia']) - strtotime($a['dia']);
-  });
+    // Transforma em formato legível para o JS
+    $vars_atuais = [];
+    $vars_passadas = [];
 
-  // Retorna em JSON
-  wp_send_json_success([
-    'atuais' => $vars_atuais,
-    'passadas' => $vars_passadas
-  ]);
+    foreach ($products as $product) {
+        $variacoes = $product->get_available_variations();
+        foreach ($variacoes as $var) {
+            $this_var = [];
+            $dia_var_dmy = $var['attributes']['attribute_dia']; // ex: '15/08/2025'
+            $dia_var_iso = data_to_iso($dia_var_dmy); // ex: '2025-08-15'
+
+            //adicionar a chave "dia" ao $this_var, preenchendo seu valor com $dia_var_iso
+            $this_var['dia'] = $dia_var_iso;
+            $this_var['nome'] = $product->get_name();
+            $this_var['variation_id'] = $var['variation_id'];
+            $this_var['parent_id'] = $product->get_id();
+            $this_var['edit_link'] = html_entity_decode(
+                get_edit_post_link($product->get_id()),
+            );
+
+            //se $dia_var_iso for maior ou igual a hoje + 2 dias, adiciona em $vars_atuais, senão em $vars_passadas
+            if (
+                (int) strtotime('now') <
+                (int) strtotime($dia_var_iso) + 3600 * 48
+            ) {
+                //Adiciona quantidade de passageiros
+                $_v_id = $var['variation_id'];
+                $pax_qty = $wpdb->get_var(
+                    $wpdb->prepare(
+                        "SELECT COUNT(*) FROM aer_reservas WHERE variation_id = %d AND status != 'cancel'",
+                        $_v_id,
+                    ),
+                );
+                $this_var['pax_qty'] = intval($pax_qty);
+
+                $vars_atuais[] = $this_var;
+            } else {
+                $vars_passadas[] = $this_var;
+            }
+        }
+    }
+
+    //ordenar $vars_atuais por data crescente, com base na chave 'dia'
+    usort($vars_atuais, function ($a, $b) {
+        return strtotime($a['dia']) - strtotime($b['dia']);
+    });
+
+    //ordenar $vars_passadas por data decrescente, com base na chave 'dia'
+    usort($vars_passadas, function ($a, $b) {
+        return strtotime($b['dia']) - strtotime($a['dia']);
+    });
+
+    // Retorna em JSON
+    wp_send_json_success([
+        'atuais' => $vars_atuais,
+        'passadas' => $vars_passadas,
+    ]);
 }
 
 // ADICIONA VARIAÇÃO AO CARRINHO VIA AJAX
 add_action('wp_ajax_add_variation_to_cart', 'ajax_add_variation_to_cart');
 add_action(
-  'wp_ajax_nopriv_add_variation_to_cart',
-  'ajax_add_variation_to_cart'
+    'wp_ajax_nopriv_add_variation_to_cart',
+    'ajax_add_variation_to_cart',
 );
 
 function ajax_add_variation_to_cart()
 {
-  $product_id = absint($_POST['product_id']);
-  $variation_id = absint($_POST['variation_id']);
-  $quantity = absint($_POST['quantity']);
-  $taxa = sanitize_text_field($_POST['taxa']);
-  $embarque = sanitize_text_field($_POST['embarque']);
-  $horario = sanitize_text_field($_POST['horario']);
-  $passageiros = $_POST['passageiros'];
+    $product_id = absint($_POST['product_id']);
+    $variation_id = absint($_POST['variation_id']);
+    $quantity = absint($_POST['quantity']);
+    $taxa = sanitize_text_field($_POST['taxa']);
+    $embarque = sanitize_text_field($_POST['embarque']);
+    $horario = sanitize_text_field($_POST['horario']);
+    $passageiros = $_POST['passageiros'];
 
-  $cart_item_data = [
-    'desconto_antecipado' => sanitize_text_field($_POST['desconto_antecipado']),
-    'taxa' => $taxa,
-    'embarque' => $embarque,
-    'horario' => $horario,
-    'passageiros' => $passageiros
-  ];
+    $cart_item_data = [
+        'desconto_antecipado' => sanitize_text_field(
+            $_POST['desconto_antecipado'],
+        ),
+        'taxa' => $taxa,
+        'embarque' => $embarque,
+        'horario' => $horario,
+        'passageiros' => $passageiros,
+    ];
 
-  // Executa a validação WooCommerce (inclui seu filtro personalizado)
-  $passed = apply_filters(
-    'woocommerce_add_to_cart_validation',
-    true,
-    $product_id,
-    $quantity,
-    $variation_id,
-    []
-  );
+    // Executa a validação WooCommerce (inclui seu filtro personalizado)
+    $passed = apply_filters(
+        'woocommerce_add_to_cart_validation',
+        true,
+        $product_id,
+        $quantity,
+        $variation_id,
+        [],
+    );
 
-  if (!$passed) {
-    // Retorna erro em formato JSON para o frontend
-    wp_send_json([
-      'error' => true,
-      'messages' => wc_print_notices(true) // captura mensagens de erro
-    ]);
-  }
+    if (!$passed) {
+        // Retorna erro em formato JSON para o frontend
+        wp_send_json([
+            'error' => true,
+            'messages' => wc_print_notices(true), // captura mensagens de erro
+        ]);
+    }
 
-  // Se passou na validação, adiciona ao carrinho
-  $added = WC()->cart->add_to_cart(
-    $product_id,
-    $quantity,
-    $variation_id,
-    [],
-    $cart_item_data
-  );
+    // Se passou na validação, adiciona ao carrinho
+    $added = WC()->cart->add_to_cart(
+        $product_id,
+        $quantity,
+        $variation_id,
+        [],
+        $cart_item_data,
+    );
 
-  if (!$added) {
-    wp_send_json([
-      'error' => true,
-      'messages' =>
-      '<ul class="woocommerce-error"><li>Não foi possível adicionar ao carrinho.</li></ul>'
-    ]);
-  }
+    if (!$added) {
+        wp_send_json([
+            'error' => true,
+            'messages' =>
+                '<ul class="woocommerce-error"><li>Não foi possível adicionar ao carrinho.</li></ul>',
+        ]);
+    }
 
-  // $array_pasageiros = wc_clean(json_decode($passageiros));
-  // update_lead_reserva($array_pasageiros, 'carrinho');
+    // $array_pasageiros = wc_clean(json_decode($passageiros));
+    // wp_die($array_pasageiros);
 
+    // update_lead_reserva($array_pasageiros, 'carrinho');
 
-  // Retorna fragments para atualizar mini-carrinho
-  WC_AJAX::get_refreshed_fragments();
-  wp_die();
+    // Retorna fragments para atualizar mini-carrinho
+    WC_AJAX::get_refreshed_fragments();
+    wp_die();
 }
 
 //ATUALIZA UMA RESERVA VIA AJAX
 add_action('wp_ajax_update_reserva', 'ajax_update_reserva');
 function ajax_update_reserva()
 {
-  global $wpdb;
-  $acao = $_POST['to'];
-  $res_id = (int) $_POST['res_id'];
+    global $wpdb;
+    $acao = $_POST['to'];
+    $res_id = (int) $_POST['res_id'];
 
-  //Define e executa a ação
-  if ($acao === 'cancelar') {
-    $wpdb->get_results(
-      "UPDATE `aer_reservas` SET `status`= 'cancel' WHERE ID = $res_id"
-    );
-  } else {
-    $wpdb->get_results(
-      "UPDATE `aer_reservas` SET `status`= 'normal' WHERE ID = $res_id"
-    );
-  }
+    //Define e executa a ação
+    if ($acao === 'cancelar') {
+        $wpdb->get_results(
+            "UPDATE `aer_reservas` SET `status`= 'cancel' WHERE ID = $res_id",
+        );
+    } else {
+        $wpdb->get_results(
+            "UPDATE `aer_reservas` SET `status`= 'normal' WHERE ID = $res_id",
+        );
+    }
 
-  //Retorna a reserva atualizada
-  $response = $wpdb->get_results(
-    "SELECT * from aer_reservas WHERE ID = $res_id"
-  );
-  wp_send_json_success($response);
+    //Retorna a reserva atualizada
+    $response = $wpdb->get_results(
+        "SELECT * from aer_reservas WHERE ID = $res_id",
+    );
+    wp_send_json_success($response);
 }
 
 // add_action('wp_ajax_get_reservas_excs', 'ajax_get_reservas_excs');
@@ -264,104 +279,110 @@ function ajax_update_reserva()
 add_action('wp_ajax_get_reservas', 'ajax_get_reservas');
 function ajax_get_reservas()
 {
-  global $wpdb;
+    global $wpdb;
 
-  //Define o ID da variaçõo, se houver
-  $variation_id = isset($_GET['variation_id'])
-    ? sanitize_text_field($_GET['variation_id'])
-    : null;
+    //Define o ID da variaçõo, se houver
+    $variation_id = isset($_GET['variation_id'])
+        ? sanitize_text_field($_GET['variation_id'])
+        : null;
 
-  //GET nas reservas
-  if ($variation_id) {
-    $response_r = $wpdb->get_results(
-      "SELECT * FROM aer_reservas WHERE variation_id = $variation_id"
-    );
-  } else {
-    $response_r = $wpdb->get_results('SELECT * FROM aer_reservas ORDER BY order_id ASC');
-  }
+    //GET nas reservas
+    if ($variation_id) {
+        $response_r = $wpdb->get_results(
+            "SELECT * FROM aer_reservas WHERE variation_id = $variation_id",
+        );
+    } else {
+        $response_r = $wpdb->get_results(
+            'SELECT * FROM aer_reservas ORDER BY order_id ASC',
+        );
+    }
 
-  //Cria array com ID das excursões (variações) que têm passageiros
-  $variations_ids = array_map(function ($r) {
-    return $r->variation_id;
-  }, $response_r);
-  $variations_ids = array_unique($variations_ids);
+    //Cria array com ID das excursões (variações) que têm passageiros
+    $variations_ids = array_map(function ($r) {
+        return $r->variation_id;
+    }, $response_r);
+    $variations_ids = array_unique($variations_ids);
 
-  //Armazena o objeto das excursões (variações) que têm passageiros
-  $variacoes_com_passageiros_raw = get_posts([
-    'post_type' => 'product_variation',
-    'numberposts' => -1,
-    'include' => $variations_ids
-  ]);
+    //Armazena o objeto das excursões (variações) que têm passageiros
+    $variacoes_com_passageiros_raw = get_posts([
+        'post_type' => 'product_variation',
+        'numberposts' => -1,
+        'include' => $variations_ids,
+    ]);
 
-  //Formata as excursões e insere na array final
-  $variacoes_com_passageiros_f = [];
-  foreach ($variacoes_com_passageiros_raw as $variacao) {
-    $key = 'id_' . $variacao->ID;
-    $nome_exc = substr($variacao->post_title, 0, -13);
-    $dia_exc = substr($variacao->post_title, -10);
-    $variacoes_com_passageiros_f[$key] = [$nome_exc, $dia_exc, $variacao->ID];
-  }
+    //Formata as excursões e insere na array final
+    $variacoes_com_passageiros_f = [];
+    foreach ($variacoes_com_passageiros_raw as $variacao) {
+        $key = 'id_' . $variacao->ID;
+        $nome_exc = substr($variacao->post_title, 0, -13);
+        $dia_exc = substr($variacao->post_title, -10);
+        $variacoes_com_passageiros_f[$key] = [
+            $nome_exc,
+            $dia_exc,
+            $variacao->ID,
+        ];
+    }
 
-  $response = [$response_r, $variacoes_com_passageiros_f];
+    $response = [$response_r, $variacoes_com_passageiros_f];
 
-  wp_send_json_success($response);
+    wp_send_json_success($response);
 }
 
 // BUSCA USUÁRIOS COM OU SEM PARÂMETRO
 add_action('wp_ajax_get_customers', 'ajax_get_customers');
 function ajax_get_customers()
 {
-  //Busca múltiplos IDS
-  $users_ids = isset($_GET['data']['users_ids'])
-    ? $_GET['data']['users_ids']
-    : null;
-  if (isset($users_ids)) {
-    $users = [];
-    if (!is_array($users_ids)) {
-      json_decode($users_ids);
-    }
-
-    foreach ($users_ids as $id) {
-      $user = get_userdata($id);
-      if ($user) {
-        $users[] = [
-          'ID' => $user->ID,
-          'nome' => $user->display_name,
-          'email' => $user->user_email
-        ];
-      }
-    }
-
-    wp_send_json_success($users);
-  }
-
-  //Verifica se há algum parâmetro e busca exclusivamente esse valor
-  $param = isset($_GET['param']) ? sanitize_text_field($_GET['param']) : null;
-
-  if ($param) {
-    switch ($param) {
-      case 'e-mail':
-        $_ids = $_GET['ids'];
-
-        // Array para armazenar os e-mails dos usuários
-        $user_emails = [];
-        foreach ($_ids as $_id) {
-          $user_data = get_userdata($_id);
-          if ($user_data) {
-            $user_emails[] = $user_data->user_email
-              ? $user_data->user_email
-              : $user_data->user_login;
-          }
+    //Busca múltiplos IDS
+    $users_ids = isset($_GET['data']['users_ids'])
+        ? $_GET['data']['users_ids']
+        : null;
+    if (isset($users_ids)) {
+        $users = [];
+        if (!is_array($users_ids)) {
+            json_decode($users_ids);
         }
-        wp_send_json_success($user_emails);
-        break;
-      default:
-        # code...
-        break;
+
+        foreach ($users_ids as $id) {
+            $user = get_userdata($id);
+            if ($user) {
+                $users[] = [
+                    'ID' => $user->ID,
+                    'nome' => $user->display_name,
+                    'email' => $user->user_email,
+                ];
+            }
+        }
+
+        wp_send_json_success($users);
     }
-  } else {
-    wp_send_json_success('Informe um parâmetro');
-  }
+
+    //Verifica se há algum parâmetro e busca exclusivamente esse valor
+    $param = isset($_GET['param']) ? sanitize_text_field($_GET['param']) : null;
+
+    if ($param) {
+        switch ($param) {
+            case 'e-mail':
+                $_ids = $_GET['ids'];
+
+                // Array para armazenar os e-mails dos usuários
+                $user_emails = [];
+                foreach ($_ids as $_id) {
+                    $user_data = get_userdata($_id);
+                    if ($user_data) {
+                        $user_emails[] = $user_data->user_email
+                            ? $user_data->user_email
+                            : $user_data->user_login;
+                    }
+                }
+                wp_send_json_success($user_emails);
+                break;
+            default:
+                # code...
+                break;
+        }
+    } else {
+        wp_send_json_success('Informe um parâmetro');
+    }
 }
 
 // ENVIA EMAIL
@@ -369,14 +390,14 @@ function ajax_get_customers()
 add_filter('wp_mail_from_name', 'personalizar_remetente_nome');
 function personalizar_remetente_nome($default)
 {
-  return get_bloginfo('name');
+    return get_bloginfo('name');
 }
 
 // Alterar o e-mail do remetente
 add_filter('wp_mail_from', 'personalizar_remetente_email');
 function personalizar_remetente_email($default)
 {
-  return 'contato@aerotour.com.br';
+    return 'contato@aerotour.com.br';
 }
 
 // add_action('wp_ajax_send_email', 'ajax_send_email');
@@ -464,51 +485,50 @@ function personalizar_remetente_email($default)
 
 function obter_emails_por_produto($produto_id)
 {
-  global $wpdb;
+    global $wpdb;
 
-  // Array para armazenar os e-mails
-  $emails = [];
+    // Array para armazenar os e-mails
+    $emails = [];
 
-  // Passo 1: Consultar a tabela 'aer_reservas' para obter os user_ids
-  $user_ids = $wpdb->get_col(
-    $wpdb->prepare(
-      'SELECT user_id 
+    // Passo 1: Consultar a tabela 'aer_reservas' para obter os user_ids
+    $user_ids = $wpdb->get_col(
+        $wpdb->prepare(
+            'SELECT user_id 
      FROM aer_reservas 
      WHERE variation_id = %d
        AND status = %s',
-      $produto_id,
-      'normal'
-    )
-  );
+            $produto_id,
+            'normal',
+        ),
+    );
 
-  // Filtrar user_ids para ignorar valores iguais a 0
-  $user_ids = array_values(
-    array_filter($user_ids, function ($user_id) {
-      return $user_id != 0;
-    })
-  );
+    // Filtrar user_ids para ignorar valores iguais a 0
+    $user_ids = array_values(
+        array_filter($user_ids, function ($user_id) {
+            return $user_id != 0;
+        }),
+    );
 
-  // Passo 2: Obter os e-mails dos usuários correspondentes
-  if (!empty($user_ids)) {
+    // Passo 2: Obter os e-mails dos usuários correspondentes
+    if (!empty($user_ids)) {
+        // ABORDAGEM NO PADRÃO WP, MAS COM POUCO MENOS PERFORMANCE
+        $args = [
+            'include' => $user_ids,
+            'fields' => ['user_email'],
+        ];
+        $users = get_users($args);
+        $emails = array_column($users, 'user_email');
 
-    // ABORDAGEM NO PADRÃO WP, MAS COM POUCO MENOS PERFORMANCE
-    $args = [
-      'include' => $user_ids,
-      'fields'  => ['user_email']
-    ];
-    $users = get_users($args);
-    $emails = array_column($users, 'user_email');
+        //ABORDAGEM COM MELHOR PERFORMANCE, MAS FORA DO PADRAO WP
+        // $placeholders = implode(',', array_fill(0, count($user_ids), '%d'));
+        // $query = "SELECT user_email FROM {$wpdb->users} WHERE ID IN ($placeholders)";
+        // $emails = $wpdb->get_col($wpdb->prepare($query, $user_ids));
+    }
 
-    //ABORDAGEM COM MELHOR PERFORMANCE, MAS FORA DO PADRAO WP
-    // $placeholders = implode(',', array_fill(0, count($user_ids), '%d'));
-    // $query = "SELECT user_email FROM {$wpdb->users} WHERE ID IN ($placeholders)";
-    // $emails = $wpdb->get_col($wpdb->prepare($query, $user_ids));
-  }
+    //remover valores duplicados de $emails
+    $emails = array_values(array_unique($emails));
 
-  //remover valores duplicados de $emails
-  $emails = array_values(array_unique($emails));
-
-  return $emails;
+    return $emails;
 }
 
 // add_action('wp_ajax_get_customers', 'ajax_get_customers');
@@ -517,473 +537,504 @@ function obter_emails_por_produto($produto_id)
 add_action('wp_ajax_save_home_cards', 'ajax_save_home_cards');
 function ajax_save_home_cards()
 {
-  $submitData = $_POST['submitData'];
-  wp_send_json_success(update_option('aer_home_displays', $submitData));
+    $submitData = $_POST['submitData'];
+    wp_send_json_success(update_option('aer_home_displays', $submitData));
 }
 
 /* SALVA PADRÕES DE HORÁRIOS */
 add_action('wp_ajax_save_padroes_horarios', 'ajax_save_padroes_horarios');
 function ajax_save_padroes_horarios()
 {
-  $data = $_POST['data'];
-  if (update_option('padroes_horarios', $data)) {
-    wp_send_json_success($data);
-  } else {
-    wp_send_json_error('Erro ao salvar padrão de embarque!');
-  }
+    $data = $_POST['data'];
+    if (update_option('padroes_horarios', $data)) {
+        wp_send_json_success($data);
+    } else {
+        wp_send_json_error('Erro ao salvar padrão de embarque!');
+    }
 }
 
 /* BUSCA USUÁRIO */
 add_action('wp_ajax_busca_usuario', 'ajax_busca_usuario');
 function ajax_busca_usuario()
 {
-  //  wp_send_json_success($_POST['value']);
-  $user = get_user_by($_POST['type'], $_POST['value']);
-  $user_nome_completo = $user->first_name . ' ' . $user->last_name;
-  $user_return = [
-    'nome_completo' => $user_nome_completo,
-    'cpf' => $user->nickname,
-    'rg' => get_user_meta($user->ID, 'rg', true),
-    'rg_orgao_exp' => get_user_meta($user->ID, 'rg_orgao_exp', true),
-    'telefone' => get_user_meta($user->ID)['billing_phone'][0],
-    'id' => $user->ID,
-    'cupons' => json_decode(get_user_meta($user->ID, 'cupons', true))
-  ];
-  wp_send_json_success($user_return);
+    //  wp_send_json_success($_POST['value']);
+    $user = get_user_by($_POST['type'], $_POST['value']);
+    $user_nome_completo = $user->first_name . ' ' . $user->last_name;
+    $user_return = [
+        'nome_completo' => $user_nome_completo,
+        'cpf' => $user->nickname,
+        'rg' => get_user_meta($user->ID, 'rg', true),
+        'rg_orgao_exp' => get_user_meta($user->ID, 'rg_orgao_exp', true),
+        'telefone' => get_user_meta($user->ID)['billing_phone'][0],
+        'id' => $user->ID,
+        'cupons' => json_decode(get_user_meta($user->ID, 'cupons', true)),
+    ];
+    wp_send_json_success($user_return);
 }
 
 /* ATRIBUI/REMOVE CUPOM DE UM USUÁRIO */
 add_action('wp_ajax_atribuir_cupom', 'ajax_atribuir_cupom');
 function ajax_atribuir_cupom()
 {
-  $coupon_id = wc_get_coupon_id_by_code($_POST['code']);
-  if (isset($coupon_id)) {
-    $coupon_customers_ids = get_post_meta(
-      $coupon_id,
-      'allowed_customers',
-      true
-    );
-    $customer_cupons_meta = get_user_meta($_POST['user_id'], 'cupons', true);
-    $return_value;
+    $coupon_id = wc_get_coupon_id_by_code($_POST['code']);
+    if (isset($coupon_id)) {
+        $coupon_customers_ids = get_post_meta(
+            $coupon_id,
+            'allowed_customers',
+            true,
+        );
+        $customer_cupons_meta = get_user_meta(
+            $_POST['user_id'],
+            'cupons',
+            true,
+        );
+        $return_value;
 
-    //atualiza a usermeta 'cupons'
-    if ($customer_cupons_meta === '') {
-      $customer_cupons_meta_obj = [$_POST['code']];
-    } else {
-      $customer_cupons_meta_obj = json_decode($customer_cupons_meta);
-      $return_value = in_array($_POST['code'], $customer_cupons_meta_obj)
-        ? 'Removido com sucesso'
-        : 'Adicionado com sucesso';
-
-      //verifica de usuário já tem o cupom
-      if (in_array($_POST['code'], $customer_cupons_meta_obj)) {
-        foreach ($customer_cupons_meta_obj as $i => $_code) {
-          if (strtoupper($_code) === strtoupper($_POST['code'])) {
-            array_splice($customer_cupons_meta_obj, $i, 1);
-          }
-        }
-      } else {
-        array_push($customer_cupons_meta_obj, $_POST['code']);
-      }
-    }
-    $customer_cupons_meta_a_str = json_encode($customer_cupons_meta_obj);
-    update_user_meta($_POST['user_id'], 'cupons', $customer_cupons_meta_a_str);
-
-    //se for um cupom restrito, atualiza a meta 'allowed_customers' do cupom
-    if (
-      get_post_meta($coupon_id, 'restrict_customers_coupon', true) === 'yes'
-    ) {
-      if ($coupon_customers_ids === '') {
-        $coupon_customers_ids_obj = [$_POST['user_id']];
-      } else {
-        $coupon_customers_ids_obj = json_decode($coupon_customers_ids);
-
-        //verifica se já está na array 'allowed_customers'
-        if (in_array($_POST['user_id'], $coupon_customers_ids_obj)) {
-          foreach ($coupon_customers_ids_obj as $i => $_user_id) {
-            if ($_user_id === +$_POST['user_id']) {
-              array_splice($coupon_customers_ids_obj, $i, 1);
-            }
-          }
+        //atualiza a usermeta 'cupons'
+        if ($customer_cupons_meta === '') {
+            $customer_cupons_meta_obj = [$_POST['code']];
         } else {
-          array_push($coupon_customers_ids_obj, +$_POST['user_id']);
-        }
-      }
-      $coupon_customers_ids_a_str = json_encode($coupon_customers_ids_obj);
-      update_post_meta(
-        $coupon_id,
-        'allowed_customers',
-        $coupon_customers_ids_a_str
-      );
-    }
+            $customer_cupons_meta_obj = json_decode($customer_cupons_meta);
+            $return_value = in_array($_POST['code'], $customer_cupons_meta_obj)
+                ? 'Removido com sucesso'
+                : 'Adicionado com sucesso';
 
-    wp_send_json_success($return_value);
-  }
+            //verifica de usuário já tem o cupom
+            if (in_array($_POST['code'], $customer_cupons_meta_obj)) {
+                foreach ($customer_cupons_meta_obj as $i => $_code) {
+                    if (strtoupper($_code) === strtoupper($_POST['code'])) {
+                        array_splice($customer_cupons_meta_obj, $i, 1);
+                    }
+                }
+            } else {
+                array_push($customer_cupons_meta_obj, $_POST['code']);
+            }
+        }
+        $customer_cupons_meta_a_str = json_encode($customer_cupons_meta_obj);
+        update_user_meta(
+            $_POST['user_id'],
+            'cupons',
+            $customer_cupons_meta_a_str,
+        );
+
+        //se for um cupom restrito, atualiza a meta 'allowed_customers' do cupom
+        if (
+            get_post_meta($coupon_id, 'restrict_customers_coupon', true) ===
+            'yes'
+        ) {
+            if ($coupon_customers_ids === '') {
+                $coupon_customers_ids_obj = [$_POST['user_id']];
+            } else {
+                $coupon_customers_ids_obj = json_decode($coupon_customers_ids);
+
+                //verifica se já está na array 'allowed_customers'
+                if (in_array($_POST['user_id'], $coupon_customers_ids_obj)) {
+                    foreach ($coupon_customers_ids_obj as $i => $_user_id) {
+                        if ($_user_id === +$_POST['user_id']) {
+                            array_splice($coupon_customers_ids_obj, $i, 1);
+                        }
+                    }
+                } else {
+                    array_push($coupon_customers_ids_obj, +$_POST['user_id']);
+                }
+            }
+            $coupon_customers_ids_a_str = json_encode(
+                $coupon_customers_ids_obj,
+            );
+            update_post_meta(
+                $coupon_id,
+                'allowed_customers',
+                $coupon_customers_ids_a_str,
+            );
+        }
+
+        wp_send_json_success($return_value);
+    }
 }
 
 /* DEFINE LINHA DE UM PASSAGEIRO */
 add_action(
-  'wp_ajax_define_linha_passageiro',
-  'ajax_save_define_linha_passageiro'
+    'wp_ajax_define_linha_passageiro',
+    'ajax_save_define_linha_passageiro',
 );
 function ajax_save_define_linha_passageiro()
 {
-  $variacao_id = $_POST['variacao_id'];
-  $linha = $_POST['linha'];
-  $ref = $_POST['passageiro_ref'];
-  $dia = get_post_meta($variacao_id)['attribute_dia'][0];
-  $passageiros_variacao = json_decode(
-    get_post_meta($variacao_id, 'passageiros', true)
-  );
-  foreach ($passageiros_variacao as $pv) {
-    if ($pv->cpf === $ref) {
-      $pv->linha = $linha;
-    }
-  }
-  $passageiros_variacao_final_string = json_encode($passageiros_variacao);
-  update_post_meta(
-    $variacao_id,
-    'passageiros',
-    $passageiros_variacao_final_string
-  );
-
-  $obj_passageiros = [];
-  foreach (
-    wc_get_product(
-      wp_get_post_parent_id($variacao_id)
-    )->get_available_variations()
-    as $var
-  ) {
-    $_key =
-      'id' .
-      $var['variation_id'] .
-      '__' .
-      str_replace('/', '_', $var['attributes']['attribute_dia']);
-    $obj_passageiros[$_key] = json_decode(
-      get_post_meta($var['variation_id'], 'passageiros', true)
+    $variacao_id = $_POST['variacao_id'];
+    $linha = $_POST['linha'];
+    $ref = $_POST['passageiro_ref'];
+    $dia = get_post_meta($variacao_id)['attribute_dia'][0];
+    $passageiros_variacao = json_decode(
+        get_post_meta($variacao_id, 'passageiros', true),
     );
-  }
-  wp_send_json_success($obj_passageiros);
+    foreach ($passageiros_variacao as $pv) {
+        if ($pv->cpf === $ref) {
+            $pv->linha = $linha;
+        }
+    }
+    $passageiros_variacao_final_string = json_encode($passageiros_variacao);
+    update_post_meta(
+        $variacao_id,
+        'passageiros',
+        $passageiros_variacao_final_string,
+    );
+
+    $obj_passageiros = [];
+    foreach (
+        wc_get_product(
+            wp_get_post_parent_id($variacao_id),
+        )->get_available_variations()
+        as $var
+    ) {
+        $_key =
+            'id' .
+            $var['variation_id'] .
+            '__' .
+            str_replace('/', '_', $var['attributes']['attribute_dia']);
+        $obj_passageiros[$_key] = json_decode(
+            get_post_meta($var['variation_id'], 'passageiros', true),
+        );
+    }
+    wp_send_json_success($obj_passageiros);
 }
 
 /* SALVA DEFINIÇÕES DE UMA VARIAÇÃO */
 add_action('wp_ajax_save_definicoes_variacao', 'ajax_save_definicoes_variacao');
 function ajax_save_definicoes_variacao()
 {
-  $linhas_sort_rule = $_POST['definicoes_a']; //'definicoes_a' tem apenas as linhas no momento
-  $excursao_id = $_POST['excursao_id'];
-  $variacao_id = $_POST['variacao_id'];
-  $passageiros_variacao = json_decode(
-    get_post_meta($variacao_id, 'passageiros', true)
-  );
+    $linhas_sort_rule = $_POST['definicoes_a']; //'definicoes_a' tem apenas as linhas no momento
+    $excursao_id = $_POST['excursao_id'];
+    $variacao_id = $_POST['variacao_id'];
+    $passageiros_variacao = json_decode(
+        get_post_meta($variacao_id, 'passageiros', true),
+    );
 
-  foreach ($linhas_sort_rule as $key => $locais_embarque) {
-    foreach ($locais_embarque as $local_embarque) {
-      foreach ($passageiros_variacao as $passageiro) {
-        if (
-          unicode_filter(substr($passageiro->embarque, 0, -8)) ===
-          unicode_filter(substr($local_embarque, 0, -8))
-        ) {
-          $passageiro->linha = $key;
+    foreach ($linhas_sort_rule as $key => $locais_embarque) {
+        foreach ($locais_embarque as $local_embarque) {
+            foreach ($passageiros_variacao as $passageiro) {
+                if (
+                    unicode_filter(substr($passageiro->embarque, 0, -8)) ===
+                    unicode_filter(substr($local_embarque, 0, -8))
+                ) {
+                    $passageiro->linha = $key;
+                }
+            }
         }
-      }
     }
-  }
 
-  $passageiros_a_string = json_encode($passageiros_variacao);
-  update_post_meta($variacao_id, 'passageiros', $passageiros_a_string);
-  wp_send_json_success($passageiros_variacao);
+    $passageiros_a_string = json_encode($passageiros_variacao);
+    update_post_meta($variacao_id, 'passageiros', $passageiros_a_string);
+    wp_send_json_success($passageiros_variacao);
 }
 
 /* ATIVA/DESATIVA LINHAS NA VARIAÇÃO */
 add_action('wp_ajax_toggle_linhas', 'ajax_toggle_linhas');
 function ajax_toggle_linhas()
 {
-  $meta_var_linhas = get_post_meta($_POST['variacao_id'], 'tem_linhas', true);
-  $meta_var_linhas_qtd = $meta_var_linhas === '' ? 1 : (int) $meta_var_linhas;
-  $variacao_id = $_POST['variacao_id'];
+    $meta_var_linhas = get_post_meta($_POST['variacao_id'], 'tem_linhas', true);
+    $meta_var_linhas_qtd = $meta_var_linhas === '' ? 1 : (int) $meta_var_linhas;
+    $variacao_id = $_POST['variacao_id'];
 
-  if ($meta_var_linhas_qtd === 1) {
-    update_post_meta($variacao_id, 'tem_linhas', 2);
-  } elseif ($meta_var_linhas_qtd > 1) {
-    $passageiros_var = json_decode(
-      get_post_meta($variacao_id, 'passageiros', true)
-    );
-    foreach ($passageiros_var as $pv) {
-      $pv->linha = '';
+    if ($meta_var_linhas_qtd === 1) {
+        update_post_meta($variacao_id, 'tem_linhas', 2);
+    } elseif ($meta_var_linhas_qtd > 1) {
+        $passageiros_var = json_decode(
+            get_post_meta($variacao_id, 'passageiros', true),
+        );
+        foreach ($passageiros_var as $pv) {
+            $pv->linha = '';
+        }
+        $new_passageiros_string = json_encode($passageiros_var);
+        update_post_meta($_POST['variacao_id'], 'tem_linhas', '');
+        update_post_meta(
+            $_POST['variacao_id'],
+            'passageiros',
+            $new_passageiros_string,
+        );
     }
-    $new_passageiros_string = json_encode($passageiros_var);
-    update_post_meta($_POST['variacao_id'], 'tem_linhas', '');
-    update_post_meta(
-      $_POST['variacao_id'],
-      'passageiros',
-      $new_passageiros_string
-    );
-  }
 
-  wp_send_json_success('desativou');
+    wp_send_json_success('desativou');
 
-  wp_die(); // Exit silently (Always at the end to avoid an Error 500)
+    wp_die(); // Exit silently (Always at the end to avoid an Error 500)
 }
 
 /* LIDA COM OPCÕES DO WORDPRESS */
 add_action('wp_ajax_handle_wp_option', 'handle_wp_option');
 function handle_wp_option()
 {
-  global $wpdb;
-  $key = $_POST['data']['key'];
+    global $wpdb;
+    $key = $_POST['data']['key'];
 
-  if (isset($_POST['data']['newValue'])) {
-    $response = update_option(
-      $_POST['data']['key'],
-      $_POST['data']['newValue'],
-      true
-    );
-    if ($response) {
-      wp_send_json_success('Valor atualizado');
-    } else {
-      wp_send_json_error('Erro ao atualizar');
+    if (isset($_POST['data']['newValue'])) {
+        $response = update_option(
+            $_POST['data']['key'],
+            $_POST['data']['newValue'],
+            true,
+        );
+        if ($response) {
+            wp_send_json_success('Valor atualizado');
+        } else {
+            wp_send_json_error('Erro ao atualizar');
+        }
     }
-  }
 }
 
 /* ADICIONA/REMOVE PONTOS DE EMBARQUE */
 add_action('wp_ajax_excluir_embarque', 'excluir_embarque');
 function excluir_embarque()
 {
-  global $wpdb;
-  $id_para_remover = $_POST['data']['id'];
-  $tabela_embarques = $wpdb->prefix . 'embarques';
+    global $wpdb;
+    $id_para_remover = $_POST['data']['id'];
+    $tabela_embarques = $wpdb->prefix . 'embarques';
 
-  $response = $wpdb->delete($tabela_embarques, ['id' => $id_para_remover]);
+    $response = $wpdb->delete($tabela_embarques, ['id' => $id_para_remover]);
 
-  if ($response > 0) {
-    wp_send_json_success('Embarque excluído com sucesso!');
-  } else {
-    wp_send_json_error('Erro ao excluir o embarque.');
-  }
+    if ($response > 0) {
+        wp_send_json_success('Embarque excluído com sucesso!');
+    } else {
+        wp_send_json_error('Erro ao excluir o embarque.');
+    }
 }
 
 add_action('wp_ajax_add_embarque', 'add_embarque');
 function add_embarque()
 {
-  global $wpdb;
-  $data = $_POST['data'];
-  $nome_embarque = $data['nome'];
-  $endereco_embarque = $data['endereco'];
-  $obs_embarque = $data['obs'];
-  $link_embarque = $data['link_mapa'];
-  $id_embarque = isset($data['id']) ? $data['id'] : false; //apenas haverá ID se estiver editando um embarque já existente
+    global $wpdb;
+    $data = $_POST['data'];
+    $nome_embarque = $data['nome'];
+    $endereco_embarque = $data['endereco'];
+    $obs_embarque = $data['obs'];
+    $link_embarque = $data['link_mapa'];
+    $id_embarque = isset($data['id']) ? $data['id'] : false; //apenas haverá ID se estiver editando um embarque já existente
 
-  if (empty($nome_embarque) || empty($endereco_embarque)) {
-    wp_send_json_error('Dados incompletos. Nenhum dado foi salvo.');
-  } else {
-    $tabela_embarques = $wpdb->prefix . 'embarques';
-    $novos_dados = [
-      'nome' => $nome_embarque,
-      'endereco' => $endereco_embarque,
-      'obs' => $obs_embarque,
-      'link_mapa' => $link_embarque
-    ];
-
-    if ($id_embarque) {
-      //Atualiza no banco de dados
-      $res = $wpdb->update($tabela_embarques, $novos_dados, [
-        'id' => $id_embarque
-      ]);
-
-      if ($res) {
-        wp_send_json_success('Informações atualizadas com sucesso!');
-      } else {
-        wp_send_json_error('Erro ao salvar. Tente novamente.');
-      }
+    if (empty($nome_embarque) || empty($endereco_embarque)) {
+        wp_send_json_error('Dados incompletos. Nenhum dado foi salvo.');
     } else {
-      //Insere no banco de dados
-      $wpdb->insert($tabela_embarques, $novos_dados);
+        $tabela_embarques = $wpdb->prefix . 'embarques';
+        $novos_dados = [
+            'nome' => $nome_embarque,
+            'endereco' => $endereco_embarque,
+            'obs' => $obs_embarque,
+            'link_mapa' => $link_embarque,
+        ];
 
-      //Obtém o ID do registro inserido
-      $new_id = $wpdb->insert_id;
-      if ($new_id) {
-        //Insere o ID do novo embarque na option 'preset_ordem_embarques'
-        if (get_option('preset_ordem_embarques')) {
-          $current_value = get_option('preset_ordem_embarques');
-          array_unshift($current_value, $new_id);
-          update_option('preset_ordem_embarques', $current_value);
+        if ($id_embarque) {
+            //Atualiza no banco de dados
+            $res = $wpdb->update($tabela_embarques, $novos_dados, [
+                'id' => $id_embarque,
+            ]);
+
+            if ($res) {
+                wp_send_json_success('Informações atualizadas com sucesso!');
+            } else {
+                wp_send_json_error('Erro ao salvar. Tente novamente.');
+            }
         } else {
-          update_option('preset_ordem_embarques', [$new_id]);
-        }
+            //Insere no banco de dados
+            $wpdb->insert($tabela_embarques, $novos_dados);
 
-        wp_send_json_success([
-          'new_id' => $new_id,
-          'message' => 'Embarque adicionado com sucesso!'
-        ]);
-      } else {
-        wp_send_json_error('Erro ao salvar. Tente novamente.');
-      }
+            //Obtém o ID do registro inserido
+            $new_id = $wpdb->insert_id;
+            if ($new_id) {
+                //Insere o ID do novo embarque na option 'preset_ordem_embarques'
+                if (get_option('preset_ordem_embarques')) {
+                    $current_value = get_option('preset_ordem_embarques');
+                    array_unshift($current_value, $new_id);
+                    update_option('preset_ordem_embarques', $current_value);
+                } else {
+                    update_option('preset_ordem_embarques', [$new_id]);
+                }
+
+                wp_send_json_success([
+                    'new_id' => $new_id,
+                    'message' => 'Embarque adicionado com sucesso!',
+                ]);
+            } else {
+                wp_send_json_error('Erro ao salvar. Tente novamente.');
+            }
+        }
     }
-  }
 }
 
 /* ATIVA/DESATIVA CUPONS POR QR CODE */
 add_action('wp_ajax_toggle_qr_coupon', 'ajax_toggle_qr_coupon');
 function ajax_toggle_qr_coupon()
 {
-  $current_value = get_option('qr_code_coupon_status');
-  $new_value = [
-    'status' =>
-    $current_value['status'] === 'desativado' || $current_value === false
-      ? 'ativado'
-      : 'desativado',
-    'code' => null
-  ];
-  update_option('qr_code_coupon_status', $new_value);
+    $current_value = get_option('qr_code_coupon_status');
+    $new_value = [
+        'status' =>
+            $current_value['status'] === 'desativado' ||
+            $current_value === false
+                ? 'ativado'
+                : 'desativado',
+        'code' => null,
+    ];
+    update_option('qr_code_coupon_status', $new_value);
 }
 add_action('wp_ajax_define_coupon', 'ajax_define_coupon');
 function ajax_define_coupon()
 {
-  $coupon_code = $_POST['coupon_code'];
-  $type = $_POST['define_coupon_type'];
+    $coupon_code = $_POST['coupon_code'];
+    $type = $_POST['define_coupon_type'];
 
-  if ($type === 'qr_code') {
-    $new_option_value = get_option('qr_code_coupon_status');
-    $new_option_value['code'] = $coupon_code;
-    update_option('qr_code_coupon_status', $new_option_value);
-  } elseif ($type === 'new_register') {
-    $new_option_value = get_option('new_register_coupon_status');
-    $new_option_value['code'] = $coupon_code;
-    update_option('new_register_coupon_status', $new_option_value);
-  }
-  wp_send_json_success('definiu');
+    if ($type === 'qr_code') {
+        $new_option_value = get_option('qr_code_coupon_status');
+        $new_option_value['code'] = $coupon_code;
+        update_option('qr_code_coupon_status', $new_option_value);
+    } elseif ($type === 'new_register') {
+        $new_option_value = get_option('new_register_coupon_status');
+        $new_option_value['code'] = $coupon_code;
+        update_option('new_register_coupon_status', $new_option_value);
+    }
+    wp_send_json_success('definiu');
 }
 
 /* ATIVA/DESATIVA CUPONS PARA NOVO CADASTRO */
 add_action(
-  'wp_ajax_toggle_new_register_coupon',
-  'ajax_toggle_new_register_coupon'
+    'wp_ajax_toggle_new_register_coupon',
+    'ajax_toggle_new_register_coupon',
 );
 function ajax_toggle_new_register_coupon()
 {
-  $current_value = get_option('new_register_coupon_status');
-  $new_value = [
-    'status' =>
-    $current_value === '' || $current_value['status'] === 'desativado'
-      ? 'ativado'
-      : 'desativado',
-    'code' => null
-  ];
-  update_option('new_register_coupon_status', $new_value);
+    $current_value = get_option('new_register_coupon_status');
+    $new_value = [
+        'status' =>
+            $current_value === '' || $current_value['status'] === 'desativado'
+                ? 'ativado'
+                : 'desativado',
+        'code' => null,
+    ];
+    update_option('new_register_coupon_status', $new_value);
 }
 
 /* CHECK-IN */
 add_action('wp_ajax_check_in', 'ajax_check_in');
 function ajax_check_in()
 {
-  global $wpdb;
-  $pax_id = intval($_POST['pax_id'] ?? 0);
-  $valor = intval($_POST['valor'] ?? 0);
-  $sentido = sanitize_text_field($_POST['sentido'] ?? '');
+    global $wpdb;
+    $pax_id = intval($_POST['pax_id'] ?? 0);
+    $valor = intval($_POST['valor'] ?? 0);
+    $sentido = sanitize_text_field($_POST['sentido'] ?? '');
 
-  //na tabela aer_reservas, atualiza o campo 'saida' ou 'volta', conforme o sentido
-  $response = $wpdb->query(
-    "UPDATE `aer_reservas` SET $sentido = $valor WHERE ID = $pax_id"
-  );
+    //na tabela aer_reservas, atualiza o campo 'saida' ou 'volta', conforme o sentido
+    $response = $wpdb->query(
+        "UPDATE `aer_reservas` SET $sentido = $valor WHERE ID = $pax_id",
+    );
 
-  if ($response === false) {
-    wp_send_json_error('Erro ao atualizar o banco de dados.');
-  } else {
-    wp_send_json_success($response);
-  }
+    if ($response === false) {
+        wp_send_json_error('Erro ao atualizar o banco de dados.');
+    } else {
+        wp_send_json_success($response);
+    }
 }
 
 add_action('wp_ajax_criar_campanha_cupons', 'criar_campanha_cupons');
 function criar_campanha_cupons()
 {
-  global $wpdb;
-  $tabela_camp_premios = $wpdb->prefix . 'camp_premios';
+    global $wpdb;
+    $tabela_camp_premios = $wpdb->prefix . 'camp_premios';
 
-  $novos_dados = [
-    'nome_campanha' => $_POST['data']['nome_campanha'],
-    'tipo' => $_POST['data']['tipo'],
-    'valido_de' => $_POST['data']['valido_de'],
-    'valido_ate' => $_POST['data']['valido_ate']
-  ];
-  if ($wpdb->insert($tabela_camp_premios, $novos_dados)) {
-    wp_send_json_success('Campanha criada com sucesso!');
-  } else {
-    wp_send_json_error('Erro na criação da campanha...');
-  }
+    $novos_dados = [
+        'nome_campanha' => $_POST['data']['nome_campanha'],
+        'tipo' => $_POST['data']['tipo'],
+        'valido_de' => $_POST['data']['valido_de'],
+        'valido_ate' => $_POST['data']['valido_ate'],
+    ];
+    if ($wpdb->insert($tabela_camp_premios, $novos_dados)) {
+        wp_send_json_success('Campanha criada com sucesso!');
+    } else {
+        wp_send_json_error('Erro na criação da campanha...');
+    }
 }
 
 // ENVIA E-MAILS DE LINK DE CONVITE GRUPO WPP (NOVO)
 // 1. Hook para buscar a lista de e-mails (ou simular)
 add_action('wp_ajax_get_email_targets', function () {
-  $is_test = $_GET['is_test'] == 1 ? true : false;
-  $targets = [];
-  if ($is_test) {
-    $qty = intval($_GET['test_qty']);
-    $errors = intval($_GET['test_errors']);
-    for ($i = 0; $i < $qty; $i++) {
-      $targets[] = [
-        'email' => "teste-{$i}@aerotour.com.br",
-        'should_fail' => ($i < $errors) // Os primeiros X falham
-      ];
+    $is_test = $_GET['is_test'] == 1 ? true : false;
+    $targets = [];
+    if ($is_test) {
+        $qty = intval($_GET['test_qty']);
+        $errors = intval($_GET['test_errors']);
+        for ($i = 0; $i < $qty; $i++) {
+            $targets[] = [
+                'email' => "teste-{$i}@aerotour.com.br",
+                'should_fail' => $i < $errors, // Os primeiros X falham
+            ];
+        }
+        wp_send_json_success([
+            'targets' => $targets,
+        ]);
+    } else {
+        $variation_id = intval($_GET['variation_id']);
+        $variation = get_post($variation_id);
+        if (!$variation) {
+            wp_send_json_error('Excursão inválida.');
+        }
+
+        $link_wpp = get_post_meta($variation_id, 'link_wpp', true);
+        if (!$link_wpp) {
+            wp_send_json_error(
+                'Link do WhatsApp não configurado nesta excursão.',
+            );
+        }
+
+        $email_params = [
+            'nome_exc' => substr($variation->post_title, 0, -13), // Remove a data do título
+            'dia_exc' => substr($variation->post_title, -10),
+            'link' => $link_wpp,
+        ];
+
+        $emails = obter_emails_por_produto($variation_id);
+        foreach ($emails as $e) {
+            $targets[] = ['email' => $e, 'should_fail' => 0];
+        } // REAL
+
+        // $targets = array(
+        //   ['email' => 'rterragd@hotmail.com', 'should_fail' => 0],
+        //   ['email' => 'rterragd2@gmail.com', 'should_fail' => 0],
+        // ); // TESTE
+
+        wp_send_json_success([
+            'targets' => $targets,
+            'email_params' => $email_params,
+        ]);
     }
-    wp_send_json_success([
-      'targets' => $targets,
-    ]);
-  } else {
-    $variation_id = intval($_GET['variation_id']);
-    $variation = get_post($variation_id);
-    if (!$variation) wp_send_json_error('Excursão inválida.');
-
-    $link_wpp = get_post_meta($variation_id, 'link_wpp', true);
-    if (!$link_wpp) wp_send_json_error('Link do WhatsApp não configurado nesta excursão.');
-
-    $email_params = [
-      'nome_exc' => substr($variation->post_title, 0, -13), // Remove a data do título
-      'dia_exc'  => substr($variation->post_title, -10),
-      'link'     => $link_wpp
-    ];
-
-    $emails = obter_emails_por_produto($variation_id);
-    foreach ($emails as $e) {
-      $targets[] = ['email' => $e, 'should_fail' => 0];
-    } // REAL
-
-    // $targets = array(
-    //   ['email' => 'rterragd@hotmail.com', 'should_fail' => 0],
-    //   ['email' => 'rterragd2@gmail.com', 'should_fail' => 0],
-    // ); // TESTE
-
-    wp_send_json_success([
-      'targets' => $targets,
-      'email_params' => $email_params
-    ]);
-  }
 });
 
 // 2. Hook para enviar um único e-mail
 add_action('wp_ajax_send_single_email', function () {
-  $is_test = $_GET['is_test'];
-  $delay = intval($_GET['delay'] ?: 0);
+    $is_test = $_GET['is_test'];
+    $delay = intval($_GET['delay'] ?: 0);
 
-  if ($is_test) {
-    if ($delay > 0) usleep($delay * 1000); // Converte ms para microsegundos
-    $should_fail = intval($_GET['should_fail']);
+    if ($is_test) {
+        if ($delay > 0) {
+            usleep($delay * 1000);
+        } // Converte ms para microsegundos
+        $should_fail = intval($_GET['should_fail']);
 
-    if ($should_fail) wp_send_json_error();
-    else wp_send_json_success();
-  } else {
-    // Lógica real de envio usando a função global aer_send_email
-    $email = sanitize_email($_GET['email']);
-    $email_params = $_GET['email_params'];
+        if ($should_fail) {
+            wp_send_json_error();
+        } else {
+            wp_send_json_success();
+        }
+    } else {
+        // Lógica real de envio usando a função global aer_send_email
+        $email = sanitize_email($_GET['email']);
+        $email_params = $_GET['email_params'];
 
-    $subject = "Grupo de WhatsApp - Excursão {$email_params['nome_exc']} ({$email_params['dia_exc']}) - Aerotour";
+        $subject = "Grupo de WhatsApp - Excursão {$email_params['nome_exc']} ({$email_params['dia_exc']}) - Aerotour";
 
-    // wp_send_json_success(); // TESTE
+        // wp_send_json_success(); // TESTE
 
-    $enviado = aer_send_email($email, $subject, 'convite-grupo-wpp', $email_params);
-    if ($enviado) wp_send_json_success();
-    else wp_send_json_error();
-  }
+        $enviado = aer_send_email(
+            $email,
+            $subject,
+            'convite-grupo-wpp',
+            $email_params,
+        );
+        if ($enviado) {
+            wp_send_json_success();
+        } else {
+            wp_send_json_error();
+        }
+    }
 });

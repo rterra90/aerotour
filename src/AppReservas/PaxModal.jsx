@@ -85,9 +85,6 @@ const PaxModal = ({
     }
   }
 
-
-  
-
   function closePaxModal() {
     setVisible(false);
     setTimeout(() => {
@@ -202,7 +199,7 @@ const PaxModal = ({
   }
 
   // Função auxiliar para enviar os dados do pax para leads_reservas
-  const syncLeadWithServer = async (paxData) => {
+  const insertLeadReserva = async (paxData) => {
     try {
       const rootUrl = window.themeLinks.siteUrl;
       const response = await fetch(`${rootUrl}/wp-json/aerotour/v1/save-lead`, {
@@ -238,7 +235,7 @@ const PaxModal = ({
           }  
 
           // CHAMADA ASSÍNCRONA PARA O LEAD
-          syncLeadWithServer(formData);
+          insertLeadReserva(formData);
 
           setPaxModalOpen(false);
           return [..._current, { ...formData, data_nascimento: formatarDataISO(formData.data_nascimento) }];

@@ -502,11 +502,11 @@ function pagamento_completed_otimizado($order_id)
 
   if (empty($passageiros_items)) return;
 
-  // Atualiza os leads para convertidos
-  foreach ($passageiros_items as $order_item) {
-    $passageiros = $order_item['passageiros'];
-    update_lead_reserva($passageiros, 'convertido', $order_id);
-  };
+  // Atualiza os leads para convertidos, acho que aqui era o mais atual
+  // foreach ($passageiros_items as $order_item) {
+  //   $passageiros = $order_item['passageiros'];
+  //   update_lead_reserva($passageiros, 'convertido', $order_id);
+  // };
 
   $p_index = 0;
   foreach ($order->get_items() as $order_item) {

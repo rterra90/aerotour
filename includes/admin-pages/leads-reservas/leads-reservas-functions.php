@@ -1,65 +1,75 @@
 <?php
 
 add_action('admin_menu', function () {
-  add_menu_page(
-    'Leads de Reservas',
-    'Leads Aerotour',
-    'manage_options',
-    'leads-reservas',
-    'render_leads_page',
-    'dashicons-id-alt',
-    '25'
-  );
+    add_menu_page(
+        'Leads de Reservas',
+        'Leads Aerotour',
+        'manage_options',
+        'leads-reservas',
+        'render_leads_page',
+        'dashicons-id-alt',
+        '25',
+    );
 });
-
 
 // FUNÇÃO QUE RENDERIZA O CONTEÚDO DA PÁGINA DE LEADS DE RESERVAS ABANDONADAS
 function render_leads_page()
 {
-  global $wpdb;
-  $table_name = $wpdb->prefix . 'reserva_leads';
-  $embarques_table = $wpdb->prefix . 'embarques';
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'reserva_leads';
+    $embarques_table = $wpdb->prefix . 'embarques';
 
-  // --- 1. LÓGICA DE PROCESSAMENTO (Exclusão) ---
-  $message = '';
+    // --- 1. LÓGICA DE PROCESSAMENTO (Exclusão) ---
+    $message = '';
 
-  // Ação de excluir (individual ou lote)
-  if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'delete') {
-    check_admin_referer('bulk-leads'); // Segurança
+    // Ação de excluir (individual ou lote)
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'delete') {
+        check_admin_referer('bulk-leads'); // Segurança
 
-    $ids_to_delete = [];
-    if (isset($_REQUEST['lead'])) {
-      $ids_to_delete = is_array($_REQUEST['lead']) ? $_REQUEST['lead'] : [$_REQUEST['lead']];
+        $ids_to_delete = [];
+        if (isset($_REQUEST['lead'])) {
+            $ids_to_delete = is_array($_REQUEST['lead'])
+                ? $_REQUEST['lead']
+                : [$_REQUEST['lead']];
+        }
+
+        if (!empty($ids_to_delete)) {
+            foreach ($ids_to_delete as $id) {
+                $wpdb->delete($table_name, ['id' => intval($id)]);
+            }
+            $message =
+                '<div class="updated notice is-dismissible"><p>' .
+                count($ids_to_delete) .
+                ' lead(s) excluídos com sucesso.</p></div>';
+        }
     }
 
-    if (!empty($ids_to_delete)) {
-      foreach ($ids_to_delete as $id) {
-        $wpdb->delete($table_name, ['id' => intval($id)]);
-      }
-      $message = '<div class="updated notice is-dismissible"><p>' . count($ids_to_delete) . ' lead(s) excluídos com sucesso.</p></div>';
+    // --- 2. FILTROS E BUSCA ---
+    $search = isset($_GET['s']) ? sanitize_text_field($_GET['s']) : '';
+    $query = "SELECT * FROM $table_name";
+
+    if (!empty($search)) {
+        $query .= $wpdb->prepare(
+            ' WHERE passenger_name LIKE %s OR passenger_cpf LIKE %s',
+            "%$search%",
+            "%$search%",
+        );
     }
-  }
 
-  // --- 2. FILTROS E BUSCA ---
-  $search = isset($_GET['s']) ? sanitize_text_field($_GET['s']) : '';
-  $query = "SELECT * FROM $table_name";
+    $query .= ' ORDER BY created_at DESC';
+    $leads = $wpdb->get_results($query);
 
-  if (!empty($search)) {
-    $query .= $wpdb->prepare(" WHERE passenger_name LIKE %s OR passenger_cpf LIKE %s", "%$search%", "%$search%");
-  }
-
-  $query .= " ORDER BY created_at DESC";
-  $leads = $wpdb->get_results($query);
-
-  // --- 3. RENDERIZAÇÃO DA PÁGINA ---
-  echo '<div class="wrap"><h1>Leads de Reservas Abandonadas</h1>';
-  echo $message; // Exibe feedback de exclusão
-
-?>
+    // --- 3. RENDERIZAÇÃO DA PÁGINA ---
+    echo '<div class="wrap"><h1>Leads de Reservas Abandonadas</h1>';
+    echo $message;
+    // Exibe feedback de exclusão
+    ?>
   <form method="get" style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
     <input type="hidden" name="page" value="leads-reservas">
     <p class="search-box">
-      <input type="search" name="s" value="<?php echo esc_attr($search); ?>" placeholder="Nome ou CPF...">
+      <input type="search" name="s" value="<?php echo esc_attr(
+          $search,
+      ); ?>" placeholder="Nome ou CPF...">
       <input type="submit" class="button" value="Filtrar">
     </p>
   </form>
@@ -92,66 +102,109 @@ function render_leads_page()
         </tr>
       </thead>
       <tbody>
-        <?php if ($leads): foreach ($leads as $lead):
-            $variation_ids = json_decode($lead->variation_id, true);
-            $tour_info = 'N/A';
-            $permalink = '#';
+        <?php if ($leads):
+            foreach ($leads as $lead):
 
-            $status_class = ($lead->status == 'convertido') ? 'background: #d4edda; color: #155724;' : '';
-            $status_label = ($lead->status == 'convertido') ? '✅ (#' . $lead->order_id . ')' : '⏳ ' . $lead->ultima_etapa;
+                $variation_ids = json_decode($lead->variation_id, true);
+                $tour_info = 'N/A';
+                $permalink = '#';
 
-            if (!empty($variation_ids) && is_array($variation_ids)) {
-              // Pegamos a primeira variação para descobrir o Produto Pai (Excursão)
-              $parent_id = wp_get_post_parent_id($variation_ids[0]);
+                $status_class =
+                    $lead->status == 'convertido'
+                        ? 'background: #d4edda; color: #155724;'
+                        : '';
+                $status_label =
+                    $lead->status == 'convertido'
+                        ? '✅ (#' . $lead->order_id . ')'
+                        : '⏳ ' . $lead->ultima_etapa;
 
-              // obtém a quantidade de variações do produto pai
-              $variations_count = count(wc_get_product($parent_id)->get_children());
+                if (!empty($variation_ids) && is_array($variation_ids)) {
+                    // Pegamos a primeira variação para descobrir o Produto Pai (Excursão)
+                    $parent_id = wp_get_post_parent_id($variation_ids[0]);
 
-              if ($parent_id) {
-                $product = wc_get_product($parent_id);
-                $tour_info = '<strong>' . $product->get_name() . '</strong>';
-                $permalink = get_permalink($parent_id);
+                    // obtém a quantidade de variações do produto pai
+                    $variations_count = count(
+                        wc_get_product($parent_id)->get_children(),
+                    );
 
-                // Opcional: Listar os nomes das variações (ex: "Adulto", "Criança")
-                $v_names = array();
-                foreach ($variation_ids as $v_id) {
-                  $v_obj = wc_get_product($v_id);
-                  if ($v_obj) $v_names[] = substr($v_obj->get_attribute_summary(), 5);
+                    if ($parent_id) {
+                        $product = wc_get_product($parent_id);
+                        $tour_info =
+                            '<strong>' . $product->get_name() . '</strong>';
+                        $permalink = get_permalink($parent_id);
+
+                        // Opcional: Listar os nomes das variações (ex: "Adulto", "Criança")
+                        $v_names = [];
+                        foreach ($variation_ids as $v_id) {
+                            $v_obj = wc_get_product($v_id);
+                            if ($v_obj) {
+                                $v_names[] = substr(
+                                    $v_obj->get_attribute_summary(),
+                                    5,
+                                );
+                            }
+                        }
+                        if ($variations_count > 1) {
+                            $tour_info .=
+                                '<br/><small>' .
+                                implode(', ', $v_names) .
+                                '</small>';
+                        }
+                    }
                 }
-                if ($variations_count > 1) $tour_info .= '<br/><small>' . implode(', ', $v_names) . '</small>';
-              }
-            }
-            $whatsapp_url = "https://wa.me/55" . preg_replace('/[^0-9]/', '', $lead->passenger_phone);
-            $nome_embarque = "ID: " . $lead->embarque;
-            if (!empty($lead->embarque)) {
-              $res = $wpdb->get_var($wpdb->prepare("SELECT nome FROM $embarques_table WHERE id = %d", $lead->embarque));
-              if ($res) $nome_embarque = "<span style='display:block'>" . explode(" - ", $res)[0] . "</span>
-                                          <span style='display:block'>" . explode(" - ", $res)[1] . "</span>";
-            }
-        ?>
+                $whatsapp_url =
+                    'https://wa.me/55' .
+                    preg_replace('/[^0-9]/', '', $lead->passenger_phone);
+                $nome_embarque = 'ID: ' . $lead->embarque;
+                if (!empty($lead->embarque)) {
+                    $res = $wpdb->get_var(
+                        $wpdb->prepare(
+                            "SELECT nome FROM $embarques_table WHERE id = %d",
+                            $lead->embarque,
+                        ),
+                    );
+                    if ($res) {
+                        $nome_embarque =
+                            "<span style='display:block'>" .
+                            explode(' - ', $res)[0] .
+                            "</span>
+                                          <span style='display:block'>" .
+                            explode(' - ', $res)[1] .
+                            '</span>';
+                    }
+                }
+                ?>
             <tr style='<?= $status_class ?>'>
               <th scope="row" class="check-column">
                 <input type="checkbox" name="lead[]" value="<?php echo $lead->id; ?>">
               </th>
 
-              <?php
-              if ($lead->status == 'convertido') {
-                $order = wc_get_order($lead->order_id);
-                if ($order) {
-                  $edit_order_url = $order->get_edit_order_url();
-                  $lead_status = '✅ (#' . $lead->order_id . ')';
-                }
+              <?php if ($lead->status == 'convertido') {
+                  $order = wc_get_order($lead->order_id);
+                  if ($order) {
+                      $edit_order_url = $order->get_edit_order_url();
+                      $lead_status = '✅ (#' . $lead->order_id . ')';
+                  }
               } else {
-                $lead_status =  '⏳ Pendente<br />' .  preg_replace('/\/\d{4}/', '', date('d/m/Y H:i', strtotime($lead->created_at)));
-              }
-              ?>
+                  $lead_status =
+                      '⏳ Pendente<br />' .
+                      preg_replace(
+                          '/\/\d{4}/',
+                          '',
+                          date('d/m/Y H:i', strtotime($lead->created_at)),
+                      );
+              } ?>
 
               <td><?php echo $lead_status; ?></td>
 
-              <td><strong><?php echo esc_html($lead->passenger_name); ?></strong></td>
+              <td><strong><?php echo esc_html(
+                  $lead->passenger_name,
+              ); ?></strong></td>
               <td>
                 <?php echo esc_html($lead->passenger_phone); ?><br />
-                <small>CPF: <?php echo esc_html($lead->passenger_cpf); ?></small>
+                <small>CPF: <?php echo esc_html(
+                    $lead->passenger_cpf,
+                ); ?></small>
               </td>
               <td>
                 <a href="<?php echo $permalink; ?>" target="_blank"> <?php echo $tour_info; ?></a>
@@ -161,7 +214,10 @@ function render_leads_page()
                 <a href="<?= $whatsapp_url ?>" target='_blank' class='button button-primary'>
                   <span class='dashicons dashicons-whatsapp' style='margin-top: 4px;'></span>
                 </a>
-                <a href="<?php echo wp_nonce_url("?page=leads-reservas&action=delete&lead=" . $lead->id, 'bulk-leads'); ?>"
+                <a href="<?php echo wp_nonce_url(
+                    '?page=leads-reservas&action=delete&lead=' . $lead->id,
+                    'bulk-leads',
+                ); ?>"
                   class="button button-link-delete"
                   style="border-color:#a76869"
                   onclick="return confirm('Deseja excluir este lead?')">
@@ -169,12 +225,15 @@ function render_leads_page()
                 </a>
               </td>
             </tr>
-          <?php endforeach;
-        else: ?>
+          <?php
+            endforeach;
+        else:
+             ?>
           <tr>
             <td colspan="7">Nenhum lead encontrado.</td>
           </tr>
-        <?php endif; ?>
+        <?php
+        endif; ?>
       </tbody>
     </table>
   </form>
@@ -190,31 +249,37 @@ function render_leads_page()
 <?php
 }
 
-
 // FUNÇÃO QUE ATUALIZA O STATUS DE UM LEAD
-function update_lead_reserva(array $passageiros, string $status, $order_id = null)
-{
-  global $wpdb;
-  $leads_table_name = $wpdb->prefix . 'reserva_leads';
+function update_lead_reserva(
+    array $passageiros,
+    string $status,
+    $order_id = null,
+) {
+    global $wpdb;
+    $leads_table_name = $wpdb->prefix . 'reserva_leads';
 
-  $ultima_etapa = ucfirst($status);
-
-  foreach ($passageiros as $passageiro) {
-    if ($passageiro->cpf) {
-      $raw_cpf = preg_replace('/[^0-9]/is', '', $passageiro->cpf);
-      $payload = array(
-        'status' => $status == 'convertido' ? $status : 'pendente',
-        'order_id' => $order_id,
-        'ultima_etapa' => $ultima_etapa
-      );
-
-      $db_update = $wpdb->update(
-        $leads_table_name,
-        $payload,
-        array('passenger_cpf' => $raw_cpf), // Onde o CPF bater
-        array('%s', '%d', '%s'),
-        array('%s')
-      );
+    if ($status == 'carrinho') {
+        wp_die('chamou update_lead_reserva para carrinho');
     }
-  }
+
+    $ultima_etapa = ucfirst($status);
+
+    foreach ($passageiros as $passageiro) {
+        if ($passageiro->cpf) {
+            $raw_cpf = preg_replace('/[^0-9]/is', '', $passageiro->cpf);
+            $payload = [
+                'status' => $status == 'convertido' ? $status : 'pendente',
+                'order_id' => $order_id,
+                'ultima_etapa' => $ultima_etapa,
+            ];
+
+            $db_update = $wpdb->update(
+                $leads_table_name,
+                $payload,
+                ['passenger_cpf' => $raw_cpf], // Onde o CPF bater
+                ['%s', '%d', '%s'],
+                ['%s'],
+            );
+        }
+    }
 }
