@@ -60,28 +60,34 @@ function render_leads_page()
     $leads = $wpdb->get_results($query);
 
     // AGRUPAMENTO DE LEADS POR SESSION ID
-    $leads_session_count = 1;
-
+    $leads_agrupados = [];
     foreach ($leads as $index => $lead) {
-        $lead->session_style = 'single';
+        $_key = $lead->session_id . '-' . $lead->variation_id;
+        if (
+            !isset($leads_agrupados[$_key]) ||
+            !is_array($leads_agrupados[$_key])
+        ) {
+            $leads_agrupados[$_key] = [];
+        }
+        array_push($leads_agrupados[$_key], $lead);
+    }
 
-        $next_lead = $leads[$index + 1] ?? null;
-
-        if ($next_lead) {
-            if ($lead->session_id === $next_lead->session_id) {
-                $lead->session_style =
-                    $leads_session_count > 1 ? 'middle' : 'first';
-
-                $leads_session_count++;
-            } else {
-                $lead->session_style =
-                    $leads_session_count > 1 ? 'end' : 'single';
-
-                $leads_session_count = 1;
-            }
+    // ESTILIZAÇÃO DE LEADS POR SESSION ID
+    foreach ($leads_agrupados as $leads_da_secao) {
+        if (count($leads_da_secao) === 1) {
+            $leads_da_secao[0]->session_style = 'single';
+        } elseif (count($leads_da_secao) === 2) {
+            $leads_da_secao[0]->session_style = 'first';
+            $leads_da_secao[1]->session_style = 'last';
         } else {
-            if ($leads_session_count > 1) {
-                $lead->session_style = 'end';
+            foreach ($leads_da_secao as $_i => $_lead) {
+                if ($_i === 0) {
+                    $_lead->session_style = 'first';
+                } elseif ($_i === count($leads_da_secao) - 1) {
+                    $_lead->session_style = 'last';
+                } else {
+                    $_lead->session_style = 'middle';
+                }
             }
         }
     }
@@ -132,84 +138,78 @@ function render_leads_page()
       </thead>
       <tbody>
         <?php if ($leads):
-            foreach ($leads as $lead):
+            foreach ($leads_agrupados as $leads_da_secao):
+                foreach ($leads_da_secao as $lead):
 
-                $variation_ids = json_decode($lead->variation_id, true);
-                $tour_info = 'N/A';
-                $permalink = '#';
+                    $variation_ids = json_decode($lead->variation_id, true);
+                    $tour_info = 'N/A';
+                    $permalink = '#';
 
-                // if ($last_session_id === $lead->session_id) {
-                //     $first_of_section_id === false;
+                    $status_class =
+                        $lead->status == 'convertido'
+                            ? 'background: #d4edda; color: #155724;'
+                            : '';
+                    $status_label =
+                        $lead->status == 'convertido'
+                            ? '✅ (#' . $lead->order_id . ')'
+                            : '⏳ ' . $lead->ultima_etapa;
 
-                //     $leads_table =
-                //         document . querySelector('.wp-list-table tbody');
-                // }
+                    if (!empty($variation_ids) && is_array($variation_ids)) {
+                        // Pegamos a primeira variação para descobrir o Produto Pai (Excursão)
+                        $parent_id = wp_get_post_parent_id($variation_ids[0]);
 
-                $status_class =
-                    $lead->status == 'convertido'
-                        ? 'background: #d4edda; color: #155724;'
-                        : '';
-                $status_label =
-                    $lead->status == 'convertido'
-                        ? '✅ (#' . $lead->order_id . ')'
-                        : '⏳ ' . $lead->ultima_etapa;
+                        // obtém a quantidade de variações do produto pai
+                        $variations_count = count(
+                            wc_get_product($parent_id)->get_children(),
+                        );
 
-                if (!empty($variation_ids) && is_array($variation_ids)) {
-                    // Pegamos a primeira variação para descobrir o Produto Pai (Excursão)
-                    $parent_id = wp_get_post_parent_id($variation_ids[0]);
+                        if ($parent_id) {
+                            $product = wc_get_product($parent_id);
+                            $tour_info =
+                                '<strong>' . $product->get_name() . '</strong>';
+                            $permalink = get_permalink($parent_id);
 
-                    // obtém a quantidade de variações do produto pai
-                    $variations_count = count(
-                        wc_get_product($parent_id)->get_children(),
-                    );
-
-                    if ($parent_id) {
-                        $product = wc_get_product($parent_id);
-                        $tour_info =
-                            '<strong>' . $product->get_name() . '</strong>';
-                        $permalink = get_permalink($parent_id);
-
-                        // Opcional: Listar os nomes das variações (ex: "Adulto", "Criança")
-                        $v_names = [];
-                        foreach ($variation_ids as $v_id) {
-                            $v_obj = wc_get_product($v_id);
-                            if ($v_obj) {
-                                $v_names[] = substr(
-                                    $v_obj->get_attribute_summary(),
-                                    5,
-                                );
+                            // Opcional: Listar os nomes das variações (ex: "Adulto", "Criança")
+                            $v_names = [];
+                            foreach ($variation_ids as $v_id) {
+                                $v_obj = wc_get_product($v_id);
+                                if ($v_obj) {
+                                    $v_names[] = substr(
+                                        $v_obj->get_attribute_summary(),
+                                        5,
+                                    );
+                                }
+                            }
+                            if ($variations_count > 1) {
+                                $tour_info .=
+                                    '<br/><small>' .
+                                    implode(', ', $v_names) .
+                                    '</small>';
                             }
                         }
-                        if ($variations_count > 1) {
-                            $tour_info .=
-                                '<br/><small>' .
-                                implode(', ', $v_names) .
-                                '</small>';
+                    }
+                    $whatsapp_url =
+                        'https://wa.me/55' .
+                        preg_replace('/[^0-9]/', '', $lead->passenger_phone);
+                    $nome_embarque = 'ID: ' . $lead->embarque;
+                    if (!empty($lead->embarque)) {
+                        $res = $wpdb->get_var(
+                            $wpdb->prepare(
+                                "SELECT nome FROM $embarques_table WHERE id = %d",
+                                $lead->embarque,
+                            ),
+                        );
+                        if ($res) {
+                            $nome_embarque =
+                                "<span style='display:block'>" .
+                                explode(' - ', $res)[0] .
+                                "</span>
+                                          <span style='display:block'>" .
+                                explode(' - ', $res)[1] .
+                                '</span>';
                         }
                     }
-                }
-                $whatsapp_url =
-                    'https://wa.me/55' .
-                    preg_replace('/[^0-9]/', '', $lead->passenger_phone);
-                $nome_embarque = 'ID: ' . $lead->embarque;
-                if (!empty($lead->embarque)) {
-                    $res = $wpdb->get_var(
-                        $wpdb->prepare(
-                            "SELECT nome FROM $embarques_table WHERE id = %d",
-                            $lead->embarque,
-                        ),
-                    );
-                    if ($res) {
-                        $nome_embarque =
-                            "<span style='display:block'>" .
-                            explode(' - ', $res)[0] .
-                            "</span>
-                                          <span style='display:block'>" .
-                            explode(' - ', $res)[1] .
-                            '</span>';
-                    }
-                }
-                ?>
+                    ?>
             <tr class="<?= $lead->session_style ?>" style='<?= $status_class ?>' data-session-id='<?= $lead->session_id ?>'>
               <th scope="row" class="check-column">
                 <input type="checkbox" name="lead[]" value="<?php echo $lead->id; ?>">
@@ -268,6 +268,7 @@ function render_leads_page()
               </td>
             </tr>
           <?php
+                endforeach;
             endforeach;
         else:
              ?>

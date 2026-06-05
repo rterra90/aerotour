@@ -21,7 +21,7 @@
 }
 
 #leads-table tbody tr.first::before,
-#leads-table tbody tr.end::before,
+#leads-table tbody tr.last::before,
 #leads-table tbody tr.middle::before{
     height: 70%;
     background-color: rgb(155, 106, 162);
@@ -35,7 +35,7 @@
     height: 72%;
 
 }
-#leads-table tbody tr.end::before{
+#leads-table tbody tr.last::before{
     top: 0px;
     transform: unset;
     border-radius: 0 0 5px 5px;
