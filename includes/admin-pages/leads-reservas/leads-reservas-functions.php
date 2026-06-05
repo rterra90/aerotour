@@ -59,6 +59,33 @@ function render_leads_page()
     $query .= ' ORDER BY created_at DESC';
     $leads = $wpdb->get_results($query);
 
+    // AGRUPAMENTO DE LEADS POR SESSION ID
+    $leads_session_count = 1;
+
+    foreach ($leads as $index => $lead) {
+        $lead->session_style = 'single';
+
+        $next_lead = $leads[$index + 1] ?? null;
+
+        if ($next_lead) {
+            if ($lead->session_id === $next_lead->session_id) {
+                $lead->session_style =
+                    $leads_session_count > 1 ? 'middle' : 'first';
+
+                $leads_session_count++;
+            } else {
+                $lead->session_style =
+                    $leads_session_count > 1 ? 'end' : 'single';
+
+                $leads_session_count = 1;
+            }
+        } else {
+            if ($leads_session_count > 1) {
+                $lead->session_style = 'end';
+            }
+        }
+    }
+
     // --- 3. RENDERIZAÇÃO DA PÁGINA ---
     echo '<div class="wrap"><h1>Leads de Reservas Abandonadas</h1>';
     echo $message;
@@ -87,9 +114,11 @@ function render_leads_page()
       </div>
     </div>
 
-    <table class="wp-list-table widefat fixed striped">
+    <table id="leads-table" class="wp-list-table widefat fixed striped">
       <thead>
         <tr>
+        <td style="width:0px; padding: 0px 4px" data-column="session-bar"></td>
+
           <td id="cb" class="manage-column column-cb check-column">
             <input id="cb-select-all-1" type="checkbox">
           </td>
@@ -108,6 +137,13 @@ function render_leads_page()
                 $variation_ids = json_decode($lead->variation_id, true);
                 $tour_info = 'N/A';
                 $permalink = '#';
+
+                // if ($last_session_id === $lead->session_id) {
+                //     $first_of_section_id === false;
+
+                //     $leads_table =
+                //         document . querySelector('.wp-list-table tbody');
+                // }
 
                 $status_class =
                     $lead->status == 'convertido'
@@ -174,7 +210,7 @@ function render_leads_page()
                     }
                 }
                 ?>
-            <tr style='<?= $status_class ?>'>
+            <tr class="<?= $lead->session_style ?>" style='<?= $status_class ?>' data-session-id='<?= $lead->session_id ?>'>
               <th scope="row" class="check-column">
                 <input type="checkbox" name="lead[]" value="<?php echo $lead->id; ?>">
               </th>
@@ -201,21 +237,21 @@ function render_leads_page()
                       );
               } ?>
 
-              <td><?php echo $lead_status; ?></td>
+              <td style="width: 8%"><?php echo $lead_status; ?></td>
 
               <td><strong><?php echo esc_html(
                   $lead->passenger_name,
               ); ?></strong></td>
-              <td>
+              <td style="width: 15%">
                 <?php echo esc_html($lead->passenger_phone); ?><br />
                 <small>CPF: <?php echo esc_html(
                     $lead->passenger_cpf,
                 ); ?></small>
               </td>
-              <td>
+              <td style="width: 15%">
                 <a href="<?php echo $permalink; ?>" target="_blank"> <?php echo $tour_info; ?></a>
               </td>
-              <td><?php echo $nome_embarque; ?></td>
+              <td style="width: 15%"><?php echo $nome_embarque; ?></td>
               <td>
                 <a href="<?= $whatsapp_url ?>" target='_blank' class='button button-primary'>
                   <span class='dashicons dashicons-whatsapp' style='margin-top: 4px;'></span>

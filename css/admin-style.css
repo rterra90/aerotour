@@ -8,6 +8,7 @@
 @import './admin/buttons.css';
 @import './admin/product_post/meta-pontos-embarque-exc.css';
 @import './admin/theme-settings.css';
+@import './admin/leads-admin.css';
 
 /* Input de texto estilizado */
 input.merged-text-input {
