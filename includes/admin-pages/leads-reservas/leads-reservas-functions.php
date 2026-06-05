@@ -96,8 +96,8 @@ function render_leads_page()
           <th style="width: 8%">Status</th>
           <th>Passageiro</th>
           <th style="width: 15%">Contato / CPF</th>
-          <th>Excursão</th>
-          <th>Embarque</th>
+          <th style="width: 15%">Excursão</th>
+          <th style="width: 15%">Embarque</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -186,8 +186,14 @@ function render_leads_page()
                       $lead_status = '✅ (#' . $lead->order_id . ')';
                   }
               } else {
+                  $ultima_etapa = isset($lead->ultima_etapa)
+                      ? $lead->ultima_etapa
+                      : 'Pendente';
+
                   $lead_status =
-                      '⏳ Pendente<br />' .
+                      '⏳ ' .
+                      $ultima_etapa .
+                      '<br />' .
                       preg_replace(
                           '/\/\d{4}/',
                           '',
@@ -250,36 +256,86 @@ function render_leads_page()
 }
 
 // FUNÇÃO QUE ATUALIZA O STATUS DE UM LEAD
-function update_lead_reserva(
-    array $passageiros,
-    string $status,
-    $order_id = null,
-) {
+function update_lead_reserva($passageiros, $status, $order_id = null)
+{
+    // Proteção básica: se não for uma array ou estiver vazia, encerra
+    if (!is_array($passageiros) || empty($passageiros)) {
+        return;
+    }
+
     global $wpdb;
     $leads_table_name = $wpdb->prefix . 'reserva_leads';
-
-    if ($status == 'carrinho') {
-        wp_die('chamou update_lead_reserva para carrinho');
-    }
 
     $ultima_etapa = ucfirst($status);
 
     foreach ($passageiros as $passageiro) {
-        if ($passageiro->cpf) {
-            $raw_cpf = preg_replace('/[^0-9]/is', '', $passageiro->cpf);
+        // Acessa como array associativa ['cpf'], pois decodificamos o JSON com true
+        $p_cpf = isset($passageiro->cpf) ? $passageiro->cpf : '';
+        // $p_cpf = isset($passageiro['cpf']) ? $passageiro['cpf'] : '';
+
+        if ($p_cpf) {
+            // Remove pontos, traços e deixa apenas números
+            $raw_cpf = preg_replace('/[^0-9]/is', '', $p_cpf);
+
             $payload = [
-                'status' => $status == 'convertido' ? $status : 'pendente',
-                'order_id' => $order_id,
+                'status' => $status === 'convertido' ? $status : 'pendente',
+                'order_id' => !empty($order_id) ? absint($order_id) : null, // Evita gravar 0 se for nulo
                 'ultima_etapa' => $ultima_etapa,
             ];
 
-            $db_update = $wpdb->update(
+            // Define dinamicamente o formato para aceitar nulo no order_id se necessário
+            $payload_format = [
+                '%s',
+                is_null($payload['order_id']) ? '%s' : '%d',
+                '%s',
+            ];
+
+            $wpdb->update(
                 $leads_table_name,
                 $payload,
-                ['passenger_cpf' => $raw_cpf], // Onde o CPF bater
-                ['%s', '%d', '%s'],
+                ['passenger_cpf' => $raw_cpf],
+                $payload_format,
                 ['%s'],
             );
         }
+    }
+}
+
+// CHAMA UPDATE_LEAD_RESERVA AO NAVEGAR PARA O CHECKOUT
+add_action('woocommerce_check_cart_items', 'analisar_metadados_no_checkout');
+
+function analisar_metadados_no_checkout()
+{
+    if (!is_checkout()) {
+        return;
+    }
+
+    $cart_items = WC()->cart->get_cart();
+
+    foreach ($cart_items as $cart_item_key => $cart_item) {
+        $product_id = $cart_item['product_id'];
+        $variation_id = $cart_item['variation_id'];
+
+        // 3. Pegar metadados customizados que foram adicionados AO ITEM DO CARRINHO
+        if (isset($cart_item['passageiros'])) {
+            $passageiros_raw = isset($cart_item['passageiros'])
+                ? wp_unslash($cart_item['passageiros'])
+                : '';
+            $passageiros_array = json_decode($passageiros_raw, false);
+            update_lead_reserva($passageiros_array, 'checkout');
+        }
+
+        // --- Exemplo de lógica/validação ---
+        // Se um metadado específico não atender ao seu critério, você pode barrar o checkout:
+        // if ($meta_do_produto === 'invalido') {
+        //     wc_add_notice(
+        //         'Desculpe, um dos itens no seu carrinho não está disponível com as opções selecionadas.',
+        //         'error',
+        //     );
+
+        //     // Remove o redirecionamento automático do WC para o checkout e mantém no carrinho
+        //     wp_safe_redirect(wc_get_cart_url());
+        //     exit();
+        // }
     }
 }

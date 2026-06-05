@@ -184,7 +184,7 @@ function ajax_add_variation_to_cart()
     $taxa = sanitize_text_field($_POST['taxa']);
     $embarque = sanitize_text_field($_POST['embarque']);
     $horario = sanitize_text_field($_POST['horario']);
-    $passageiros = $_POST['passageiros'];
+    $passageiros = $_POST['passageiros']; // stringified array of objects
 
     $cart_item_data = [
         'desconto_antecipado' => sanitize_text_field(
@@ -231,10 +231,12 @@ function ajax_add_variation_to_cart()
         ]);
     }
 
-    // $array_pasageiros = wc_clean(json_decode($passageiros));
-    // wp_die($array_pasageiros);
-
-    // update_lead_reserva($array_pasageiros, 'carrinho');
+    // Atualiza o lead para status 'carrinho'
+    $passageiros_raw = isset($_POST['passageiros'])
+        ? wp_unslash($_POST['passageiros'])
+        : '';
+    $passageiros_array = json_decode($passageiros_raw, false);
+    update_lead_reserva($passageiros_array, 'carrinho');
 
     // Retorna fragments para atualizar mini-carrinho
     WC_AJAX::get_refreshed_fragments();

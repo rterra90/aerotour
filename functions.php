@@ -429,18 +429,6 @@ function insere_dados_passageiro_pedido(
 }
 /* Fim Insere os dados do passageiro como meta do item do carrinho */
 
-/* Ações após adicionar item ao carrinho */
-// add_action('woocommerce_add_to_cart', 'minha_acao_apos_adicionar', 10, 6);
-// function minha_acao_apos_adicionar($cart_item_key, $product_id, $quantity, $variation_id, $variation, mixed $cart_item_data)
-// {
-//   if (! isset($cart_item_data['passageiros']) || empty($cart_item_data['passageiros'])) {
-//     return;
-//   }
-//   $passageiros = wc_clean($cart_item_data['passageiros']);
-//   $passageiros = $cart_item_data['passageiros'];
-//   update_lead_reserva($passageiros, 'carrinho');
-// }
-
 /* Insere dados do passageiro como meta da order */
 add_action(
   'woocommerce_checkout_update_order_meta',
@@ -476,9 +464,6 @@ function insere_passageiro_order_pendente($order_id, $data)
 
   $order_meta = json_encode($order_meta, JSON_UNESCAPED_UNICODE);
   update_post_meta($order_id, 'passageiros_items_str', $order_meta);
-
-
-  // update_lead_reserva('convertido', $passageiros, $order_id);
 }
 /* Fim Insere dados do passageiro como meta da order */
 
@@ -502,11 +487,11 @@ function pagamento_completed_otimizado($order_id)
 
   if (empty($passageiros_items)) return;
 
-  // Atualiza os leads para convertidos, acho que aqui era o mais atual
-  // foreach ($passageiros_items as $order_item) {
-  //   $passageiros = $order_item['passageiros'];
-  //   update_lead_reserva($passageiros, 'convertido', $order_id);
-  // };
+  // Atualiza os leads para convertidos
+  foreach ($passageiros_items as $order_item) {
+    $passageiros = $order_item['passageiros'];
+    update_lead_reserva($passageiros, 'convertido', $order_id);
+  };
 
   $p_index = 0;
   foreach ($order->get_items() as $order_item) {
