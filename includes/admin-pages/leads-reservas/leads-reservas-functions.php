@@ -237,7 +237,7 @@ function render_leads_page()
                       );
               } ?>
 
-              <td style="width: 8%"><?php echo $lead_status; ?></td>
+              <td class="status-cell" style="width: 8%"><?php echo $lead_status; ?></td>
 
               <td><strong><?php echo esc_html(
                   $lead->passenger_name,
