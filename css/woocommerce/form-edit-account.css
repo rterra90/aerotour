@@ -50,16 +50,18 @@ form.woocommerce-EditAccountForm{
 }
 
 /* Inputs Estilizados */
-.aer-text-input {
+.modern-text-input {
     width: 100%;
     padding: 10px 14px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background: #fdfdfd;
     transition: all 0.2s ease;
+    letter-spacing: 0.035rem;
+    
 }
 
-.aer-text-input:focus {
+.modern-text-input:focus {
     border-color: #400f0f;
     box-shadow: 0 0 0 3px rgba(64, 15, 15, 0.1);
     outline: none;

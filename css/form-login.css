@@ -8,18 +8,24 @@
 #form-login .login-title-section h1 {
   font-size: 1.5rem;
 }
-#form-login .login-container {
+.login-container {
   max-width: 900px;
   margin: 30px auto;
   background: var(--aer-box-light);
   border-radius: var(--aer-radius);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
   overflow: hidden;
+}
+#form-login .login-container{
+  display: flex;
+
+}
+.login-box{
+  padding: 40px;
+
 }
 #form-login .login-box {
   flex: 1;
-  padding: 40px;
   border-right: 1px solid #ccc;
 }
 #form-login .login-box:last-child {
@@ -256,3 +262,4 @@ form#emailRegisterForm {
     color: #666;
     font-size: 0.8em;
 }
+

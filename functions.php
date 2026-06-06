@@ -317,9 +317,9 @@ function add_fields_to_edit_account_form()
       <p class="woocommerce-form-row woocommerce-form-row--wide form-row">
         <label for="<?= $campo[1] ?>"><?= $campo[0] ?></label>
         <?php if ($campo[0] == 'CPF' && $value !== '') { ?>
-          <input disabled type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" id="<?= $campo[1] ?>" value="<?php echo cpf_mask($value); ?>" />
+          <input disabled type="text" class="modern-text-input woocommerce-Input woocommerce-Input--text input-text" id="<?= $campo[1] ?>" value="<?php echo cpf_mask($value); ?>" />
         <?php } else { ?>
-          <input type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" name="<?= $campo[1] ?>" id="<?= $campo[1] ?>" value="<?php echo $value; ?>" />
+          <input type="text" class="modern-text-input woocommerce-Input woocommerce-Input--text input-text" name="<?= $campo[1] ?>" id="<?= $campo[1] ?>" value="<?php echo $value; ?>" />
         <?php } ?>
 
       </p>
@@ -1209,7 +1209,7 @@ if (is_admin()) {
     }
     return $response;
   }, 10, 3);
-}
+};
 
 
 ?>

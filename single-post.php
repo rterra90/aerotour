@@ -87,7 +87,7 @@ get_header(); // Inclui o cabeçalho
     
 
     if(respondTextareaLabel && commentForm){
-      commentForm.querySelectorAll('input[type="text"], textarea').forEach(_inp => _inp.classList.add('aer-text-input'));
+      commentForm.querySelectorAll('input[type="text"], textarea').forEach(_inp => _inp.classList.add('modern-text-input'));
       commentForm.insertBefore(respondTextareaLabel, commentForm.querySelector('p.comment-form-cookies-consent'));
       respondTextareaLabel.children[1].rows = 3;
 

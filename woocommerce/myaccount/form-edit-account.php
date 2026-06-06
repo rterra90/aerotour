@@ -30,18 +30,18 @@ do_action('woocommerce_before_edit_account_form');
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="account_first_name">Nome *</label>
-          <input type="text" class="aer-text-input" name="account_first_name" id="account_first_name" value="<?php echo esc_attr($user->first_name); ?>" required />
+          <input type="text" class="modern-text-input" name="account_first_name" id="account_first_name" value="<?php echo esc_attr($user->first_name); ?>" required />
         </div>
         <div class="col-md-6 mb-3">
           <label for="account_last_name">Sobrenome *</label>
-          <input type="text" class="aer-text-input" name="account_last_name" id="account_last_name" value="<?php echo esc_attr($user->last_name); ?>" required />
+          <input type="text" class="modern-text-input" name="account_last_name" id="account_last_name" value="<?php echo esc_attr($user->last_name); ?>" required />
         </div>
       </div>
 
       <div class="d-none">
         <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide d-none">
           <label for="account_display_name"><?php esc_html_e('Display name', 'woocommerce'); ?>&nbsp;<span class="required">*</span></label>
-          <input type="text" class="aer-text-input woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" value="<?php echo esc_attr($user->display_name); ?>" /> <span><em><?php esc_html_e('This will be how your name will be displayed in the account section and in reviews', 'woocommerce'); ?></em></span>
+          <input type="text" class="modern-text-input woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" value="<?php echo esc_attr($user->display_name); ?>" /> <span><em><?php esc_html_e('This will be how your name will be displayed in the account section and in reviews', 'woocommerce'); ?></em></span>
 
         </p>
       </div>
@@ -67,7 +67,7 @@ do_action('woocommerce_before_edit_account_form');
           data-status="<?= $possui_valor ? 'disabled'  : 'enabled'; ?>"
           name="cpf"
           id="doc_field"
-          class="aer-text-input <?php echo $possui_valor ? 'locked-field' : ''; ?>"
+          class="modern-text-input <?php echo $possui_valor ? 'locked-field' : ''; ?>"
           value="<?php echo esc_attr($documento_salvo); ?>"
           placeholder=000.000.000-00"
           <?php echo $possui_valor ? 'readonly' : ''; ?>
@@ -83,7 +83,7 @@ do_action('woocommerce_before_edit_account_form');
 
       <div class="mb-3">
         <label for="account_email">E-mail *</label>
-        <input type="email" class="aer-text-input" name="account_email" id="account_email" value="<?php echo esc_attr($user->user_email); ?>" required />
+        <input type="email" class="modern-text-input" name="account_email" id="account_email" value="<?php echo esc_attr($user->user_email); ?>" required />
       </div>
 
       <div class="custom-fields-wrapper">
@@ -103,15 +103,15 @@ do_action('woocommerce_before_edit_account_form');
         <p class="text-muted small mb-3">Deixe em branco para manter a senha atual.</p>
         <div class="mb-3">
           <label for="password_current">Senha atual</label>
-          <input type="password" class="aer-text-input" name="password_current" id="password_current" />
+          <input type="password" class="modern-text-input" name="password_current" id="password_current" />
         </div>
         <div class="mb-3">
           <label for="password_1">Nova senha</label>
-          <input type="password" class="aer-text-input" name="password_1" id="password_1" />
+          <input type="password" class="modern-text-input" name="password_1" id="password_1" />
         </div>
         <div class="mb-3">
           <label for="password_2">Confirmar nova senha</label>
-          <input type="password" class="aer-text-input" name="password_2" id="password_2" />
+          <input type="password" class="modern-text-input" name="password_2" id="password_2" />
         </div>
       </div>
     </div>

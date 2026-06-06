@@ -28,6 +28,8 @@ body {
   --aer-accent-hover: #672222;
   --aer-box-light: #f9f9f9;
   --aer-radius: 0.875rem;
+  --wc-message-bg: #d3dff9;
+  --wc-message-text: #2b406e;
 
   font-family: Raleway, sans-serif !important;
   display: flex;
@@ -168,19 +170,6 @@ a.message-link {
   text-transform: uppercase;
   cursor: pointer;
 }
-.aer-text-input {
-  padding: 4px 10px;
-  margin: 0 auto;
-  border-radius: 0.3rem;
-  border: 1px solid #717171;
-  font-weight: 300;
-  letter-spacing: 0.035rem;
-  transition: 0.2s;
-}
-.aer-text-input:focus,
-.aer-text-input:hover {
-  background-color: #ebebeb;
-}
 .center-element {
   margin: 0 auto;
 }
@@ -316,4 +305,16 @@ form#searchform input#s::after {
   #top-header h1 {
     font-size: 0.8rem !important;
   }
+}
+
+/* WOOCOMMERCE-MESSAGE */
+.woocommerce-message{
+  text-align: center;
+    padding: 4px;
+    color: var(--wc-message-text);
+    background-color: var(--wc-message-bg);
+    font-weight: 500;
+}
+.woocommerce-message:focus-visible{
+  outline: none;
 }
