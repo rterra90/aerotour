@@ -117,7 +117,7 @@ require_once get_template_directory() . '/includes/footer-scripts.php';
 
 require_once get_template_directory() . '/admin-head-scripts.php';
 require_once get_template_directory() . '/admin-footer-scripts.php';
-require_once get_template_directory() . '/email-hooks.php';
+// require_once get_template_directory() . '/email-hooks.php';
 require_once get_template_directory() . '/exc-passageiros-admin.php';
 require_once get_template_directory() . '/includes/preview-emails.php';
 require_once get_template_directory() . '/includes/functions/login-functions.php';
@@ -593,7 +593,7 @@ function pagamento_completo($order_id)
       }
     }
 
-    $email_to = 'renatobancadorock@gmail.com';
+    $email_to = 'dev@aerotour.com.br';
     $email_subject = 'Nova reserva Aerotour em seu ponto de venda!';
     $email_message =
       "<html>
