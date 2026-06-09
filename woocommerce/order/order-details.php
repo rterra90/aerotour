@@ -25,13 +25,13 @@ if ( $show_downloads ) {
 
 ?>
 <div class="row">
-<section class="woocommerce-order-details mb-4 col-md-7">
+<section class="woocommerce-order-details mb-4 col-xxl-9 col-12">
 	<div>
 		<?php do_action( 'woocommerce_order_details_before_order_table', $order ); ?>
 
 		<h2 class="woocommerce-order-details__title bg-title"><?php esc_html_e( 'Order details', 'woocommerce' ); ?></h2>
 
-		<table class="woocommerce-table woocommerce-table--order-details shop_table order_details">
+		<!-- <table class="woocommerce-table woocommerce-table--order-details shop_table order_details">
 
 			<thead>
 				<tr>
@@ -82,13 +82,23 @@ if ( $show_downloads ) {
 					</tr>
 				<?php endif; ?>
 			</tfoot>
-		</table>
+		</table> -->
+
+		<!-- Template de tabela de itens do pedido -->
+        <?php
+        wc_get_template(
+          'order/custom-order-details-table.php',
+          [
+              'order' => $order,
+              'order_items' => $order_items,
+              'show_purchase_note' => $show_purchase_note,
+          ]
+        );
+        ?>
 
 
 		<?php // do_action( 'woocommerce_order_details_after_order_table', $order ); ?>
 	</div>
-	
-	<link rel="stylesheet" href="<?= get_stylesheet_directory_uri(); ?>/css/includes/order-details.css">
 </section>
 
 <?php

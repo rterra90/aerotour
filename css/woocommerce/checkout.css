@@ -297,6 +297,25 @@ p.pedido-prazo-aviso {
   opacity: 0.88;
 }
 
+/* texto da política de privacidade */
+.woocommerce-privacy-policy-text {
+    font-size: 0.75rem;
+    color: #718096;
+    line-height: 1.4;
+    padding-top: 1rem;
+    border-top: 1px solid #edf2f7;
+    text-align: justify;
+}
+.woocommerce-privacy-policy-text a.woocommerce-privacy-policy-link {
+    color: #4a5568;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+.woocommerce-privacy-policy-text a.woocommerce-privacy-policy-link:hover {
+    color: #2d3748;
+    text-decoration: none;
+}
 @media (max-width: 576px) {
   .flex-checkout-review-order-table .single-excursao .detalhes {
     font-size: 0.8rem;
@@ -319,3 +338,5 @@ p.pedido-prazo-aviso {
     margin: 0 0 22px 0;
   }
 }
+
+

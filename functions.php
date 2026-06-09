@@ -429,7 +429,8 @@ function insere_dados_passageiro_pedido(
 }
 /* Fim Insere os dados do passageiro como meta do item do carrinho */
 
-/* Insere dados do passageiro como meta da order */
+/* Insere dados do passageiro como meta da order global e por line item */
+// GLOBAL
 add_action(
   'woocommerce_checkout_update_order_meta',
   'insere_passageiro_order_pendente',
@@ -464,6 +465,32 @@ function insere_passageiro_order_pendente($order_id, $data)
 
   $order_meta = json_encode($order_meta, JSON_UNESCAPED_UNICODE);
   update_post_meta($order_id, 'passageiros_items_str', $order_meta);
+}
+
+// LINE ITEM
+add_action( 'woocommerce_checkout_create_order_line_item', 'salvar_passageiros_no_item', 10, 4 );
+function salvar_passageiros_no_item( $item, $cart_item_key, $values, $order ) {
+    if ( isset( $values['passageiros'] ) ) {
+        $item->add_meta_data( 
+            'Passageiros',
+            $values['passageiros'], 
+            true 
+        );
+    }
+    if ( isset( $values['embarque'] ) ) {
+        $item->add_meta_data( 
+            'Embarque',
+            $values['embarque'], 
+            true 
+        );
+    }
+    if ( isset( $values['horario'] ) ) {
+        $item->add_meta_data( 
+            'Horário',
+            $values['horario'], 
+            true 
+        );
+    }
 }
 /* Fim Insere dados do passageiro como meta da order */
 

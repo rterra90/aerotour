@@ -2,24 +2,111 @@
 // // //
 // FUNÇÕES DA PÁGINA SINGLE-PRODUCT
 //Scripts gerais, como react, json-LD, e js da página
-require_once get_template_directory() . '/includes/woocommerce/single-product-functions.php';
+require_once get_template_directory() .
+    '/includes/woocommerce/single-product-functions.php';
 
 //Lógicas que lidam com as informações das excursões (embarques, datas, disponibilidade...)
-require_once get_template_directory() . '/includes/classes/helper-single-product.php';
+require_once get_template_directory() .
+    '/includes/classes/helper-single-product.php';
 
 //Funções que renderizam as seções da página single-product
-require_once get_template_directory() . '/includes/classes/render-components-single-product.php';
-
+require_once get_template_directory() .
+    '/includes/classes/render-components-single-product.php';
 
 // // //
 // FUNÇÕES DA PÁGINA CHECKOUT
-require_once get_template_directory() . '/includes/woocommerce/checkout-functions.php';
+require_once get_template_directory() .
+    '/includes/woocommerce/checkout-functions.php';
 
+// // //
+// FUNÇÕES DE PEDIDOS
+//Função que formata os metadados por item de um pedido
+add_filter(
+    'woocommerce_order_item_get_formatted_meta_data',
+    'customizar_exibicao_metadados_order',
+    10,
+    2,
+);
+
+function customizar_exibicao_metadados_order($formatted_meta, $item)
+{
+    global $wpdb;
+    foreach ($formatted_meta as $key => $meta) {
+        // 1. Tratamento para o campo de Passageiros (JSON string)
+        if (strtolower($meta->key) === 'passageiros') {
+            $passageiros_raw = $meta->value;
+
+            // Decodifica o JSON para array associativa do PHP
+            $passageiros = json_decode(wp_unslash($passageiros_raw), true);
+
+            if (is_array($passageiros) && !empty($passageiros)) {
+                $html_output =
+                    '<ul class="order-item-pax-list" style="list-style: none; padding-left: 0; margin-top: 5px;">';
+
+                foreach ($passageiros as $index => $p) {
+                    $num = $index + 1;
+                    $nome = esc_html(
+                        $p['nome_completo'] ?? ($p['nome'] ?? 'Não informado'),
+                    );
+                    $cpf = esc_html($p['cpf'] ?? 'Não informado');
+                    $tel = esc_html($p['celular'] ?? 'Não informado');
+                    $nasc = isset($p['data_nascimento'])
+                        ? esc_html(data_to_dmy($p['data_nascimento']))
+                        : '';
+
+                    $html_output .=
+                        "<li class='order-item-single-pax' style='margin-bottom: 8px; flex-direction:column'>";
+                    $html_output .= "<strong>{$nome}</strong> ";
+                    $html_output .= "<div><small style='color: #666;'>CPF: {$cpf}  | </small>";
+                    $html_output .= "<small style='color: #666;'>Tel: {$tel} | </small>";
+                    if ($nasc) {
+                        $html_output .= "<small style='color: #666;'>Nasc: {$nasc}</small></div>";
+                    }
+                    $html_output .= '</li>';
+                }
+
+                $html_output .= '</ul>';
+
+                // Substitui o valor bruto pelo HTML estruturado e altera a label para ficar amigável
+                $formatted_meta[$key]->display_key = 'Passageiros';
+                $formatted_meta[$key]->display_value = $html_output;
+            }
+        }
+
+        // 2. Tratamento para o campo de Embarque (ID para Nome na tabela customizada)
+        if ($meta->key === 'Embarque') {
+            $embarque_id = absint($meta->value);
+
+            if ($embarque_id > 0) {
+                // Faz a consulta na sua tabela personalizada de embarques
+                // Ajuste o nome da tabela ('wp_aerotour_embarques' ou similar) e da coluna conforme sua estrutura
+                $tabela_embarques = $wpdb->prefix . 'embarques';
+
+                $nome_embarque = $wpdb->get_var(
+                    $wpdb->prepare(
+                        "SELECT nome FROM {$tabela_embarques} WHERE id = %d",
+                        $embarque_id,
+                    ),
+                );
+
+                if ($nome_embarque) {
+                    // Substitui o ID numérico pelo nome real do ponto de embarque
+                    $formatted_meta[$key]->display_key = 'Local de Embarque';
+                    $formatted_meta[$key]->display_value = esc_html(
+                        $nome_embarque,
+                    );
+                }
+            }
+        }
+    }
+
+    return $formatted_meta;
+}
 
 //ADICIONAR SUPORTE WOOCOMMERCE
 function aerotour_add_woocommercer_support()
 {
-  add_theme_support('woocommerce');
+    add_theme_support('woocommerce');
 }
 add_action('after_setup_theme', 'aerotour_add_woocommercer_support');
 
@@ -30,82 +117,84 @@ add_filter('woocommerce_enqueue_styles', '__return_empty_array');
 
 // Remove o script de checkout do WooCommerce (que inclui o bloco de pagamento)
 add_action(
-  'wp_enqueue_scripts',
-  function () {
-    wp_dequeue_script('wc-checkout');
-    if (is_checkout()) {
-      wp_dequeue_script('wc-cart-fragments');
-    }
-  },
-  100
+    'wp_enqueue_scripts',
+    function () {
+        wp_dequeue_script('wc-checkout');
+        if (is_checkout()) {
+            wp_dequeue_script('wc-cart-fragments');
+        }
+    },
+    100,
 );
-
 
 // Registrar endpoint para "Minhas reservas"
 add_action('init', 'add_endpoints');
 function add_endpoints()
 {
-  add_rewrite_endpoint('minhas-reservas', EP_PAGES);
+    add_rewrite_endpoint('minhas-reservas', EP_PAGES);
 }
-add_action('woocommerce_account_minhas-reservas_endpoint', 'minhas_reservas_endpoint_page_create');
+add_action(
+    'woocommerce_account_minhas-reservas_endpoint',
+    'minhas_reservas_endpoint_page_create',
+);
 function minhas_reservas_endpoint_page_create()
 {
-  wc_get_template('myaccount/minhas-reservas.php');
+    wc_get_template('myaccount/minhas-reservas.php');
 }
-
 
 // Modifica os itens do menu da conta do usuário
 add_action('woocommerce_account_menu_items', 'custom_account_menu');
 function custom_account_menu($menu_links)
 {
-  unset($menu_links['downloads']);
-  unset($menu_links['customer-logout']);
-  // $menu_links['customer-logout'] = 'Sair';
-  $menu_links = array_slice($menu_links, 0, 5, true)
-    + array('minhas-reservas' => 'Minhas reservas')
-    + array_slice($menu_links, 5, NULL, true);
-  return $menu_links;
+    unset($menu_links['downloads']);
+    unset($menu_links['customer-logout']);
+    // $menu_links['customer-logout'] = 'Sair';
+    $menu_links =
+        array_slice($menu_links, 0, 5, true) + [
+            'minhas-reservas' => 'Minhas reservas',
+        ] +
+        array_slice($menu_links, 5, null, true);
+    return $menu_links;
 }
 
 // Otimiza a query de produtos para exibir apenas excursões ativas (com data limite >= hoje) em arquivos de loja, categoria e tag
 add_action('pre_get_posts', 'otimizar_query_produtos_excursao');
 function otimizar_query_produtos_excursao($query)
 {
-  // 1. Saída antecipada (Early Return) para evitar processamento desnecessário
-  if (is_admin() || !$query->is_main_query()) {
-    return;
-  }
+    // 1. Saída antecipada (Early Return) para evitar processamento desnecessário
+    if (is_admin() || !$query->is_main_query()) {
+        return;
+    }
 
-  // 2. Agrupa as verificações de página
-  if (is_shop() || is_product_category() || is_product_tag()) {
+    // 2. Agrupa as verificações de página
+    if (is_shop() || is_product_category() || is_product_tag()) {
+        // Define a data atual uma única vez
+        $hoje = date('Ymd');
 
-    // Define a data atual uma única vez
-    $hoje = date('Ymd');
+        // Configurações da Query
+        $query->set('posts_per_page', -1); // Nota: Cuidado se tiver +100 produtos
+        $query->set('meta_key', 'data_limite_excursao');
+        $query->set('orderby', 'meta_value_num');
+        $query->set('order', 'ASC');
 
-    // Configurações da Query
-    $query->set('posts_per_page', -1); // Nota: Cuidado se tiver +100 produtos
-    $query->set('meta_key', 'data_limite_excursao');
-    $query->set('orderby', 'meta_value_num');
-    $query->set('order', 'ASC');
+        // 3. Otimização da Meta Query
+        $meta_query = (array) $query->get('meta_query');
+        $meta_query[] = [
+            'key' => 'data_limite_excursao',
+            'value' => $hoje,
+            'compare' => '>=',
+            'type' => 'NUMERIC',
+        ];
 
-    // 3. Otimização da Meta Query
-    $meta_query = (array) $query->get('meta_query');
-    $meta_query[] = [
-      'key'     => 'data_limite_excursao',
-      'value'   => $hoje,
-      'compare' => '>=',
-      'type'    => 'NUMERIC'
-    ];
-
-    $query->set('meta_query', $meta_query);
-  }
+        $query->set('meta_query', $meta_query);
+    }
 }
 
 // Ponto de venda em cart_collaterals
 add_action('woocommerce_review_order_before_payment', 'exibe_pdv');
 function exibe_pdv()
 {
-?>
+    ?>
   <div class="cart_collaterals_pdv">
     <p>Ponto de venda: <span></span></p>
     <input type="hidden" name="pdv">
@@ -123,34 +212,64 @@ function exibe_pdv()
 // Remove breadcrumb do WooCommerce em arquivos de loja, categoria e tag
 function remover_breadcrumb_em_arquivos_woocommerce()
 {
-  if (is_product_category() || is_shop() || is_product_tag()) {
-    remove_action(
-      'woocommerce_before_main_content',
-      'woocommerce_breadcrumb',
-      20
-    );
-  }
+    if (is_product_category() || is_shop() || is_product_tag()) {
+        remove_action(
+            'woocommerce_before_main_content',
+            'woocommerce_breadcrumb',
+            20,
+        );
+    }
 }
 add_action('wp', 'remover_breadcrumb_em_arquivos_woocommerce');
 
 //Remove a exibição de cross-sell do cart
 remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
 
+function filter_woocommerce_cart_totals_coupon_html(
+    $coupon_html,
+    $coupon,
+    $discount_amount_html,
+) {
+    // Change text
+    $coupon_html =
+        $discount_amount_html .
+        ' <a href="' .
+        esc_url(
+            add_query_arg(
+                'remove_coupon',
+                rawurlencode($coupon->get_code()),
+                defined('WOOCOMMERCE_CHECKOUT')
+                    ? wc_get_checkout_url()
+                    : wc_get_cart_url(),
+            ),
+        ) .
+        '" class="woocommerce-remove-coupon" data-coupon="' .
+        esc_attr($coupon->get_code()) .
+        '">' .
+        __('<i class="bi bi-trash"></i>', 'woocommerce') .
+        '</a>';
 
-function filter_woocommerce_cart_totals_coupon_html($coupon_html, $coupon, $discount_amount_html)
-{
-  // Change text
-  $coupon_html = $discount_amount_html . ' <a href="' . esc_url(add_query_arg('remove_coupon', rawurlencode($coupon->get_code()), defined('WOOCOMMERCE_CHECKOUT') ? wc_get_checkout_url() : wc_get_cart_url())) . '" class="woocommerce-remove-coupon" data-coupon="' . esc_attr($coupon->get_code()) . '">' . __('<i class="bi bi-trash"></i>', 'woocommerce') . '</a>';
-
-  return $coupon_html;
+    return $coupon_html;
 }
-add_filter('woocommerce_cart_totals_coupon_html', 'filter_woocommerce_cart_totals_coupon_html', 10, 3);
-
+add_filter(
+    'woocommerce_cart_totals_coupon_html',
+    'filter_woocommerce_cart_totals_coupon_html',
+    10,
+    3,
+);
 
 // Adicionar o filtro ao texto de "obrigado pelo pedido"
-add_filter('woocommerce_thankyou_order_received_text', 'customizar_texto_obrigado', 10, 2);
+add_filter(
+    'woocommerce_thankyou_order_received_text',
+    'customizar_texto_obrigado',
+    10,
+    2,
+);
 function customizar_texto_obrigado($texto, $pedido)
 {
-  $novo_texto = "Confira os detalhes do pedido"; // Substitua pelo texto desejado
-  return $novo_texto;
+    $novo_texto = 'Confira os detalhes do pedido'; // Substitua pelo texto desejado
+    return $novo_texto;
 }
+add_filter('woocommerce_price_format', function () {
+    return '%1$s%2$s';
+});

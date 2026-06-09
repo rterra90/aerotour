@@ -61,7 +61,10 @@ function aer_get_segmented_css()
         // Estilos para Carrinho e Checkout
         'ecommerce' => [
             'condition' => is_cart() || is_checkout(),
-            'files' => ['/css/woocommerce/checkout.min.css'],
+            'files' => [
+                '/css/woocommerce/checkout.min.css',
+                '/css/woocommerce/order-details.min.css',
+            ],
         ],
         // Estilos para home do blog
         'blog_home' => [
