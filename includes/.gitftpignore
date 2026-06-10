@@ -1,0 +1,16 @@
+# Ignorar dependências do Node/React
+node_modules/
+
+# Ignorar arquivos de configuração de desenvolvimento local
+.git/
+.gitignore
+.gitftpignore
+package.json
+package-lock.json
+README.md
+.prettierrc
+.editorconfig
+
+# Ignorar arquivos do sistema operacional
+.DS_Store
+Thumbs.db
