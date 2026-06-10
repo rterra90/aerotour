@@ -4,7 +4,7 @@
 
 
     <main class="bg-df x-align py-5 py-4 aer-bg-light">
-      <div class="container-xl index-inner">
+      <div class="container-xxl index-inner">
         <!-- <h1 class="text-center mb-4"><?php //get_the_title() 
                                           ?></h1> -->
         <?php the_content(); ?>

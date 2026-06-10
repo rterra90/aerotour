@@ -34,9 +34,11 @@
 			<tfoot>
 				<?php
 				foreach ( $order->get_order_item_totals() as $key => $total ) {
+					$_label = strtolower($total['label']) == 'método de pagamento:' ? 'Forma de pagamento:' : $total['label'];
+					// print_r($total['label']);
 					?>
-						<tr>
-							<th scope="row"><?php echo esc_html( $total['label'] ); ?></th>
+						<tr class="<?= $_label === 'Forma de pagamento:' ? 'pgto' : ''; ?>">
+							<th scope="row"><?php echo esc_html( $_label ); ?></th>
 							<td><?php echo wp_kses_post( $total['value'] ); ?></td>
 						</tr>
 						<?php

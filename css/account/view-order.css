@@ -7,17 +7,17 @@ a.voltar-header {
 a.voltar-header:hover {
   cursor: pointer;
 }
-p.informacao-status-header {
+p.order-summary-text {
   font-size: 1.15rem;
 }
-p.informacao-status-header mark.order-status {
+p.order-summary-text mark.order-status {
   font-weight: 600;
 }
-p.informacao-status-header[data-status='completed'] mark.order-status {
-  background-color: #0080005c;
+.woocommerce-MyAccount-content #view-order-container h2{
+  font-size: 1rem;
 }
-p.informacao-status-header[data-status='cancelled'] mark.order-status {
-  background-color: #e3b7b7;
+.woocommerce-MyAccount-content #view-order-container #detalhesDoPedido h2{
+  margin-bottom: 1.125rem;
 }
 p.parceiro-pedido-badge {
   display: inline-block;
@@ -33,6 +33,10 @@ p.parceiro-pedido-badge {
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
+  gap: 26px;
+}
+#pedidoContent::before{
+
 }
 #pedidoContent h2 {
   font-size: 0.9rem;
@@ -40,10 +44,10 @@ p.parceiro-pedido-badge {
   font-weight: 600;
   letter-spacing: 0.025rem;
 }
-#pedidoContent #atualizacoesDoPedido {
+/* #pedidoContent #atualizacoesDoPedido {
   max-width: 400px;
   padding: 12px 0 12px 24px;
-}
+} */
 #pedidoContent #detalhesDoPedido,
 #pedidoContent #detalhesDoPedido .woocommerce-order-details {
   flex-grow: 1;
@@ -96,53 +100,131 @@ p.parceiro-pedido-badge {
 #meus-pedidos-cta a:hover {
   text-decoration: underline;
 }
-.pending-order-buttons a {
-  text-align: center;
-  border: 2px solid rgb(22 22 22);
-  padding: 7px 7px 0 7px;
-  width: 78px;
-  background: transparent;
-  opacity: 0.9;
-  transition: 0.2s;
+/* Container Geral */
+.pending-order-buttons {
+    padding: 10px 0;
 }
-.pending-order-buttons a[data-action='pay']:hover {
-  opacity: 1;
 
-  background: #a8ddbf;
+/* Base Comum dos Botões */
+.pending-order-buttons .btn {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-.pending-order-buttons a[data-action='cancel']:hover {
-  opacity: 1;
-  border-color: #2a0909;
-  background: #ebb7b7;
+
+/* Botão Pagar - Ação Primária (Verde de Sucesso/Destaque Aerotour) */
+.pending-order-buttons .btn-pay {
+    background-color: #2ec4b6; /* Substitua pela cor exata do seu tema se preferir */
+    color: #ffffff;
+    border: 1px solid #2ec4b6;
 }
-.pending-order-buttons a span {
-  font-size: 0.675rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  display: block;
-  text-align: center;
-  letter-spacing: 0.02rem;
-  margin-top: 4px;
+
+.pending-order-buttons .btn-pay:hover {
+    background-color: #25a195;
+    border-color: #25a195;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(46, 196, 182, 0.2);
 }
-.pending-order-buttons a img {
-  width: 32px;
-  height: 32px;
+
+/* Botão Cancelar - Ação Secundária (Outline Discreto) */
+.pending-order-buttons .btn-cancel {
+    background-color: transparent;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+}
+
+.pending-order-buttons .btn-cancel:hover {
+    background-color: #fff5f5;
+    color: #dc3545; /* Realce em tom de alerta suave apenas no hover */
+    border-color: #ffc9c9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.1);
+}
+
+/* Ajuste dos ícones SVG internos */
+.pending-order-buttons .btn svg {
+    fill: currentColor;
+    transition: transform 0.3s ease;
+}
+
+.pending-order-buttons .btn:hover svg {
+    transform: scale(1.1);
+}
+.pending-order-buttons .btn-pay img{
+  filter: invert(1);
+}
+
+/* ATUALIZAÇÕES DO PEDIDO */
+/* Container Principal */
+#atualizacoesDoPedido {
+    background-color: #ffffff;
+    flex: 370px 0 0;
+}
+
+/* Estrutura da Linha do Tempo */
+.aerotour-timeline {
+    border-left: 2px solid #e9ecef; /* Linha vertical cinza que conecta os pontos */
+}
+
+/* Item Individual */
+.timeline-item:last-child {
+    border-left: 2px solid transparent; /* Remove a linha do último item */
+    margin-left: -2px; /* Ajuste para não deslocar o último marcador */
+    pb-0: 0;
+}
+
+/* Marcador (Bolinha da Timeline) */
+.timeline-marker {
+    width: 12px;
+    height: 12px;
+    left: -14px; /* Centraliza exatamente em cima da linha vertical */
+    top: 4px;
+    border: 2px solid #ffffff; /* Borda branca para dar destaque sobre a linha */
+    box-shadow: 0 0 0 3px rgba(var(--aer-accent), 0.15); /* Sombra suave com a cor do seu tema */
+    background-color: var(--aer-accent);
+}
+
+/* Caixa de Texto da Mensagem */
+.timeline-body {
+    font-size: 0.925rem;
+    padding: 10px;
+}
+
+/* Reset de margens internas geradas pelo wpautop no parágrafo do WC */
+.timeline-body p:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-body p {
+    color: #495057;
+    font-size: .75rem;
+}
+.timeline-content > span {
+  font-size: .725rem;
 }
 @media (max-width: 1024px) {
-  #pedidoContent #atualizacoesDoPedido {
-    max-width: 300px;
+  #pedidoContent {
+    flex-direction: column-reverse;
   }
 }
 @media (max-width: 768px) {
   a.voltar-header {
     margin-bottom: 12px;
   }
-  #pedidoContent {
-    flex-direction: column-reverse;
-  }
+
   #pedidoContent #atualizacoesDoPedido {
     max-width: 100%;
     width: 100%;
     padding: 12px;
+  }
+}
+@media(max-width: 576px){
+  p.order-summary-text{
+    font-size: 1rem;
   }
 }

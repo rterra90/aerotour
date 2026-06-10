@@ -40,6 +40,13 @@ body.theme-dark{
   background-color: #0C0C0C;
 }
 
+/* Accent color */
+.accent-color-text{
+  color: var(--aer-accent);
+}
+.accent-color-bg{
+  background-color: var(--aer-accent);
+}
 /* Footer background image */
 footer#aer-footer{
   background-image:url('./assets/images/header-banner.webp')

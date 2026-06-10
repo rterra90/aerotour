@@ -54,11 +54,11 @@
 }
 
 /* Cores por Status (Adaptado do padrão WC) */
-.table-row.completed .order-status { background: #e6f4ea; color: #1e7e34; }
-.table-row.cancelled .order-status {background: #f4e6e6; color: #7e1e1e;}
-.table-row.processing .order-status { background: #fff4e5; color: #b45d00; }
-.table-row.on-hold .order-status { background: #f3f3f3; color: #777; }
-.table-row.pending .order-status { background: #fff1cc; color: #c3991d; }
+.table-row.completed .order-status, p.order-summary-text[data-status='completed'] mark.order-status { background: #d1e3d6; color: #1e7e34; }
+.table-row.cancelled .order-status, p.order-summary-text[data-status='cancelled'] mark.order-status {background: #e3b7b7; color: #7e1e1e;}
+.table-row.processing .order-status, p.order-summary-text[data-status='processing'] mark.order-status { background: #fff4e5; color: #b45d00; }
+.table-row.on-hold .order-status, p.order-summary-text[data-status='on-hold'] mark.order-status { background: #f3f3f3; color: #777; }
+.table-row.pending .order-status, p.order-summary-text[data-status='pending'] mark.order-status { background: #fff1cc; color: #a68113; }
 
 /* Botões de Ação */
 .order-buttons{

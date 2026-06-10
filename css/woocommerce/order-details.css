@@ -3,6 +3,11 @@
   background-color: var(--aer-box-light);
   border-radius: var(--aer-radius);
 }
+#pedidoContent .woocommerce-order-details > div {
+  padding: 0;
+  background: none;
+}
+
 .woocommerce-order-details table {
     width: 100%;
 }
@@ -55,6 +60,14 @@
 
 #custom-order-details-table tfoot tr {
   border-bottom: 1px solid rgb(223, 223, 223);
+  position: relative;
+}
+
+#custom-order-details-table tfoot tr.pgto td{
+    position: absolute;
+    right: 0;
+    white-space: nowrap;
+    text-align: left;
 }
 
 #custom-order-details-table ul.wc-item-meta > li {

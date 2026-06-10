@@ -82,12 +82,14 @@ function aer_get_segmented_css()
             'files' => [
                 '/css/form-login.min.css',
                 '/css/woocommerce/form-edit-account.min.css',
-                '/css/woocommerce/orders.min.css',
                 '/css/minha-conta.min.css',
                 '/css/account/account-menu.min.css',
                 '/css/account/dashboard.min.css',
                 '/css/account/minhas-reservas.min.css',
                 '/css/account/lost-password.min.css',
+                '/css/woocommerce/orders.min.css', // pedidos
+                '/css/account/view-order.min.css', // página de pedido individual
+                '/css/woocommerce/order-details.min.css', // tabela de detalhes do pedido (usada tanto no view-order quanto no form-pay)
             ],
         ],
         // Estilos para página contato
