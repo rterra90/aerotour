@@ -275,27 +275,8 @@ form.woocommerce-checkout #customer_details label {
   text-transform: uppercase;
   font-size: 0.825rem;
 }
-.detalhes-gateway .mp-details-title {
-  margin: 0 0 32px 0;
-  text-align: center;
-}
-/* MP PIX*/
 
-.mp-row-checkout-pix .mp-steps-congrats {
-  padding: 0 15px;
-}
-button#place-order {
-}
 
-p.pedido-prazo {
-  margin-bottom: 0px;
-  font-size: 0.875rem;
-}
-p.pedido-prazo-aviso {
-  font-size: 0.775rem;
-  line-height: 1.25;
-  opacity: 0.88;
-}
 
 /* texto da política de privacidade */
 .woocommerce-privacy-policy-text {
@@ -332,11 +313,7 @@ p.pedido-prazo-aviso {
   .flex-checkout-review-order-table .single-excursao .subtotal {
     font-size: 0.85rem;
   }
-  .detalhes-gateway .mp-details-title {
-    font-size: 1.075rem;
-    font-weight: 600;
-    margin: 0 0 22px 0;
-  }
+
 }
 
 

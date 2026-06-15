@@ -18,12 +18,17 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-
-$notes = $order->get_customer_order_notes();
 ?>
+
 <div id="view-order-container">
 <a class="voltar-header" href="<?= wc_get_account_endpoint_url( 'orders' ); ?>">< Voltar para pedidos</a>
 <h2 class="mt-4 mb-3 bg-title">Pedido #<?= $order->get_order_number(); ?></h2>
+
+<?php
+do_action( 'woocommerce_view_order_start', $order_id );
+$notes = $order->get_customer_order_notes();
+?>
+
 <p class="order-summary-text" data-status="<?= $order->get_status(); ?>">
 	Esse pedido foi realizado em <b><?= wc_format_datetime( $order->get_date_created() ) ?></b> e atualmente está <mark class="order-status "><?=wc_get_order_status_name( $order->get_status() )?></mark>
 </p>

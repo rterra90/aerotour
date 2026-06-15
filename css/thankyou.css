@@ -1,8 +1,4 @@
-.thankyou-box {
-  background-color: var(--aer-box-light);
-  padding: 16px;
-  border-radius: var(--aer-radius);
-}
+
 .progress {
   margin-bottom: 20px;
   background-color: rgb(201, 201, 201) !important;
@@ -22,6 +18,10 @@
   width: 100%;
   background-color: #608f54;
 }
+.progress-bar.step-1.cancelled {
+  width: 100%;
+  background-color: #e00000;
+}
 .progress-bar.pending {
   animation-name: progressBar_pending;
   animation-iteration-count: infinite;
@@ -29,6 +29,11 @@
 }
 .progress-bar.success {
   animation-name: progressBar_success;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+.progress-bar.step-2.cancelled {
+  animation-name: progressBar_cancelled;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
@@ -50,6 +55,17 @@
   to {
     width: 100%;
     background-color: #608f54;
+  }
+}
+
+@keyframes progressBar_cancelled {
+  from {
+    width: 0%;
+    background-color: #b9b9b9;
+  }
+  to {
+    width: 100%;
+    background-color: #e00000;
   }
 }
 
@@ -99,6 +115,7 @@
   letter-spacing: 0.02rem;
   background: #f3f3f3;
   padding: 10px;
+  border-radius: var(--aer-radius);
 }
 .alerta-refresh-header span {
   text-decoration: underline;
@@ -115,4 +132,112 @@
   #pagamentoSucesso .lead {
     font-size: 0.875rem;
   }
+  .alerta-refresh-header {
+    font-size: .85rem;
+  }
+}
+
+#page-thankyou .mp-details-title, #page-thankyou h2.thankyou-title {
+  margin: 0 0 32px 0;
+  text-align: center;
+}
+@media(max-width: 576px){
+  #page-thankyou .mp-details-title, #page-thankyou h2.thankyou-title {
+    font-size: 1.075rem!important;
+    margin-bottom: 6px!important;
+    font-weight: 600;
+    margin: 0 0 22px 0;
+    font-size: 1.175rem;
+  }
+}
+  
+
+/* THANKYOU BOX */
+#thankyou-box {
+  background-color: var(--aer-box-light);
+  padding: 16px;
+  border-radius: var(--aer-radius);
+}
+#thankyou-box ul.order_details li{
+  gap: 4px
+}
+#thankyou-box ul.order_details li.email span{
+  white-space: nowrap;
+}
+#thankyou-box ul.order_details li.email strong{
+  word-break: break-all;
+}
+#thankyou-box p.pedido-prazo {
+  margin-bottom: 0px;
+  font-size: 0.875rem;
+}
+#thankyou-box p.pedido-prazo-aviso {
+  font-size: 0.775rem;
+  line-height: 1.25;
+  opacity: 0.88;
+}
+
+/* ORDER COUNTDOWN */
+
+#order-countdown-timer .countdown-text{
+  margin-bottom: -4px;
+}
+#order-countdown-timer .countdown-clock{
+  font-size: 1.4rem;
+}
+@media(max-width: 768px){
+#order-countdown-timer{
+  width: fit-content;
+  margin: 0 auto;
+}
+}
+
+/* MP PIX */
+
+.mp-row-checkout-pix .mp-steps-congrats {
+  padding: 0 15px;
+}
+
+.mp-details-pix{
+  border-radius: var(--aer-radius)!important;
+  margin-bottom: 1rem!important;
+}
+
+/* pix steps box */
+.mp-details-pix .mp-details-pix-title {
+  margin-top: 22px;
+  margin-bottom: 6px;
+}
+.mp-details-pix ul.mp-steps-congrats{
+      background: #fafafa;
+    padding: 10px!important;
+    width: fit-content;
+    margin: 0 12px!important;
+    border: 1px #bababa dashed;
+}
+
+ul.mp-steps-congrats .mp-details-pix-number-p{
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+}
+ul.mp-steps-congrats .mp-details-list-description{
+  font-size: .775rem!important;
+  margin-bottom: 13px;
+}
+
+@media(max-width: 768px){
+  .mp-details-pix .mp-details-pix-img {
+    margin: 24px auto 0;
+    padding: 0;
+}
+.mp-details-pix ul.mp-steps-congrats{
+    margin: 0 auto!important;
+}
+.mp-pix-right{
+  margin-top: 12px;
+}
+.mp-row-checkout-pix-container button{
+  margin-top: 8px;
+}
 }

@@ -161,3 +161,58 @@ function validarCPF(cpf) {
 
   return true;
 }
+
+// Timer de pedido pendente
+jQuery(document).ready(function($) {
+    function startOrderCountdown() {
+        var $timerContainer = $('#order-countdown-timer');
+        var $clockDigits = $('#countdown-clock-digits');
+        
+        if (!$timerContainer.length || !$clockDigits.length) {
+            return; // Se o elemento não estiver na página atual, encerra a função
+        }
+
+        // Obtém os segundos restantes passados dinamicamente pelo PHP
+        var secondsLeft = parseInt($timerContainer.data('seconds-left'), 10);
+
+        if (isNaN(secondsLeft) || secondsLeft <= 0) {
+            return;
+        }
+
+        var countdownInterval = setInterval(function() {
+            secondsLeft--;
+
+            if (secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+                $clockDigits.text("00:00");
+                
+                // Força o reload da página para o WooCommerce mostrar o status atualizado do pedido
+                window.location.reload();
+                return;
+            }
+
+            // Transforma os segundos restantes em formato amigável de MM:SS
+            var minutes = Math.floor(secondsLeft / 60);
+            var seconds = secondsLeft % 60;
+
+            // Formatação com zero à esquerda (padStart alternativo para compatibilidade)
+            var displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+            var displaySeconds = seconds < 10 ? '0' + seconds : seconds;
+
+            $clockDigits.text(displayMinutes + ':' + displaySeconds);
+            
+            // Atualiza o data-attribute para manter o DOM atualizado caso necessário
+            $timerContainer.data('seconds-left', secondsLeft);
+
+            // Melhoria visual de urgência: Piscar em vermelho nos últimos 3 minutos
+            if (secondsLeft <= 180) {
+                $timerContainer.removeClass('alert-warning border-warning').addClass('alert-danger border-danger animate-pulse-urgency');
+                $clockDigits.addClass('text-danger');
+            }
+
+        }, 1000);
+    }
+
+    // Inicializa o cronômetro
+    startOrderCountdown();
+});

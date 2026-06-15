@@ -18,6 +18,7 @@
     padding: 20px 26px;
     border-radius: 12px;
 overflow: hidden;
+position: relative;
 }
 .woocommerce-MyAccount-content h2{
   font-size: 1.4rem;

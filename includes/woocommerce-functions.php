@@ -103,6 +103,95 @@ function customizar_exibicao_metadados_order($formatted_meta, $item)
     return $formatted_meta;
 }
 
+//Função que renderiza o Timer de Validade do Pedido Pendente
+add_action('woocommerce_before_thankyou_box', 'render_order_countdown', 10);
+add_action('woocommerce_view_order_start', 'render_order_countdown', 5);
+
+function render_order_countdown($order_id)
+{
+    $order = wc_get_order($order_id);
+
+    // Interrompe se não exister order ou se não estiver pendente de pagamento
+    if (!$order || !$order->has_status(['pending', 'on-hold'])) {
+        return;
+    }
+
+    // Tempo total permitido: 30 minutos em segundos
+    $tempo_limite_segundos = 1546 * 60;
+
+    // Obtém o timestamp de criação do pedido em UTC/GMT para evitar problemas de fuso local
+    $horario_pedido = $order->get_date_created()->getTimestamp();
+    $horario_atual = current_time('timestamp', true); // UTC timestamp nativo do WP
+
+    // Calcula os segundos passados e o que ainda resta
+    $segundos_passados = $horario_atual - $horario_pedido;
+    $segundos_restantes = $tempo_limite_segundos - $segundos_passados;
+
+    // Se o tempo já esgotou no backend, não renderiza o timer (ou renderiza zerado)
+    if ($segundos_restantes <= 0) {
+
+        // Altera o status e adiciona uma nota explicativa na timeline do pedido
+        $order->update_status(
+            'cancelled',
+            __(
+                'Pedido cancelado automaticamente: Tempo limite de 30 minutos para pagamento esgotado.',
+                'aerotour',
+            ),
+        );
+
+        echo '<div class="alert alert-danger text-center fw-bold mb-4 py-2">O tempo de pagamento para este pedido expirou.</div>';
+        ?>
+            <script>
+                window.addEventListener('load', () => {
+
+                const isPageOrder = document.querySelector('.order-summary-text');
+                if(isPageOrder){
+                    const text = document.querySelector('.order-summary-text');
+                    const badge = document.querySelector('mark.order-status');
+                    const actions = document.querySelector('.pending-order-buttons');
+                    if(text) text.dataset.status = 'cancelled';
+                    if(badge) badge.innerText = 'CANCELADO';
+                    if (actions) actions.remove();
+                }
+
+                const isPageThankYou = document.querySelector('#page-thankyou');
+                if(isPageThankYou){
+                    const thankyouBox = document.querySelector('#thankyou-box');
+                    const p_prazo = document.querySelector('#thankyou-box p.pedido-prazo-aviso');
+                    const progress_1 = document.querySelector('.progress.step-1 > div');
+                    const progress_2 = document.querySelector('.progress.step-2 > div');
+                    const alerta_refresh = document.querySelector('p.alerta-refresh-header');
+
+                    p_prazo.innerText = "Será necessário fazer um novo pedido para garantir sua reserva."
+                    progress_1.className = 'progress-bar step-1 cancelled';
+                    progress_2.className = 'progress-bar step-2 animate-2 cancelled';
+                    progress_2.style.animationDelay = '1s';
+                    if(alerta_refresh) alerta_refresh.remove();
+                }
+
+
+
+                })
+            </script>
+        <?php return;
+    }
+    // Renderiza a estrutura HTML com os atributos lidos pelo JavaScript
+    ?>
+    <div class="alert alert-warning d-flex align-items-center gap-3 mb-3 mb-md-4 p-2 pe-3 shadow-sm rounded border-start border-warning" 
+         id="order-countdown-timer" 
+         data-order-id="<?php echo $order_id; ?>" 
+         data-seconds-left="<?php echo esc_attr($segundos_restantes); ?>">
+        
+        <div class="spinner-grow text-warning spinner-grow-sm" role="status"></div>
+        
+        <div class="text-start">
+            <span class="count-down-text d-block text-muted small text-uppercase fw-semibold tracking-wider" style="font-size: 0.75rem;">Sua vaga está reservada por:</span>
+            <span class="countdown-clock fw-bold text-dark font-monospace m-0" style="font-size:1.4rem" id="countdown-clock-digits">--:--</span>
+        </div>
+    </div>
+    <?php
+}
+
 //ADICIONAR SUPORTE WOOCOMMERCE
 function aerotour_add_woocommercer_support()
 {
