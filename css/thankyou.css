@@ -69,7 +69,47 @@
   }
 }
 
+/* SEÇÃO PAGAMENTO SUCESSO */
+/* Customização do Card de Sucesso Aerotour */
 #pagamentoSucesso {
+    border: none !important;
+    opacity: 0;
+    position: relative;
+    top: -10px;
+    border-radius: var(--aer-radius);
+}
+
+#pagamentoSucesso .opacity-85 {
+    opacity: 0.85;
+}
+
+#pagamentoSucesso .bg-light-subtle {
+    background-color: #f0f7f4 !important; /* Um tom bem suave verde/azul para o box de instrução */
+    border-left: 4px solid var(--aer-accent) !important; /* Destaque informativo lateral */
+}
+
+#pagamentoSucesso .tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+#pagamentoSucesso .step-number {
+    font-size: 0.9rem;
+}
+#pagamentoSucesso .btn-outline-secondary{
+      border-color: var(--aer-accent);
+    color: var(--aer-accent);
+
+}
+#pagamentoSucesso .btn-outline-secondary:hover{
+  background-color: #f0f0f0;
+}
+/* Ajuste sutil nos botões para mobile */
+@media (max-width: 575.98px) {
+    #pagamentoSucesso .btn {
+        font-size: 0.95rem;
+    }
+}
+/* #pagamentoSucesso {
   margin-top: 20px;
   border: 3px solid #608f54;
   text-align: center;
@@ -77,14 +117,9 @@
   background-color: var(--aer-bg-light);
   opacity: 0;
   transition: 1s ease-in-out;
-}
-#pagamentoSucesso.animate {
-  animation-name: enterSuccessPaymentBox;
-  animation-delay: 1s;
-  animation-duration: 1.5s;
-  animation-fill-mode: forwards;
-}
-#pagamentoSucesso .aer-icon.sucesso {
+} */
+
+/* #pagamentoSucesso .aer-icon.sucesso {
   display: inline-block;
   margin-right: 10px;
 }
@@ -98,6 +133,12 @@
 }
 #pagamentoSucesso .lead a:hover {
   opacity: 1;
+} */
+ #pagamentoSucesso.animate {
+  animation-name: enterSuccessPaymentBox;
+  animation-delay: 1s;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
 }
 @keyframes enterSuccessPaymentBox {
   from {
@@ -175,21 +216,6 @@
   font-size: 0.775rem;
   line-height: 1.25;
   opacity: 0.88;
-}
-
-/* ORDER COUNTDOWN */
-
-#order-countdown-timer .countdown-text{
-  margin-bottom: -4px;
-}
-#order-countdown-timer .countdown-clock{
-  font-size: 1.4rem;
-}
-@media(max-width: 768px){
-#order-countdown-timer{
-  width: fit-content;
-  margin: 0 auto;
-}
 }
 
 /* MP PIX */

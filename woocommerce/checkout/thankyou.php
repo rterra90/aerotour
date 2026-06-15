@@ -13,8 +13,15 @@ defined( 'ABSPATH' ) || exit;
     if(prazoContainer) prazoContainer.remove();
   }
 </script>
-<div id="page-thankyou" class="woocommerce-order row">
-  <h2 class="thankyou-title">Quase lá! Agora é só finalizar o pagamento para garantir sua reserva.</h2>
+<div id="page-thankyou" class="woocommerce-order row" style="flex-direction: <?= $order -> status === 'completed' ? 'row-reverse' : 'row' ?>">
+  <?php
+    if($order->has_status(['pending', 'on-hold'])){
+      ?>
+        <h2 class="thankyou-title">Quase lá! Agora é só finalizar o pagamento para garantir sua reserva.</h2>
+      <?php
+    }
+
+?>
 	<?php
 	if ( $order ) :
 
@@ -148,12 +155,62 @@ defined( 'ABSPATH' ) || exit;
           <?php
         }elseif ($order->status === 'completed'){
           ?>
-          <div id="pagamentoSucesso" class="p-4 d- mb-4">
-            <p class="h4 mb-3"><?= aer_icons('sucesso', 24, 24); ?>Muito obrigado! Seu pagamento foi recebido com sucesso.</p>
-            <p class="lead">Você receberá um e-mail com informações sobre o pagamento e as excursões que você reservou.</p>
-            <p class="lead mb-0">A partir da sua conta, você pode conferir os <a href="<?= wc_get_endpoint_url( 'pedidos', '', wc_get_page_permalink('myaccount') ); ?>">detalhes de seus pedidos</a> e <a href="<?= wc_get_endpoint_url( 'minhas-reservas', '', wc_get_page_permalink('myaccount') ); ?>">gerenciar suas reservas</a>.</p>
-
+          <div id="pagamentoSucesso" class="card border-0 shadow-sm overflow-hidden mb-2 rounded-4">
+      <div class="bg-success text-white p-4 text-center">
+          <div class="success-icon-wrapper mb-3 d-inline-flex align-items-center justify-content-center bg-white text-success rounded-circle shadow-sm" style="width: 60px; height: 60px;">
+              <?= aer_icons('sucesso', 32, 32); ?>
           </div>
+          <h2 class="h3 fw-bold mb-1">Pagamento Confirmado!</h2>
+          <p class="mb-0 opacity-85 fs-5">Sua vaga está garantida na excursão.</p>
+      </div>
+
+      <div class="card-body p-4 p-md-5 bg-white">
+          
+          <div class="alert alert-info border-0 bg-light-subtle p-3 mb-4 rounded-3 d-flex align-items-start gap-3">
+              <span class="fs-4 text-info lh-1">💡</span>
+              <div>
+                  <strong class="d-block text-dark mb-1">Tudo pronto e automático!</strong>
+                  <span class="text-secondary small">Nosso sistema já identificou sua transação. <span class="fw-bold">Não é necessário</span> enviar comprovantes por WhatsApp ou e-mail.</span>
+              </div>
+          </div>
+
+          <h4 class="h6 text-uppercase tracking-wider text-muted fw-bold mb-4">O que acontece agora?</h4>
+
+          <div class="row g-4 mb-4">
+              <div class="col-12 col-md-6">
+                  <div class="d-flex gap-3 align-items-start">
+                      <div class="step-number bg-success-subtle text-success fw-bold rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">1</div>
+                      <div>
+                          <h5 class="h6 fw-bold mb-1">Confirmação por E-mail</h5>
+                          <p class="text-secondary small mb-0">Enviamos os detalhes da transação e os detalhes da sua reserva diretamente para a sua caixa de entrada.</p>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                  <div class="d-flex gap-3 align-items-start">
+                      <div class="step-number bg-success-subtle text-success fw-bold rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">2</div>
+                      <div>
+                          <h5 class="h6 fw-bold mb-1">Gerenciamento na Conta</h5>
+                          <p class="text-secondary small mb-0">Você pode visualizar o voucher e gerenciar suas reservas acessando "Minhas reservas" na área de membros.</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <hr class="text-muted opacity-25 my-4">
+
+          <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 mt-2">
+              <a href="<?= wc_get_endpoint_url( 'minhas-reservas', '', wc_get_page_permalink('myaccount') ); ?>" class="btn btn-success px-4 py-2 w-100 w-sm-auto rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                  Ver Minhas Reservas
+              </a>
+              <a href="<?= wc_get_endpoint_url( 'pedidos', '', wc_get_page_permalink('myaccount') ); ?>" class="btn btn-outline-secondary px-4 py-2 w-100 w-sm-auto rounded-3">
+                  Histórico de Pedidos
+              </a>
+          </div>
+
+      </div>
+    </div>
           <script>
             const successBox = document.querySelector('#pagamentoSucesso');
             if(successBox){

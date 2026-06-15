@@ -25,7 +25,6 @@ defined( 'ABSPATH' ) || exit;
 <h2 class="mt-4 mb-3 bg-title">Pedido #<?= $order->get_order_number(); ?></h2>
 
 <?php
-do_action( 'woocommerce_view_order_start', $order_id );
 $notes = $order->get_customer_order_notes();
 ?>
 
@@ -33,6 +32,8 @@ $notes = $order->get_customer_order_notes();
 	Esse pedido foi realizado em <b><?= wc_format_datetime( $order->get_date_created() ) ?></b> e atualmente está <mark class="order-status "><?=wc_get_order_status_name( $order->get_status() )?></mark>
 </p>
 <?php
+do_action( 'woocommerce_view_order_start', $order_id );
+
 if($order->get_status() === 'completed'){
 	?>
 	<div class="mt-sm-4 mt-5 mb-5" id="meus-pedidos-cta">

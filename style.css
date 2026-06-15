@@ -326,32 +326,3 @@ form#searchform input#s::after {
   outline: none;
 }
 
-/* Timer de Validade do Pedido */
-#order-countdown-timer {
-    background-color: #fffdf5;
-    border-left: 4px solid #ffc107 !important;
-    transition: all 0.3s ease-in-out;
-}
-
-#countdown-clock-digits {
-    font-variant-numeric: tabular-nums; /* Mantém largura fixa para todos os números */
-    letter-spacing: -0.5px;
-}
-
-/* Efeito de urgência nos minutos finais */
-.animate-pulse-urgency {
-    background-color: #fff5f5 !important;
-    animation: alertPulse 2s infinite ease-in-out;
-}
-
-@keyframes alertPulse {
-    0% {
-        box-shadow: 0 0px 4px rgba(220, 53, 69, 0.1);
-    }
-    50% {
-        box-shadow: 0 0px 12px rgba(220, 53, 69, 0.25);
-    }
-    100% {
-        box-shadow: 0 0px 4px rgba(220, 53, 69, 0.1);
-    }
-}

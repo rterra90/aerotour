@@ -90,6 +90,7 @@ function aer_get_segmented_css()
                 '/css/woocommerce/orders.min.css', // pedidos
                 '/css/account/view-order.min.css', // página de pedido individual
                 '/css/woocommerce/order-details.min.css', // tabela de detalhes do pedido (usada tanto no view-order quanto no form-pay)
+                '/css/includes/order-countdown-timer.min.css', // timer de contagem regressiva para pagamento (usado tanto no view-order quanto no form-pay)
             ],
         ],
         // Estilos para página contato
@@ -100,7 +101,7 @@ function aer_get_segmented_css()
         //Estilos para página de pedido recebido
         'thankyou' => [
             'condition' => is_order_received_page(),
-            'files' => ['/css/thankyou.min.css'],
+            'files' => ['/css/thankyou.min.css', '/css/includes/order-countdown-timer.min.css'],
         ],
     ];
 
