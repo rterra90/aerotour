@@ -144,35 +144,32 @@ function render_order_countdown($order_id)
             <script>
                 window.addEventListener('load', () => {
 
-                const isPageOrder = document.querySelector('.order-summary-text');
-                if(isPageOrder){
-                    const text = document.querySelector('.order-summary-text');
-                    const badge = document.querySelector('mark.order-status');
-                    const actions = document.querySelector('.pending-order-buttons');
-                    if(text) text.dataset.status = 'cancelled';
-                    if(badge) badge.innerText = 'CANCELADO';
-                    if (actions) actions.remove();
-                }
+                    const isPageOrder = document.querySelector('.order-summary-text');
+                    if(isPageOrder){
+                        const text = document.querySelector('.order-summary-text');
+                        const badge = document.querySelector('mark.order-status');
+                        const actions = document.querySelector('.pending-order-buttons');
+                        if(text) text.dataset.status = 'cancelled';
+                        if(badge) badge.innerText = 'CANCELADO';
+                        if (actions) actions.remove();
+                    }
 
-                const isPageThankYou = document.querySelector('#page-thankyou');
-                if(isPageThankYou){
-                    const thankyouBox = document.querySelector('#thankyou-box');
-                    const p_prazo = document.querySelector('#thankyou-box p.pedido-prazo-aviso');
-                    const progress_1 = document.querySelector('.progress.step-1 > div');
-                    const progress_2 = document.querySelector('.progress.step-2 > div');
-                    const alerta_refresh = document.querySelector('p.alerta-refresh-header');
-                    const mp_pix_container = document.querySelector('div.mp-details-pix');
+                    const isPageThankYou = document.querySelector('#page-thankyou');
+                    if(isPageThankYou){
+                        const thankyouBox = document.querySelector('#thankyou-box');
+                        const p_prazo = document.querySelector('#thankyou-box p.pedido-prazo-aviso');
+                        const progress_1 = document.querySelector('.progress.step-1 > div');
+                        const progress_2 = document.querySelector('.progress.step-2 > div');
+                        const alerta_refresh = document.querySelector('p.alerta-refresh-header');
+                        const mp_pix_container = document.querySelector('div.mp-details-pix');
 
-                    p_prazo.innerText = "Será necessário fazer um novo pedido para garantir sua reserva."
-                    progress_1.className = 'progress-bar step-1 cancelled';
-                    progress_2.className = 'progress-bar step-2 animate-2 cancelled';
-                    progress_2.style.animationDelay = '1s';
-                    if(alerta_refresh) alerta_refresh.remove();
-                    if(mp_pix_container) mp_pix_container.remove();
-                }
-
-
-
+                        p_prazo.innerText = "Será necessário fazer um novo pedido para garantir sua reserva."
+                        progress_1.className = 'progress-bar step-1 cancelled';
+                        progress_2.className = 'progress-bar step-2 animate-2 cancelled';
+                        progress_2.style.animationDelay = '1s';
+                        if(alerta_refresh) alerta_refresh.remove();
+                        if(mp_pix_container) mp_pix_container.remove();
+                    }
                 })
             </script>
         <?php return;
