@@ -117,7 +117,7 @@ function render_order_countdown($order_id)
     }
 
     // Tempo total permitido: 30 minutos em segundos
-    $tempo_limite_segundos = 1546 * 60;
+    $tempo_limite_segundos = 825 * 60;
 
     // Obtém o timestamp de criação do pedido em UTC/GMT para evitar problemas de fuso local
     $horario_pedido = $order->get_date_created()->getTimestamp();
@@ -161,12 +161,14 @@ function render_order_countdown($order_id)
                     const progress_1 = document.querySelector('.progress.step-1 > div');
                     const progress_2 = document.querySelector('.progress.step-2 > div');
                     const alerta_refresh = document.querySelector('p.alerta-refresh-header');
+                    const mp_pix_container = document.querySelector('div.mp-details-pix');
 
                     p_prazo.innerText = "Será necessário fazer um novo pedido para garantir sua reserva."
                     progress_1.className = 'progress-bar step-1 cancelled';
                     progress_2.className = 'progress-bar step-2 animate-2 cancelled';
                     progress_2.style.animationDelay = '1s';
                     if(alerta_refresh) alerta_refresh.remove();
+                    if(mp_pix_container) mp_pix_container.remove();
                 }
 
 
