@@ -27,3 +27,34 @@ function custom_override_checkout_fields($fields)
   unset($fields['billing']['billing_state']); //remover estado
   return $fields;
 }
+
+// Accordion métodos de pagamento em payment.php
+add_action('woocommerce_review_order_after_payment', 'accordion_formas_pagamento');
+function accordion_formas_pagamento()
+{
+    ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const acc = document.getElementById('accordionFormasPagamento');
+            if (acc) {
+                const items = acc.querySelectorAll('.wc_payment_method');
+                items.forEach(item => {
+                    const label = item.querySelector('label');
+                    const box = item.querySelector('.payment_box');
+                    if (label && box) {
+                        label.addEventListener('click', () => {
+                            // Fecha todos os boxes
+                            items.forEach(i => {
+                                const b = i.querySelector('.payment_box');
+                                if (b) b.style.display = 'none';
+                            });
+                            // Abre o box do método selecionado
+                            box.style.display = 'block';
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+    <?php
+}
