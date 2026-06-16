@@ -117,7 +117,7 @@ function render_order_countdown($order_id)
     }
 
     // Tempo total permitido: 30 minutos em segundos
-    $tempo_limite_segundos = 825 * 60;
+    $tempo_limite_segundos = 30 * 60;
 
     // Obtém o timestamp de criação do pedido em UTC/GMT para evitar problemas de fuso local
     $horario_pedido = $order->get_date_created()->getTimestamp();
