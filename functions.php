@@ -846,47 +846,47 @@ function terms_and_conditions_validation($username, $email, $validation_errors)
 
 
 /* Valida adição ao carrinho */
-add_filter(
-  'woocommerce_add_to_cart_validation',
-  'filter_add_to_cart_validation',
-  10,
-  5
-);
+// add_filter(
+//   'woocommerce_add_to_cart_validation',
+//   'filter_add_to_cart_validation',
+//   10,
+//   5
+// );
 
-function filter_add_to_cart_validation(
-  $passed,
-  $product_id,
-  $quantity,
-  $variation_id,
-  $variations
-) {
-  // Dados do novo passageiro
-  $novo_passageiros = !empty($_POST['passageiros'])
-    ? json_decode(stripslashes($_POST['passageiros']))
-    : [];
+// function filter_add_to_cart_validation(
+//   $passed,
+//   $product_id,
+//   $quantity,
+//   $variation_id,
+//   $variations
+// ) {
+//   // Dados do novo passageiro
+//   $novo_passageiros = !empty($_POST['passageiros'])
+//     ? json_decode(stripslashes($_POST['passageiros']))
+//     : [];
 
-  foreach (WC()->cart->get_cart() as $cart_item) {
-    // Se for variação, compara variation_id
-    if ($variation_id > 0 && $cart_item['variation_id'] == $variation_id) {
-      $passed = false;
-    }
+//   foreach (WC()->cart->get_cart() as $cart_item) {
+//     // Se for variação, compara variation_id
+//     if ($variation_id > 0 && $cart_item['variation_id'] == $variation_id) {
+//       $passed = false;
+//     }
 
-    // Se não for variação, compara product_id
-    if ($variation_id == 0 && $cart_item['product_id'] == $product_id) {
-      $passed = false;
-    }
+//     // Se não for variação, compara product_id
+//     if ($variation_id == 0 && $cart_item['product_id'] == $product_id) {
+//       $passed = false;
+//     }
 
-    if (!$passed) {
-      break;
-    } // interrompe o loop
-
-
+//     if (!$passed) {
+//       break;
+//     } // interrompe o loop
 
 
-  }
 
-  return $passed;
-}
+
+//   }
+
+//   return $passed;
+// }
 /* Fim Valida adição ao carrinho */
 
 add_filter(

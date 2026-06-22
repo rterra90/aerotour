@@ -62,24 +62,24 @@ if($order->get_status() === 'completed'){
 		</div>
 	<?php
 }
-$notes = $notes ? $notes : [
-    (object) [
-        'comment_date' => '2026-06-08 09:15:00',
-        'comment_content' => 'Pedido recebido e aguardando confirmação do pagamento.'
-    ],
-    (object) [
-        'comment_date' => '2026-06-08 09:47:00',
-        'comment_content' => 'Pagamento aprovado pela operadora. Pedido liberado para separação.'
-    ],
-    (object) [
-        'comment_date' => '2026-06-09 14:20:00',
-        'comment_content' => 'Itens separados no estoque e encaminhados para expedição.'
-    ],
-    (object) [
-        'comment_date' => '2026-06-09 18:05:00',
-        'comment_content' => 'Pedido despachado. Código de rastreamento enviado ao cliente.'
-    ],
-];
+// $notes = $notes ? $notes : [
+//     (object) [
+//         'comment_date' => '2026-06-08 09:15:00',
+//         'comment_content' => 'Pedido recebido e aguardando confirmação do pagamento.'
+//     ],
+//     (object) [
+//         'comment_date' => '2026-06-08 09:47:00',
+//         'comment_content' => 'Pagamento aprovado pela operadora. Pedido liberado para separação.'
+//     ],
+//     (object) [
+//         'comment_date' => '2026-06-09 14:20:00',
+//         'comment_content' => 'Itens separados no estoque e encaminhados para expedição.'
+//     ],
+//     (object) [
+//         'comment_date' => '2026-06-09 18:05:00',
+//         'comment_content' => 'Pedido despachado. Código de rastreamento enviado ao cliente.'
+//     ],
+// ];
 ?>
 <hr class="mb-5 mt-0">
 <div id="pedidoContent">

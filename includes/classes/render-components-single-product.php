@@ -166,7 +166,9 @@ class Aerotour_Template
         get_template_part(
             'woocommerce/single-product/tab',
             $tab_embarque_slug,
-            ['exc_embarques' => $excursao['embarques']],
+            ['embarques_por_variacao' => $excursao['embarques_por_variacao'],
+            'embarques_detalhes' => $excursao['embarques_detalhes']
+            ],
         );
         ?>
 

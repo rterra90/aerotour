@@ -273,7 +273,40 @@ function process_product_meta_optimized($id)
 
       // Salva a lista no próprio produto [cite: 11]
       update_post_meta($id, 'previous_event_ids', $new_event_ids);
-    } else {
+      
+    } elseif ($clean_key === 'embarques_data'){ // Salva os embarques da excursão
+
+      $product = wc_get_product($id);
+      if (!$product || !$product->is_type('variable')) {
+          return;
+      }
+
+
+
+      // Obtém todas as variações ligadas a esse produto pai
+      $variation_ids = $product->get_children();
+
+      if(empty($post_value)){
+        delete_post_meta($v_id, '_embarques_config');
+        continue;
+      }
+
+      $data_json = stripslashes($post_value);
+      $data_por_variacao = json_decode($data_json, true);
+
+      foreach ($variation_ids as $v_id) {
+            // Se houver configuração ativa para essa variação específica, salva
+            if (isset($data_por_variacao[$v_id]) && !empty($data_por_variacao[$v_id])) {
+                update_post_meta($v_id, '_embarques_config', json_encode($data_por_variacao[$v_id], JSON_UNESCAPED_UNICODE));
+            } else {
+                // Caso contrário, remove o metadado (evita lixo no banco se o ponto for desativado)
+                delete_post_meta($v_id, '_embarques_config');
+            }
+        }
+
+
+
+    }else {
       // SALVAMENTO PADRÃO para outros campos meta_ 
       // Certifique-se de sanitizar conforme o tipo de dado
       $sanitized_value = is_array($post_value) ? array_map('sanitize_text_field', $post_value) : sanitize_text_field($post_value);

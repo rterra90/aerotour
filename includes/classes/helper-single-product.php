@@ -1,6 +1,4 @@
 <?php
-// inc/helper-excursoes.php
-
 class Aerotour_Helper
 {
 
@@ -12,6 +10,33 @@ class Aerotour_Helper
     global $wpdb;
     $product = wc_get_product($product_id);
     if (!$product) return null;
+
+    $variacoes = $product->get_available_variations();
+
+    // agrupa os ids de embarque globais e embarques por variação
+    $ids_embarques_data = array();
+    $embarques_por_variacao = array();
+
+    foreach ($variacoes as $variacao) {
+      $var_id = $variacao['variation_id'];
+      $variation_embarques = json_decode(get_post_meta($var_id, '_embarques_config', true), true);
+
+      array_push($embarques_por_variacao, array(
+        'variation_id' => $var_id,
+        'variation_dia' => $variacao['attributes']['attribute_dia'],
+        'variation_embarques' => $variation_embarques
+      ));
+
+      $ids_embarques_var = array_column($variation_embarques, 'embarque_id');
+      $ids_embarques_data = array_merge($ids_embarques_data, $ids_embarques_var);
+    }
+    
+    // busca os detalhes dos embarques globais
+    if (!empty($ids_embarques_data)) {
+      $ids_str_data = implode(',', array_map('intval', array_unique($ids_embarques_data)));
+      $embarques_detalhes = $wpdb->get_results("SELECT * FROM aer_embarques WHERE id IN ($ids_str_data)");
+    }
+
 
     // Lógica de Embarques (Originalmente no template [cite: 3, 6])
     $locais_embarque = json_decode(get_post_meta($product_id, 'embarques', true), true);
@@ -36,8 +61,7 @@ class Aerotour_Helper
         }
       }
     }
-    $variacoes = $product->get_available_variations();
-    // wp_die(print_r($variacoes[0]['display_regular_price']));
+    $variacoes = $product->get_available_variations();  
 
     //Define as propriedades 'encerrar_vendas' e 'dia' em cada variação
     foreach ($variacoes as $i => $var) {
@@ -60,7 +84,9 @@ class Aerotour_Helper
         'label' => get_post_meta($product_id, 'ingressos_label', true)
       ],
       'embarques'     => $locais_embarque,
-      'show_vendidos' => get_post_meta($product_id, 'show_vendidos', true) === 'yes'
+      'show_vendidos' => get_post_meta($product_id, 'show_vendidos', true) === 'yes',
+      'embarques_detalhes' => $embarques_detalhes,
+      'embarques_por_variacao' => $embarques_por_variacao
     ];
   }
 

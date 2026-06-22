@@ -199,11 +199,27 @@ function ajax_add_variation_to_cart()
     // Executa a validação WooCommerce (inclui seu filtro personalizado)
     $passed = apply_filters(
         'woocommerce_add_to_cart_validation',
-        true,
-        $product_id,
-        $quantity,
-        $variation_id,
-        [],
+        function($passed, $product_id, $quantity, $variation_id, $cart_item_data) {
+            
+            // Validação personalizada: Verificar se a excursão já está no carrinho
+            foreach (WC()->cart->get_cart() as $cart_item) {
+                if (
+                    $cart_item['product_id'] === $product_id &&
+                    $cart_item['variation_id'] === $variation_id
+                ) {
+                    wc_add_notice(
+                        'Esta excursão já está no carrinho.',
+                        'error',
+                    );
+                    return false; // Impede a adição ao carrinho
+                }
+            }
+
+
+
+            return true; // Permite a adição ao carrinho
+
+        }
     );
 
     if (!$passed) {
