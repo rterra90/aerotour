@@ -7,7 +7,11 @@
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    try {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    } catch (e) {
+      throw mod = 0, e;
+    }
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -34,24 +38,24 @@
         (function() {
           "use strict";
           var hasSymbol = typeof Symbol === "function" && Symbol.for;
-          var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for("react.element") : 60103;
-          var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for("react.portal") : 60106;
-          var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for("react.fragment") : 60107;
-          var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for("react.strict_mode") : 60108;
-          var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for("react.profiler") : 60114;
-          var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for("react.provider") : 60109;
-          var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for("react.context") : 60110;
-          var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for("react.async_mode") : 60111;
-          var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for("react.concurrent_mode") : 60111;
-          var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for("react.forward_ref") : 60112;
-          var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for("react.suspense") : 60113;
-          var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for("react.suspense_list") : 60120;
-          var REACT_MEMO_TYPE = hasSymbol ? Symbol.for("react.memo") : 60115;
-          var REACT_LAZY_TYPE = hasSymbol ? Symbol.for("react.lazy") : 60116;
-          var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for("react.block") : 60121;
-          var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for("react.fundamental") : 60117;
-          var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for("react.responder") : 60118;
-          var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for("react.scope") : 60119;
+          var REACT_ELEMENT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.element") : 60103;
+          var REACT_PORTAL_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.portal") : 60106;
+          var REACT_FRAGMENT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.fragment") : 60107;
+          var REACT_STRICT_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.strict_mode") : 60108;
+          var REACT_PROFILER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.profiler") : 60114;
+          var REACT_PROVIDER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.provider") : 60109;
+          var REACT_CONTEXT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.context") : 60110;
+          var REACT_ASYNC_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.async_mode") : 60111;
+          var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.concurrent_mode") : 60111;
+          var REACT_FORWARD_REF_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.forward_ref") : 60112;
+          var REACT_SUSPENSE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.suspense") : 60113;
+          var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.suspense_list") : 60120;
+          var REACT_MEMO_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.memo") : 60115;
+          var REACT_LAZY_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.lazy") : 60116;
+          var REACT_BLOCK_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.block") : 60121;
+          var REACT_FUNDAMENTAL_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.fundamental") : 60117;
+          var REACT_RESPONDER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.responder") : 60118;
+          var REACT_SCOPE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.scope") : 60119;
           function isValidElementType(type) {
             return typeof type === "string" || typeof type === "function" || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
             type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === "object" && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
@@ -814,19 +818,19 @@
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
           var ReactVersion = "18.3.1";
-          var REACT_ELEMENT_TYPE = Symbol.for("react.element");
-          var REACT_PORTAL_TYPE = Symbol.for("react.portal");
-          var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
-          var REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");
-          var REACT_PROFILER_TYPE = Symbol.for("react.profiler");
-          var REACT_PROVIDER_TYPE = Symbol.for("react.provider");
-          var REACT_CONTEXT_TYPE = Symbol.for("react.context");
-          var REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
-          var REACT_SUSPENSE_TYPE = Symbol.for("react.suspense");
-          var REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list");
-          var REACT_MEMO_TYPE = Symbol.for("react.memo");
-          var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-          var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
+          var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element");
+          var REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal");
+          var REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment");
+          var REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode");
+          var REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler");
+          var REACT_PROVIDER_TYPE = /* @__PURE__ */ Symbol.for("react.provider");
+          var REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context");
+          var REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref");
+          var REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense");
+          var REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list");
+          var REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo");
+          var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+          var REACT_OFFSCREEN_TYPE = /* @__PURE__ */ Symbol.for("react.offscreen");
           var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
           var FAUX_ITERATOR_SYMBOL = "@@iterator";
           function getIteratorFn(maybeIterable) {
@@ -1790,7 +1794,7 @@
           }
           var REACT_MODULE_REFERENCE;
           {
-            REACT_MODULE_REFERENCE = Symbol.for("react.module.reference");
+            REACT_MODULE_REFERENCE = /* @__PURE__ */ Symbol.for("react.module.reference");
           }
           function isValidElementType(type) {
             if (typeof type === "string" || typeof type === "function") {
@@ -2697,19 +2701,19 @@
         (function() {
           "use strict";
           var React2 = require_react();
-          var REACT_ELEMENT_TYPE = Symbol.for("react.element");
-          var REACT_PORTAL_TYPE = Symbol.for("react.portal");
-          var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
-          var REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");
-          var REACT_PROFILER_TYPE = Symbol.for("react.profiler");
-          var REACT_PROVIDER_TYPE = Symbol.for("react.provider");
-          var REACT_CONTEXT_TYPE = Symbol.for("react.context");
-          var REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
-          var REACT_SUSPENSE_TYPE = Symbol.for("react.suspense");
-          var REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list");
-          var REACT_MEMO_TYPE = Symbol.for("react.memo");
-          var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-          var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
+          var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element");
+          var REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal");
+          var REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment");
+          var REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode");
+          var REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler");
+          var REACT_PROVIDER_TYPE = /* @__PURE__ */ Symbol.for("react.provider");
+          var REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context");
+          var REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref");
+          var REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense");
+          var REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list");
+          var REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo");
+          var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+          var REACT_OFFSCREEN_TYPE = /* @__PURE__ */ Symbol.for("react.offscreen");
           var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
           var FAUX_ITERATOR_SYMBOL = "@@iterator";
           function getIteratorFn(maybeIterable) {
@@ -2755,7 +2759,7 @@
           var enableDebugTracing = false;
           var REACT_MODULE_REFERENCE;
           {
-            REACT_MODULE_REFERENCE = Symbol.for("react.module.reference");
+            REACT_MODULE_REFERENCE = /* @__PURE__ */ Symbol.for("react.module.reference");
           }
           function isValidElementType(type) {
             if (typeof type === "string" || typeof type === "function") {
@@ -3600,10 +3604,8 @@
   // src/Utilities.jsx
   function convertDate(inputDate, action) {
     function detectFormat(dateStr) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr))
-        return "ISO";
-      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr))
-        return "DMY";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return "ISO";
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return "DMY";
       return "UNKNOWN";
     }
     function dmyToIso(dmy) {
@@ -3672,10 +3674,8 @@
       if (_save && hasUpdatedData) {
         if (preDataRef.current.length > 0) {
           toggleDate(preDataRef.current);
-        } else
-          toggleDate("", "");
-      } else
-        setVisible(false);
+        } else toggleDate("", "");
+      } else setVisible(false);
       setTimeout(() => {
         setDateModalOpen(false);
       }, 300);
@@ -3689,8 +3689,7 @@
           setDataLimiteDesconto((prev) => {
             const arr = Array.isArray(prev) ? [...prev] : [];
             const prev_index = arr.indexOf(_dateObj.desconto_antecipado_val);
-            if (prev_index !== -1)
-              arr.splice(prev_index, 1);
+            if (prev_index !== -1) arr.splice(prev_index, 1);
             arr.sort((a, b) => new Date(b) - new Date(a));
             return arr;
           });
@@ -3722,10 +3721,8 @@
     }
     React.useEffect(() => {
       preDataRef.current = preData;
-      if (preData.length < 1)
-        saveBtnRef.current.setAttribute("disabled", "");
-      else
-        saveBtnRef.current.removeAttribute("disabled");
+      if (preData.length < 1) saveBtnRef.current.setAttribute("disabled", "");
+      else saveBtnRef.current.removeAttribute("disabled");
     }, [preData]);
     React.useEffect(() => {
       setVisible(true);
@@ -3745,8 +3742,7 @@
           }
         });
         setPreData((prev) => {
-          if (!initial)
-            setInitial(() => [...prev, ...mapped]);
+          if (!initial) setInitial(() => [...prev, ...mapped]);
           return [...prev, ...mapped];
         });
       }
@@ -3863,12 +3859,9 @@
       }, 300);
     }
     function arrayToString(lista) {
-      if (lista.length === 0)
-        return "";
-      if (lista.length === 1)
-        return lista[0];
-      if (lista.length === 2)
-        return `${lista[0]} e ${lista[1]}`;
+      if (lista.length === 0) return "";
+      if (lista.length === 1) return lista[0];
+      if (lista.length === 2) return `${lista[0]} e ${lista[1]}`;
       const todasMenosUltima = lista.slice(0, -1).join(" , ");
       const ultima = lista[lista.length - 1];
       return `${todasMenosUltima} e ${ultima}`;
@@ -3962,8 +3955,7 @@
         });
         let _array_horarios = Array.from(new Set(_horariosDisp));
         setHorariosDisponiveis(_array_horarios);
-        if (_array_horarios.length === 1)
-          setHorario(_array_horarios[0]);
+        if (_array_horarios.length === 1) setHorario(_array_horarios[0]);
         if (variacoesSelecionadas.length > 0) {
           const _precos = variacoesSelecionadas.map((_varId) => {
             const varObj = variacoes.filter((_v) => _v.variation_id == _varId)[0];
@@ -3978,8 +3970,7 @@
             const modalPriceElement = priceContainerRef.current.querySelector("span");
             modalPriceElement.innerText = +uniquePrecos[0] + taxaEmb;
             setPrecoUnitario(+uniquePrecos[0] + taxaEmb);
-          } else
-            setPrecoUnitario("varios");
+          } else setPrecoUnitario("varios");
         } else {
           window.alert("Nenhuma data selecionada");
           closeEmbarqueModal(false);
@@ -4149,12 +4140,10 @@
     const handleSelect = (option) => {
       setSelected(option);
       setIsOpen(false);
-      if (onChange)
-        onChange(option.value);
+      if (onChange) onChange(option.value);
     };
     const handleKeyDown = (e) => {
-      if (e.key === "Escape")
-        setIsOpen(false);
+      if (e.key === "Escape") setIsOpen(false);
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         e.preventDefault();
         const items = listRef.current?.querySelectorAll('[role="option"]');
@@ -4174,10 +4163,8 @@
       const initialOption = optionsData.filter(
         (_op) => _op.value === tripType
       )[0];
-      if (initialOption)
-        setSelected(initialOption);
-      else
-        setSelected(optionsData[0]);
+      if (initialOption) setSelected(initialOption);
+      else setSelected(optionsData[0]);
       const handleClickOutside = (e) => {
         if (buttonRef.current && listRef.current) {
           if (!buttonRef.current.contains(e.target) && !listRef.current.contains(e.target)) {
@@ -4298,29 +4285,25 @@
     return value.replace(/\D/g, "").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})/, "$1-$2").replace(/(-\d{2})\d+?$/, "$1");
   };
   var celularMask = (value) => {
-    if (!value)
-      return "";
+    if (!value) return "";
     value = value.replace(/\D/g, "");
     value = value.replace(/(\d{2})(\d)/, "($1) $2");
     value = value.replace(/(\d)(\d{4})$/, "$1-$2");
     return value;
   };
   var dataMask = (data) => {
-    if (!data)
-      return "";
+    if (!data) return "";
     const [ano, mes, dia] = data.split("-");
     return `${dia}/${mes}/${ano}`;
   };
   var formatarDataISO = (data) => {
-    if (!data)
-      return "";
+    if (!data) return "";
     const [dia, mes, ano] = data.split("/");
     return `${ano}-${mes}-${dia}`;
   };
   var isDataISO = (str) => /^\d{4}-\d{2}-\d{2}$/.test(str);
   var nomeValido = (str) => {
-    if (!str || typeof str !== "string")
-      return false;
+    if (!str || typeof str !== "string") return false;
     const palavras = str.trim().split(/\s+/).filter((p) => p.length > 1 || p.toLowerCase() === "e");
     return palavras.length >= 2;
   };
@@ -4354,8 +4337,7 @@
     const { userData } = window.singleProductData;
     const currentSessionId = window.singleProductData?.session_id || "anon_lead";
     const canShowAutofill = React.useMemo(() => {
-      if (!userData || !userData.cpf)
-        return false;
+      if (!userData || !userData.cpf) return false;
       return !passageiros.some((pax) => pax.cpf === cpfMask(userData.cpf));
     }, [userData, passageiros]);
     function handleAutofillChange(e) {
@@ -4371,14 +4353,10 @@
         }));
         setFormErrors(() => {
           const errors = [];
-          if (!userData.nome_completo || !nomeValido(userData.nome_completo))
-            errors.push("nome_completo");
-          if (!userData.cpf || !validarCPF(cpfMask(userData.cpf)))
-            errors.push("cpf");
-          if (!userData.celular || celularMask(userData.celular).length < 14)
-            errors.push("celular");
-          if (!userData.data_nascimento || !isDataISO(formatarDataISO(userData.data_nascimento)))
-            errors.push("data_nascimento");
+          if (!userData.nome_completo || !nomeValido(userData.nome_completo)) errors.push("nome_completo");
+          if (!userData.cpf || !validarCPF(cpfMask(userData.cpf))) errors.push("cpf");
+          if (!userData.celular || celularMask(userData.celular).length < 14) errors.push("celular");
+          if (!userData.data_nascimento || !isDataISO(formatarDataISO(userData.data_nascimento))) errors.push("data_nascimento");
           return errors;
         });
       } else {
@@ -4405,10 +4383,8 @@
           if (cpfMask(target.value).length == 14) {
             const cpfValido = validarCPF(cpfMask(target.value));
             target.classList.remove("input-attention");
-            if (cpfValido)
-              target.classList.remove("input-error");
-            else
-              target.classList.add("input-error");
+            if (cpfValido) target.classList.remove("input-error");
+            else target.classList.add("input-error");
             atualizarErros(target.name, !cpfValido);
           } else if (valueLength < 14) {
             target.classList.remove("input-error");
@@ -4420,10 +4396,8 @@
         case "celular": {
           const celValido = celularMask(target.value).length == 14 || celularMask(target.value).length == 15;
           target.classList.remove("input-error");
-          if (celValido)
-            target.classList.remove("input-attention");
-          else if (valueLength < 14)
-            target.classList.remove("input-error");
+          if (celValido) target.classList.remove("input-attention");
+          else if (valueLength < 14) target.classList.remove("input-error");
           atualizarErros(target.name, !celValido);
           setFormData({ ...formData, celular: celularMask(target.value) });
           break;
@@ -4444,8 +4418,7 @@
         case "cpf": {
           const cpfIncompleto = valueLength < 14 && valueLength > 0;
           const cpfEmpty = valueLength == 0;
-          if (cpfIncompleto)
-            target.classList.add("input-attention");
+          if (cpfIncompleto) target.classList.add("input-attention");
           else if (valueLength == 14 || cpfEmpty) {
             if (target.classList.contains("input-attention")) {
               target.classList.remove("input-attention");
@@ -4479,8 +4452,7 @@
               ) == false
             )) {
               setPaxMenor(true);
-            } else
-              setPaxMenor(false);
+            } else setPaxMenor(false);
           }
           break;
         }
@@ -4497,7 +4469,7 @@
         }
       });
     }
-    const syncLeadWithServer = async (paxData) => {
+    const insertLeadReserva = async (paxData) => {
       try {
         const rootUrl = window.themeLinks.siteUrl;
         const response = await fetch(`${rootUrl}/wp-json/aerotour/v1/save-lead`, {
@@ -4530,7 +4502,7 @@
               alert("J\xE1 existe um passageiro com este CPF.");
               return _current;
             }
-            syncLeadWithServer(formData);
+            insertLeadReserva(formData);
             setPaxModalOpen(false);
             return [..._current, { ...formData, data_nascimento: formatarDataISO(formData.data_nascimento) }];
           });
@@ -4547,10 +4519,8 @@
               setPaxModalOpen(false);
               return _current.map((_pax, _i) => {
                 const _dn = isDataISO(formData.data_nascimento) ? formData.data_nascimento : formatarDataISO(formData.data_nascimento);
-                if (_i === _index)
-                  return { ...formData, data_nascimento: _dn };
-                else
-                  return _pax;
+                if (_i === _index) return { ...formData, data_nascimento: _dn };
+                else return _pax;
               });
             }
           });
@@ -5054,8 +5024,7 @@
         minimumFractionDigits: 2
       });
       setTotalCost(formatar(total));
-      if (!total)
-        return setDiscountCost(false);
+      if (!total) return setDiscountCost(false);
       const temDesconto = selectedDates.some(
         (data) => availableDates.find((d) => d.dia === data && d.desconto_antecipado)
       );
@@ -5089,8 +5058,7 @@
     }, [loading]);
     React.useEffect(() => {
       if (variacoes.length == 1) {
-        if (variacoes[0].encerrar_vendas)
-          setExcursaoEncerrada(true);
+        if (variacoes[0].encerrar_vendas) setExcursaoEncerrada(true);
         else {
           const singleVarId = variacoes[0].variation_id;
           const dataPayload = [
@@ -5104,8 +5072,7 @@
         const todasEncerradas = variacoes.every(
           (variacao) => variacao.encerrar_vendas
         );
-        if (todasEncerradas)
-          setExcursaoEncerrada(true);
+        if (todasEncerradas) setExcursaoEncerrada(true);
       }
       variacoes.map((variacao) => {
         let _dia = variacao.attributes.attribute_dia;
@@ -5132,8 +5099,7 @@
       });
     }, []);
     function submitToCart(index = 0) {
-      if (!loading)
-        setLoading(true);
+      if (!loading) setLoading(true);
       if (index >= selectedDates.length) {
         botaoContinuarRef.current.innerHTML = "Redirecionando para o carrinho...";
         window.location.href = cartUrl;
@@ -5152,7 +5118,6 @@
         type: "POST",
         url: ajaxUrl,
         dataType: "json",
-        // importante para interpretar resposta WooCommerce
         data: {
           action: "add_variation_to_cart",
           product_id: productId,
@@ -5182,10 +5147,8 @@
       setDateModalOpen(true);
     }
     function openEmbarqueModal() {
-      if (selectedDates.length > 0)
-        setEmbarqueModalOpen(true);
-      else
-        setAvisosModalOpen("sem-data-selecionada");
+      if (selectedDates.length > 0) setEmbarqueModalOpen(true);
+      else setAvisosModalOpen("sem-data-selecionada");
     }
     function openPaxModal(mode = "add", paxData = null, index = null) {
       if (selectedDates.length < 1) {
@@ -5197,8 +5160,7 @@
       } else {
         if (maxVagas <= passageiros.length)
           setAvisosModalOpen("max-vagas-atingido");
-        else
-          setPaxModalOpen([true, mode, paxData, index]);
+        else setPaxModalOpen([true, mode, paxData, index]);
       }
     }
     const getVarIdByDate = (date_str) => {
