@@ -15,7 +15,7 @@ import {
 } from '../Utilities';
 
 function AppReservas() {
-  const { variacoes, embarques, productId, estadoDestino } = window.singleProductData;
+  const { variacoes, embarquesDetalhes, embarquesVariacao, productId, estadoDestino } = window.singleProductData;
   const {ajaxUrl, cartUrl} = window.themeLinks;
 
   const [availableDates, setAvailableDates] = React.useState([]);
@@ -159,7 +159,7 @@ function AppReservas() {
 
     const submitQty = passageiros.length;
     const submitTaxa = taxa;
-    const submitEmbarque = embarque ? embarque[0].embarqueId : null;
+    const submitEmbarque = embarque ? embarque[0].id : null;
     const submitHorario = horario;
     const submitPax = passageiros.length > 0 ? JSON.stringify(passageiros) : null;
 
@@ -168,12 +168,7 @@ function AppReservas() {
 
     const lastSelectedDate = selectedDates[selectedDates.length - 1];
     const hasDiscount = discountCost ? convertDate(lastSelectedDate, 'iso') : false;
-
-    $.ajax({
-      type: 'POST',
-      url: ajaxUrl,
-      dataType: 'json',
-      data: {
+    const payload = {
         action: 'add_variation_to_cart',
         product_id: productId,
         variation_id: submitVarId,
@@ -183,25 +178,33 @@ function AppReservas() {
         horario: submitHorario,
         passageiros: submitPax,
         desconto_antecipado: hasDiscount,
-      },
-      success: function (response) {
-        // WooCommerce retorna { error: true, messages: "..."} quando bloqueia
-        if (response.error) {
-          setLoading(false);
-          setAvisosModalOpen('ja-adicionado-carrinho');
+      }
 
-          return; // interrompe fluxo
-        }
+    console.log(payload)
+    console.log(ajaxUrl)
+    // $.ajax({
+    //   type: 'POST',
+    //   url: ajaxUrl,
+    //   dataType: 'json',
+    //   data: payload,
+    //   success: function (response) {
+    //     // WooCommerce retorna { error: true, messages: "..."} quando bloqueia
+    //     if (response.error) {
+    //       setLoading(false);
+    //       setAvisosModalOpen('ja-adicionado-carrinho');
 
-        // se deu certo, chama próxima
-        submitToCart(index + 1);
-      },
-      error: function (xhr, status, error) {
-        console.error('Erro AJAX:', error);
-        setLoading(false);
-        // não prossegue em caso de erro
-      },
-    });
+    //       return; // interrompe fluxo
+    //     }
+
+    //     // se deu certo, chama próxima
+    //     submitToCart(index + 1);
+    //   },
+    //   error: function (xhr, status, error) {
+    //     console.error('Erro AJAX:', error);
+    //     setLoading(false);
+    //     // não prossegue em caso de erro
+    //   },
+    // });
   }
 
   function openDateModal() {
@@ -266,12 +269,14 @@ function AppReservas() {
     }
   };
 
-  const toggleEmbarque = (embId) => {
-    embarques.forEach((_emb) => {
-      if (_emb.embarqueId == embId) {
-        setEmbarque([_emb]);
+  const toggleEmbarque = (idEmbarqueSelecionado, horarioSelecionado) => {
+    
+    embarquesDetalhes.forEach(embDet => {
+      if(embDet.id === idEmbarqueSelecionado){
+        setEmbarque([embDet]);
+        setHorario(horarioSelecionado);
       }
-    });
+    })
   };
 
   // gtag('event', 'botao_reserva_click', {});
@@ -439,9 +444,9 @@ function AppReservas() {
               <EmbarqueModal
                 setEmbarqueModalOpen={setEmbarqueModalOpen}
                 toggleEmbarque={toggleEmbarque}
-                embarques={embarques}
+                embarquesDetalhes={embarquesDetalhes}
+                embarquesVariacoes={embarquesVariacao}
                 embarque={embarque}
-                setEmbarque={setEmbarque}
                 selectedDates={selectedDates}
                 variacoes={variacoes}
                 getVarIdByDate={getVarIdByDate}
@@ -479,7 +484,7 @@ function AppReservas() {
                 setPassageiros={setPassageiros}
                 convertDate={convertDate}
                 variacoesSelecionadas={variacoesSelecionadas}
-                embarqueId={embarque[0].embarqueId}
+                embarqueId={embarque[0].id}
               />
             )}
 

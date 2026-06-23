@@ -32,11 +32,11 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
     <?php
 
     // iteraar sobre as variações e obter o meta _embarques_config para cada variação
-    foreach ($excursao['variacoes'] as $variacao) {
-      $variacao_id = $variacao['variation_id'];
-      $embarques_config = get_post_meta($variacao_id, '_embarques_config', true);
-      echo "<br /><br />Variação ID: $variacao_id - Embarques Config: $embarques_config <br>";
-    };
+    // foreach ($excursao['variacoes'] as $variacao) {
+    //   $variacao_id = $variacao['variation_id'];
+    //   $embarques_config = get_post_meta($variacao_id, '_embarques_config', true);
+    //   echo "<br /><br />Variação ID: $variacao_id - Embarques Config: $embarques_config <br>";
+    // };
 
     // print_r($excursao['embarques_por_variacao']);
 ?>

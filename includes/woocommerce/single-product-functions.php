@@ -4,7 +4,7 @@
  * Carrega os scripts da single product e App de Reservas apenas em páginas de produto
  */
 add_action('wp_enqueue_scripts', function () {
-  if (! is_product()) {
+  if (! function_exists('is_product') || ! is_product()) {
     return;
   }
 
@@ -18,14 +18,14 @@ add_action('wp_enqueue_scripts', function () {
     get_stylesheet_directory_uri() . $js_path,
     ['jquery', 'aer-reserva-app'], // Adicione dependências se o script usar jQuery ou o App React
     $version,
-    true // Carrega no footer
+    false // Carrega no footer
   );
 
   // 2. Registra e enfileira o React (preferencialmente local para evitar DNS lookup externo)
   wp_enqueue_script('react', 'https://unpkg.com/react@18/umd/react.production.min.js', [], '18', true);
   wp_enqueue_script('react-dom', 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js', ['react'], '18', true);
 
-  // 3. Enfileira o seu App de Reservas
+  // 3. Enfileira o App de Reservas
   $app_reservas_file = get_stylesheet_directory_uri() . '/js/react_apps/app_reservas_usuario.js';
   wp_enqueue_script(
     'aer-reserva-app',
@@ -33,7 +33,6 @@ add_action('wp_enqueue_scripts', function () {
     ['react', 'react-dom'], // Dependências garantem a ordem correta
     file_exists($app_reservas_file) ? filemtime($app_reservas_file) : '1.0.0', // Cache busting automático
     null,
-    true // Carrega no footer
   );
 
   // 4. Passa os dados necessários (o que estava nos data-attributes)
@@ -45,6 +44,8 @@ add_action('wp_enqueue_scripts', function () {
   wp_localize_script('aer-reserva-app', 'singleProductData', [
     'variacoes' => $excursao['variacoes'],
     'embarques' => $excursao['embarques'],
+    'embarquesDetalhes' => isset($excursao['embarques_detalhes']) ? $excursao['embarques_detalhes'] : null,
+    'embarquesVariacao' => isset($excursao['embarques_por_variacao']) ? $excursao['embarques_por_variacao'] : null,
     'productId' => $excursao['id'],
     'estadoDestino' => has_term('rock-in-rio', 'product_cat', $post->ID) ? 'rj' : 'sp',
     'userData' => $user_id ? [
