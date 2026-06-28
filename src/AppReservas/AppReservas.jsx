@@ -180,31 +180,29 @@ function AppReservas() {
         desconto_antecipado: hasDiscount,
       }
 
-    console.log(payload)
-    console.log(ajaxUrl)
-    // $.ajax({
-    //   type: 'POST',
-    //   url: ajaxUrl,
-    //   dataType: 'json',
-    //   data: payload,
-    //   success: function (response) {
-    //     // WooCommerce retorna { error: true, messages: "..."} quando bloqueia
-    //     if (response.error) {
-    //       setLoading(false);
-    //       setAvisosModalOpen('ja-adicionado-carrinho');
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      dataType: 'json',
+      data: payload,
+      success: function (response) {
+        // WooCommerce retorna { error: true, messages: "..."} quando bloqueia
+        if (response.error) {
+          setLoading(false);
+          setAvisosModalOpen(response.type);
 
-    //       return; // interrompe fluxo
-    //     }
+          return; // interrompe fluxo
+        }
 
-    //     // se deu certo, chama próxima
-    //     submitToCart(index + 1);
-    //   },
-    //   error: function (xhr, status, error) {
-    //     console.error('Erro AJAX:', error);
-    //     setLoading(false);
-    //     // não prossegue em caso de erro
-    //   },
-    // });
+        // se deu certo, chama próxima
+        submitToCart(index + 1);
+      },
+      error: function (xhr, status, error) {
+        console.error('Erro AJAX:', error);
+        setLoading(false);
+        // não prossegue em caso de erro
+      },
+    });
   }
 
   function openDateModal() {

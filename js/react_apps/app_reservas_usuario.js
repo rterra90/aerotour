@@ -4880,6 +4880,23 @@
                           children: "Fechar"
                         }
                       )
+                    ] }),
+                    alertType == "nao-disponivel" && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "error-container", role: "alert", "aria-live": "assertive", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "error-icon", children: "\u26A0\uFE0F" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("p", { className: "error-message", children: [
+                        "Lamentamos, mas o local de embarque ou hor\xE1rio selecionado n\xE3o est\xE1 mais dispon\xEDvel para esta data. Por favor, atualize a p\xE1gina para conferir as novas informa\xE7\xF5es.",
+                        " ",
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "d-block", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("a", { onClick: () => window.location.reload(), className: "close-button d-block mt-3", children: "Atualizar p\xE1gina" }) })
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                        "button",
+                        {
+                          className: "close-button",
+                          type: "button",
+                          onClick: () => closeAvisosModal("cancel"),
+                          children: "Fechar"
+                        }
+                      )
                     ] })
                   ]
                 }
@@ -5123,8 +5140,24 @@
         passageiros: submitPax,
         desconto_antecipado: hasDiscount
       };
-      console.log(payload);
-      console.log(ajaxUrl);
+      $.ajax({
+        type: "POST",
+        url: ajaxUrl,
+        dataType: "json",
+        data: payload,
+        success: function(response) {
+          if (response.error) {
+            setLoading(false);
+            setAvisosModalOpen(response.type);
+            return;
+          }
+          submitToCart(index + 1);
+        },
+        error: function(xhr, status, error) {
+          console.error("Erro AJAX:", error);
+          setLoading(false);
+        }
+      });
     }
     function openDateModal() {
       setDateModalOpen(true);

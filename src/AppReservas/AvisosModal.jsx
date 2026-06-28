@@ -141,6 +141,24 @@ const AvisosModal = ({
               </button>
             </div>
           )}
+
+          {/* Conteúdo já existe no carrinho */}
+          {alertType == 'nao-disponivel' && (
+            <div className="error-container" role="alert" aria-live="assertive">
+              <div className="error-icon">⚠️</div>
+              <p className="error-message">
+                Lamentamos, mas o local de embarque ou horário selecionado não está mais disponível para esta data. Por favor, atualize a página para conferir as novas informações.{' '}
+                <span className="d-block"><a onClick={() => window.location.reload()} className="close-button d-block mt-3">Atualizar página</a></span>
+              </p>
+              <button
+                className="close-button"
+                type="button"
+                onClick={() => closeAvisosModal('cancel')}
+              >
+                Fechar
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
