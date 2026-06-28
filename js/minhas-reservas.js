@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- 1. VALIDAÇÃO DE BOTÕES ---
     function gerenciarValidacao() {
-        console.log('gerenciarValidacao chamada');
         // Seleciona todos os formulários de solicitação (embarque e cancelamento)
         const formularios = document.querySelectorAll('.form-solicitar-embarque, .form-solicitar-cancelamento');
 
@@ -13,11 +12,31 @@ document.addEventListener('DOMContentLoaded', function() {
             const btnSubmit = form.querySelector('button[type="submit"]');
 
             const validar = () => {
+                const radios = document.querySelectorAll('.modal-dialog input[type="radio"]');
                 const algumCheckado = Array.from(checkboxes).some(cb => cb.checked);
+
+                if(radios.length > 0) {
+                    radios.forEach(radio => {
+                        radio.addEventListener('change', () => {
+                            validar(); // Revalida quando um rádio é selecionado
+                        });
+                    });
+                }
                 
                 // Se for formulário de embarque, precisa de ponto + passageiro
                 if (form.classList.contains('form-solicitar-embarque')) {
                     const pontoSelecionado = selectPonto && selectPonto.value !== "";
+
+                    if(radios.length > 0) {
+                        console.log('caiu aqui')
+                        const algumRadioSelecionado = Array.from(radios).some(radio => radio.checked);
+                        console.log('algumRadioSelecionado', algumRadioSelecionado)
+                        console.log('algumCheckado', algumCheckado)
+                        console.log('pontoSelecionado', pontoSelecionado)
+                        btnSubmit.disabled = !(algumCheckado && algumRadioSelecionado && pontoSelecionado);
+                        return;
+                    }
+
                     btnSubmit.disabled = !(algumCheckado && pontoSelecionado);
                 } else {
                     // Se for cancelamento, basta ter passageiro selecionado

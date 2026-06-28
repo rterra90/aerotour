@@ -13,6 +13,7 @@ add_action(
 function solicitar_alteracao_embarque()
 {
     $novo_ponto = sanitize_text_field($_POST['novo_ponto']);
+    $novo_horario = sanitize_text_field($_POST['novo_horario']);
     $excursao = sanitize_text_field($_POST['excursao']);
     $data_v = sanitize_text_field($_POST['data_viagem']);
     $ponto_ant = sanitize_text_field($_POST['ponto_atual']);
@@ -26,7 +27,8 @@ function solicitar_alteracao_embarque()
     $message .= "Pedido: #$order_id\n";
     $message .= "Excursão: $excursao ($data_v)\n";
     $message .= "Ponto Atual: $ponto_ant\n";
-    $message .= "Novo Ponto Solicitado: $novo_ponto\n\n";
+    $message .= "Novo Ponto Solicitado: $novo_ponto\n";
+    $message .= "Novo horário de embarque: $novo_horario\n\n";
     $message .= "Passageiros a serem alterados:\n";
 
     foreach ($passageiros as $p) {
