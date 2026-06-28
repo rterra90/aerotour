@@ -448,12 +448,12 @@ function AppReservas() {
                 selectedDates={selectedDates}
                 variacoes={variacoes}
                 getVarIdByDate={getVarIdByDate}
-                setHorario={setHorario}
                 variacoesSelecionadas={variacoesSelecionadas}
                 setPrecoUnitario={setPrecoUnitario}
                 setTaxa={setTaxa}
                 estadoDestino={estadoDestino}
                 cidadesDiaAnterior={cidadesDiaAnterior}
+                horario={horario}
               />
             )}
 

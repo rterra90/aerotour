@@ -226,6 +226,12 @@
   font-size: 0.85rem;
 }
 
+.embarque-details-inner .multi-radios label.disabled{
+      color: #b9b9b9;
+    background: #f7f7f7;
+    cursor: not-allowed;
+}
+
 .aviso-dia-anterior{
     display: block;
     color: #212529;
@@ -276,14 +282,17 @@
   font-size: 0.875rem;
 }
 
-.embarque-details-inner .horario-opcao:hover {
-  background-color: #bee3f8;
+.embarque-details-inner .horario-opcao:not(.disabled):hover {
+  background-color: #d2b4b4;
 }
 
 .embarque-details-inner .horario-opcao input[type='radio'] {
-  accent-color: #3182ce;
+  accent-color: var(--aer-accent);
 }
-
+.embarque-details-inner .horario-opcao input[type='radio']:checked + span{
+    font-weight: 500;
+    color: var(--aer-accent);
+}
 .embarque-details-inner .localizacao p.info {
   font-size: 0.95rem;
   margin: 0.5rem 0;

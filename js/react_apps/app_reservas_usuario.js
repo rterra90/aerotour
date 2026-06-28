@@ -3833,10 +3833,7 @@
     embarquesVariacoes,
     // Nova prop: array de disponibilidade e horários
     embarque,
-    selectedDates,
     variacoes,
-    getVarIdByDate,
-    setHorario,
     variacoesSelecionadas,
     setPrecoUnitario,
     setTaxa,
@@ -3851,6 +3848,7 @@
     const embarqueForm = React.useRef();
     const priceContainerRef = React.useRef();
     const saveBtnRef = React.useRef();
+    const exibeHorariosInativos = false;
     function closeEmbarqueModal(_save) {
       if (_save && preEmbarque.length > 0) {
         toggleEmbarque(preEmbarque[0].id, preHorario);
@@ -3911,6 +3909,7 @@
     React.useEffect(() => {
       setDisponibilidadeParcial([]);
       setHorariosDisponiveis([]);
+      setPreHorario("");
       if (preEmbarque.length > 0) {
         let _horariosDisp = [];
         let indisponiveis = [];
@@ -3924,11 +3923,9 @@
           if (embVar) {
             taxaEmb = embVar.taxa || 0;
             embVar.horarios.forEach((h) => {
-              if (h.disponivel) {
-                hasAvailable = true;
-                if (!_horariosDisp.includes(h.horario)) {
-                  _horariosDisp.push(h.horario);
-                }
+              if (h.disponivel) hasAvailable = true;
+              if (!_horariosDisp.some((existing) => existing.horario === h.horario)) {
+                _horariosDisp.push({ horario: h.horario, disponivel: h.disponivel });
               }
             });
           }
@@ -3944,8 +3941,10 @@
         }
         const arrayHorarios = Array.from(new Set(_horariosDisp));
         setHorariosDisponiveis(arrayHorarios);
-        if (arrayHorarios.length === 1) {
-          setPreHorario(arrayHorarios[0]);
+        console.log(arrayHorarios);
+        const unicoAtivoNaoExibirInativos = arrayHorarios.filter((h) => h.disponivel).length === 1 && !exibeHorariosInativos;
+        if (arrayHorarios.length === 1 || unicoAtivoNaoExibirInativos) {
+          setPreHorario(arrayHorarios[0].horario);
         }
         if (variacoesSelecionadas.length > 0) {
           const _precos = variacoesSelecionadas.map((_varId) => {
@@ -3967,11 +3966,16 @@
           window.alert("Nenhuma data selecionada");
           closeEmbarqueModal(false);
         }
+      } else {
+      }
+    }, [preEmbarque]);
+    React.useEffect(() => {
+      if (preHorario && preEmbarque.length > 0) {
         saveBtnRef.current.removeAttribute("disabled");
       } else {
         saveBtnRef.current.setAttribute("disabled", "");
       }
-    }, [preEmbarque]);
+    }, [preHorario, preEmbarque]);
     React.useEffect(() => {
       if (disponibilidadeParcial.length > 0 || horariosDisponiveis.length > 1 && !horarioSelecionadoParaBotao()) {
         saveBtnRef.current.setAttribute("disabled", "");
@@ -4030,25 +4034,46 @@
                             horariosDisponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
                               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Hor\xE1rio de embarque" }),
                               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "horario-single d-block text-center", children: [
-                                horariosDisponiveis[0],
+                                horariosDisponiveis[0].horario,
                                 estadoDestino === "rj" && preEmbarque[0] && cidadesDiaAnterior.includes(preEmbarque[0].nome.split(" - ")[0]) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "aviso-dia-anterior", children: "do dia anterior" }) : null
                               ] })
                             ] }),
-                            horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "title", children: "Selecione o hor\xE1rio" }),
-                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "multi-radios", children: horariosDisponiveis.map((h, index) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: "horario-opcao", children: [
+                            horariosDisponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_jsx_runtime2.Fragment, { children: exibeHorariosInativos ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Selecione o hor\xE1rio" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "multi-radios", children: horariosDisponiveis.map((h, index) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: h.disponivel ? "horario-opcao" : "horario-opcao disabled", children: [
                                 /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
                                   "input",
                                   {
                                     type: "radio",
                                     name: "horario",
-                                    value: h,
-                                    onChange: (e) => setHorario(e.target.value)
+                                    value: h.horario,
+                                    onChange: (e) => setPreHorario(e.target.value),
+                                    disabled: !h.disponivel,
+                                    checked: preHorario === h.horario
                                   }
                                 ),
-                                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: h })
+                                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: h.horario })
                               ] }, index)) })
-                            ] })
+                            ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_jsx_runtime2.Fragment, { children: horariosDisponiveis.filter((h) => h.disponivel).length === 1 ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Hor\xE1rio de embarque" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "horario-single d-block text-center", children: horariosDisponiveis.find((h) => h.disponivel).horario })
+                            ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Selecione o hor\xE1rio" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "multi-radios", children: horariosDisponiveis.filter((h) => h.disponivel).map((h, index) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: "horario-opcao", children: [
+                                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+                                  "input",
+                                  {
+                                    type: "radio",
+                                    name: "horario",
+                                    value: h.horario,
+                                    onChange: (e) => setPreHorario(e.target.value),
+                                    disabled: !h.disponivel,
+                                    checked: preHorario === h.horario
+                                  }
+                                ),
+                                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: h.horario })
+                              ] }, index)) })
+                            ] }) }) })
                           ] }),
                           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "localizacao", children: [
                             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title my-2 mb-0", children: "Local de embarque" }),
@@ -4112,7 +4137,6 @@
     variacoes: import_prop_types2.default.array.isRequired,
     variacoesSelecionadas: import_prop_types2.default.array.isRequired,
     getVarIdByDate: import_prop_types2.default.func.isRequired,
-    setHorario: import_prop_types2.default.func.isRequired,
     setPrecoUnitario: import_prop_types2.default.func.isRequired,
     setTaxa: import_prop_types2.default.func.isRequired,
     estadoDestino: import_prop_types2.default.string.isRequired,
@@ -5355,12 +5379,12 @@
             selectedDates,
             variacoes,
             getVarIdByDate,
-            setHorario,
             variacoesSelecionadas,
             setPrecoUnitario,
             setTaxa,
             estadoDestino,
-            cidadesDiaAnterior
+            cidadesDiaAnterior,
+            horario
           }
         ),
         dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(

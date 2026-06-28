@@ -8,10 +8,7 @@ const EmbarquesModal = ({
   embarquesDetalhes, // Nova prop: array de detalhes fixos
   embarquesVariacoes, // Nova prop: array de disponibilidade e horários
   embarque,
-  selectedDates,
   variacoes,
-  getVarIdByDate,
-  setHorario,
   variacoesSelecionadas,
   setPrecoUnitario,
   setTaxa,
@@ -27,6 +24,8 @@ const EmbarquesModal = ({
   const embarqueForm = React.useRef();
   const priceContainerRef = React.useRef();
   const saveBtnRef = React.useRef();
+
+  const exibeHorariosInativos = false;
 
   function closeEmbarqueModal(_save) {
     if (_save && preEmbarque.length > 0) {
@@ -103,6 +102,7 @@ const EmbarquesModal = ({
   React.useEffect(() => {
     setDisponibilidadeParcial([]);
     setHorariosDisponiveis([]);
+    setPreHorario('');
 
     if (preEmbarque.length > 0) {
       let _horariosDisp = [];
@@ -123,11 +123,9 @@ const EmbarquesModal = ({
           taxaEmb = embVar.taxa || 0; // Atualiza a taxa com base no objeto de variação
           
           embVar.horarios.forEach(h => {
-            if (h.disponivel) {
-              hasAvailable = true;
-              if (!_horariosDisp.includes(h.horario)) {
-                _horariosDisp.push(h.horario);
-              }
+            if (h.disponivel) hasAvailable = true;
+            if(!_horariosDisp.some(existing => existing.horario === h.horario)) {
+            _horariosDisp.push({horario: h.horario, disponivel: h.disponivel})
             }
           });
         }
@@ -148,10 +146,12 @@ const EmbarquesModal = ({
       // Remove duplicatas e define horários existentes para o embarque
       const arrayHorarios = Array.from(new Set(_horariosDisp));
       setHorariosDisponiveis(arrayHorarios);
-      
+      console.log(arrayHorarios)
       // Regra: Configura o horário automaticamente APENAS se houver apenas 1 opção
-      if (arrayHorarios.length === 1) {
-        setPreHorario(arrayHorarios[0]);
+
+      const unicoAtivoNaoExibirInativos = arrayHorarios.filter(h => h.disponivel).length === 1 && !exibeHorariosInativos;
+      if (arrayHorarios.length === 1 || unicoAtivoNaoExibirInativos) {
+        setPreHorario(arrayHorarios[0].horario);
       }
 
       // Define o preço do embarque
@@ -179,11 +179,19 @@ const EmbarquesModal = ({
       }
 
       // Atualiza o estado do botão
+      // saveBtnRef.current.removeAttribute('disabled');
+    } else {
+      // saveBtnRef.current.setAttribute('disabled', ''); 
+    }
+  }, [preEmbarque]);
+
+  React.useEffect(() => {
+    if(preHorario && preEmbarque.length > 0) {
       saveBtnRef.current.removeAttribute('disabled');
     } else {
       saveBtnRef.current.setAttribute('disabled', ''); 
     }
-  }, [preEmbarque]);
+  }, [preHorario, preEmbarque]);
 
   // Efeito 3: Trava salvamento caso haja indisponibilidade em alguma data selecionada
   React.useEffect(() => {
@@ -260,13 +268,14 @@ const EmbarquesModal = ({
                 </h2>
 
                 <div className="embarque-details-inner">
-                  {/* Horário simples */}
                   <div className="horarios">
+
+                    {/* Horário simples */}
                     {horariosDisponiveis.length === 1 && (
                       <>
                         <h3 className="title">Horário de embarque</h3>
                         <span className="horario-single d-block text-center">
-                          {horariosDisponiveis[0]}
+                          {horariosDisponiveis[0].horario}
                         
                         {/* Exibe badge "do dia anterior" */}
                         {estadoDestino === 'rj' && 
@@ -280,20 +289,56 @@ const EmbarquesModal = ({
                     {/* Horários múltiplos - Renderização Dinâmica e Escolha do Usuário */}
                     {horariosDisponiveis.length > 1 && (
                       <>
-                        <p className="title">Selecione o horário</p>
-                        <div className="multi-radios">
-                          {horariosDisponiveis.map((h, index) => (
-                             <label className="horario-opcao" key={index}>
-                                <input 
-                                  type="radio" 
-                                  name="horario" 
-                                  value={h} 
-                                  onChange={(e) => setHorario(e.target.value)} 
-                                />
-                                <span>{h}</span>
-                             </label>
-                          ))}
-                        </div>
+                        {exibeHorariosInativos ? (
+                          <>
+                            <h3 className="title">Selecione o horário</h3>
+                            <div className="multi-radios">
+                              {horariosDisponiveis.map((h, index) => (
+                                <label className={h.disponivel ? 'horario-opcao' : 'horario-opcao disabled'} key={index}>
+                                  <input 
+                                    type="radio" 
+                                    name="horario" 
+                                    value={h.horario} 
+                                    onChange={(e) => setPreHorario(e.target.value)} 
+                                    disabled={!h.disponivel} 
+                                    checked={preHorario === h.horario}
+                                  />
+                                  <span>{h.horario}</span>
+                                </label>
+                              ))}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {horariosDisponiveis.filter(h => h.disponivel).length === 1 ? (
+                              <>
+                                <h3 className="title">Horário de embarque</h3>
+                                <span className="horario-single d-block text-center">
+                                  {horariosDisponiveis.find(h => h.disponivel).horario}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <h3 className="title">Selecione o horário</h3>
+                                <div className="multi-radios">
+                                  {horariosDisponiveis.filter(h => h.disponivel).map((h, index) => (
+                                    <label className="horario-opcao" key={index}>
+                                      <input
+                                        type="radio"
+                                        name="horario"
+                                        value={h.horario}
+                                        onChange={(e) => setPreHorario(e.target.value)}
+                                        disabled={!h.disponivel}
+                                        checked={preHorario === h.horario}
+                                      />
+                                      <span>{h.horario}</span>
+                                    </label>
+                                  ))}
+                                </div>
+                              </>
+                            )}
+                          </>
+                        )}
                       </>
                     )}
                   </div>
@@ -351,7 +396,6 @@ EmbarquesModal.propTypes = {
   variacoes: PropTypes.array.isRequired,
   variacoesSelecionadas: PropTypes.array.isRequired,
   getVarIdByDate: PropTypes.func.isRequired,
-  setHorario: PropTypes.func.isRequired,
   setPrecoUnitario: PropTypes.func.isRequired,
   setTaxa: PropTypes.func.isRequired,
   estadoDestino: PropTypes.string.isRequired,
