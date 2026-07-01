@@ -86,7 +86,7 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
 
       }
 
-      $exibe_horarios_inativos = false;
+      $exibe_horarios_inativos = true;
 
       //verifica a quantidade de horários únicos encontrados em todas as variações para esse embarque
       $horarios_unicos = array_unique(array_map(function($h_emb){

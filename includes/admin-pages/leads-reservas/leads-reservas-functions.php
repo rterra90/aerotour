@@ -361,18 +361,5 @@ function analisar_metadados_no_checkout()
             $passageiros_array = json_decode($passageiros_raw, false);
             update_lead_reserva($passageiros_array, 'checkout');
         }
-
-        // --- Exemplo de lógica/validação ---
-        // Se um metadado específico não atender ao seu critério, você pode barrar o checkout:
-        // if ($meta_do_produto === 'invalido') {
-        //     wc_add_notice(
-        //         'Desculpe, um dos itens no seu carrinho não está disponível com as opções selecionadas.',
-        //         'error',
-        //     );
-
-        //     // Remove o redirecionamento automático do WC para o checkout e mantém no carrinho
-        //     wp_safe_redirect(wc_get_cart_url());
-        //     exit();
-        // }
     }
 }

@@ -18,6 +18,8 @@ endif; ?>
 		<h1>Faça login ou cadastre-se para continuar.</h1>
 	</div>
 
+	<?php do_action('woocommerce_after_title_my_account'); ?>
+
 
 	<div class="login-container" id="customer_login">
 
@@ -242,17 +244,6 @@ endif; ?>
 				ja_errou = true;
 			} else e.target.classList.remove('erro-input');
 		}
-	}
-
-	if (window.sessionStorage.getItem('aer_redirect_after_login')) {
-		const login_redirect_message = (src) => {
-			if (src === 'checkout') return 'Identifique-se ou cadastre-se para finalizar seu pedido.'
-		}
-		const redirectData = JSON.parse(window.sessionStorage.getItem('aer_redirect_after_login'));
-		const redirect_alert = document.createElement('div');
-		redirect_alert.classList.add('redirect_alert', 'mb-3');
-		redirect_alert.innerText = login_redirect_message(redirectData.page);
-		document.querySelector('#form-login').insertBefore(redirect_alert, document.querySelector('#form-login #customer_login'));
 	}
 
 	document.querySelector('input#reg_username').addEventListener('keyup', (e) => cpfMask(e));

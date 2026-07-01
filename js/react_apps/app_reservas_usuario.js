@@ -3838,7 +3838,8 @@
     setPrecoUnitario,
     setTaxa,
     estadoDestino,
-    cidadesDiaAnterior
+    cidadesDiaAnterior,
+    horario
   }) => {
     const [visible, setVisible] = React.useState(false);
     const [preEmbarque, setPreEmbarque] = React.useState([]);
@@ -3848,7 +3849,7 @@
     const embarqueForm = React.useRef();
     const priceContainerRef = React.useRef();
     const saveBtnRef = React.useRef();
-    const exibeHorariosInativos = false;
+    const exibeHorariosInativos = true;
     function closeEmbarqueModal(_save) {
       if (_save && preEmbarque.length > 0) {
         toggleEmbarque(preEmbarque[0].id, preHorario);
@@ -3904,6 +3905,7 @@
       } else {
         embarqueForm.current.querySelector("select").value = "";
         setPreEmbarque([]);
+        setPreHorario("");
       }
     }, []);
     React.useEffect(() => {
@@ -4140,7 +4142,8 @@
     setPrecoUnitario: import_prop_types2.default.func.isRequired,
     setTaxa: import_prop_types2.default.func.isRequired,
     estadoDestino: import_prop_types2.default.string.isRequired,
-    cidadesDiaAnterior: import_prop_types2.default.array.isRequired
+    cidadesDiaAnterior: import_prop_types2.default.array.isRequired,
+    horario: import_prop_types2.default.string.isRequired
   };
 
   // src/AppReservas/PaxModal.jsx

@@ -13,7 +13,8 @@ const EmbarquesModal = ({
   setPrecoUnitario,
   setTaxa,
   estadoDestino,
-  cidadesDiaAnterior
+  cidadesDiaAnterior,
+  horario
 }) => {
   const [visible, setVisible] = React.useState(false);
   const [preEmbarque, setPreEmbarque] = React.useState([]);
@@ -25,7 +26,7 @@ const EmbarquesModal = ({
   const priceContainerRef = React.useRef();
   const saveBtnRef = React.useRef();
 
-  const exibeHorariosInativos = false;
+  const exibeHorariosInativos = true;
 
   function closeEmbarqueModal(_save) {
     if (_save && preEmbarque.length > 0) {
@@ -87,6 +88,10 @@ const EmbarquesModal = ({
     });
 
     /* Personaliza inputs se houver valor prévio */
+    
+  // if(horario) {
+  //   setPreHorario(horario);
+  // }
     if (embarque && embarque.length > 0) {
       if (embarqueForm.current) {
         embarqueForm.current.querySelector('select').value = embarque[0].id || embarque[0].embarqueId;
@@ -95,6 +100,7 @@ const EmbarquesModal = ({
     } else {
       embarqueForm.current.querySelector('select').value = '';
       setPreEmbarque([]);
+      setPreHorario('');
     }
   }, []);
 
@@ -400,4 +406,6 @@ EmbarquesModal.propTypes = {
   setTaxa: PropTypes.func.isRequired,
   estadoDestino: PropTypes.string.isRequired,
   cidadesDiaAnterior: PropTypes.array.isRequired,
+  horario: PropTypes.string.isRequired,
+
 };

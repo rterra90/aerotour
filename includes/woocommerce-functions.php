@@ -28,6 +28,21 @@ add_filter(
     2,
 );
 
+// Insere alerta de login ou cadastro ao ser redirecionado após tentativa de checkout
+add_action('woocommerce_after_title_my_account', function () {
+    if (isset($_GET['redirect'])) {
+        $redirect_url = urldecode($_GET['redirect']);
+        $checkout_url = wc_get_checkout_url();
+
+        // Se a URL de redirecionamento for a do checkout, exibe a mensagem
+        if (strpos($redirect_url, $checkout_url) !== false) {
+            echo '<div class="woocommerce-info redirect_alert mb-3" style="list-style:none;">';
+            echo 'Identifique-se ou cadastre-se para finalizar seu pedido.';
+            echo '</div>';
+        }
+    }
+});
+
 function customizar_exibicao_metadados_order($formatted_meta, $item)
 {
     global $wpdb;
