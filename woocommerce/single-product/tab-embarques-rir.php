@@ -57,17 +57,17 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
         </div>
       </div>
 
-      <?php if ($is_rock_in_rio): ?>
-        <div class="rir-notice-box">
-          <div class="rir-notice-icon">
-            <i class="dashicons dashicons-warning"></i>
-          </div>
-          <div class="rir-notice-content">
-            <strong>Atenção:</strong>
-            <p>Os embarques se iniciam na <u>noite do dia anterior</u> à data escolhida. Verifique atentamente o horário de cada ponto abaixo.</p>
-          </div>
-        </div>
-      <?php endif; ?>
+<?php if ($is_rock_in_rio): ?>
+  <div class="rir-notice-box">
+    <div class="rir-notice-icon">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+    </div>
+    <div class="rir-notice-content">
+      <strong>Atenção com o Horário:</strong>
+      <p>Os embarques se iniciam na <u>noite do dia anterior</u> à data escolhida para o festival. Verifique atentamente o horário de cada ponto abaixo para não perder o ônibus!</p>
+    </div>
+  </div>
+<?php endif; ?>
 
       <div class="lista-embarque" id="listaEmbarque">
         <?php
@@ -212,4 +212,56 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
   .horario > p {
     margin-bottom: 0px!important;
   }
+  /* ==========================================================================
+   CAIXA DE AVISO ESPECIAL - ROCK IN RIO (ESTILO AEROTOUR)
+   ========================================================================== */
+.rir-notice-box {
+    display: flex;
+    align-items: flex-start;
+    background-color: #fffbeb !important; /* Fundo amarelo pastel bem suave */
+    border: 1px solid #fef08a !important; /* Borda sutil amarela */
+    border-left: 5px solid #eab308 !important; /* Destaque lateral no tom dourado da badge */
+    padding: .8rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.06) !important; /* Sombra dourada cirúrgica */
+}
+
+/* Espaçamento e cor do ícone do Bootstrap */
+.rir-notice-box .rir-notice-icon {
+    margin-right: 1rem;
+    color: #eab308 !important; /* Dourado */
+    font-size: 1.4rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    padding-top: 2px;
+}
+
+/* Conteúdo de texto */
+.rir-notice-box .rir-notice-content {
+    font-size: 0.85rem;
+    line-height: 1.2;
+    color: #1e293b !important; /* Azul escuro/grafite legível */
+}
+
+.rir-notice-box .rir-notice-content strong {
+    color: #0f172a !important; /* Destaque do título em quase preto */
+    font-weight: 700;
+    display: block;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    margin-bottom: .2rem
+}
+
+.rir-notice-box .rir-notice-content p {
+    margin: 0 !important;
+}
+
+.rir-notice-box .rir-notice-content u {
+    font-weight: 600;
+    text-decoration-color: #eab308;
+    text-decoration-thickness: 2px;
+}
 </style>
