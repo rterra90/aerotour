@@ -28,13 +28,11 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
     return array_values($agrupado);
 }
 
-// print_r($var_embarque_settings);
-// echo '<br/><br/>';
-// print_r($embarques_detalhes);
 ?>
 <div id="tab2" class="tab-content tab-embarques">
   <div class="embarque-container">
 
+    <?php if($embarques_detalhes && is_array($embarques_detalhes) && !empty($embarques_detalhes)): ?>
     <!-- Filtro de cidadess -->
     <div class="filtro-header">
       <span>Filtre por <br />cidade:</span>
@@ -228,6 +226,9 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
       <?php } ?>
       <div class="mostrar-tudo-btn d-none" data-cidade="todas">Mostrar tudo</div>
     </div>
+    <?php else: ?>
+      <p class="text-center">Nenhum local de embarque cadastrado para esta excursão.</p>
+    <?php endif; ?>
   </div>
 </div>
 

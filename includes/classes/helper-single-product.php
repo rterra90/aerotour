@@ -27,8 +27,10 @@ class Aerotour_Helper
         'variation_embarques' => $variation_embarques
       ));
 
-      $ids_embarques_var = array_column($variation_embarques, 'embarque_id');
-      $ids_embarques_data = array_merge($ids_embarques_data, $ids_embarques_var);
+      if(isset($variation_embarques) && is_array($variation_embarques)) {
+        $ids_embarques_var = array_column($variation_embarques, 'embarque_id');
+        $ids_embarques_data = array_merge($ids_embarques_data, $ids_embarques_var);
+      }
     }
     
     // busca os detalhes dos embarques globais
@@ -85,7 +87,7 @@ class Aerotour_Helper
       ],
       'embarques'     => $locais_embarque,
       'show_vendidos' => get_post_meta($product_id, 'show_vendidos', true) === 'yes',
-      'embarques_detalhes' => $embarques_detalhes,
+      'embarques_detalhes' => isset($embarques_detalhes) ? $embarques_detalhes : null,
       'embarques_por_variacao' => $embarques_por_variacao
     ];
   }

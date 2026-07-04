@@ -115,7 +115,7 @@ require_once get_template_directory() . '/includes/functions/usuarios-functions.
 require_once get_template_directory() . '/includes/footer-scripts.php';
 require_once get_template_directory() . '/includes/functions/pax-meta-functions.php'; //Funções para o fluxo de metadados de passageiros
 
-require_once get_template_directory() . '/includes/temp-migrate-embarques.php'; //Funções para o fluxo de metadados de passageiros
+require_once get_template_directory() . '/includes/temp-migrate-embarques.php'; // Função temporária para migrar os dados de embarques antigos para a nova arquitetura
 
 
 

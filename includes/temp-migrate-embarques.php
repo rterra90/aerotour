@@ -53,7 +53,7 @@ function aerotour_executar_migracao_embarques() {
             $parent_id = $post->ID;
 
             // Bloqueio de segurança: Ignora IDs menores que 5740
-            if ($parent_id < 5740) {
+            if ($parent_id < 0) {
                 continue;
             }
 
