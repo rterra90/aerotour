@@ -100,6 +100,7 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
     <!-- FIM BOTÃO WHATSAPP -->
 
     <?php Aerotour_Template::render_related_excursions(); ?>
+    <p>oi</p>
     <?php Aerotour_Template::render_product_footer(); ?>
   </div>
 </section>

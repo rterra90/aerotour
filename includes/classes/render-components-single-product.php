@@ -184,15 +184,27 @@ class Aerotour_Template
     }
     public static function render_related_excursions()
     {
-        global $product;
+        // global $product; FORA DO ESCOPO
+
+        // 1. Pega o ID do produto atual de forma segura
+        $current_product_id = get_the_ID(); 
+
+        // Se falhar (ou estiver fora do loop), tenta pegar o ID do objeto global da query
+        if ( ! $current_product_id ) {
+            $current_product_id = get_queried_object_id();
+        }
+
+        // 2. Instancia o objeto do produto usando o ID (evita o bug da string)
+        $product = wc_get_product( $current_product_id );
 
         // Se não houver produto no contexto global, encerra
         if (!$product) {
             return;
         }
+        
 
-        $cross_sells_ids = [];
-        // $cross_sells_ids = $product->get_cross_sell_ids();
+        // $cross_sells_ids = [];
+        $cross_sells_ids = $product->get_cross_sell_ids();
 
         // Se não houver IDs de venda cruzada configurados, encerra
         if (empty($cross_sells_ids)) {
