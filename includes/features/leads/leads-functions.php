@@ -338,28 +338,25 @@ function update_lead_reserva($passageiros, $status, $order_id = null)
     }
 }
 
-// CHAMA UPDATE_LEAD_RESERVA AO NAVEGAR PARA O CHECKOUT
-add_action('woocommerce_check_cart_items', 'analisar_metadados_no_checkout');
-
-function analisar_metadados_no_checkout()
-{
-    if (!is_checkout()) {
-        return;
-    }
+// CHAMA UPDATE_LEAD_RESERVA AO NAVEGAR PARA CARRINHO E CHECKOUT
+add_action('woocommerce_check_cart_items', 'update_leads_cart_checkout');
+function update_leads_cart_checkout(){
+    // Só executa se o carrinho possuir itens
+    if (WC()->cart->is_empty()) return;
 
     $cart_items = WC()->cart->get_cart();
-
-    foreach ($cart_items as $cart_item_key => $cart_item) {
-        $product_id = $cart_item['product_id'];
-        $variation_id = $cart_item['variation_id'];
-
-        // 3. Pegar metadados customizados que foram adicionados AO ITEM DO CARRINHO
+    foreach ($cart_items as $cart_item){
+        // Pegar metadados 'passageiros' que foram adicionados AO ITEM DO CARRINHO
         if (isset($cart_item['passageiros'])) {
             $passageiros_raw = isset($cart_item['passageiros'])
                 ? wp_unslash($cart_item['passageiros'])
                 : '';
             $passageiros_array = json_decode($passageiros_raw, false);
-            update_lead_reserva($passageiros_array, 'checkout');
+
+            // Atualiza o status do lead (carrinho ou checkout)
+            if($passageiros_array){
+                update_lead_reserva($passageiros_array, is_checkout() ? 'checkout' : 'carrinho');
+            }
         }
     }
 }

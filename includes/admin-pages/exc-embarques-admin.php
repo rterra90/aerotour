@@ -11,6 +11,8 @@ function painel_exc_embarques()
         return;
     }
 
+    $old_embarques_meta = get_post_meta($product->get_id(), 'embarques', true);
+
     $nome_tabela = $wpdb->prefix . 'embarques';
     $embarques_db = $wpdb->get_results("SELECT * from $nome_tabela");
     $padroes_horarios_salvos = get_option('padroes_horarios');
@@ -80,6 +82,7 @@ function painel_exc_embarques()
                 <input autofocus type="time">
                 <button>Definir</button>
             </dialog>
+
             
             <p>Selecione os embarques da excursão</p>
             <div class="main-embarques-header">

@@ -1,25 +1,11 @@
 <?php
 /* Insere os dados do passageiro como meta do item do carrinho */
-add_filter(
-  'woocommerce_add_cart_item_data',
-  'insere_dados_passageiro_pedido',
-  9,
-  6
-);
-function insere_dados_passageiro_pedido(
-  $cart_item_data,
-  $product_id,
-  $variation_id,
-  $quantity
-) {
-  $cart_item_data['embarque'] = $_POST['embarque'];
-  $cart_item_data['horario'] = $_POST['horario'];
-  $cart_item_data['passageiros'] = $_POST['passageiros'];
-  $cart_item_data['taxa'] = $_POST['taxa'];
 
-  return $cart_item_data;
-}
+// Antes era feito com o filter woocommerce_add_cart_item_data; agora, acontece no callback do hook ajax_add_variation_to_cart, em ajax-hooks.php. Isso porque a adição ao carrinho é feita via chamada AJAX no AppReservas.
+
 /* Fim Insere os dados do passageiro como meta do item do carrinho */
+
+
 
 /* Insere dados do passageiro como meta da order global e por line item */
 // GLOBAL

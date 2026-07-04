@@ -180,7 +180,117 @@ a.message-link {
 .center-element {
   margin: 0 auto;
 }
-.woocommerce-notices-wrapper > * {
+
+/* WOOCOMMERCE MESSAGES */
+/* ==========================================================================
+   ESTILIZAÇÃO DOS ALERTAS PADRÃO WOOCOMMERCE (ESTILO AEROTOUR)
+   ========================================================================== */
+
+/* Container base de todos os alertas do WooCommerce */
+.woocommerce-error, 
+.woocommerce-message, 
+.woocommerce-info {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 2rem !important;
+    border: none !important; /* Remove as bordas pretas quadradas nativas */
+    border-radius: 12px !important; /* Bordas arredondadas padrão Aerotour */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    list-style: none !important;
+            opacity: 0;
+        transform: translateY(-15px); /* Inicia um pouco acima */
+    
+    /* Gatilho para a animação de entrada */
+    animation: aerotourAlertSlideIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: .5s;
+}
+
+/* Tratamento específico para Alertas de Erro (Ex: Embarque indisponível) */
+.woocommerce-error {
+    background-color: #fdf2f2 !important; /* Vermelho pastel suave */
+    color: #9b1c1c !important; /* Texto vinho legível */
+    border-left: 5px solid #de350b !important; /* Linha de destaque na esquerda */
+}
+
+/* Correção para quando o erro renderiza em formato de lista (padrão WC) */
+.woocommerce-error li {
+    margin-bottom: 0 !important;
+}
+
+/* Tratamento específico para Alertas de Sucesso/Mensagens (Ex: Cupom aplicado) */
+.woocommerce-message {
+    background-color: #f0fdf4 !important; /* Verde pastel suave */
+    color: #166534 !important;
+    border-left: 5px solid #10b981 !important;
+}
+
+/* Tratamento específico para Alertas Informativos */
+.woocommerce-info {
+    background-color: #f0f9ff !important; /* Azul pastel suave */
+    color: #075985 !important;
+    border-left: 5px solid #0284c7 !important;
+}
+
+/* Ajuste nos links de ação dentro dos alertas (Ex: "Retornar ao carrinho") */
+.woocommerce-error a, 
+.woocommerce-message a, 
+.woocommerce-info a {
+    color: inherit !important;
+    text-decoration: underline !important;
+    font-weight: 600;
+}
+
+.woocommerce-error a:hover, 
+.woocommerce-message a:hover, 
+.woocommerce-info a:hover {
+    opacity: 0.8;
+}
+
+/* Botões internos de ações nativas (Ex: Botão "Ver carrinho" no topo do produto) */
+.woocommerce-message .button,
+.woocommerce-info .button,
+.woocommerce-error .button {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    color: inherit !important;
+    border-radius: 30px !important;
+    padding: 0.4rem 1.2rem !important;
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    transition: background 0.2s ease;
+    margin-left: auto !important; /* Empurra o botão para a extremidade direita */
+}
+
+.woocommerce-message .button:hover,
+.woocommerce-info .button:hover,
+.woocommerce-error .button:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+.woocommerce-notices-wrapper > *:focus-visible {
+  outline: none;
+}
+
+/* ==========================================================================
+   CRIAÇÃO DA ANIMAÇÃO DE ENTRADA (SLIDE IN + FADE IN)
+   ========================================================================== */
+@keyframes aerotourAlertSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-15px); /* Inicia um pouco acima */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Para na posição original */
+    }
+}
+
+
+/* .woocommerce-notices-wrapper > * {
   margin: 0 auto 15px !important;
   display: block;
   border: 2px solid #222;
@@ -202,7 +312,7 @@ a.message-link {
 .woocommerce-notices-wrapper .woocommerce-error {
   background-color: #dba6a6;
   border-color: #cb8585;
-}
+} */
 form#searchform {
   max-width: 460px;
   margin: 0 auto;

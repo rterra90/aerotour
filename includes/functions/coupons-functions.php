@@ -226,4 +226,43 @@ function manage_coupons_widget(){
   </div>
   <?php
 }
+
+/**
+ * Personaliza as mensagens de erro de cupons no WooCommerce
+ */
+add_filter('woocommerce_coupon_error', 'customizar_erros_de_cupom', 10, 3);
+function customizar_erros_de_cupom($err, $err_code, $coupon) {
+    
+    switch ($err_code) {
+        // Cenário 1: O cupom digitado simplesmente não existe ou expirou
+        case WC_Coupon::E_WC_COUPON_NOT_EXIST:
+            $err = __('Código de cupom inválido. Verifique se digitou corretamente ou se o cupom aindas está ativo.', 'woocommerce');
+            break;
+
+        // Cenário 2: O cupom expirou a data de validade
+        case WC_Coupon::E_WC_COUPON_EXPIRED:
+            $err = __('Este cupom já expirou e não pode mais ser utilizado.', 'woocommerce');
+            break;
+
+        // Cenário 3: O cupom já foi usado pelo cliente antes (limite por usuário)
+        case WC_Coupon::E_WC_COUPON_ALREADY_APPLIED_THE_COUPON:
+            $err = __('Você já aplicou esse cupom nesta reserva!', 'woocommerce');
+            break;
+
+        // Cenário 4: O cupom exige um valor mínimo de compra no carrinho
+        case WC_Coupon::E_WC_COUPON_MIN_SPEND_LIMIT_NOT_MET:
+            $err = sprintf(
+                __('Este cupom só pode ser aplicado em reservas com o valor mínimo de %s.', 'woocommerce'),
+                wc_price($coupon->get_minimum_amount())
+            );
+            break;
+
+        // Cenário 5: Uso do cupom atingiu o limite global de utilizações da empresa
+        case WC_Coupon::E_WC_COUPON_USAGE_LIMIT_REACHED:
+            $err = __('Lamentamos, mas o limite máximo de utilizações deste cupom já foi atingido.', 'woocommerce');
+            break;
+    }
+
+    return $err;
+}
 ?>

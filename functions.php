@@ -115,6 +115,9 @@ require_once get_template_directory() . '/includes/functions/usuarios-functions.
 require_once get_template_directory() . '/includes/footer-scripts.php';
 require_once get_template_directory() . '/includes/functions/pax-meta-functions.php'; //Funções para o fluxo de metadados de passageiros
 
+require_once get_template_directory() . '/includes/temp-migrate-embarques.php'; //Funções para o fluxo de metadados de passageiros
+
+
 
 require_once get_template_directory() . '/admin-head-scripts.php';
 require_once get_template_directory() . '/admin-footer-scripts.php';
@@ -129,7 +132,7 @@ require_once get_template_directory() . '/includes/functions/coupons-functions.p
 require_once get_template_directory() . '/includes/functions/blog.php';
 require_once get_template_directory() . '/includes/functions/general-customize.php';
 require_once get_template_directory() . '/includes/afiliados/pdv-functions.php';
-require_once get_template_directory() . '/includes/admin-pages/leads-reservas/leads-reservas-functions.php';
+require_once get_template_directory() . '/includes/features/leads/leads-functions.php';
 
 // require_once get_template_directory() . '/includes/functions/contrato.php';
 
