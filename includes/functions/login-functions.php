@@ -351,3 +351,54 @@ function validar_documentos_aerotour($errors)
   }
 }
 /* Fim Formulário de alteração de dados pessoais */
+
+
+// 1. Evita o acesso de convidados ao checkout e injeta o parâmetro na URL
+add_action('template_redirect', 'custom_redirect_guest_checkout');
+function custom_redirect_guest_checkout() {
+    if (is_checkout() && !is_user_logged_in()) {
+        $checkout_url = wc_get_checkout_url();
+        $my_account_url = get_permalink(wc_get_page_id('myaccount'));
+        
+        // Passamos o parâmetro na URL para a página de login
+        $redirect_url = add_query_arg('redirect', urlencode($checkout_url), $my_account_url);
+        
+        wp_safe_redirect($redirect_url);
+        exit;
+    }
+}
+
+// 2. INJETA O PARÂMETRO COMO CAMPO OCULTO (HIDDEN INPUT) NOS FORMULÁRIOS
+// Isso garante que o valor seja enviado via $_POST (mesmo em requisições AJAX)
+add_action('woocommerce_login_form_end', 'custom_append_redirect_hidden_field');
+add_action('woocommerce_register_form_end', 'custom_append_redirect_hidden_field');
+function custom_append_redirect_hidden_field() {
+    if (isset($_GET['redirect'])) {
+        echo '<input type="hidden" name="custom_redirect_to" value="' . esc_url(urldecode($_GET['redirect'])) . '" />';
+    }
+}
+
+// 3. CAPTURA O VALOR APÓS O LOGIN OU CADASTRO
+add_filter('woocommerce_login_redirect', 'custom_process_url_redirect', 9999, 2);
+add_filter('woocommerce_registration_redirect', 'custom_process_url_redirect', 9999, 1);
+function custom_process_url_redirect($redirect_to) {
+    
+    // Primeiro tenta pegar do $_POST (campo oculto do formulário - funciona com AJAX e convencional)
+    if (!empty($_POST['custom_redirect_to'])) {
+        $url_destino = esc_url_raw($_POST['custom_redirect_to']);
+    } 
+    // Como plano de contingência, tenta pegar direto do $_GET da URL
+    elseif (!empty($_GET['redirect'])) {
+        $url_destino = esc_url_raw(urldecode($_GET['redirect']));
+    }
+
+    // Validação de segurança antes de redirecionar
+    if (!empty($url_destino)) {
+        $home_url = home_url();
+        if (strpos($url_destino, $home_url) !== false) {
+            return $url_destino;
+        }
+    }
+    
+    return $redirect_to;
+}

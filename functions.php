@@ -369,29 +369,6 @@ function terms_and_conditions_validation($username, $email, $validation_errors)
 /* Fim Termos e condições */
 
 
-
-add_action('template_redirect', 'custom_redirect_guest_checkout');
-
-function custom_redirect_guest_checkout() {
-    // 1. Verifica se estamos na página de checkout
-    // 2. Verifica se o usuário NÃO está logado
-    // 3. Verifica se o checkout para convidados está desativado (ou se você quer forçar isso)
-    if (is_checkout() && !is_user_logged_in()) {
-        
-        // Pega a URL do checkout
-        $checkout_url = wc_get_checkout_url();
-        
-        // Cria a URL de redirecionamento para a Minha Conta, 
-        // passando o checkout como o destino pós-login
-        $my_account_url = get_permalink(wc_get_page_id('myaccount'));
-        $redirect_url = add_query_arg('redirect', urlencode($checkout_url), $my_account_url);
-        
-        // Faz o redirecionamento seguro via PHP (Status 302)
-        wp_safe_redirect($redirect_url);
-        exit;
-    }
-}
-
 //ANTES DE CALCULAR O TOTAL DO CARRINHO
 add_action('woocommerce_before_calculate_totals', 'aer_fees');
 function aer_fees($cart_items)
