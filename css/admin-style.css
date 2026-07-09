@@ -6,7 +6,8 @@
 @import './admin/user-search.css';
 /* @import './admin/check-in-modal.css'; */
 @import './admin/buttons.css';
-@import './admin/product_post/meta-pontos-embarque-exc.css';
+/* @import './admin/product_post/meta-pontos-embarque-exc.css'; */
+@import './admin/new-edit-excursao/aba-pontos-de-embarque.css';
 @import './admin/theme-settings.css';
 @import './admin/leads-admin.css';
 

@@ -11,8 +11,6 @@ function painel_exc_embarques()
         return;
     }
 
-    $old_embarques_meta = get_post_meta($product->get_id(), 'embarques', true);
-
     $nome_tabela = $wpdb->prefix . 'embarques';
     $embarques_db = $wpdb->get_results("SELECT * from $nome_tabela");
     $padroes_horarios_salvos = get_option('padroes_horarios');
@@ -42,6 +40,10 @@ function painel_exc_embarques()
         $config_meta = get_post_meta($v_id, '_embarques_config', true);
         $config = $config_meta ? json_decode($config_meta, true) : [];
 
+
+        // print_r($config);
+
+
         foreach ($config as $emb) {
             $emb_id = $emb['embarque_id'];
             if (!isset($ui_data[$emb_id])) {
@@ -65,16 +67,22 @@ function painel_exc_embarques()
                 if ($found_index === -1) {
                     $ui_data[$emb_id]['horarios'][] = [
                         'horario'         => $hora,
-                        'disponibilidade' => [ $v_id => $h['disponivel'] ]
+                        // 'disponibilidade' => [ $v_id => $h['disponivel'] ],
+                        'status' => [ $v_id => $h['status'] ]
                     ];
                 } else {
-                    $ui_data[$emb_id]['horarios'][$found_index]['disponibilidade'][$v_id] = $h['disponivel'];
+                    // $ui_data[$emb_id]['horarios'][$found_index]['disponibilidade'][$v_id] = $h['disponivel'];
+                    $ui_data[$emb_id]['horarios'][$found_index]['status'][$v_id] = $h['status'];
                 }
             }
         }
+
+        // print_r($ui_data);
+
     }
     ?>
     <div class="panel woocommerce_options_panel wc_metaboxes_wrapper hidden px-4" id="exc_embarques_meta">
+
         <div class="section-show" data-dias="<?= esc_attr(json_encode($dias_exc)) ?>">
             <dialog id="refHorarioModal">
                 <p>Defina o horário de embarque no ponto</p>
@@ -108,12 +116,17 @@ function painel_exc_embarques()
 
             <ul class="main-embarques-list">
                 <?php
-                foreach ($ordem_dos_embarques as $_ordem) {
-                    $embarque_db = array_filter($embarques_db, function ($_emb_db) use ($_ordem) {
-                        return $_emb_db->id == $_ordem;
+                foreach ($ordem_dos_embarques as $_embarque_id) {
+     
+                    // Filtra o embarque correspondente do banco de dados para obter os detalhes
+                    $embarque_db = array_filter($embarques_db, function ($_emb_db) use ($_embarque_id) {
+                        return $_emb_db->id == $_embarque_id;
                     });
+
+                    // Garante que apenas o primeiro resultado seja considerado, caso haja múltiplos registros (o que não deveria ocorrer)
                     $embarque_db = array_values($embarque_db)[0] ?? null;
                     if (!$embarque_db) continue;
+                    
 
                     $has_meta = isset($ui_data[$embarque_db->id]);
                     $is_ativo = $has_meta ? 'ativo' : 'inativo';
@@ -129,6 +142,7 @@ function painel_exc_embarques()
                         </div>
                         
                         <div class="emb-item-body">
+
                             <ul class="lista-horarios" data-embarque-id="<?= esc_attr($embarque_db->id) ?>">
                                 <?php
                                 if (!empty($horarios_salvos)) {
@@ -140,20 +154,51 @@ function painel_exc_embarques()
                                             <div class="horario">
                                                 <input type="time" data-order="<?= $horariosIndex ?>" value="<?= esc_attr($current_hora) ?>" onchange="salvaEmbarques()">
                                             </div>
-                                            <div class="disponibilidade" data-embarque-id="<?= esc_attr($embarque_db->id) ?>" data-order="<?= $horariosIndex ?>">
-                                                <?php foreach ($variacoes_list as $v) { 
-                                                    $is_disp = isset($h_info['disponibilidade'][$v['id']]) ? $h_info['disponibilidade'][$v['id']] : false;
+
+                                            
+
+                                                <?php
+
+                                                foreach ($variacoes_list as $v) :
                                                     ?>
-                                                    <label>
-                                                        <input type="checkbox" 
-                                                               <?= $is_disp ? 'checked' : '' ?> 
-                                                               onchange="salvaEmbarques()" 
-                                                               data-content="<?= esc_attr(substr($v['dia'], 0, -5)) ?>" 
-                                                               data-variation-id="<?= esc_attr($v['id']) ?>" 
-                                                               data-dia="<?= esc_attr($v['dia']) ?>">
-                                                    </label>
-                                                <?php } ?>
-                                            </div>
+                                                    <div class="disponibilidade" 
+                                                    data-varid="<?= $v['id'] ? esc_attr($v['id']) : 'sem variation id'; ?>" 
+                                                    data-horario="<?= esc_attr($current_hora); ?>">
+
+                                                    <?php
+                                                        $current_status = 'disponivel'; // Status padrão
+                                                        $current_dia = $v['dia'];
+                                                        if (isset($ui_data[$embarque_db->id])) :
+                                                            $horarios_salvos = $ui_data[$embarque_db->id]['horarios'];
+
+                                                            
+                                                            foreach ($horarios_salvos as $hs) {
+                                                                if ($hs['horario'] === $current_hora) {
+                                                                    
+                                                                    if (isset($hs['status'])) {
+                                                                        $current_status = $hs['status'][$v['id']];
+                                                                    } else {
+                                                                        // Fallback de leitura para dados salvos antes dessa atualização
+                                                                        $is_checked = isset($hs['disponivel']) ? filter_var($hs['disponivel'], FILTER_VALIDATE_BOOLEAN) : false;
+                                                                        $current_status = $is_checked ? 'disponivel' : 'indisponivel';
+                                                                    }
+                                                                    break;
+                                                                }
+                                                            }
+                                                        endif;
+                                                        ?>
+                                                            <button type="button" class="btn-status-disp" data-status="<?= esc_attr($current_status); ?>">
+                                                            
+                                                            <span class="status-label"><?= esc_html(substr($current_dia, 0, -5)); ?></span>
+                                                            </button>
+                                                            
+                                                            <input type="hidden" class="disp-status-input" value="<?= esc_attr($current_status); ?>">
+                                                        </div>
+                                                        <?php
+                                                        endforeach; 
+                                                    ?>
+
+
                                             <div class="opcoes">
                                                 <?php if ($horariosIndex > 1) { ?> 
                                                     <span onclick="excluirHorario(this.dataset.embarqueId, this.dataset.order)" class="dashicons dashicons-trash" data-embarque-id="<?= esc_attr($embarque_db->id) ?>" data-order="<?= $horariosIndex ?>"></span>
@@ -170,18 +215,43 @@ function painel_exc_embarques()
                                         <div class="horario">
                                             <input type="time" onchange="salvaEmbarques()" data-order="1" value="">
                                         </div>
-                                        <div class="disponibilidade" data-embarque-id="<?= esc_attr($embarque_db->id) ?>" data-order="1">
-                                            <?php foreach ($variacoes_list as $v) { ?>
-                                                <label>
-                                                    <input type="checkbox" 
-                                                           checked 
-                                                           onchange="salvaEmbarques()" 
-                                                           data-content="<?= esc_attr(substr($v['dia'], 0, -5)) ?>" 
-                                                           data-variation-id="<?= esc_attr($v['id']) ?>" 
-                                                           data-dia="<?= esc_attr($v['dia']) ?>">
-                                                </label>
-                                            <?php } ?>
-                                        </div>
+                                        <?php
+
+                                            foreach ($variacoes_list as $v) :
+                                                ?>
+                                                <div class="disponibilidade" 
+                                                data-varid="<?= $v['id'] ? esc_attr($v['id']) : 'sem variation id'; ?>" 
+                                                data-horario="<?= esc_attr($current_hora); ?>">
+
+                                                <?php
+                                                $current_status = 'disponivel'; // Status padrão
+                                                $current_dia = $v['dia'];
+                                                if (isset($ui_data[$embarque_db->id])) :
+                                                    $horarios_salvos = $ui_data[$embarque_db->id]['horarios'];
+                                                    foreach ($horarios_salvos as $hs) {
+                                                        if ($hs['horario'] === $current_hora) {
+                                                            if (isset($hs['status'])) {
+                                                                $current_status = $hs['status'];
+                                                            } else {
+                                                                // Fallback de leitura para dados salvos antes dessa atualização
+                                                                $is_checked = isset($hs['disponivel']) ? filter_var($hs['disponivel'], FILTER_VALIDATE_BOOLEAN) : false;
+                                                                $current_status = $is_checked ? 'disponivel' : 'indisponivel';
+                                                            }
+                                                            break;
+                                                        }
+                                                    }
+                                                endif;
+                                                ?>
+                                                    <button type="button" class="btn-status-disp" data-status="<?= esc_attr($current_status); ?>">
+                                                    
+                                                    <span class="status-label"><?= esc_html(substr($current_dia, 0, -5)); ?></span>
+                                                    </button>
+                                                    
+                                                    <input type="hidden" class="disp-status-input" value="<?= esc_attr($current_status); ?>">
+                                                </div>
+                                                <?php
+                                            endforeach; 
+                                        ?>
                                         <div class="opcoes"></div>
                                     </li>
                                     <?php
@@ -357,10 +427,14 @@ function painel_exc_embarques()
                             if(inputHora && inputHora.value !== ''){
                                 const horaStr = inputHora.value;
 
-                                const cbVariacoes = horarioLi.querySelectorAll(`.disponibilidade input[type="checkbox"]`);
-                                cbVariacoes.forEach(cb => {
-                                    const varId = cb.dataset.variationId;
-                                    const isChecked = cb.checked;
+                                // Seleciona todos os containers de disponibilidade dentro da linha deste horário
+                                const blocosDisponibilidade = horarioLi.querySelectorAll('.disponibilidade');
+
+                                blocosDisponibilidade.forEach(dispEl => {
+                                    // Obtém o ID da variação e o status do botão
+                                    const varId = dispEl.dataset.varid;
+                                    const btnStatus = dispEl.querySelector('.btn-status-disp');
+                                    const statusVal = btnStatus ? btnStatus.getAttribute('data-status') : 'disponivel';
 
                                     if (!dataPorVariacao[varId]) {
                                         dataPorVariacao[varId] = [];
@@ -376,18 +450,21 @@ function painel_exc_embarques()
                                         dataPorVariacao[varId].push(embConfig);
                                     }
 
+                                    // Alimenta o objeto final com o novo status e mantém o booleano como fallback amigável
                                     embConfig.horarios.push({
                                         horario: horaStr,
-                                        disponivel: isChecked
+                                        status: statusVal,                       // Novo: 'disponivel', 'esgotado' ou 'indisponivel'
+                                        disponivel: (statusVal === 'disponivel') // Fallback retrocompatível (true/false)
                                     });
                                 });
                             }
                         });
                     });
-console.log(dataPorVariacao);
+
                     const hiddenInput = document.querySelector('input#meta_embarques_data');
                     if (hiddenInput) {
                         hiddenInput.value = JSON.stringify(dataPorVariacao);
+                        console.log(hiddenInput)
                     }
                 }
 
@@ -395,6 +472,34 @@ console.log(dataPorVariacao);
                 document.addEventListener("DOMContentLoaded", () => {
                     salvaEmbarques();
                 });
+
+                // EVENTO DE CLIQUE CÍCLICO NO BOTÃO DE STATUS DE DISPONIBILIDADE DE VARIAÇÃO POR HORÁRIO
+document.querySelectorAll('.btn-status-disp').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault(); // Evita qualquer comportamento padrão de formulário
+        
+        const container = this.closest('.disponibilidade');
+        const input = container.querySelector('.disp-status-input');
+        let currentStatus = this.getAttribute('data-status');
+        let nextStatus = '';
+
+        // Lógica de rotação: Disponível -> Esgotado -> Indisponível -> Disponível
+        if (currentStatus === 'disponivel') {
+            nextStatus = 'esgotado';
+        } else if (currentStatus === 'esgotado') {
+            nextStatus = 'indisponivel';
+        } else {
+            nextStatus = 'disponivel';
+        }
+
+        // Atualiza o DOM e o estilo instantaneamente
+        this.setAttribute('data-status', nextStatus);
+        input.value = nextStatus;
+
+        // Dispara o salvamento geral
+        salvaEmbarques();
+    });
+});
             </script>   
         </div>
         

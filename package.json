@@ -17,6 +17,7 @@
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "bootstrap-icons": "^1.13.1",
     "gapi-script": "^1.2.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.548.0",
