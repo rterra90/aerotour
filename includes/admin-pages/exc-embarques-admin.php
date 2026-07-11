@@ -68,11 +68,15 @@ function painel_exc_embarques()
                     $ui_data[$emb_id]['horarios'][] = [
                         'horario'         => $hora,
                         // 'disponibilidade' => [ $v_id => $h['disponivel'] ],
-                        'status' => [ $v_id => $h['status'] ]
+                        'status' => isset($h['status']) ? [ $v_id => $h['status'] ] : []
                     ];
                 } else {
-                    // $ui_data[$emb_id]['horarios'][$found_index]['disponibilidade'][$v_id] = $h['disponivel'];
-                    $ui_data[$emb_id]['horarios'][$found_index]['status'][$v_id] = $h['status'];
+                    if(!isset($ui_data[$emb_id]['horarios'][$found_index]['status'])) {
+                        $ui_data[$emb_id]['horarios'][$found_index]['status'] = [];
+                    }else{
+                    $ui_data[$emb_id]['horarios'][$found_index]['disponibilidade'][$v_id] = $h['disponivel'];
+
+                    }
                 }
             }
         }
@@ -176,7 +180,7 @@ function painel_exc_embarques()
                                                                 if ($hs['horario'] === $current_hora) {
                                                                     
                                                                     if (isset($hs['status'])) {
-                                                                        $current_status = $hs['status'][$v['id']];
+                                                                        $current_status = isset($hs['status'][$v['id']]) ? $hs['status'][$v['id']] : 'disponivel';
                                                                     } else {
                                                                         // Fallback de leitura para dados salvos antes dessa atualização
                                                                         $is_checked = isset($hs['disponivel']) ? filter_var($hs['disponivel'], FILTER_VALIDATE_BOOLEAN) : false;

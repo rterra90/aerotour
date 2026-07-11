@@ -20,7 +20,8 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
 
         $agrupado[$dia]['horarios'][] = [
             'horario' => $item['horario'],
-            'disponivel' => $item['disponivel']
+            'disponivel' => $item['disponivel'],
+            'status' => isset($item['status']) ? $item['status'] : 'indisponivel'
         ];
     }
 
@@ -84,34 +85,25 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
 
       }
 
-      $exibe_horarios_inativos = true;
-
       //verifica a quantidade de horários únicos encontrados em todas as variações para esse embarque
       $horarios_unicos = array_unique(array_map(function($h_emb){
         return $h_emb['horario'];
       }, $horarios_do_embarque));
 
-                  //verifica se todas as variações possuem horários idênticos para esse embarque
+            //verifica se todas as variações possuem horários idênticos para esse embarque
             $set_horarios_iguais_nos_embarques = array_filter(agruparHorariosPorDia($horarios_do_embarque),
-              function($h_emb) use($horarios_unicos, $exibe_horarios_inativos){
-                if($exibe_horarios_inativos){
-                  return count($h_emb['horarios']) == count($horarios_unicos);
-                }else{
-
-                // mapear $h_emb['horarios'] para retornar apenas os os objetos em que 'disponivel' seja true ou 1
+              function($h_emb){
+                // mapear $h_emb['horarios'] para retornar apenas os os objetos em que 'disponivel' seja true ou esgotado
                 $horarios_disponiveis = array_filter($h_emb['horarios'], function($h){
-                  return $h['disponivel'];
+                  return $h['status'] === 'disponivel' || $h['status'] === 'esgotado';
                 });
                 
                 if(count($horarios_disponiveis) !== count($h_emb['horarios'])){
                   return false;
-                }
-                
-                }
+                }           
+              });
 
-            });
-
-            $horarios_iguais_nos_embarques = count($set_horarios_iguais_nos_embarques) === count(agruparHorariosPorDia($horarios_do_embarque));
+      $horarios_iguais_nos_embarques = count($set_horarios_iguais_nos_embarques) === count(agruparHorariosPorDia($horarios_do_embarque));
       ?>
         <div class="item-embarque" data-cidade="<?= strtolower(
                                                   trim(explode(' - ', $embarque -> nome)[0])
@@ -160,7 +152,7 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
 
                   $horarios_exibidos = array_filter(
                       $dia['horarios'],
-                      fn($h) => $exibe_horarios_inativos || $h['disponivel']
+                      fn($h) => $h['status'] === 'disponivel' || $h['status'] === 'esgotado'
                   );
 
                   // Cria uma chave única baseada nos horários e disponibilidade
@@ -177,39 +169,41 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
               }
 
 
-
-
-
-
               foreach ($dias_agrupados as $grupo) : ?>
 
-                <div class="dia-horarios-area">
+                <?php if(!(empty($grupo['horarios']))) : ?>
+                  <div class="dia-horarios-area">
 
-                    <p class="area-header">
-                        <?php
-                        $dias = array_map(
-                            fn($d) => substr($d, 0, -5),
-                            $grupo['dias']
-                        );
+                      <p class="area-header">
+                          <?php
+                          $dias = array_map(
+                              fn($d) => substr($d, 0, -5),
+                              $grupo['dias']
+                          );
 
-                        echo count($dias) > 1
-                            ? 'Dias ' . implode(' e ', $dias)
-                            : 'Dia ' . $dias[0];
-                        ?>
-                    </p>
 
-                    <?php foreach ($grupo['horarios'] as $h_emb) : ?>
-                        <span><?= $h_emb['horario']; ?></span>
-                    <?php endforeach; ?>
+                          // se a configuração de horários for diferente entre os dias, exibe "Dia(s) X e Y" ou "Dias X, Y e Z"
+                          // count($dias_agrupados) > 1 indica que há diferentes configurações de horários entre os dias
+                          if(count($dias_agrupados) > 1){
+                          echo count($dias) > 1
+                              ? 'Dias ' . implode(' e ', $dias)
+                              : 'Dia ' . $dias[0];
+                          }
 
-                </div>
+                          ?>
+                      </p>
 
+                      <?php foreach ($grupo['horarios'] as $h_emb) : ?>
+                          <span><?= $h_emb['horario']; ?></span>
+                      <?php endforeach; ?>
+
+                  </div>
+                <?php endif; ?>
               <?php endforeach;
               ?>
               </div>
               <?php
             }
-
             ?>
 
             </div>
