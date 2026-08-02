@@ -14,7 +14,8 @@ const EmbarquesModal = ({
   setTaxa,
   estadoDestino,
   cidadesDiaAnterior,
-  horario
+  horario,
+  getDateByVarId
 }) => {
   const [visible, setVisible] = React.useState(false);
   const [preEmbarque, setPreEmbarque] = React.useState([]);
@@ -405,7 +406,7 @@ console.log(horariosAgregados);
                     )}
                     </> : (
                       <div className="horarios-multiplas-datas">
-                        <h3 className="title">Horários de embarque por data</h3>
+                        <h3 className="title mb-4">Horários de embarque por data</h3>
                         
                         {Object.entries(horariosDisponiveis).map(([dataKey, horariosDaData]) => {
                           // Verifica se os itens do array são strings ("17:00") ou objetos ({horario: "17:00", status: "disponivel"})
@@ -417,13 +418,13 @@ console.log(horariosAgregados);
                           );
 
                           return (
-                            <div key={dataKey} className="data-section mb-4">
+                            <div key={dataKey} className="data-section mb-3">
                               {/* Identificação de qual dia/variação são esses horários */}
-                              <h4 className="subtitle mb-2" style={{fontSize: '16px', fontWeight: 'bold'}}>Data/Reserva: {dataKey}</h4>
+                              <h4 className="subtitle mb-2" style={{fontSize: '16px', fontWeight: 'bold'}}>Data: {getDateByVarId(dataKey)}</h4>
                               
                               {/* Horário simples para esta data específica */}
                               {disponiveis.length === 1 && (
-                                <span className="horario-single d-block text-center mb-3">
+                                <span className="horario-single d-block text-center">
                                   {isStringArray ? disponiveis[0] : disponiveis[0].horario}
                                   
                                   {/* Exibe badge "do dia anterior" se a lógica for atendida */}
@@ -529,7 +530,7 @@ EmbarquesModal.propTypes = {
   selectedDates: PropTypes.array.isRequired,
   variacoes: PropTypes.array.isRequired,
   variacoesSelecionadas: PropTypes.array.isRequired,
-  getVarIdByDate: PropTypes.func.isRequired,
+  getDateByVarId: PropTypes.func.isRequired,
   setPrecoUnitario: PropTypes.func.isRequired,
   setTaxa: PropTypes.func.isRequired,
   estadoDestino: PropTypes.string.isRequired,

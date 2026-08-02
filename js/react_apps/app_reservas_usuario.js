@@ -3839,7 +3839,8 @@
     setTaxa,
     estadoDestino,
     cidadesDiaAnterior,
-    horario
+    horario,
+    getDateByVarId
   }) => {
     const [visible, setVisible] = React.useState(false);
     const [preEmbarque, setPreEmbarque] = React.useState([]);
@@ -4103,18 +4104,18 @@
                               ] }, index)) })
                             ] })
                           ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "horarios-multiplas-datas", children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Hor\xE1rios de embarque por data" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title mb-4", children: "Hor\xE1rios de embarque por data" }),
                             Object.entries(horariosDisponiveis).map(([dataKey, horariosDaData]) => {
                               const isStringArray = typeof horariosDaData[0] === "string";
                               const disponiveis = horariosDaData.filter(
                                 (h) => isStringArray ? true : h.status !== "indisponivel"
                               );
-                              return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "data-section mb-4", children: [
+                              return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "data-section mb-3", children: [
                                 /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("h4", { className: "subtitle mb-2", style: { fontSize: "16px", fontWeight: "bold" }, children: [
-                                  "Data/Reserva: ",
-                                  dataKey
+                                  "Data: ",
+                                  getDateByVarId(dataKey)
                                 ] }),
-                                disponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "horario-single d-block text-center mb-3", children: [
+                                disponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "horario-single d-block text-center", children: [
                                   isStringArray ? disponiveis[0] : disponiveis[0].horario,
                                   estadoDestino === "rj" && preEmbarque[0] && cidadesDiaAnterior.includes(preEmbarque[0].nome.split(" - ")[0]) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "aviso-dia-anterior ms-2", children: "do dia anterior" }) : null
                                 ] }),
@@ -4210,7 +4211,7 @@
     selectedDates: import_prop_types2.default.array.isRequired,
     variacoes: import_prop_types2.default.array.isRequired,
     variacoesSelecionadas: import_prop_types2.default.array.isRequired,
-    getVarIdByDate: import_prop_types2.default.func.isRequired,
+    getDateByVarId: import_prop_types2.default.func.isRequired,
     setPrecoUnitario: import_prop_types2.default.func.isRequired,
     setTaxa: import_prop_types2.default.func.isRequired,
     estadoDestino: import_prop_types2.default.string.isRequired,
@@ -5284,6 +5285,10 @@
       );
       return foundVar ? foundVar.variation_id : void 0;
     };
+    const getDateByVarId = (varId) => {
+      const foundVar = variacoes.find((_var) => _var.variation_id == varId);
+      return foundVar ? foundVar.attributes.attribute_dia : void 0;
+    };
     const getAvailabilityById = (_id) => {
       const _var = variacoes.filter((_v) => _v.variation_id == _id)[0];
       const _payload = _var.availability_html;
@@ -5453,13 +5458,13 @@
             embarque,
             selectedDates,
             variacoes,
-            getVarIdByDate,
             variacoesSelecionadas,
             setPrecoUnitario,
             setTaxa,
             estadoDestino,
             cidadesDiaAnterior,
-            horario
+            horario,
+            getDateByVarId
           }
         ),
         dateModalOpen && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(

@@ -239,6 +239,12 @@ function AppReservas() {
     return foundVar ? foundVar.variation_id : undefined;
   };
 
+  // Função que retorna o attribute_dia a partir do ID da variação
+  const getDateByVarId = (varId) => {
+    const foundVar = variacoes.find((_var) => _var.variation_id == varId);
+    return foundVar ? foundVar.attributes.attribute_dia : undefined;
+  };
+
   const getAvailabilityById = (_id) => {
     const _var = variacoes.filter((_v) => _v.variation_id == _id)[0];
     const _payload = _var.availability_html;
@@ -451,13 +457,13 @@ function AppReservas() {
                 embarque={embarque}
                 selectedDates={selectedDates}
                 variacoes={variacoes}
-                getVarIdByDate={getVarIdByDate}
                 variacoesSelecionadas={variacoesSelecionadas}
                 setPrecoUnitario={setPrecoUnitario}
                 setTaxa={setTaxa}
                 estadoDestino={estadoDestino}
                 cidadesDiaAnterior={cidadesDiaAnterior}
                 horario={horario}
+                getDateByVarId={getDateByVarId}
               />
             )}
 

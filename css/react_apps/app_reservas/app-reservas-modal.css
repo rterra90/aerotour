@@ -293,6 +293,18 @@
     font-weight: 500;
     color: var(--aer-accent);
 }
+
+/* Horários por datas múltiplas */
+.horarios-multiplas-datas .data-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.horarios-multiplas-datas .data-section .horario-single{
+  padding: .25rem .75rem;
+  font-size: 1.075rem;
+}
+
 .embarque-details-inner .localizacao p.info {
   font-size: 0.95rem;
   margin: 0.5rem 0;
