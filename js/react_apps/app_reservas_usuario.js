@@ -5393,7 +5393,7 @@
                 ] }),
                 embarque.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sub-horario d-flex mt-2", children: [
                   /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "icon", children: "\u{1F559}" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: typeof horario === "string" ? horario : "lado" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: typeof horario === "string" ? horario : "Clique para ver" }),
                   /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "text", children: " " })
                 ] }) }),
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "edit-icon", children: "\u270F\uFE0F" })
