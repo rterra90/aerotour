@@ -201,7 +201,6 @@ function painel_exc_embarques()
                                                                 if ($hs['horario'] === $current_hora) {
                                                                     
                                                                     if (isset($hs['status'])) {
-                                                                        print_r($hs['status']);
                                                                         $current_status = isset($hs['status'][$v['id']]) ? $hs['status'][$v['id']] : 'disponivel';
                                                                     } else {
                                                                         // Fallback de leitura para dados salvos antes dessa atualização

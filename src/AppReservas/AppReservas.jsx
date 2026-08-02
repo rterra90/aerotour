@@ -378,7 +378,7 @@ function AppReservas() {
                   <>
                     <div className="sub-horario d-flex mt-2">
                       <div className="icon">🕙</div>
-                      <span>{typeof horario === 'string' ? horario : 'lado'}</span>
+                      <span>{typeof horario === 'string' ? horario : 'Clique para ver'}</span>
 
                       <div className="text"> </div>
                     </div>
