@@ -64,18 +64,37 @@ function painel_exc_embarques()
                     }
                 }
 
+                // if ($found_index === -1) {
+                //     $ui_data[$emb_id]['horarios'][] = [
+                //         'horario'         => $hora,
+                //         // 'disponibilidade' => [ $v_id => $h['disponivel'] ],
+                //         'status' => isset($h['status']) ? [ $v_id => $h['status'] ] : []
+                //     ];
+                // } else {
+                //     if(!isset($ui_data[$emb_id]['horarios'][$found_index]['status'])) {
+                //         $ui_data[$emb_id]['horarios'][$found_index]['status'] = [];
+                //     }else{
+                //     $ui_data[$emb_id]['horarios'][$found_index]['status'][$v_id] = 'disponivel';
+
+                //     }
+                // }
                 if ($found_index === -1) {
                     $ui_data[$emb_id]['horarios'][] = [
-                        'horario'         => $hora,
-                        // 'disponibilidade' => [ $v_id => $h['disponivel'] ],
-                        'status' => isset($h['status']) ? [ $v_id => $h['status'] ] : []
+                        'horario' => $hora,
+                        'status'  => isset($h['status']) ? [ $v_id => $h['status'] ] : []
                     ];
                 } else {
-                    if(!isset($ui_data[$emb_id]['horarios'][$found_index]['status'])) {
+                    if (!isset($ui_data[$emb_id]['horarios'][$found_index]['status'])) {
                         $ui_data[$emb_id]['horarios'][$found_index]['status'] = [];
-                    }else{
-                    $ui_data[$emb_id]['horarios'][$found_index]['disponibilidade'][$v_id] = $h['disponivel'];
-
+                    }
+                    
+                    // Resgata o status correto da variação atual
+                    if (isset($h['status'])) {
+                        $ui_data[$emb_id]['horarios'][$found_index]['status'][$v_id] = $h['status'];
+                    } else {
+                        // Fallback de retrocompatibilidade caso o dado ainda esteja no formato antigo
+                        $is_checked = isset($h['disponivel']) ? filter_var($h['disponivel'], FILTER_VALIDATE_BOOLEAN) : false;
+                        $ui_data[$emb_id]['horarios'][$found_index]['status'][$v_id] = $is_checked ? 'disponivel' : 'indisponivel';
                     }
                 }
             }
@@ -175,11 +194,14 @@ function painel_exc_embarques()
                                                         if (isset($ui_data[$embarque_db->id])) :
                                                             $horarios_salvos = $ui_data[$embarque_db->id]['horarios'];
 
+                                                                        // print_r($horarios_salvos);
                                                             
                                                             foreach ($horarios_salvos as $hs) {
+
                                                                 if ($hs['horario'] === $current_hora) {
                                                                     
                                                                     if (isset($hs['status'])) {
+                                                                        print_r($hs['status']);
                                                                         $current_status = isset($hs['status'][$v['id']]) ? $hs['status'][$v['id']] : 'disponivel';
                                                                     } else {
                                                                         // Fallback de leitura para dados salvos antes dessa atualização
@@ -368,7 +390,15 @@ function painel_exc_embarques()
                     cloneLi.dataset.order = order;
                     cloneLi.querySelector('input[type="time"]').value = '';
                     cloneLi.querySelector('input[type="time"]').dataset.order = order;
-                    cloneLi.querySelectorAll('.disponibilidade input').forEach(_inp => _inp.checked = true);
+
+                    // Reseta o status de todos os botões clonados para o padrão
+                    cloneLi.querySelectorAll('.disponibilidade').forEach(dispContainer => {
+                        const btn = dispContainer.querySelector('.btn-status-disp');
+                        const inputStatus = dispContainer.querySelector('.disp-status-input');
+                        
+                        if (btn) btn.setAttribute('data-status', 'disponivel');
+                        if (inputStatus) inputStatus.value = 'disponivel';
+                    });
                     
                     const opcoesDiv = cloneLi.querySelector('.opcoes');
                     opcoesDiv.innerHTML = '';
@@ -468,7 +498,7 @@ function painel_exc_embarques()
                     const hiddenInput = document.querySelector('input#meta_embarques_data');
                     if (hiddenInput) {
                         hiddenInput.value = JSON.stringify(dataPorVariacao);
-                        console.log(hiddenInput)
+                        console.log(JSON.parse(hiddenInput.value));
                     }
                 }
 
@@ -477,33 +507,36 @@ function painel_exc_embarques()
                     salvaEmbarques();
                 });
 
-                // EVENTO DE CLIQUE CÍCLICO NO BOTÃO DE STATUS DE DISPONIBILIDADE DE VARIAÇÃO POR HORÁRIO
-document.querySelectorAll('.btn-status-disp').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault(); // Evita qualquer comportamento padrão de formulário
-        
-        const container = this.closest('.disponibilidade');
-        const input = container.querySelector('.disp-status-input');
-        let currentStatus = this.getAttribute('data-status');
-        let nextStatus = '';
+                // EVENTO DE CLIQUE CÍCLICO USANDO DELEGAÇÃO DE EVENTOS
+                document.addEventListener('click', function(e) {
+                    const btn = e.target.closest('.btn-status-disp');
+                    
+                    // Se o clique não foi no nosso botão, ignora
+                    if (!btn) return;
+                    
+                    e.preventDefault(); 
+                    
+                    const container = btn.closest('.disponibilidade');
+                    const input = container.querySelector('.disp-status-input');
+                    let currentStatus = btn.getAttribute('data-status');
+                    let nextStatus = '';
 
-        // Lógica de rotação: Disponível -> Esgotado -> Indisponível -> Disponível
-        if (currentStatus === 'disponivel') {
-            nextStatus = 'esgotado';
-        } else if (currentStatus === 'esgotado') {
-            nextStatus = 'indisponivel';
-        } else {
-            nextStatus = 'disponivel';
-        }
+                    // Lógica de rotação: Disponível -> Esgotado -> Indisponível -> Disponível
+                    if (currentStatus === 'disponivel') {
+                        nextStatus = 'esgotado';
+                    } else if (currentStatus === 'esgotado') {
+                        nextStatus = 'indisponivel';
+                    } else {
+                        nextStatus = 'disponivel';
+                    }
 
-        // Atualiza o DOM e o estilo instantaneamente
-        this.setAttribute('data-status', nextStatus);
-        input.value = nextStatus;
+                    // Atualiza o DOM
+                    btn.setAttribute('data-status', nextStatus);
+                    input.value = nextStatus;
 
-        // Dispara o salvamento geral
-        salvaEmbarques();
-    });
-});
+                    // Dispara o salvamento
+                    salvaEmbarques();
+                });
             </script>   
         </div>
         

@@ -160,7 +160,9 @@ function AppReservas() {
     const submitQty = passageiros.length;
     const submitTaxa = taxa;
     const submitEmbarque = embarque ? embarque[0].id : null;
+
     const submitHorario = horario;
+
     const submitPax = passageiros.length > 0 ? JSON.stringify(passageiros) : null;
 
     const _date = selectedDates[index];
@@ -272,7 +274,9 @@ function AppReservas() {
     embarquesDetalhes.forEach(embDet => {
       if(embDet.id === idEmbarqueSelecionado){
         setEmbarque([embDet]);
+
         setHorario(horarioSelecionado);
+        
       }
     })
   };
@@ -368,7 +372,7 @@ function AppReservas() {
                   <>
                     <div className="sub-horario d-flex mt-2">
                       <div className="icon">🕙</div>
-                      <span>{horario ? horario : '--:--'}</span>
+                      <span>{typeof horario === 'string' ? horario : 'lado'}</span>
 
                       <div className="text"> </div>
                     </div>

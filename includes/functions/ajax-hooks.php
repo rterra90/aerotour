@@ -182,7 +182,37 @@ function ajax_add_variation_to_cart()
     $quantity     = absint($_POST['quantity']);
     $taxa         = sanitize_text_field($_POST['taxa']); 
     $embarque_id  = absint($_POST['embarque']); 
-    $horario      = sanitize_text_field($_POST['horario']); 
+    
+    // ----------------------------------------------------------------------
+    // NOVO: Tratamento flexível para o horário (Array de objetos ou String)
+    // ----------------------------------------------------------------------
+    $horario_raw = isset($_POST['horario']) ? wp_unslash($_POST['horario']) : '';
+    $horario = '';
+    
+    // Tenta decodificar caso tenha vindo como string JSON do frontend
+    $decoded_horario = is_string($horario_raw) ? json_decode($horario_raw, true) : $horario_raw;
+
+    if (is_array($decoded_horario) && !empty($decoded_horario)) {
+        // Percorre a array procurando o objeto com o varID correspondente
+        foreach ($decoded_horario as $item) {
+            if (isset($item['varID']) && (int)$item['varID'] === $variation_id) {
+                $horario = sanitize_text_field($item['varHorario']);
+                break;
+            }
+        }
+    } else {
+        // Fallback: se não for array, assume que é o cenário antigo de string simples (ex: "17:00")
+        $horario = sanitize_text_field($horario_raw);
+    }
+
+    // Validação extra caso o loop não encontre o horário para o variation_id atual
+    if (empty($horario)) {
+        wp_send_json([
+            'error' => true,
+            'messages' => '<ul class="woocommerce-error"><li>Nenhum horário foi identificado para esta data. Por favor, tente novamente.</li></ul>',
+        ]);
+    }
+    // ----------------------------------------------------------------------
     
     // Tratamento dos passageiros (stringified array of objects)
     $passageiros_raw = isset($_POST['passageiros']) ? wp_unslash($_POST['passageiros']) : ''; 
@@ -220,16 +250,16 @@ function ajax_add_variation_to_cart()
                 'type' => 'ja-adicionado-carrinho',
                 'messages' => '<p class="app-reservas-error">Esta excursão já está no carrinho.</p>',
             ]);
-        } // [cite: 110]
+        } 
     }
 
     // 3. Preparar os dados personalizados para o item no carrinho
     $cart_item_data = [
-        'desconto_antecipado' => sanitize_text_field($_POST['desconto_antecipado']), // [cite: 106]
-        'taxa'                => $taxa, // [cite: 106]
+        'desconto_antecipado' => sanitize_text_field($_POST['desconto_antecipado']), 
+        'taxa'                => $taxa, 
         'embarque'            => $embarque_id,
-        'horario'             => $horario, // [cite: 106]
-        'passageiros'         => $passageiros_raw, // [cite: 106]
+        'horario'             => $horario, // O valor inserido no carrinho agora é apenas a string (ex: "17:00")
+        'passageiros'         => $passageiros_raw, 
     ];
 
     // 4. Adiciona ao carrinho 
@@ -239,27 +269,25 @@ function ajax_add_variation_to_cart()
         $variation_id,
         [],
         $cart_item_data
-    ); // 
+    ); 
 
-    if (!$added) { // [cite: 113]
+    if (!$added) { 
         wp_send_json([
             'error' => true,
-            'messages' => '<ul class="woocommerce-error"><li>Não foi possível adicionar ao carrinho.</li></ul>', // [cite: 113]
+            'messages' => '<ul class="woocommerce-error"><li>Não foi possível adicionar ao carrinho.</li></ul>', 
         ]);
     }
 
-    // 5. Atualiza o lead para status 'carrinho' [cite: 114]
+    // 5. Atualiza o lead para status 'carrinho' 
     if (!empty($passageiros_raw)) {
-        $passageiros_array = json_decode($passageiros_raw, false); // [cite: 115]
+        $passageiros_array = json_decode($passageiros_raw, false); 
         if (function_exists('update_lead_reserva')) {
-            update_lead_reserva($passageiros_array, 'carrinho'); // [cite: 115]
+            update_lead_reserva($passageiros_array, 'carrinho'); 
         }
     }
 
     // 6. Retorna resposta de sucesso
-    // A função get_refreshed_fragments() nativa do WC já encerra a requisição via wp_die()
-    // e retorna um JSON válido (sem {error: true}), o que se alinha com o que sua requisição do React espera no success. [cite: 116, 123, 124]
-    WC_AJAX::get_refreshed_fragments(); // [cite: 116]
+    WC_AJAX::get_refreshed_fragments(); 
 }
 
 //ATUALIZA UMA RESERVA VIA AJAX

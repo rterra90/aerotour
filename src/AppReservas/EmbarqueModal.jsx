@@ -19,19 +19,21 @@ const EmbarquesModal = ({
   const [visible, setVisible] = React.useState(false);
   const [preEmbarque, setPreEmbarque] = React.useState([]);
   const [preHorario, setPreHorario] = React.useState('');
+  const [preMultiHorario, setPreMultiHorario] = React.useState([]);
   const [horariosDisponiveis, setHorariosDisponiveis] = React.useState([]);
+  const [horariosPorVariacaoSelecionada, setHorariosPorVariacaoSelecionada] = React.useState(null);
   const [disponibilidadeParcial, setDisponibilidadeParcial] = React.useState([]);
 
   const embarqueForm = React.useRef();
   const priceContainerRef = React.useRef();
   const saveBtnRef = React.useRef();
 
-  const exibeHorariosInativos = true;
-
   function closeEmbarqueModal(_save) {
     if (_save && preEmbarque.length > 0) {
       // O ID agora vem direto do objeto detalhe
-      toggleEmbarque(preEmbarque[0].id, preHorario); 
+      if(preHorario) toggleEmbarque(preEmbarque[0].id, preHorario); 
+      else if(preMultiHorario) toggleEmbarque(preEmbarque[0].id, preMultiHorario)
+      
     }
     setVisible(false);
     setTimeout(() => {
@@ -67,7 +69,7 @@ const EmbarquesModal = ({
           if (embVar && embVar.horarios) {
             embVar.horarios.forEach(h => {
               totalHorarios++;
-              if (!h.disponivel) totalIndisp++;
+              if (h.status === 'indisponivel') totalIndisp++;
             });
           } else {
             // Se o embarque não existe nesta variação, tratamos como indisponível
@@ -88,10 +90,8 @@ const EmbarquesModal = ({
     });
 
     /* Personaliza inputs se houver valor prévio */
-    
-  // if(horario) {
-  //   setPreHorario(horario);
-  // }
+    setPreHorario(horario ? horario : 'sem pre horário')
+
     if (embarque && embarque.length > 0) {
       if (embarqueForm.current) {
         embarqueForm.current.querySelector('select').value = embarque[0].id || embarque[0].embarqueId;
@@ -108,7 +108,11 @@ const EmbarquesModal = ({
   React.useEffect(() => {
     setDisponibilidadeParcial([]);
     setHorariosDisponiveis([]);
-    setPreHorario('');
+
+    // Reseta o preHorario se o embarque selecionado mudou
+    if(preEmbarque.length > 0 && embarque.length > 0 && preEmbarque[0].id !== embarque[0].id) {
+      setPreHorario('');
+    }
 
     if (preEmbarque.length > 0) {
       let _horariosDisp = [];
@@ -122,6 +126,8 @@ const EmbarquesModal = ({
         const varData = embarquesVariacoes.find(v => v.variation_id == varId);
         if (!varData) return;
 
+        // console.log(varData);
+
         const embVar = varData.variation_embarques.find(e => e.embarque_id == embId);
         let hasAvailable = false;
 
@@ -129,12 +135,101 @@ const EmbarquesModal = ({
           taxaEmb = embVar.taxa || 0; // Atualiza a taxa com base no objeto de variação
           
           embVar.horarios.forEach(h => {
-            if (h.disponivel) hasAvailable = true;
-            if(!_horariosDisp.some(existing => existing.horario === h.horario)) {
-            _horariosDisp.push({horario: h.horario, disponivel: h.disponivel})
+
+            //se status == 'disponivel', insere em _horariosDisp, se for 'indisponivel', insere em indisponiveis
+            if (h.status === 'disponivel') {
+              hasAvailable = true;
+
+              // evita duplicatas de horários ao inserir em _horariosDisp
+              if(!_horariosDisp.some(existing => existing.horario === h.horario)) {
+                _horariosDisp.push({horario: h.horario, status: h.status, dia: varData.variation_dia, varID: varId});
+              }
+
+            } else if (h.status === 'indisponivel') {
+              // indisponiveis.push({horario: h.horario, status: 'indisponivel' });
             }
           });
         }
+
+        // Se variacoesSelecionadas.length > 1, verificar se os horários inseridos em _horariosDisp existem em todas as variações.
+        // Para isso, vamos distribuir os elementos de _horariosDisp com base no valor de varId e depois filtrar apenas os horários que existem em todas as variações selecionadas.
+        if (variacoesSelecionadas.length > 1) {
+          const _horariosPorVariacao = {}; 
+          variacoesSelecionadas.forEach((varId) => {
+            const varData = embarquesVariacoes.find(v => v.variation_id == varId);
+            if (!varData) return;
+
+            _horariosPorVariacao[varId] = varData.variation_embarques
+              .filter(emb => emb.embarque_id == embId)
+              .flatMap(emb => emb.horarios)
+              .filter(h => h.status === 'disponivel')
+              .map(h => h);
+          });
+
+          setHorariosPorVariacaoSelecionada(_horariosPorVariacao);
+          console.log('Horários por variação:', _horariosPorVariacao);
+
+
+          // Filtra apenas os horários que existem em todas as variações selecionadas
+          // const horariosComunsEmTodasVariacoes = _horariosDisp.filter(h => 
+          //   variacoesSelecionadas.every(varId => 
+          //     _horariosPorVariacao[varId] && _horariosPorVariacao[varId].includes(h.horario)
+          //   )
+          // );
+
+          
+          // Horários agregados de todas as variações, para comparações
+          const horariosAgregados = [];
+          Object.entries(_horariosPorVariacao).forEach(([_vID, _varHorario]) => { 
+            _varHorario.forEach(_h => {
+              if(!horariosAgregados.includes(_h.horario)) {
+                horariosAgregados.push(_h.horario);
+              }
+            })
+            
+          });
+console.log(horariosAgregados);
+          // Verifica se todas as variações possuem horários disponíveis idênticos
+          const objValues = Object.values(_horariosPorVariacao);
+          const horariosIguaisEmTodasVariacoes = objValues.every(val => JSON.stringify(val) === JSON.stringify(objValues[0]));
+
+
+          if(horariosAgregados.length === 1){
+            setHorariosDisponiveis([{horario: horariosAgregados[0]}])
+            setPreHorario(horariosAgregados[0])
+          }else{
+            setHorariosDisponiveis(_horariosPorVariacao);
+
+            const _preMultiHorario = Object.entries(_horariosPorVariacao).map(([_key, _value]) => {
+              if(_value.length > 1){
+                return {varID: _key, varHorario: null};
+
+              }else{
+                return {varID: _key, varHorario: _value[0].horario};
+
+              }
+            })
+
+            console.log(_preMultiHorario);
+            setPreMultiHorario(_preMultiHorario);
+          }
+
+
+
+        }else{
+          setHorariosPorVariacaoSelecionada(null);
+
+          // Remove duplicatas e define horários existentes para o embarque
+          const arrayHorarios = Array.from(new Set(_horariosDisp));
+          setHorariosDisponiveis(arrayHorarios);
+
+          // Regra: Configura o horário automaticamente APENAS se houver apenas 1 opção
+          if(arrayHorarios.length === 1){
+            setPreHorario(arrayHorarios[0].horario)
+          }
+
+        }
+
 
         // Se não houver horário disponível nesta data, registra como parcial
         if (!hasAvailable) {
@@ -149,16 +244,7 @@ const EmbarquesModal = ({
         setDisponibilidadeParcial(indisponiveis);
       }
 
-      // Remove duplicatas e define horários existentes para o embarque
-      const arrayHorarios = Array.from(new Set(_horariosDisp));
-      setHorariosDisponiveis(arrayHorarios);
-      console.log(arrayHorarios)
-      // Regra: Configura o horário automaticamente APENAS se houver apenas 1 opção
 
-      const unicoAtivoNaoExibirInativos = arrayHorarios.filter(h => h.disponivel).length === 1 && !exibeHorariosInativos;
-      if (arrayHorarios.length === 1 || unicoAtivoNaoExibirInativos) {
-        setPreHorario(arrayHorarios[0].horario);
-      }
 
       // Define o preço do embarque
       if (variacoesSelecionadas.length > 0) {
@@ -192,12 +278,13 @@ const EmbarquesModal = ({
   }, [preEmbarque]);
 
   React.useEffect(() => {
-    if(preHorario && preEmbarque.length > 0) {
+    const temPreHorario = preHorario || preMultiHorario.length > 0;
+    if(temPreHorario && preEmbarque.length > 0) {
       saveBtnRef.current.removeAttribute('disabled');
     } else {
       saveBtnRef.current.setAttribute('disabled', ''); 
     }
-  }, [preHorario, preEmbarque]);
+  }, [preHorario, preMultiHorario, preEmbarque]);
 
   // Efeito 3: Trava salvamento caso haja indisponibilidade em alguma data selecionada
   React.useEffect(() => {
@@ -276,8 +363,11 @@ const EmbarquesModal = ({
                 <div className="embarque-details-inner">
                   <div className="horarios">
 
+                    {/* verifica se horariosDisponiveis é array */}
+
+                    {Array.isArray(horariosDisponiveis) ? <>
                     {/* Horário simples */}
-                    {horariosDisponiveis.length === 1 && (
+                    {horariosDisponiveis.filter(h => h.status !== 'indisponivel').length === 1 && (
                       <>
                         <h3 className="title">Horário de embarque</h3>
                         <span className="horario-single d-block text-center">
@@ -293,60 +383,98 @@ const EmbarquesModal = ({
                     )}
 
                     {/* Horários múltiplos - Renderização Dinâmica e Escolha do Usuário */}
-                    {horariosDisponiveis.length > 1 && (
+                    {horariosDisponiveis.filter(h => h.status !== 'indisponivel').length > 1 && (
                       <>
-                        {exibeHorariosInativos ? (
-                          <>
-                            <h3 className="title">Selecione o horário</h3>
+                        <h3 className="title">Selecione o horário</h3>
                             <div className="multi-radios">
                               {horariosDisponiveis.map((h, index) => (
-                                <label className={h.disponivel ? 'horario-opcao' : 'horario-opcao disabled'} key={index}>
+                                <label className={h.status !== 'indisponivel' ? 'horario-opcao' : 'horario-opcao disabled'} key={index}>
                                   <input 
                                     type="radio" 
                                     name="horario" 
                                     value={h.horario} 
                                     onChange={(e) => setPreHorario(e.target.value)} 
-                                    disabled={!h.disponivel} 
+                                    disabled={h.status === 'indisponivel'} 
                                     checked={preHorario === h.horario}
                                   />
                                   <span>{h.horario}</span>
                                 </label>
                               ))}
                             </div>
-                          </>
-                        ) : (
-                          <>
-                            {horariosDisponiveis.filter(h => h.disponivel).length === 1 ? (
-                              <>
-                                <h3 className="title">Horário de embarque</h3>
-                                <span className="horario-single d-block text-center">
-                                  {horariosDisponiveis.find(h => h.disponivel).horario}
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <h3 className="title">Selecione o horário</h3>
-                                <div className="multi-radios">
-                                  {horariosDisponiveis.filter(h => h.disponivel).map((h, index) => (
-                                    <label className="horario-opcao" key={index}>
-                                      <input
-                                        type="radio"
-                                        name="horario"
-                                        value={h.horario}
-                                        onChange={(e) => setPreHorario(e.target.value)}
-                                        disabled={!h.disponivel}
-                                        checked={preHorario === h.horario}
-                                      />
-                                      <span>{h.horario}</span>
-                                    </label>
-                                  ))}
-                                </div>
-                              </>
-                            )}
-                          </>
-                        )}
                       </>
                     )}
+                    </> : (
+                      <div className="horarios-multiplas-datas">
+                        <h3 className="title">Horários de embarque por data</h3>
+                        
+                        {Object.entries(horariosDisponiveis).map(([dataKey, horariosDaData]) => {
+                          // Verifica se os itens do array são strings ("17:00") ou objetos ({horario: "17:00", status: "disponivel"})
+                          const isStringArray = typeof horariosDaData[0] === 'string';
+                          
+                          // Filtra os horários disponíveis para a data atual do loop
+                          const disponiveis = horariosDaData.filter(h => 
+                            isStringArray ? true : h.status !== 'indisponivel'
+                          );
+
+                          return (
+                            <div key={dataKey} className="data-section mb-4">
+                              {/* Identificação de qual dia/variação são esses horários */}
+                              <h4 className="subtitle mb-2" style={{fontSize: '16px', fontWeight: 'bold'}}>Data/Reserva: {dataKey}</h4>
+                              
+                              {/* Horário simples para esta data específica */}
+                              {disponiveis.length === 1 && (
+                                <span className="horario-single d-block text-center mb-3">
+                                  {isStringArray ? disponiveis[0] : disponiveis[0].horario}
+                                  
+                                  {/* Exibe badge "do dia anterior" se a lógica for atendida */}
+                                  {estadoDestino === 'rj' && 
+                                  preEmbarque[0] && 
+                                  cidadesDiaAnterior.includes(preEmbarque[0].nome.split(' - ')[0]) ? 
+                                  <span className="aviso-dia-anterior ms-2">do dia anterior</span> : null}
+                                </span>
+                              )}
+
+                              {/* Horários múltiplos para esta data específica */}
+                              {disponiveis.length > 1 && (
+                                <div className="multi-radios mb-3">
+                                  {horariosDaData.map((h, index) => {
+                                    const horarioTexto = isStringArray ? h : h.horario;
+                                    const isDisabled = !isStringArray && h.status === 'indisponivel';
+
+                                    return (
+                                      <label 
+                                        className={!isDisabled ? 'horario-opcao' : 'horario-opcao disabled'} 
+                                        key={`${dataKey}-${index}`}
+                                      >
+                                        <input 
+                                          type="radio" 
+                                          /* O nome precisa ser único por data para que os radios não interfiram uns nos outros */
+                                          name={`horario-${dataKey}`} 
+                                          value={horarioTexto} 
+                                          disabled={isDisabled} 
+                                          
+                                          /* ATENÇÃO: Como agora são múltiplas datas, o state preHorario 
+                                             idealmente precisa ser um objeto para armazenar a escolha de cada dia */
+                                          onChange={(e) => setPreHorario(prev => ({ 
+                                            ...prev, 
+                                            [dataKey]: e.target.value 
+                                          }))} 
+                                          
+                                          checked={typeof preHorario === 'object' && preHorario[dataKey] === horarioTexto}
+                                        />
+                                        <span>{horarioTexto}</span>
+                                      </label>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    
                   </div>
 
                   <div className="localizacao">
