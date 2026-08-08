@@ -5168,9 +5168,17 @@
     React.useEffect(() => {
       const temData = selectedDates.length > 0;
       const temEmbarque = embarque.length > 0;
-      const temHorario = horario && horario.length > 0;
+      const temHorario = () => {
+        if (!temData) return false;
+        if (!temEmbarque) return false;
+        if (Object.keys(horario)) {
+          return Object.keys(horario).length > 0;
+        } else {
+          return horario.length > 0;
+        }
+      };
       const temPassageiros = passageiros.length > 0;
-      if (temData && temEmbarque && temHorario && temPassageiros) {
+      if (temData && temEmbarque && temHorario() && temPassageiros) {
         botaoContinuarRef.current.removeAttribute("disabled");
       } else {
         botaoContinuarRef.current.setAttribute("disabled", "");

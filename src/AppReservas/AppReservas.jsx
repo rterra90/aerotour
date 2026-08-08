@@ -28,6 +28,7 @@ function AppReservas() {
   const [embarque, setEmbarque] = React.useState([]);
   const [horario, setHorario] = React.useState(null);
   const [maxVagas, setMaxVagas] = React.useState(null);
+
   const [passageiros, setPassageiros] = React.useState([]);
   const [precoUnitario, setPrecoUnitario] = React.useState(0);
   const [taxa, setTaxa] = React.useState(0);
@@ -71,10 +72,20 @@ function AppReservas() {
   React.useEffect(() => {
     const temData = selectedDates.length > 0;
     const temEmbarque = embarque.length > 0;
-    const temHorario = horario && horario.length > 0;
+    const temHorario = () => {
+      if (!temData) return false;
+      if (!temEmbarque) return false;
+
+      if(Object.keys(horario)){
+        return Object.keys(horario).length > 0;
+      } else {
+        return horario.length > 0;
+      }
+
+    } 
     const temPassageiros = passageiros.length > 0;
 
-    if (temData && temEmbarque && temHorario && temPassageiros) {
+    if (temData && temEmbarque && temHorario() && temPassageiros) {
       botaoContinuarRef.current.removeAttribute('disabled');
     } else {
       botaoContinuarRef.current.setAttribute('disabled', '');
