@@ -1,0 +1,418 @@
+/* =========================================
+   BARRA DE PROGRESSO DE LEITURA
+   ========================================= */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background-color: var(--aer-light-dark); /* Utilize a cor de destaque da Aerotour */
+  z-index: 9999;
+  transition: width 0.1s ease-out;
+}
+
+/* =========================================
+   CABEÇALHO & METADADOS
+   ========================================= */
+#single-post article .entry-meta {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+#single-post article .posted-on,
+#single-post article .reading-time-badge {
+  font-size: 0.855rem;
+  opacity: 0.8;
+  font-weight: 600;
+  color: #555;
+}
+
+/* =========================================
+   LINKS NO CONTEÚDO
+   ========================================= */
+article a {
+    text-decoration: underline;
+}
+
+/* =========================================
+   CAIXA DE SNIPPETS (RESUMO)
+   ========================================= */
+.post-snippet-box {
+  background-color: #f8f9fa; /* Fundo suave */
+  border-left: 4px solid var(--aer-light-dark);
+  padding: 20px 24px;
+  margin: 30px 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.post-snippet-box .snippet-title {
+  margin-top: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  color: var(--aer-bg-dark);
+  margin-bottom: 12px;
+}
+
+.post-snippet-box .snippet-content {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #444;
+}
+/* ==========================================================================
+   ESTILO DE LISTA VERTICAL MODERNA
+   ========================================================================== */
+
+#single-post article .entry-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 28px;
+}
+
+#single-post article .entry-content ul li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #333333;
+  line-height: 1.5;
+}
+
+/* Marcador estilizado */
+#single-post article .entry-content ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--aer-light-dark, #0088cc);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center / contain;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+/* =========================================
+   AJUSTES GERAIS DE LEITURA (TYPOGRAPHY)
+   ========================================= */
+#single-post .header-img{
+background-image: url('https://aerotour.com.br/wp-content/uploads/2025/02/wpp-blog-aerotour.webp');
+border-radius: 0.75rem 0.75rem!important;
+overflow: hidden;
+height: 420px;
+background-size: cover;
+max-width: 800px;
+margin: 0 auto;
+border-radius: 0px;
+margin-bottom: 18px;
+}
+@media(max-width: 568px){
+  #single-post .header-img{
+    height: 26vh;
+    background-position-x: center;
+  }
+}
+#single-post article .entry-content {
+  margin-top: 30px;
+  font-size: 1.125rem; /* Aumentado levemente para telas modernas */
+  line-height: 1.8;   /* Maior respiro entre as linhas */
+  color: #2c2c2c;
+}
+#single-post article .entry-content p {
+  letter-spacing: 0.015rem;
+  margin-bottom: 1.6rem;
+}
+#single-post article .entry-content h2,
+#single-post article .entry-content h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* ==========================================================================
+   CONTAINER PRINCIPAL DE COMENTÁRIOS
+   ========================================================================== */
+#single-post #comments_container {
+  width: 100%;
+  max-width: 800px;
+  margin: 50px auto 30px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Título da Seção */
+#single-post #comments_container > h3#title-comments {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--aer-bg-dark, #1a202c);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: -24px -24px 20px -24px;
+  padding: 16px 24px;
+  background-color: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Subtítulo com a contagem de respostas */
+#single-post #comments_container h3#comments {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #edf2f7;
+}
+
+/* ==========================================================================
+   LISTA DE COMENTÁRIOS (TREE / CARDS)
+   ========================================================================== */
+#single-post ol.commentlist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+
+#single-post ol.commentlist li.comment {
+  margin-bottom: 20px;
+  padding: 0;
+  position: relative;
+}
+
+#single-post ol.commentlist li.comment:last-child {
+  margin-bottom: 0;
+}
+
+/* Card do Comentário */
+#single-post .comment-body {
+  background-color: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+#single-post .comment-body:hover {
+  border-color: #cbd5e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Cabeçalho do Autor & Avatar */
+#single-post .comment-author.vcard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.925rem;
+  font-weight: 600;
+}
+
+#single-post .comment-author.vcard img.avatar {
+  display: block; /* Habilitado e estilizado em formato circular */
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #cbd5e0;
+}
+
+#single-post .comment-author .fn a {
+  color: #2d3748;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+#single-post .comment-author .fn a:hover {
+  color: var(--aer-light-dark, #3182ce);
+}
+
+#single-post .comment-author .says {
+  font-size: 0.85rem;
+  color: #a0aec0;
+  font-weight: 400;
+}
+
+/* Meta Data (Data e Editar) */
+#single-post .comment-meta.commentmetadata {
+  font-size: 0.775rem;
+  color: #718096;
+  margin: 4px 0 10px 46px; /* Alinhado ao texto abaixo do avatar */
+}
+
+#single-post .comment-meta a {
+  color: #718096;
+  text-decoration: none;
+}
+
+#single-post .comment-meta a.comment-edit-link {
+  color: var(--aer-light-dark, #3182ce);
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* Conteúdo do Comentário */
+#single-post .comment-body p {
+  font-size: 0.925rem;
+  line-height: 1.55;
+  color: #2d3748;
+  margin: 8px 0 12px 46px;
+}
+
+/* Botão Responder */
+#single-post .reply {
+  margin-left: 46px;
+}
+
+#single-post .reply a.comment-reply-link {
+  display: inline-block;
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #4a5568;
+  background-color: #edf2f7;
+  padding: 4px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+#single-post .reply a.comment-reply-link:hover {
+  background-color: var(--aer-light-dark, #3182ce);
+  color: #ffffff;
+}
+
+/* Estilo para Comentários Aninhados (Respostas) */
+#single-post ol.commentlist ul.children {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 15px;
+  border-left: 2px solid #e2e8f0;
+}
+
+/* ==========================================================================
+   FORMULÁRIO DE COMENTÁRIO (#RESPOND)
+   ========================================================================== */
+#single-post #respond {
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 1px solid #e2e8f0;
+}
+
+#single-post #reply-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+#single-post #cancel-comment-reply-link {
+  font-size: 0.8rem;
+  color: #e53e3e;
+  text-transform: none;
+  margin-left: 10px;
+}
+
+#single-post #comments_container .logged-in-as {
+  font-size: 0.825rem;
+  color: #718096;
+  margin-bottom: 16px;
+}
+
+#single-post #comments_container .logged-in-as a {
+  display: inline;
+  color: var(--aer-light-dark, #3182ce);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#single-post #comments_container .logged-in-as a:hover {
+  text-decoration: underline;
+}
+
+#single-post #comments_container .required-field-message {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.775rem;
+  color: #a0aec0;
+}
+
+/* Inputs e Textarea */
+#single-post #respond form#commentform .comment-form-comment label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 6px;
+}
+
+#single-post #respond textarea.modern-text-input {
+  width: 100%;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.925rem;
+  color: #2d3748;
+  background-color: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+}
+
+#single-post #respond textarea.modern-text-input:focus {
+  outline: none;
+  border-color: var(--aer-light-dark, #3182ce);
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+}
+
+/* Botão Enviar / Submit */
+#single-post #respond form#commentform .form-submit {
+  margin-top: 12px;
+}
+
+#single-post #respond input.submit {
+  background-color: var(--aer-light-dark, #2b6cb0);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 8px 24px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+#single-post #respond input.submit:hover {
+  background-color: #1a202c;
+  transform: translateY(-1px);
+}
+
+/* Responsive (Mobile) */
+@media (max-width: 576px) {
+  #single-post #comments_container {
+    padding: 16px;
+  }
+  
+  #single-post #comments_container > h3#title-comments {
+    margin: -16px -16px 16px -16px;
+    padding: 12px 16px;
+  }
+
+  #single-post .comment-meta.commentmetadata,
+  #single-post .comment-body p,
+  #single-post .reply {
+    margin-left: 0;
+  }
+
+  #single-post .comment-body p {
+    margin-top: 10px;
+  }
+}

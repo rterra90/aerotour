@@ -137,8 +137,8 @@ const EmbarquesModal = ({
           
           embVar.horarios.forEach(h => {
 
-            //se status == 'disponivel', insere em _horariosDisp, se for 'indisponivel', insere em indisponiveis
-            if (h.status === 'disponivel') {
+            //se status !== 'indisponivel', insere em _horariosDisp, se for 'indisponivel', insere em indisponiveis
+            if (h.status !== 'indisponivel') {
               hasAvailable = true;
 
               // evita duplicatas de horários ao inserir em _horariosDisp
@@ -163,12 +163,12 @@ const EmbarquesModal = ({
             _horariosPorVariacao[varId] = varData.variation_embarques
               .filter(emb => emb.embarque_id == embId)
               .flatMap(emb => emb.horarios)
-              .filter(h => h.status === 'disponivel')
+              .filter(h => h.status !== 'indisponivel')
               .map(h => h);
           });
 
           setHorariosPorVariacaoSelecionada(_horariosPorVariacao);
-          console.log('Horários por variação:', _horariosPorVariacao);
+          // console.log('Horários por variação:', _horariosPorVariacao);
 
 
           // Filtra apenas os horários que existem em todas as variações selecionadas
@@ -189,7 +189,7 @@ const EmbarquesModal = ({
             })
             
           });
-console.log(horariosAgregados);
+
           // Verifica se todas as variações possuem horários disponíveis idênticos
           const objValues = Object.values(_horariosPorVariacao);
           const horariosIguaisEmTodasVariacoes = objValues.every(val => JSON.stringify(val) === JSON.stringify(objValues[0]));
@@ -211,7 +211,7 @@ console.log(horariosAgregados);
               }
             })
 
-            console.log(_preMultiHorario);
+            // console.log(_preMultiHorario);
             setPreMultiHorario(_preMultiHorario);
           }
 
@@ -388,19 +388,34 @@ console.log(horariosAgregados);
                       <>
                         <h3 className="title">Selecione o horário</h3>
                             <div className="multi-radios">
-                              {horariosDisponiveis.map((h, index) => (
-                                <label className={h.status !== 'indisponivel' ? 'horario-opcao' : 'horario-opcao disabled'} key={index}>
+                              {horariosDisponiveis.map((h, index) => {
+                                const isSelected = preHorario === h.horario;
+                                const statusClass = h.status !== 'disponivel' ? `${h.status} disabled` : h.status;
+                                const labelClass = `horario-opcao ${statusClass} ${isSelected ? 'selected' : ''}`;
+
+                                return <>
+                                <label className={labelClass} key={index}>
                                   <input 
                                     type="radio" 
                                     name="horario" 
                                     value={h.horario} 
-                                    onChange={(e) => setPreHorario(e.target.value)} 
-                                    disabled={h.status === 'indisponivel'} 
+                                    onChange={(e) => {
+                                    //remove a classe 'selected' de todos os labels
+                                      const allLabels = embarqueForm.current.querySelectorAll('.horario-opcao');
+                                      allLabels.forEach(label => label.classList.remove('selected'));
+
+
+                                    // adiciona a classe 'selected' ao label pai do input selecionado
+                                      e.target.parentElement.classList.add('selected');
+                                      setPreHorario(e.target.value);
+                                    }
+                                  } 
+                                    disabled={h.status === 'indisponivel' || h.status === 'esgotado'} 
                                     checked={preHorario === h.horario}
                                   />
                                   <span>{h.horario}</span>
-                                </label>
-                              ))}
+                                </label></>  
+                              })}
                             </div>
                       </>
                     )}
@@ -411,8 +426,9 @@ console.log(horariosAgregados);
                         {Object.entries(horariosDisponiveis).map(([dataKey, horariosDaData]) => {
                           // Verifica se os itens do array são strings ("17:00") ou objetos ({horario: "17:00", status: "disponivel"})
                           const isStringArray = typeof horariosDaData[0] === 'string';
-                          
-                          // Filtra os horários disponíveis para a data atual do loop
+                          // console.log(horariosDaData);
+
+                          // Filtra os horários para exibição ('disponivel' e 'esgotado') para a data atual do loop
                           const disponiveis = horariosDaData.filter(h => 
                             isStringArray ? true : h.status !== 'indisponivel'
                           );
@@ -420,7 +436,7 @@ console.log(horariosAgregados);
                           return (
                             <div key={dataKey} className="data-section mb-3">
                               {/* Identificação de qual dia/variação são esses horários */}
-                              <h4 className="subtitle mb-2" style={{fontSize: '16px', fontWeight: 'bold'}}>Data: {getDateByVarId(dataKey)}</h4>
+                              <h4 className="subtitle mb-2" style={{fontSize: '15px', fontWeight: 'bold'}}>Data: {getDateByVarId(dataKey)}</h4>
                               
                               {/* Horário simples para esta data específica */}
                               {disponiveis.length === 1 && (
@@ -440,11 +456,14 @@ console.log(horariosAgregados);
                                 <div className="multi-radios mb-3">
                                   {horariosDaData.map((h, index) => {
                                     const horarioTexto = isStringArray ? h : h.horario;
-                                    const isDisabled = !isStringArray && h.status === 'indisponivel';
+                                    const isDisabled = !isStringArray && (h.status === 'indisponivel' || h.status === 'esgotado');
+                                    const isSelected = typeof preHorario === 'object' && preHorario[dataKey] === horarioTexto;
+                                    const statusClass = isStringArray ? 'disponivel' : h.status !== 'disponivel' ? h.status + ' disabled' : h.status;
+                                    const labelClass = `horario-opcao ${statusClass} ${isSelected ? 'selected' : ''}`;
 
                                     return (
                                       <label 
-                                        className={!isDisabled ? 'horario-opcao' : 'horario-opcao disabled'} 
+                                        className={labelClass} 
                                         key={`${dataKey}-${index}`}
                                       >
                                         <input 
@@ -456,10 +475,24 @@ console.log(horariosAgregados);
                                           
                                           /* ATENÇÃO: Como agora são múltiplas datas, o state preHorario 
                                              idealmente precisa ser um objeto para armazenar a escolha de cada dia */
-                                          onChange={(e) => setPreHorario(prev => ({ 
+                                          onChange={(e) => {
+                                            // extrair dataKey do name do input
+                                            const _var_id = e.target.name.split('-')[1];
+
+                                            //remove a classe 'selected' de todos os labels que fazem parte do mesmo grupo de data
+                                            const allLabels = embarqueForm.current.querySelectorAll(`[name="horario-${_var_id}"]`);
+                                            console.log('allLabels', allLabels);
+                                            // allLabels.forEach(label => label.classList.remove('selected'));
+
+
+                                          // adiciona a classe 'selected' ao label pai do input selecionado
+                                            e.target.parentElement.classList.add('selected');
+                                          
+                                            
+                                            setPreHorario(prev => ({ 
                                             ...prev, 
-                                            [dataKey]: e.target.value 
-                                          }))} 
+                                            [dataKey]: e.target.value
+                                          }))}} 
                                           
                                           checked={typeof preHorario === 'object' && preHorario[dataKey] === horarioTexto}
                                         />

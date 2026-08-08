@@ -226,12 +226,6 @@
   font-size: 0.85rem;
 }
 
-.embarque-details-inner .multi-radios label.disabled{
-      color: #b9b9b9;
-    background: #f7f7f7;
-    cursor: not-allowed;
-}
-
 .aviso-dia-anterior{
     display: block;
     color: #212529;
@@ -254,7 +248,7 @@
   color: #444;
 }
 
-.embarque-details-inner .horarios .multi-radios {
+.embarque-details-inner .multi-radios {
   display: flex;
   gap: 20px;
   margin-bottom: 24px;
@@ -280,18 +274,51 @@
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 0.875rem;
+  color: #767676;
 }
-
-.embarque-details-inner .horario-opcao:not(.disabled):hover {
-  background-color: #d2b4b4;
+.embarque-details-inner .horario-opcao.selected{
+    background-color: #beecc2;
+    box-shadow: 2px 2px 2px #38763d70;
 }
-
-.embarque-details-inner .horario-opcao input[type='radio'] {
-  accent-color: var(--aer-accent);
-}
-.embarque-details-inner .horario-opcao input[type='radio']:checked + span{
+.embarque-details-inner .horario-opcao.selected input[type='radio']:checked + span{
     font-weight: 500;
-    color: var(--aer-accent);
+  color: #2E7D32;
+}
+.embarque-details-inner .horario-opcao:not(.disabled):hover {
+  background-color: #d7f1d9;
+}
+.embarque-details-inner .horario-opcao input[type='radio'] {
+  accent-color: #2E7D32;
+}
+.embarque-details-inner .multi-radios label {
+  position: relative;
+}
+.embarque-details-inner .multi-radios label.disabled{
+      color: #b9b9b9;
+    background: #f7f7f7;
+    cursor: not-allowed;
+}
+.embarque-details-inner .multi-radios label.esgotado{
+    cursor: not-allowed;
+    
+}
+.embarque-details-inner .multi-radios label.esgotado::after{
+    content: 'Esgotado';
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    text-transform: uppercase;
+    font-size: .55rem;
+    transform: translateX(-50%);
+    color: #360404;
+    background: #d2b2b2;
+    border-radius: .2rem;
+    padding: 0px 5px;
+    font-weight: 600;
+    letter-spacing: .02rem;
+}
+.embarque-details-inner .multi-radios label.esgotado input[type='radio']{
+  opacity: .5;
 }
 
 /* Horários por datas múltiplas */
@@ -304,7 +331,13 @@
   padding: .25rem .75rem;
   font-size: 1.075rem;
 }
-
+.horarios-multiplas-datas .data-section .multi-radios{
+  gap: 8px;
+  
+}
+.horarios-multiplas-datas .data-section .multi-radios label{
+padding: 6px 10px;
+}
 .embarque-details-inner .localizacao p.info {
   font-size: 0.95rem;
   margin: 0.5rem 0;

@@ -3931,7 +3931,7 @@
           if (embVar) {
             taxaEmb = embVar.taxa || 0;
             embVar.horarios.forEach((h) => {
-              if (h.status === "disponivel") {
+              if (h.status !== "indisponivel") {
                 hasAvailable = true;
                 if (!_horariosDisp.some((existing) => existing.horario === h.horario)) {
                   _horariosDisp.push({ horario: h.horario, status: h.status, dia: varData.variation_dia, varID: varId });
@@ -3945,10 +3945,9 @@
             variacoesSelecionadas.forEach((varId2) => {
               const varData2 = embarquesVariacoes.find((v) => v.variation_id == varId2);
               if (!varData2) return;
-              _horariosPorVariacao[varId2] = varData2.variation_embarques.filter((emb) => emb.embarque_id == embId).flatMap((emb) => emb.horarios).filter((h) => h.status === "disponivel").map((h) => h);
+              _horariosPorVariacao[varId2] = varData2.variation_embarques.filter((emb) => emb.embarque_id == embId).flatMap((emb) => emb.horarios).filter((h) => h.status !== "indisponivel").map((h) => h);
             });
             setHorariosPorVariacaoSelecionada(_horariosPorVariacao);
-            console.log("Hor\xE1rios por varia\xE7\xE3o:", _horariosPorVariacao);
             const horariosAgregados = [];
             Object.entries(_horariosPorVariacao).forEach(([_vID, _varHorario]) => {
               _varHorario.forEach((_h) => {
@@ -3957,7 +3956,6 @@
                 }
               });
             });
-            console.log(horariosAgregados);
             const objValues = Object.values(_horariosPorVariacao);
             const horariosIguaisEmTodasVariacoes = objValues.every((val) => JSON.stringify(val) === JSON.stringify(objValues[0]));
             if (horariosAgregados.length === 1) {
@@ -3972,7 +3970,6 @@
                   return { varID: _key, varHorario: _value[0].horario };
                 }
               });
-              console.log(_preMultiHorario);
               setPreMultiHorario(_preMultiHorario);
             }
           } else {
@@ -4088,20 +4085,30 @@
                             ] }),
                             horariosDisponiveis.filter((h) => h.status !== "indisponivel").length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
                               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Selecione o hor\xE1rio" }),
-                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "multi-radios", children: horariosDisponiveis.map((h, index) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: h.status !== "indisponivel" ? "horario-opcao" : "horario-opcao disabled", children: [
-                                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-                                  "input",
-                                  {
-                                    type: "radio",
-                                    name: "horario",
-                                    value: h.horario,
-                                    onChange: (e) => setPreHorario(e.target.value),
-                                    disabled: h.status === "indisponivel",
-                                    checked: preHorario === h.horario
-                                  }
-                                ),
-                                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: h.horario })
-                              ] }, index)) })
+                              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "multi-radios", children: horariosDisponiveis.map((h, index) => {
+                                const isSelected = preHorario === h.horario;
+                                const statusClass = h.status !== "disponivel" ? `${h.status} disabled` : h.status;
+                                const labelClass = `horario-opcao ${statusClass} ${isSelected ? "selected" : ""}`;
+                                return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_jsx_runtime2.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { className: labelClass, children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+                                    "input",
+                                    {
+                                      type: "radio",
+                                      name: "horario",
+                                      value: h.horario,
+                                      onChange: (e) => {
+                                        const allLabels = embarqueForm.current.querySelectorAll(".horario-opcao");
+                                        allLabels.forEach((label) => label.classList.remove("selected"));
+                                        e.target.parentElement.classList.add("selected");
+                                        setPreHorario(e.target.value);
+                                      },
+                                      disabled: h.status === "indisponivel" || h.status === "esgotado",
+                                      checked: preHorario === h.horario
+                                    }
+                                  ),
+                                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: h.horario })
+                                ] }, index) });
+                              }) })
                             ] })
                           ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "horarios-multiplas-datas", children: [
                             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title mb-4", children: "Hor\xE1rios de embarque por data" }),
@@ -4111,7 +4118,7 @@
                                 (h) => isStringArray ? true : h.status !== "indisponivel"
                               );
                               return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "data-section mb-3", children: [
-                                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("h4", { className: "subtitle mb-2", style: { fontSize: "16px", fontWeight: "bold" }, children: [
+                                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("h4", { className: "subtitle mb-2", style: { fontSize: "15px", fontWeight: "bold" }, children: [
                                   "Data: ",
                                   getDateByVarId(dataKey)
                                 ] }),
@@ -4121,11 +4128,14 @@
                                 ] }),
                                 disponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "multi-radios mb-3", children: horariosDaData.map((h, index) => {
                                   const horarioTexto = isStringArray ? h : h.horario;
-                                  const isDisabled = !isStringArray && h.status === "indisponivel";
+                                  const isDisabled = !isStringArray && (h.status === "indisponivel" || h.status === "esgotado");
+                                  const isSelected = typeof preHorario === "object" && preHorario[dataKey] === horarioTexto;
+                                  const statusClass = isStringArray ? "disponivel" : h.status !== "disponivel" ? h.status + " disabled" : h.status;
+                                  const labelClass = `horario-opcao ${statusClass} ${isSelected ? "selected" : ""}`;
                                   return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
                                     "label",
                                     {
-                                      className: !isDisabled ? "horario-opcao" : "horario-opcao disabled",
+                                      className: labelClass,
                                       children: [
                                         /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
                                           "input",
@@ -4134,10 +4144,16 @@
                                             name: `horario-${dataKey}`,
                                             value: horarioTexto,
                                             disabled: isDisabled,
-                                            onChange: (e) => setPreHorario((prev) => ({
-                                              ...prev,
-                                              [dataKey]: e.target.value
-                                            })),
+                                            onChange: (e) => {
+                                              const _var_id = e.target.name.split("-")[1];
+                                              const allLabels = embarqueForm.current.querySelectorAll(`[name="horario-${_var_id}"]`);
+                                              console.log("allLabels", allLabels);
+                                              e.target.parentElement.classList.add("selected");
+                                              setPreHorario((prev) => ({
+                                                ...prev,
+                                                [dataKey]: e.target.value
+                                              }));
+                                            },
                                             checked: typeof preHorario === "object" && preHorario[dataKey] === horarioTexto
                                           }
                                         ),

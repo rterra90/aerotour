@@ -74,7 +74,7 @@ function aer_get_segmented_css()
         // Estilos para blog posts individuais
         'blog_single' => [
             'condition' => is_single() && 'post' === get_post_type(),
-            'files' => ['/css/single-post.min.css'],
+            'files' => ['/css/blog/single-post.min.css'],
         ],
         // Estilos para Minha Conta
         'my_account' => [
