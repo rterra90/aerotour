@@ -19,7 +19,7 @@
 /* SEÇÃO STATUS DE RESERVAS*/
 /* Estilo Base das Badges */
 .badge-excursao {
-    padding: 6px 13px;
+    padding: 5px 12px;
     border-radius: 5px;
     font-weight: 600;
     font-size: 13px;
@@ -39,31 +39,11 @@
     --slider-speed: 5s; /* Tempo do deslize suave */
 }
 
-.badge-slider-container {
-    width: 300px;
-    overflow: hidden;
-    position: relative;
-}
-.badge-slider-container.overflowing{
- /* Aplicando o gradiente que criamos anteriormente */
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-}
-
 .badge-slider-track {
     display: flex;
-    gap: 10px;
-    width: max-content; /* Garante que o track tenha a largura real das badges */
+    gap: 6px;
+    flex-wrap: wrap;
     padding: 4px 0px;
-    
-    /* Aplicação da animação */
-    /* animation: none */
-}
-.badge-slider-container.overflowing .badge-slider-track{
-    animation: slide-back-and-forth 16s ease-in-out infinite;
-    padding: 4px 12px;
-
-
 }
 
 @keyframes slide-back-and-forth {
@@ -83,17 +63,10 @@
 }
 
 @media (max-width: 500px) {
-    .badge-slider-container {
-        width: 100%;
-    }
-    .badge-slider-container.overflowing .badge-slider-track{
-      padding: 4px 0px;
-    }
-    .badge-slider-container.overflowing{
- /* Aplicando o gradiente que criamos anteriormente */
-    -webkit-mask-image: none;
-    mask-image: none;
-}
+  .badge-slider-track{
+        display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
     @keyframes slide-back-and-forth {
     /* 0% a 18% -> Parado no início (aprox. 3s de 16s) */
     0%, 18% {
@@ -111,23 +84,43 @@
 }
 }
 
-/* Pausa a animação quando o usuário passa o mouse (opcional, mas recomendado) */
-.badge-slider-container:hover .badge-slider-track {
-    animation-play-state: paused;
-}
-
 .badge-item {
     flex-shrink: 0;
 }
 .badge-excursao.multi-badges{
-  font-size: .75rem;
+    gap: 5px;
+    font-size: .65rem;
+    display: flex;
 
 }
 .badge-excursao.multi-badges span{
   display: block;
-  font-size: .65rem;
+  margin-bottom: -2px;
 }
+.badge-excursao.multi-badges{
+    background: transparent;
+    /* border: none; */
 
+}
+.badge-excursao.multi-badges::before{
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 20px;
+    top: 50%;
+    background-color: red;
+    position: relative;
+    transform: translateY(-50%);
+}
+.badge-excursao.multi-badges.badge-ultimas::before{
+  background-color: #b8860b;
+}
+.badge-excursao.multi-badges.badge-disponivel::before{
+  background-color: #2e7d32;
+}
+.badge-excursao.multi-badges.badge-esgotado::before{
+  background-color: #c62828;
+}
 
 .status-badges-container{
     display: flex;

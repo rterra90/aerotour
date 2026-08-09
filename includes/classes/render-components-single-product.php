@@ -1,7 +1,7 @@
 <?php
 // inc/template-excursoes.php
 
-class Aerotour_Template
+class Single_Product_Template
 {
     /**
      * Renderiza os badges de status (Originalmente no template [cite: 29-49])
@@ -10,11 +10,42 @@ class Aerotour_Template
     {
         $statuses = [];
         foreach ($excursao['variacoes'] as $var) {
-            $encerrar_vendas =
+
+            // Define se as vendas estão encerradas MANUALMENTE para a variação
+            $vendas_encerradas =
                 isset($var['encerrar_vendas']) &&
-                $var['encerrar_vendas'] === 'yes';
-            if ($encerrar_vendas) {
-                continue;
+                $var['encerrar_vendas'] == 1;
+
+            // Se não estiver encerrada manualmente, verifica se a data já passou para encerrar
+            if(!$vendas_encerradas){
+              
+              // Verifica se o valor de 'dia' está no formato dmY
+              if(preg_match(
+                '/(\d{2})\/(\d{2})\/(\d{4})/',
+                $var['dia'] ?? '',
+                $matches
+              )){
+                  $var_timestamp = strtotime("{$matches[3]}-{$matches[2]}-{$matches[1]}");
+                  $_now = new DateTime();
+                  $_now_timestamp = $_now->getTimestamp();
+
+                  //adicionar 20 horas ao timestamp da variação para remover a badge de status
+                  $var_timestamp += 20 * 60 * 60;
+                  
+                  if($var_timestamp < $_now_timestamp){
+                      $vendas_encerradas = true;
+                  }
+              }
+            }
+
+            if ($vendas_encerradas) {
+              // $status = [
+              //     'label' => 'Reservas encerradas',
+              //     'slug' => 'encerrado',
+              //     'dia' => $var['dia']
+              //     ];
+              // $statuses[] = $status;
+              continue;
             }
 
             preg_match(
@@ -43,7 +74,7 @@ class Aerotour_Template
             return "<div class='badge-excursao badge-encerrado'>Reservas encerradas</div>";
         }
 
-        // Lógica de Slider vs Badge Único [cite: 35-41]
+        // Lógica de Slider vs Badge Único
         ob_start();
         $slugs = array_unique(array_column($statuses, 'slug'));
         if (count($slugs) === 1) {

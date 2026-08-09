@@ -1,5 +1,5 @@
 <?php
-class Aerotour_Helper
+class Single_Product_Helper
 {
 
   /**
@@ -144,7 +144,7 @@ class Aerotour_Helper
     $excursao = self::get_formatted_excursion_data($product_id);
     $is_encerrada = self::is_excursion_closed($product_id);
 
-    $datas = Aerotour_Helper::get_datas_da_excursao($product);
+    $datas = Single_Product_Helper::get_datas_da_excursao($product);
 
     $start_date_obj = DateTime::createFromFormat('d/m/Y', $datas[0]);
     $start_date = $start_date_obj->format('Y-m-d');

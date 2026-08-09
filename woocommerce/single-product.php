@@ -6,8 +6,8 @@
 get_header();
 
 // A lógica pesada agora vem via helper/controller
-$excursao = Aerotour_Helper::get_formatted_excursion_data(get_the_ID());
-$is_encerrada = Aerotour_Helper::is_excursion_closed(get_the_ID());
+$excursao = Single_Product_Helper::get_formatted_excursion_data(get_the_ID());
+$is_encerrada = Single_Product_Helper::is_excursion_closed(get_the_ID());
 $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
 ?>
 
@@ -27,7 +27,7 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
   <div class="container-xxl py-md-5 py-3 excursao-wrapper <?= isset($excursao['img']) ? 'has-image' : ''; ?>">
     <?php wc_print_notices(); ?>
 
-    <?php Aerotour_Template::render_partner_banners($excursao); ?>
+    <?php Single_Product_Template::render_partner_banners($excursao); ?>
 
     <?php
 
@@ -50,12 +50,12 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
         </div>
 
         <div class="status-badges-container">
-          <?= Aerotour_Template::render_status_badges($excursao); ?>
+          <?= Single_Product_Template::render_status_badges($excursao); ?>
         </div>
 
         <div class="info">
           <section class="grid-container">
-            <?php Aerotour_Template::render_info_grid($excursao); ?>
+            <?php Single_Product_Template::render_info_grid($excursao); ?>
           </section>
 
           <a href="#reservaBox" class="cta-button">
@@ -63,7 +63,7 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
           </a>
         </div>
 
-        <?php Aerotour_Template::render_info_tabs($excursao); ?>
+        <?php Single_Product_Template::render_info_tabs($excursao); ?>
       </div>
 
       <div id="reservaBox" class="col-md-5 reserva-box">
@@ -99,11 +99,11 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
     <?php endif; ?>
     <!-- FIM BOTÃO WHATSAPP -->
 
-    <?php Aerotour_Template::render_related_excursions(); ?>
+    <?php Single_Product_Template::render_related_excursions(); ?>
     
-    <?php Aerotour_Template::render_product_footer(); ?>
+    <?php Single_Product_Template::render_product_footer(); ?>
   </div>
 </section>
-<?php Aerotour_Template::render_product_modals($excursao); ?>
+<?php Single_Product_Template::render_product_modals($excursao); ?>
 
 <?php get_footer(); ?>

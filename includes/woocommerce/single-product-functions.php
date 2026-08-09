@@ -39,7 +39,7 @@ add_action('wp_enqueue_scripts', function () {
   global $post;
   $current_user = wp_get_current_user();
   $user_id = $current_user->ID;
-  $excursao = Aerotour_Helper::get_formatted_excursion_data($post->ID); // Sua função de lógica
+  $excursao = Single_Product_Helper::get_formatted_excursion_data($post->ID); // Sua função de lógica
 
   wp_localize_script('aer-reserva-app', 'singleProductData', [
     'variacoes' => $excursao['variacoes'],
@@ -65,7 +65,7 @@ add_action('wp_head', function () {
   if (! is_product()) return;
 
   $product_id = get_the_ID();
-  $schema = Aerotour_Helper::get_excursion_schema($product_id);
+  $schema = Single_Product_Helper::get_excursion_schema($product_id);
 
   if ($schema) {
     echo "\n\n";
