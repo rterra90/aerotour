@@ -104,13 +104,32 @@ if (count($res['passageiros']) === 1) {
         <span>Alterar embarque</span>
       </a>
 
-      <a href="#"
-        class="action-item cancelar-option"
-        data-bs-toggle="modal"
-        data-bs-target="#modal-cancelar-<?= $res['chave']; ?>">
-        <i class="bi bi-x-circle mb-1" style="font-size: 1.1rem;"></i>
-        <span>Cancelar reserva</span>
-      </a>
+      <!-- Ação de cancelamento de reserva (somente se a reserva não estiver em processo de cancelamento e se faltarem 7 dias ou mais para a data do evento) -->
+      <?php if (!in_array('pending_cancel', array_column($res['passageiros'], 'status'))): 
+
+        // Timestamp dia da excursão
+        $data_excursao_iso = DateTimeImmutable::createFromFormat('d/m/Y', $res['data'])->setTime(0, 0);
+        $data_excursao_timestamp = $data_excursao_iso->getTimestamp();
+
+        // Timestamp atual
+        $current_date = new DateTimeImmutable('now');
+        $current_timestamp = $current_date->getTimestamp();
+
+
+        // Exibir botão de cancelamento apenas se faltarem 7 dias ou mais para a data do evento
+         if (($data_excursao_timestamp - $current_timestamp) >= (7 * 24 * 60 * 60)) :
+          ?>
+          <a href="#"
+            class="action-item cancelar-option"
+            data-bs-toggle="modal"
+            data-bs-target="#modal-cancelar-<?= $res['chave']; ?>">
+            <i class="bi bi-x-circle mb-1" style="font-size: 1.1rem;"></i>
+            <span>Cancelar reserva</span>
+          </a>
+        <?php endif; ?>
+      <?php endif; ?>
+
+
     </div>
     <div class="card-footer bg-white border-0 p-3 text-center border-top-0">
       <a href="<?= $res['url']; ?>" class="text-decoration-none small fw-bold">

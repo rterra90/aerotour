@@ -6,6 +6,7 @@ $ativas_agrupadas = [];
 $canceladas_agrupadas = [];
 $user_cpf = get_user_meta($current_user_id, 'cpf', true);
 
+// 1. Busca de dados: obtém todas as reservas associadas ao usuário (tanto como comprador quanto como passageiro)
 if ($user_cpf) {
   $reservas_db = $wpdb->get_results($wpdb->prepare(
     "SELECT * FROM `aer_reservas` WHERE p_cpf = %s OR order_user_id = %d",
@@ -39,11 +40,6 @@ if ($user_cpf) {
     $current_user_id
   ), ARRAY_A);
 }
-
-
-
-// 1. Busca de dados: obtém todas as reservas associadas ao usuário (tanto como comprador quanto como passageiro)
-
 
 
 
