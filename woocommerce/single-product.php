@@ -41,7 +41,7 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
     // print_r($excursao['embarques_por_variacao']);
 ?>
 
-    <section class="row product-body mt-3">
+    <section class="row product-body mt-sm-3 mt-1">
       <div id="info-body" class="col-md-7">
         <div class="d-flex justify-content-between align-items-start">
           <h1><span>Excursão<br /></span><?= $excursao['nome'] ?></h1>
