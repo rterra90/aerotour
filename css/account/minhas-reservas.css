@@ -11,6 +11,89 @@ main {
     font-size: .875rem;
     letter-spacing: .05rem;
 }
+/* Modal passageiros */
+  #body-lista-passageiros .edit-pax-btn{
+    font-size: .55rem;
+  }
+  form#form-solicitar-edicao .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+  }
+  form#form-solicitar-edicao .alert{
+        font-size: .75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: .75rem;
+  }
+  input.has-error {
+    border-color: #dc3545; /* Cor de erro (vermelho) */
+  }
+
+  #body-edit-passageiro #resumo-edit {
+    font-size: 0.75rem;
+    color: #555;
+  }
+
+  #body-edit-passageiro #resumo-edit ul{
+    display: flex; gap: 2px;
+    align-items: flex-start;
+  }
+
+
+
+/* Resumo edit badges */
+#body-edit-passageiro #resumo-edit ul li:not(.placeholder) {
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.25rem;
+    white-space: nowrap;
+}
+#body-edit-passageiro #resumo-edit ul li.invisible{
+    width: 0px;
+    padding: 0!important;
+    margin: 0!important;
+}
+#body-edit-passageiro #resumo-edit ul li.placeholder i{
+    white-space: nowrap;
+}
+
+/* Modal Passageiros Slide view/edit */
+.modal-body-slider {
+    padding: 0;
+    overflow-x: hidden; /* Esconde a parte que está fora da tela */
+}
+
+.slider-wrapper {
+    display: flex;
+    width: 200%; /* Duas telas de 100% cada */
+    transition: transform 0.3s ease-in-out;
+    align-items: flex-start; /* Evita que a tela menor estique a maior */
+    gap: 20px;
+}
+
+.slider-pane {
+    width: calc(50% - 10px);
+    flex-shrink: 0;
+    transition: .5s;
+    opacity: 1;
+}
+.slider-pane.faded{
+    opacity: 0;
+}
+.slider-pane#body-edit-passageiro{
+    max-height: 600px;
+    overflow: hidden;
+}
+.slider-pane#body-edit-passageiro.faded{
+    max-height: 100px;
+}
+
+.show-edit-screen {
+    transform: translateX(-50%);
+}
+
 
 /* Modal de ações de minhas reservas (cancelar, alterar embarque, etc.) */
 .reservas-wrapper .modal .modal-body{

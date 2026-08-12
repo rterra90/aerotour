@@ -23,9 +23,11 @@ function celularMask(value) {
   return value;
 }
 function CPFMask(value) {
-  value = value.replace(/\D/g, ''); // Remove tudo que não for dígito
-  // CPF
-  return value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    value = value.replace(/\D/g, '').slice(0, 11);
+  value = value.replace(/(\d{3})(\d)/, '$1.$2');
+  value = value.replace(/(\d{3})(\d)/, '$1.$2');
+  value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  return value;
 }
 function d_CPFMask(value) {
   value = value.replace(/\D/g, '').slice(0, 11);
@@ -103,6 +105,7 @@ function dataMask(value) {
   return value.slice(0, 10);
 }
 
+
 // Função para limpar a máscara e obter apenas os dígitos
 function cleanMask(value) {
   return value ? value.replace(/\D/g, '') : '';
@@ -124,6 +127,17 @@ function applyMask(value, type) {
   }
 }
 
+  // Função auxiliar para converter DMY para ISO
+  function dmyToIso(dmy) {
+    const [day, month, year] = dmy.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+
+  // Função auxiliar para converter ISO para DMY
+  function isoToDmy(iso) {
+    const [year, month, day] = iso.split('-');
+    return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+  }
 
 // // //
 // VALIDAÇÕES DE INPUTS
@@ -161,6 +175,15 @@ function validarCPF(cpf) {
 
   return true;
 }
+
+function validarNomeCompleto(value) {
+  // Remove espaços extras e divide o nome em partes
+  const parts = value.trim().split(/\s+/);
+
+  // Verifica se as duas partes possuem mais de 1 caractere
+  return parts.length >= 2 && parts.every(part => part.length > 1);
+}
+
 
 // Timer de pedido pendente
 jQuery(document).ready(function($) {

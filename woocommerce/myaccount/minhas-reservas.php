@@ -69,6 +69,7 @@ foreach ($reservas_db as $reg) {
     'status' => $reg['status'],
     'is_me' => ($reg['user_id'] == $current_user_id),
     'order_user_id' => $reg['order_user_id'],
+    'data_nasc' => $reg['data_nasc'] ?: 'Não informado',
     // 'sou_dono' => $reg['order_user_id'] == $current_user_id,
   ];
 
