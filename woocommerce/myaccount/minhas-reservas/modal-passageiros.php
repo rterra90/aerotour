@@ -35,13 +35,13 @@
                             <span class="badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle small">Cancelamento pendente</span>
                         <?php endif; ?>
                         <?php if ($p['is_me']): ?>
-                            <span class="badge rounded-pill bg-primary-subtle text-primary">Você</span>
+                            <span class="badge rounded-pill bg-primary-subtle accent-color-text">Você</span>
                         <?php endif; ?>
                       </div>
                       
                       <button type="button" 
                               class="btn btn-sm btn-outline-secondary mt-1 edit-pax-btn"
-                              data-id="<?= $p['id'] ?? ''; ?>"
+                              data-id="<?= $p['res_id'] ?? ''; ?>"
                               data-res-chave="<?= $res['chave']; ?>"
                               data-nome="<?= $p['nome']; ?>"
                               data-doc="<?= $p['doc']; ?>"
@@ -60,53 +60,56 @@
           <!-- TELA 2: FORMULÁRIO DE EDIÇÃO    -->
           <!-- =============================== -->
           <div class="slider-pane faded" id="body-edit-passageiro">
-            <!-- Botão extra para voltar (opcional, mas bom para UX) -->
-            <button type="button" class="btn btn-link text-decoration-none p-0 mb-3" onclick="closeEditScreen('<?= $res['chave']; ?>')">
-                <i class="bi bi-arrow-left"></i> Voltar para lista
-            </button>
+            <div id="solic-edit-container">
+              <!-- Botão extra para voltar (opcional, mas bom para UX) -->
+              <button type="button" class="btn btn-link text-decoration-none p-0 mb-3" onclick="closeEditScreen('<?= $res['chave']; ?>')">
+                  <i class="bi bi-arrow-left"></i> Voltar para lista
+              </button>
 
-            <form id="form-solicitar-edicao" action="/api/solicitar-edicao-passageiro" method="POST">
-              <div class="alert alert-info small">
-                  Altere apenas os dados que deseja atualizar. As solicitações serão analisadas antes de serem aplicadas à reserva.
-              </div>
-              
-              <input type="hidden" name="passageiro_id" id="edit-passageiro-id">
-  
-              <div class="mb-3">
-                  <label class="form-label text-muted small mb-1">Nome Completo</label>
-                  <input type="text" class="form-control edit-pax-input" name="novo_nome" id="edit-nome" required>
-              </div>
-              <div class="mb-3">
-                  <label class="form-label text-muted small mb-1">CPF</label>
-                  <input type="text" class="form-control edit-pax-input" name="novo_doc" id="edit-doc" required>
-              </div>
-              <div class="mb-3">
-                  <label class="form-label text-muted small mb-1">Celular (WhatsApp)</label>
-                  <input type="text" class="form-control edit-pax-input" name="novo_telefone" id="edit-telefone" required>
-              </div>
-              <div class="mb-3">
-                  <label class="form-label text-muted small mb-1">Data de nascimento</label>
-                  <input type="text" class="form-control edit-pax-input" name="nova_data_nascimento" id="edit-data-nasc" required>
-              </div>
-  
-              <!-- Container de resumo das alterações de dados -->
-              <div id="resumo-edit" class="bg-light p-2 rounded mb-3 border">
-                <span class="d-block small fw-bold mb-1">Dados atualizados:</span>
-                <ul class="mb-0 small">
-                  <li class="placeholder text-muted"><i>Nenhum dado alterado ainda</i></li>
-                  <li class="invisible" data-field="novo_nome">Nome completo</li>
-                  <li class="invisible" data-field="novo_doc">CPF</li>
-                  <li class="invisible" data-field="novo_telefone">Celular</li>
-                  <li class="invisible" data-field="nova_data_nascimento">Data de nascimento</li>
-                </ul>
-              </div>
-  
-              <div class="d-flex justify-content-end gap-2 mt-4">
-                <!-- Mudei para onclick chamar o fechar tela, ao invés de fechar o modal inteiro -->
-                <button type="button" class="btn btn-light" onclick="closeEditScreen('<?= $res['chave']; ?>')">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
-              </div>
-            </form>
+              <form data-parent-wrapper-key="<?= $res['chave']; ?>" id="form-solicitar-edicao" action="/api/solicitar-edicao-passageiro" data-res-id=<?= $p['res_id']; ?> method="POST">
+                <div class="alert alert-info small">
+                    Altere apenas os dados que deseja atualizar. As solicitações serão analisadas antes de serem aplicadas à reserva.
+                </div>
+                
+                <input type="hidden" name="pax_id" id="edit-passageiro-id">
+    
+                <div class="mb-3">
+                    <label class="form-label text-muted small mb-1">Nome Completo</label>
+                    <input type="text" class="form-control edit-pax-input" name="novo_nome" id="edit-nome" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small mb-1">CPF</label>
+                    <input type="text" class="form-control edit-pax-input" name="novo_doc" id="edit-doc" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small mb-1">Celular (WhatsApp)</label>
+                    <input type="text" class="form-control edit-pax-input" name="novo_telefone" id="edit-telefone" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small mb-1">Data de nascimento</label>
+                    <input type="text" class="form-control edit-pax-input" name="nova_data_nascimento" id="edit-data-nasc" required>
+                </div>
+    
+                <!-- Container de resumo das alterações de dados -->
+                <div id="resumo-edit" class="bg-light p-2 rounded mb-3 border">
+                  <span class="d-block small fw-bold mb-1">Dados atualizados:</span>
+                  <ul class="mb-0 small">
+                    <li class="placeholder text-muted"><i>Nenhum dado alterado ainda</i></li>
+                    <li class="invisible" data-field="novo_nome">Nome completo</li>
+                    <li class="invisible" data-field="novo_doc">CPF</li>
+                    <li class="invisible" data-field="novo_telefone">Celular</li>
+                    <li class="invisible" data-field="nova_data_nascimento">Data de nascimento</li>
+                  </ul>
+                </div>
+    
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                  <!-- Mudei para onclick chamar o fechar tela, ao invés de fechar o modal inteiro -->
+                  <button type="button" class="btn btn-light" onclick="closeEditScreen('<?= $res['chave']; ?>')">Cancelar</button>
+                  <button id="edit-pax-enviar-btn" type="submit" class="btn btn-primary">Enviar Solicitação</button>
+                </div>
+              </form>
+            </div>
+            
           </div>
           
         </div> <!-- Fim slider-wrapper -->
@@ -116,6 +119,24 @@
 </div>
 
 <script>
+
+  // function validaCamposEdicaoPax(inputElement){
+
+  //   let isValid = false;
+  //     if (inputElement.id === 'edit-nome') {
+  //       isValid = validarNomeCompleto(inputElement.value);
+
+  //     }else if(inputElement.id === 'edit-doc'){
+  //       isValid = validarCPF(inputElement.value);
+
+  //     }else if(inputElement.id === 'edit-telefone'){
+  //       isValid = inputElement.value.length >= 14;
+
+  //     }else if(inputElement.id === 'edit-data-nasc'){
+  //       isValid = inputElement.value.length === 10;
+  //     }
+
+  // }
 
   // Aplica as máscaras nos inputs
   const editPaxInputs = document.querySelectorAll('.edit-pax-input');
@@ -232,6 +253,10 @@ function openEditScreen(button) {
     // alterna a classe 'faded' para a tela de edição e a lista de passageiros
     document.getElementById('body-lista-passageiros').classList.add('faded');
     document.getElementById('body-edit-passageiro').classList.remove('faded');
+
+    // adiciona o listener de submit no formulário de edição
+    document.getElementById('form-solicitar-edicao').addEventListener('submit', (e) => submitSolicitacaoEditPax(e));
+
 }
 
 function closeEditScreen(resChave) {
@@ -259,4 +284,98 @@ modalElement.addEventListener('hidden.bs.modal', function () {
     // Restaura o título do modal
     document.getElementById('modal-title-<?= $res['chave']; ?>').innerText = "Passageiros nesta reserva";
 });
+
+async function submitSolicitacaoEditPax(event){
+  event.preventDefault()
+
+  // desabilitar botão de envio e escrever "Enviando..." para feedback visual
+  const submitButton = document.getElementById('edit-pax-enviar-btn');
+  submitButton.disabled = true;
+  submitButton.textContent = "Enviando...";
+
+  //verifica se todos os dados passam na validação
+  const editPaxInputs = Array.from(document.querySelectorAll('.edit-pax-input'));
+
+  const validations = editPaxInputs.map(input => {
+    if(input.id === 'edit-nome'){
+      return validarNomeCompleto(input.value);
+    }else if(input.id === 'edit-doc'){
+      return validarCPF(input.value);
+    }else if(input.id === 'edit-telefone'){
+      return input.value.length >= 14;
+    }else if(input.id === 'edit-data-nasc'){
+      return input.value.length === 10;
+    }
+  })
+
+  const alteracoes = editPaxInputs.map(input => input.value !== input.dataset.initialValue);
+
+  if(validations.some(v => v === false)){
+    alert('Por favor, verifique os dados informados.');
+    return;
+  } else if (alteracoes.every(a => a === false)){
+    alert('Por favor, altere algum dado para enviar.');
+    return;
+  }
+
+  // prepara os dados para envio
+  const formData = new FormData(event.target);
+  payload = Object.fromEntries(formData.entries());
+
+  payload.action_from = 'user';
+
+  const fieldMap = {
+    'edit-nome': 'status_nome',
+    'edit-doc': 'status_doc',
+    'edit-telefone': 'status_telefone',
+    'edit-data-nasc': 'status_data_nasc'
+  };
+
+  editPaxInputs.forEach(input => {
+    if (input.value !== input.dataset.initialValue && fieldMap[input.id]) {
+      payload[fieldMap[input.id]] = 'pendente';
+    }
+  });
+
+console.log(payload)
+
+  try{
+    const apiUrl = window.themeLinks.siteUrl + '/wp-json/api/v1/edit-reserva';
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+
+    // Se o status HTTP for diferente de 2xx (ex: 500 do WP_Error)
+    if (!response.ok) {
+      throw new Error(data.message || 'Erro desconhecido no servidor.');
+    }
+
+    // SUCESSO (200 OK)
+
+      // substituir o formulário de edicao por um container de confirmação
+    const editContainer = document.getElementById('solic-edit-container');
+    editContainer.innerHTML = `
+      <div class="mt-3 mb-4 alert alert-success small animate-from-top">
+        Sua solicitação de edição foi enviada com sucesso! Ela será analisada antes de ser aplicada à reserva.
+      </div>
+      <button type="button" class="main-btn d-block mx-auto btn" onclick="closeEditScreen('${event.target.dataset.parentWrapperKey}')">Voltar para lista de passageiros</button>
+    `;
+
+    setTimeout(() => {
+    editContainer.querySelector('.alert').classList.add('show-animated');
+    }, 150);
+
+  } catch (error) {
+    console.error('Falha na requisição:', error.message);
+
+  }
+
+
+
+
+}
+
 </script>

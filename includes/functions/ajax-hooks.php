@@ -1,9 +1,15 @@
 <?php
 
+require_once get_template_directory() . '/includes/functions/user-hooks.php';
+
+
 // FUNÇÃO CANCELAMENTO DE RESERVA
 require_once get_template_directory() .
     '/includes/functions/cancelamento-functions.php';
-require_once get_template_directory() . '/includes/functions/user-hooks.php';
+
+// FUNÇÃO ALTERAÇÃO DE DADOS DE RESERVA
+require_once get_template_directory() .
+    '/includes/functions/edit-dados-reserva-functions.php';
 
 //ENVIA SOLICITAÇÃO DE TROCA DE EMBARQUE PARA O ADMINISTRADOR
 add_action(

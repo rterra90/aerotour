@@ -5,6 +5,7 @@ use Pelago\Emogrifier\CssInliner;
 $root_url = get_stylesheet_directory_uri();
 
 // ENDPOINTS PARA CONSUMIR A REST API
+require_once get_template_directory() . '/endpoints/api_reserva_put.php';
 require_once get_template_directory() . '/endpoints/cupom_update.php';
 require_once get_template_directory() . '/endpoints/cupom_update.php';
 require_once get_template_directory() . '/endpoints/api_campanhas_get.php';
@@ -115,7 +116,7 @@ require_once get_template_directory() . '/includes/functions/usuarios-functions.
 require_once get_template_directory() . '/includes/footer-scripts.php';
 require_once get_template_directory() . '/includes/functions/pax-meta-functions.php'; //Funções para o fluxo de metadados de passageiros
 
-require_once get_template_directory() . '/includes/temp-migrate-embarques.php'; // Função temporária para migrar os dados de embarques antigos para a nova arquitetura
+require_once get_template_directory() . '/includes/tabela-solic-edit-pax.php';
 
 
 
