@@ -92,7 +92,6 @@ function carregar_assets_moderacao_passageiros($hook) {
 
     // JS para requisições AJAX sem recarregar a página
     wp_enqueue_script('jquery');
-
 }
 
 function renderizar_pagina_moderacao_passageiros() {
@@ -108,11 +107,12 @@ function renderizar_pagina_moderacao_passageiros() {
     $reservas_ids_str = implode(',', array_map('intval', $reservas_ids));
 
     $reservas_originais = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}reservas WHERE ID IN($reservas_ids_str)");
-
+    
     $table_items = array();
     
     foreach($solicitacoes as $solic){
-        $original = array_filter($reservas_originais, function($r) use($solic) { return $r -> ID == $solic -> reserva_id; })[0];
+        $original = array_filter($reservas_originais, function($r) use($solic) { return $r -> ID == $solic -> reserva_id; });
+        $original = array_values($original)[0];
 
         $item = array(
             'orig_nome' => $original -> p_nome,
@@ -136,13 +136,7 @@ function renderizar_pagina_moderacao_passageiros() {
         array_push($table_items, $item);
         
     }
-
-       
-
     ?>
-    <pre>
-        <?php  //print_r($table_items); ?>
-    </pre>
 
     <div class="wrap">
         <h1 class="wp-heading-inline">Moderação de Alterações de Passageiros</h1>
@@ -255,130 +249,130 @@ function renderizar_pagina_moderacao_passageiros() {
 
     <!-- Script de Processamento AJAX -->
     <script>
-    async function processarCampo(solicitationId, campo, acao, valorOriginal) {
-        const ajaxData = new FormData();
-        ajaxData.append('action', 'avaliar_edit_reserva');
-        ajaxData.append('solicitacao_id', solicitationId);
-        ajaxData.append('campo', campo);
-        ajaxData.append('acao', acao);
-        ajaxData.append('valor_original', valorOriginal);
-        ajaxData.append('nonce', '<?= wp_create_nonce("avaliar_edit_reserva_nonce"); ?>');
+        async function processarCampo(solicitationId, campo, acao, valorOriginal) {
+            const ajaxData = new FormData();
+            ajaxData.append('action', 'avaliar_edit_reserva');
+            ajaxData.append('solicitacao_id', solicitationId);
+            ajaxData.append('campo', campo);
+            ajaxData.append('acao', acao);
+            ajaxData.append('valor_original', valorOriginal);
+            ajaxData.append('nonce', '<?= wp_create_nonce("avaliar_edit_reserva_nonce"); ?>');
 
-        const ajaxDataObject = Object.fromEntries(ajaxData .entries());
+            const ajaxDataObject = Object.fromEntries(ajaxData .entries());
 
-        jQuery(function($) {
-            $.ajax({
-            url: themeLinks.ajaxUrl,
-            type: 'POST',
-            data: ajaxDataObject,
-            success: async function(response) {
-                console.log(response.data)
+            jQuery(function($) {
+                $.ajax({
+                url: themeLinks.ajaxUrl,
+                type: 'POST',
+                data: ajaxDataObject,
+                success: async function(response) {
+                    console.log(response.data)
 
-                const cell = document.getElementById(`box-field-${solicitationId}-${campo}`);
-                if(cell) {
-                    if(acao === 'aceitar') {
-                        cell.innerHTML = `<span class="badge-status badge-aprovado">Aprovado: ${response.data.novo_valor}</span>`;
-                    } else {
-                        cell.innerHTML = `<span class="badge-status badge-rejeitado">Rejeitado</span> <br><small>${response.data.valor_original}</small>`;
+                    const cell = document.getElementById(`box-field-${solicitationId}-${campo}`);
+                    if(cell) {
+                        if(acao === 'aceitar') {
+                            cell.innerHTML = `<span class="badge-status badge-aprovado">Aprovado: ${response.data.novo_valor}</span>`;
+                        } else {
+                            cell.innerHTML = `<span class="badge-status badge-rejeitado">Rejeitado</span> <br><small>${response.data.valor_original}</small>`;
+                        }
                     }
+                    
+                    const novo_status_solic = response.data.novo_status_solic;
+                    if(novo_status_solic === 'concluido'){
+                        const actionsCell = document.getElementById(`actions-${solicitationId}`);
+                        actionsCell.querySelector('.pending-solic').classList.add('d-none');
+                        actionsCell.querySelector('.concluido-solic').classList.remove('d-none');
+                    }
+                },
+                error: function(error) {
+                    alert("Erro: " + error.data);
                 }
-                
-                const novo_status_solic = response.data.novo_status_solic;
-                if(novo_status_solic === 'concluido'){
-                    const actionsCell = document.getElementById(`actions-${solicitationId}`);
-                    actionsCell.querySelector('.pending-solic').classList.add('d-none');
-                    actionsCell.querySelector('.concluido-solic').classList.remove('d-none');
-                }
-            },
-            error: function(error) {
-                alert("Erro: " + error.data);
-            }
-            });
-        })
-    }
-
-    function processarTudo(solicitationId, acao) {
-        if(!confirm(`Tem certeza que deseja ${acao} TODAS as alterações desta solicitação?`)) return;
-
-        const data = new FormData();
-        data.append('action', 'processar_alteracao_tudo');
-        data.append('solicitacao_id', solicitationId);
-        data.append('acao', acao);
-        data.append('nonce', '<?= wp_create_nonce("avaliar_edit_reserva_nonce"); ?>');
-
-        fetch(ajaxurl, { method: 'POST', body: data })
-        .then(response => response.json())
-        .then(res => {
-            if(res.success) {
-                const row = document.getElementById(`row-solicitation-${solicitationId}`);
-                if(row) {
-                    row.style.transition = 'all 0.5s';
-                    row.style.backgroundColor = acao === 'aceitar' ? '#d1e7dd' : '#f8d7da';
-                    setTimeout(() => row.remove(), 600);
-                }
-            } else {
-                alert('Erro: ' + res.data);
-            }
-        });
-    }
-
-    function checarConclusaoLinha(solicitationId) {
-        const row = document.getElementById(`row-solicitation-${solicitationId}`);
-        const pendentes = row.querySelectorAll('.diff-container');
-        // Se não houver mais containers de diferença pendentes na linha, oculta a linha
-        if(pendentes.length === 0) {
-            setTimeout(() => {
-                row.style.transition = 'all 0.5s';
-                row.style.opacity = '0';
-                setTimeout(() => row.remove(), 500);
-            }, 1000);
+                });
+            })
         }
-    }
+
+        function processarTudo(solicitationId, acao) {
+            if(!confirm(`Tem certeza que deseja ${acao} TODAS as alterações desta solicitação?`)) return;
+
+            const data = new FormData();
+            data.append('action', 'processar_alteracao_tudo');
+            data.append('solicitacao_id', solicitationId);
+            data.append('acao', acao);
+            data.append('nonce', '<?= wp_create_nonce("avaliar_edit_reserva_nonce"); ?>');
+
+            fetch(ajaxurl, { method: 'POST', body: data })
+            .then(response => response.json())
+            .then(res => {
+                if(res.success) {
+                    const row = document.getElementById(`row-solicitation-${solicitationId}`);
+                    if(row) {
+                        row.style.transition = 'all 0.5s';
+                        row.style.backgroundColor = acao === 'aceitar' ? '#d1e7dd' : '#f8d7da';
+                        setTimeout(() => row.remove(), 600);
+                    }
+                } else {
+                    alert('Erro: ' + res.data);
+                }
+            });
+        }
+
+        function checarConclusaoLinha(solicitationId) {
+            const row = document.getElementById(`row-solicitation-${solicitationId}`);
+            const pendentes = row.querySelectorAll('.diff-container');
+            // Se não houver mais containers de diferença pendentes na linha, oculta a linha
+            if(pendentes.length === 0) {
+                setTimeout(() => {
+                    row.style.transition = 'all 0.5s';
+                    row.style.opacity = '0';
+                    setTimeout(() => row.remove(), 500);
+                }, 1000);
+            }
+        }
     </script>
     <?php
+}
+
+// Função Auxiliar para Renderização de Cada Célula (Compara Origem x Novo)
+function renderizar_campo_moderacao($solicitationId, $campo, $valorOriginal, $valorNovo, $statusCampo) {
+    // Caso já tenha sido aprovado ou rejeitado individualmente
+    if ($statusCampo === 'aprovado') {
+        echo '<span class="badge-status badge-aprovado">Aprovado: ' . esc_html($valorNovo) . '</span>';
+        return;
+    }
+    if ($statusCampo === 'rejeitado') {
+        echo '<span class="badge-status badge-rejeitado">Rejeitado</span><br><small class="text-muted">' . esc_html($valorOriginal) . '</small>';
+        return;
     }
 
-    // Função Auxiliar para Renderização de Cada Célula (Compara Origem x Novo)
-    function renderizar_campo_moderacao($solicitationId, $campo, $valorOriginal, $valorNovo, $statusCampo) {
-        // Caso já tenha sido aprovado ou rejeitado individualmente
-        if ($statusCampo === 'aprovado') {
-            echo '<span class="badge-status badge-aprovado">Aprovado: ' . esc_html($valorNovo) . '</span>';
-            return;
-        }
-        if ($statusCampo === 'rejeitado') {
-            echo '<span class="badge-status badge-rejeitado">Rejeitado</span><br><small class="text-muted">' . esc_html($valorOriginal) . '</small>';
-            return;
-        }
+    // Se o valor for igual ou o novo for vazio = Exibe valor normal
+    if (empty($valorNovo) || $valorOriginal === $valorNovo) {
+        echo '<span>' . esc_html($valorOriginal) . '</span>';
+        return;
+    }
 
-        // Se o valor for igual ou o novo for vazio = Exibe valor normal
-        if (empty($valorNovo) || $valorOriginal === $valorNovo) {
-            echo '<span>' . esc_html($valorOriginal) . '</span>';
-            return;
-        }
-
-        // Se o valor for diferente = Exibe container com destaque e botões dedicados
-        ?>
-        <div class="diff-container" id="box-field-<?= $solicitationId; ?>-<?= $campo; ?>">
-            <div class="diff-val-original" title="Valor Atual">
-                <small style="color:#666;">De:</small> <?= esc_html($valorOriginal); ?>
-            </div>
-            <div class="diff-val-novo" title="Novo Valor Solicitado">
-                <small style="color:#666;">Para:</small> <?= esc_html($valorNovo); ?>
-            </div>
-            <div class="diff-actions">
-                <button type="button" 
-                        class="button button-small" 
-                        style="color: #198754; border-color: #198754;"
-                        onclick="processarCampo(<?= $solicitationId; ?>, '<?= $campo; ?>', 'aceitar', '<?= $valorOriginal; ?>')">
-                    <span class="dashicons dashicons-yes"></span>
-                </button>
-                <button type="button" 
-                        class="button button-small" 
-                        style="color: #dc3545; border-color: #dc3545;"
-                        onclick="processarCampo(<?= $solicitationId; ?>, '<?= $campo; ?>', 'rejeitar', '<?= $valorOriginal; ?>')">
-                    <span class="dashicons dashicons-no"></span>
-                </button>
-            </div>
+    // Se o valor for diferente = Exibe container com destaque e botões dedicados
+    ?>
+    <div class="diff-container" id="box-field-<?= $solicitationId; ?>-<?= $campo; ?>">
+        <div class="diff-val-original" title="Valor Atual">
+            <small style="color:#666;">De:</small> <?= esc_html($valorOriginal); ?>
         </div>
-        <?php
-    }
+        <div class="diff-val-novo" title="Novo Valor Solicitado">
+            <small style="color:#666;">Para:</small> <?= esc_html($valorNovo); ?>
+        </div>
+        <div class="diff-actions">
+            <button type="button" 
+                    class="button button-small" 
+                    style="color: #198754; border-color: #198754;"
+                    onclick="processarCampo(<?= $solicitationId; ?>, '<?= $campo; ?>', 'aceitar', '<?= $valorOriginal; ?>')">
+                <span class="dashicons dashicons-yes"></span>
+            </button>
+            <button type="button" 
+                    class="button button-small" 
+                    style="color: #dc3545; border-color: #dc3545;"
+                    onclick="processarCampo(<?= $solicitationId; ?>, '<?= $campo; ?>', 'rejeitar', '<?= $valorOriginal; ?>')">
+                <span class="dashicons dashicons-no"></span>
+            </button>
+        </div>
+    </div>
+    <?php
+}

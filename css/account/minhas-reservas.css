@@ -30,12 +30,12 @@ main {
     border-color: #dc3545; /* Cor de erro (vermelho) */
   }
 
-  #body-edit-passageiro #resumo-edit {
+  .slider-pane.edit-form-pane .resumo-edit-box {
     font-size: 0.75rem;
     color: #555;
   }
 
-  #body-edit-passageiro #resumo-edit ul{
+  .slider-pane.edit-form-pane .resumo-edit-box ul{
     display: flex; gap: 2px;
     align-items: flex-start;
   }
@@ -43,26 +43,26 @@ main {
 
 
 /* Resumo edit badges */
-#body-edit-passageiro #resumo-edit ul li:not(.placeholder) {
+.slider-pane.edit-form-pane .resumo-edit-box ul li:not(.placeholder) {
     background-color: #e9ecef;
     border-radius: 0.25rem;
     padding: 0.2rem 0.5rem;
     margin-right: 0.25rem;
     white-space: nowrap;
 }
-#body-edit-passageiro #resumo-edit ul li.invisible{
+.slider-pane.edit-form-pane .resumo-edit-box ul li.invisible{
     width: 0px;
     padding: 0!important;
     margin: 0!important;
 }
-#body-edit-passageiro #resumo-edit ul li.placeholder i{
+.slider-pane.edit-form-pane .resumo-edit-box ul li.placeholder i{
     white-space: nowrap;
 }
 
 /* Modal Passageiros Slide view/edit */
 .modal-body-slider {
     padding: 0;
-    overflow-x: hidden; /* Esconde a parte que está fora da tela */
+    overflow: hidden; /* Esconde a parte que está fora da tela */
 }
 
 .slider-wrapper {
@@ -82,11 +82,14 @@ main {
 .slider-pane.faded{
     opacity: 0;
 }
-.slider-pane#body-edit-passageiro{
+.slider-pane.lista-pane{
     max-height: 600px;
     overflow: hidden;
 }
-.slider-pane#body-edit-passageiro.faded{
+.slider-pane.lista-pane.faded{
+    height: 100px;
+}
+.slider-pane.edit-form-pane.faded{
     max-height: 100px;
 }
 
