@@ -90,9 +90,14 @@ $text_align = is_rtl() ? 'right' : 'left';
 
     //Passageiros
     $passageiros = $passageiros_items[$p_index]['passageiros'];
-    $passageiros = array_filter($passageiros, function ($p) {
-      if ($p !== false) return $p;
-    });
+    if(isset($passageiros) && $passageiros !== null){
+      $passageiros = array_filter($passageiros, function ($p) {
+        if ($p !== false) return $p;
+      });$passageiros = array_filter($passageiros, function ($p) {
+        if ($p !== false) return $p;
+      });
+    }
+    
   ?>
 
     <!-- Bloco de excursão -->
@@ -137,7 +142,7 @@ $text_align = is_rtl() ? 'right' : 'left';
             </code>
           </p>
 
-          <?php if (count($passageiros) > 1) : ?>
+          <?php if ($passageiros !== null && count($passageiros) > 1) : ?>
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(37, 211, 102, 0.3);">
               <p style="font-size: 12px; color: #444; line-height: 1.4; margin: 0;">
                 <strong>Atenção:</strong> Compartilhe o link com os demais passageiros. <br>
@@ -147,27 +152,31 @@ $text_align = is_rtl() ? 'right' : 'left';
           <?php endif; ?>
 
         </div>
+      <?php endif;
+      
+      if(isset($passageiros) && $passageiros !== null) : ?>
+        <div class="passageiros">
+          <h3>Passageiros</h3>
+
+          <?php
+          foreach ($passageiros as $passageiro) {
+            $rota = esc_html($passageiro->tripType);
+            $rota = $rota == 'ida-e-volta' ? "Ida e volta" : 'Apenas ' . $rota;
+          ?>
+            <div class="passageiro">
+              <strong>Nome:</strong> <?= $passageiro->nome_completo; ?><br>
+              <strong>CPF:</strong> <?= cpf_mask($passageiro->cpf); ?><br>
+              <strong>Telefone:</strong> <?= $passageiro->celular; ?><br>
+              <strong>Nascimento:</strong> <?= $passageiro->data_nascimento; ?><br>
+              <strong>Modalidade:</strong> <?= $rota; ?>
+            </div>
+          <?php
+          }
+          ?>
+        </div>
       <?php endif; ?>
 
-      <div class="passageiros">
-        <h3>Passageiros</h3>
-
-        <?php
-        foreach ($passageiros as $passageiro) {
-          $rota = esc_html($passageiro->tripType);
-          $rota = $rota == 'ida-e-volta' ? "Ida e volta" : 'Apenas ' . $rota;
-        ?>
-          <div class="passageiro">
-            <strong>Nome:</strong> <?= $passageiro->nome_completo; ?><br>
-            <strong>CPF:</strong> <?= cpf_mask($passageiro->cpf); ?><br>
-            <strong>Telefone:</strong> <?= $passageiro->celular; ?><br>
-            <strong>Nascimento:</strong> <?= $passageiro->data_nascimento; ?><br>
-            <strong>Modalidade:</strong> <?= $rota; ?>
-          </div>
-        <?php
-        }
-        ?>
-      </div>
+      
     </div>
 
 

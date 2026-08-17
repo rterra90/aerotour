@@ -158,7 +158,7 @@ function aer_render_email($template_name, $args = [])
   // return ob_get_clean();
 
   // Se existir um arquivo CSS, injetamos ele para o processamento
-
+  $html_com_estilo = $html;
 
   if (file_exists($css_path)) {
 
@@ -168,7 +168,19 @@ function aer_render_email($template_name, $args = [])
     // temporariamente para o cliente, ou usar um conversor.
     // Aqui, vamos envolver o HTML com o estilo para garantir a leitura.
     $html = "<html><meta name='color-scheme' content='light dark'><meta name='supported-color-schemes' content='light dark'><head><style>{$css}</style></head><body>{$html}</body></html>";
-    $html_com_estilo = CssInliner::fromHtml($html)->inlineCss($css)->render();
+
+    // Verifica se a classe existe antes de instanciar
+    if ( class_exists( 'Pelago\Emogrifier\CssInliner' ) ) {
+        $cssInliner = \Pelago\Emogrifier\CssInliner::fromHtml( $html );
+        if ( ! empty( $css ) ) {
+            $cssInliner->inlineCss( $css );
+        }
+        $html = $cssInliner->render();
+    } else {
+        // Se a classe não for encontrada, injeta o CSS direto em uma tag <style> no head
+        $html = str_replace( '</head>', '<style>' . $css . '</style></head>', $html );
+    }
+    // $html_com_estilo = CssInliner::fromHtml($html)->inlineCss($css)->render();
   }
 
   return $html_com_estilo;
