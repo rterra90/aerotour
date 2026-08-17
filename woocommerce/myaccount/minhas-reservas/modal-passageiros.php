@@ -55,53 +55,63 @@
           <!-- TELA 2: FORMULÁRIO DE EDIÇÃO -->
           <div class="slider-pane edit-form-pane faded" id="body-edit-passageiro-<?= $res['chave']; ?>">
             <div id="solic-edit-container-<?= $res['chave']; ?>">
-              <button type="button" class="btn btn-link text-decoration-none p-0 mb-3" onclick="closeEditScreen('<?= $res['chave']; ?>')">
+              <div class="form-wrapper">
+                <button type="button" class="btn btn-link text-decoration-none p-0 mb-3" onclick="closeEditScreen('<?= $res['chave']; ?>')">
                   <i class="bi bi-arrow-left"></i> Voltar para lista
-              </button>
+                </button>
 
-              <!-- Adicionado onsubmit e sufixo no ID -->
-              <form id="form-solicitar-edicao-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" action="/api/solicitar-edicao-passageiro" method="POST" onsubmit="submitSolicitacaoEditPax(event, '<?= $res['chave']; ?>')">
-                <div class="alert alert-info small">
-                    Altere apenas os dados que deseja atualizar. As solicitações serão analisadas antes de serem aplicadas à reserva.
+                <!-- Adicionado onsubmit e sufixo no ID -->
+                <form id="form-solicitar-edicao-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" action="/api/solicitar-edicao-passageiro" method="POST" onsubmit="submitSolicitacaoEditPax(event, '<?= $res['chave']; ?>')">
+                  <div class="alert alert-info small">
+                      Altere apenas os dados que deseja atualizar. As solicitações serão analisadas antes de serem aplicadas à reserva.
+                  </div>
+                  
+                  <input type="hidden" name="pax_id" id="edit-passageiro-id-<?= $res['chave']; ?>">
+      
+                  <!-- Adicionado data-res-chave e data-type nos inputs para facilitar a delegação no JS -->
+                  <div class="mb-3">
+                      <label class="form-label text-muted small mb-1">Nome Completo</label>
+                      <input type="text" class="form-control edit-pax-input" name="novo_nome" id="edit-nome-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="nome" required>
+                  </div>
+                  <div class="mb-3">
+                      <label class="form-label text-muted small mb-1">CPF</label>
+                      <input type="text" class="form-control edit-pax-input" name="novo_doc" id="edit-doc-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="doc" required>
+                  </div>
+                  <div class="mb-3">
+                      <label class="form-label text-muted small mb-1">Celular (WhatsApp)</label>
+                      <input type="text" class="form-control edit-pax-input" name="novo_telefone" id="edit-telefone-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="telefone" required>
+                  </div>
+                  <div class="mb-3">
+                      <label class="form-label text-muted small mb-1">Data de nascimento</label>
+                      <input type="text" class="form-control edit-pax-input" name="nova_data_nascimento" id="edit-data-nasc-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="data-nasc" required>
+                  </div>
+      
+                  <!-- Resumo com ID único -->
+                  <div id="resumo-edit-<?= $res['chave']; ?>" class="resumo-edit-box bg-light p-2 rounded mb-3 border">
+                    <span class="d-block small fw-bold mb-1">Dados atualizados:</span>
+                    <ul class="mb-0 small">
+                      <li class="placeholder text-muted"><i>Nenhum dado alterado ainda</i></li>
+                      <li class="invisible" data-field="novo_nome">Nome completo</li>
+                      <li class="invisible" data-field="novo_doc">CPF</li>
+                      <li class="invisible" data-field="novo_telefone">Celular</li>
+                      <li class="invisible" data-field="nova_data_nascimento">Data de nascimento</li>
+                    </ul>
+                  </div>
+      
+                  <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-light" onclick="closeEditScreen('<?= $res['chave']; ?>')">Cancelar</button>
+                    <button id="edit-pax-enviar-btn-<?= $res['chave']; ?>" type="submit" class="btn btn-primary">Enviar Solicitação</button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="success-wrapper d-none">
+                <div class="mt-3 mb-4 alert alert-success small animate-from-top">
+                  Sua solicitação de edição foi enviada com sucesso! Ela será analisada antes de ser aplicada à reserva.
                 </div>
-                
-                <input type="hidden" name="pax_id" id="edit-passageiro-id-<?= $res['chave']; ?>">
-    
-                <!-- Adicionado data-res-chave e data-type nos inputs para facilitar a delegação no JS -->
-                <div class="mb-3">
-                    <label class="form-label text-muted small mb-1">Nome Completo</label>
-                    <input type="text" class="form-control edit-pax-input" name="novo_nome" id="edit-nome-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="nome" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small mb-1">CPF</label>
-                    <input type="text" class="form-control edit-pax-input" name="novo_doc" id="edit-doc-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="doc" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small mb-1">Celular (WhatsApp)</label>
-                    <input type="text" class="form-control edit-pax-input" name="novo_telefone" id="edit-telefone-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="telefone" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted small mb-1">Data de nascimento</label>
-                    <input type="text" class="form-control edit-pax-input" name="nova_data_nascimento" id="edit-data-nasc-<?= $res['chave']; ?>" data-res-chave="<?= $res['chave']; ?>" data-type="data-nasc" required>
-                </div>
-    
-                <!-- Resumo com ID único -->
-                <div id="resumo-edit-<?= $res['chave']; ?>" class="resumo-edit-box bg-light p-2 rounded mb-3 border">
-                  <span class="d-block small fw-bold mb-1">Dados atualizados:</span>
-                  <ul class="mb-0 small">
-                    <li class="placeholder text-muted"><i>Nenhum dado alterado ainda</i></li>
-                    <li class="invisible" data-field="novo_nome">Nome completo</li>
-                    <li class="invisible" data-field="novo_doc">CPF</li>
-                    <li class="invisible" data-field="novo_telefone">Celular</li>
-                    <li class="invisible" data-field="nova_data_nascimento">Data de nascimento</li>
-                  </ul>
-                </div>
-    
-                <div class="d-flex justify-content-end gap-2 mt-4">
-                  <button type="button" class="btn btn-light" onclick="closeEditScreen('<?= $res['chave']; ?>')">Cancelar</button>
-                  <button id="edit-pax-enviar-btn-<?= $res['chave']; ?>" type="submit" class="btn btn-primary">Enviar Solicitação</button>
-                </div>
-              </form>
+                <button type="button" class="main-btn d-block mx-auto btn" onclick="closeEditScreen('<?= $res['chave']; ?>')">Voltar para lista de passageiros</button>
+              </div>
+              
             </div>
           </div>
           

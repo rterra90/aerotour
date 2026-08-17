@@ -285,6 +285,10 @@ function openEditScreen(button, resChave) {
     document.getElementById(`slider-wrapper-${resChave}`).classList.add('show-edit-screen');
     document.getElementById(`body-lista-passageiros-${resChave}`).classList.add('faded');
     document.getElementById(`body-edit-passageiro-${resChave}`).classList.remove('faded');
+
+    const submitButton = document.getElementById(`edit-pax-enviar-btn-${resChave}`);
+    submitButton.disabled = false;
+    submitButton.textContent = "Enviar Solicitação";
 }
 
 function closeEditScreen(resChave) {
@@ -295,7 +299,14 @@ function closeEditScreen(resChave) {
     }, 300);
 
     document.getElementById(`body-lista-passageiros-${resChave}`).classList.remove('faded');
-    document.getElementById(`body-edit-passageiro-${resChave}`).classList.add('faded');
+    
+    const bobyEditPax = document.getElementById(`body-edit-passageiro-${resChave}`);
+    
+    bobyEditPax.classList.add('faded');
+
+    bobyEditPax.querySelector('.success-wrapper').classList.add('d-none');
+    bobyEditPax.querySelector('.form-wrapper').classList.remove('d-none');
+
 }
 
 // ==========================================
@@ -384,15 +395,18 @@ async function submitSolicitacaoEditPax(event, resChave){
 
     // SUCESSO - Substitui interface
     const editContainer = document.getElementById(`solic-edit-container-${resChave}`);
-    editContainer.innerHTML = `
-      <div class="mt-3 mb-4 alert alert-success small animate-from-top">
-        Sua solicitação de edição foi enviada com sucesso! Ela será analisada antes de ser aplicada à reserva.
-      </div>
-      <button type="button" class="main-btn d-block mx-auto btn" onclick="closeEditScreen('${resChave}')">Voltar para lista de passageiros</button>
-    `;
+    // editContainer.innerHTML = `
+    //   <div class="mt-3 mb-4 alert alert-success small animate-from-top">
+    //     Sua solicitação de edição foi enviada com sucesso! Ela será analisada antes de ser aplicada à reserva.
+    //   </div>
+    //   <button type="button" class="main-btn d-block mx-auto btn" onclick="closeEditScreen('${resChave}')">Voltar para lista de passageiros</button>
+    // `;
+
+    editContainer.querySelector('.form-wrapper').classList.add('d-none');
+    editContainer.querySelector('.success-wrapper').classList.remove('d-none');
 
     setTimeout(() => {
-        const alertEl = editContainer.querySelector('.alert');
+        const alertEl = editContainer.querySelector('.alert-success');
         if(alertEl) alertEl.classList.add('show-animated');
     }, 150);
 
