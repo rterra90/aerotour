@@ -314,7 +314,8 @@ function renderizar_pagina_moderacao_passageiros() {
         }
 
         function processarTudo(solicitationId, acao) {
-            if(!confirm(`Tem certeza que deseja ${acao} TODAS as alterações desta solicitação?`)) return;
+            const primeiraPergunta = acao === 'limpar' ? `Remover essa solicitação?` : `Tem certeza que deseja ${acao} TODAS as alterações desta solicitação?`;
+            if(!confirm(primeiraPergunta)) return;
 
             const data = new FormData();
             data.append('action', 'processar_alteracao_tudo');
