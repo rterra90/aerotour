@@ -5,7 +5,7 @@ $var_embarque_settings = $args['embarques_por_variacao'];
 // Funcionalidades Específicas do Rock in Rio
 $is_rock_in_rio = has_term('rock-in-rio', 'product_cat');
 $cidades_dia_anterior = $is_rock_in_rio ?
-  array('Campinas', 'Limeira', 'Americana', 'Sumaré', 'Itu', 'Salto', 'Indaiatuba') : null;
+  array('Campinas', 'Valinhos', 'Limeira', 'Americana', 'Sumaré', 'Itu', 'Salto', 'Indaiatuba') : null;
 
 function agruparHorariosPorDia(array $horarios_do_embarque): array
 {
