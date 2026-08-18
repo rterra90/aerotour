@@ -80,13 +80,33 @@ function carregar_assets_moderacao_passageiros($hook) {
         }
         .badge-aprovado { background-color: #d1e7dd; color: #0f5132; }
         .badge-rejeitado { background-color: #f8d7da; color: #842029; }
-        .table-moderacao td { vertical-align: middle !important; }
+        .table-moderacao td { 
+            vertical-align: middle !important;
+            line-height: 1.4;
+        }
 
         .table-row-actions > div{
             display: flex;
             flex-direction: column;
             align-items: start;
             gap: 2px;
+        }
+        .table-moderacao small.data-solic{
+            border: 1px solid #787878;
+            font-size: .575rem;
+            padding: .1rem .4rem;
+            border-radius: .3rem;
+            color: #787878;
+            margin-top: 6px;
+            display: block;
+        
+        }
+        .table-moderacao small a {
+            color: unset;
+        }
+
+        .table-moderacao small a:hover {
+            text-decoration: underline;
         }
     ");
 
@@ -125,6 +145,7 @@ function renderizar_pagina_moderacao_passageiros() {
             'nova_data_nasc' => $solic -> nova_data_nasc,
             'reserva_id' => $solic -> reserva_id,
             'solic_id' => $solic -> id,
+            'order_id' => esc_html($original -> order_id),
             'data_solicitacao' => $solic -> data_solicitacao,
             'status_nome' => $solic -> status_nome,
             'status_doc' => $solic -> status_doc,
@@ -132,7 +153,7 @@ function renderizar_pagina_moderacao_passageiros() {
             'status_data_nasc' => $solic -> status_data_nasc,
             'status' => $solic -> status
         );
-
+        // print_r($item);
         array_push($table_items, $item);
         
     }
@@ -149,7 +170,7 @@ function renderizar_pagina_moderacao_passageiros() {
         <table class="wp-list-table widefat fixed striped table-view-list table-moderacao mt-3">
             <thead>
                 <tr>
-                    <th style="width: 90px;">Reserva ID</th>
+                    <th style="width: 90px;">#</th>
                     <th>Nome Completo</th>
                     <th>CPF</th>
                     <th>Celular</th>
@@ -169,9 +190,10 @@ function renderizar_pagina_moderacao_passageiros() {
                         <tr>
                             <!-- ID da Reserva -->
                             <td>
-                                <strong>#<?= esc_html($item['reserva_id']); ?></strong>
+                                <small><strong>Pedido: </strong><a href="<?= get_edit_post_link($item['order_id']) ?> "><?= $item['order_id']; ?></a></small>
+                                <small><strong>Reserva: </strong><?= esc_html($item['reserva_id']); ?></small>
                                 <br>
-                                <small class="text-muted"><?= date('d/m/Y H:i', strtotime($item['data_solicitacao'])); ?></small>
+                                <small class="text-muted data-solic"><?= date('d/m/Y H:i', strtotime($item['data_solicitacao'])); ?></small>
                             </td>
 
                             <!-- 1. Nome Completo -->
