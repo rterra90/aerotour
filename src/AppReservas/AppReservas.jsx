@@ -490,6 +490,7 @@ function AppReservas() {
                 passageiros={passageiros}
                 dataLimiteDesconto={dataLimiteDesconto}
                 setDataLimiteDesconto={setDataLimiteDesconto}
+                productId={productId}
               />
             )}
 

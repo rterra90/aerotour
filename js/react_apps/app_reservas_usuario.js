@@ -3662,7 +3662,8 @@
     getAvailabilityById,
     passageiros,
     setDataLimiteDesconto,
-    dataLimiteDesconto
+    dataLimiteDesconto,
+    productId
   }) => {
     const [preData, setPreData] = React.useState([]);
     const [visible, setVisible] = React.useState(false);
@@ -3760,6 +3761,11 @@
             onClick: (e) => e.stopPropagation(),
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Selecionar Datas" }),
+              productId == "6555" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { class: "mb-0 small text-center", children: [
+                "\u26A0\uFE0F Aten\xE7\xE3o: escolha a ",
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "mesma data do seu ingresso" }),
+                " para o festival!"
+              ] }) : null,
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                 "form",
                 {
@@ -3819,7 +3825,8 @@
     getVarIdByDate: import_prop_types.default.func.isRequired,
     getAvailabilityById: import_prop_types.default.func.isRequired,
     setDataLimiteDesconto: import_prop_types.default.func.isRequired,
-    dataLimiteDesconto: import_prop_types.default.array.isRequired
+    dataLimiteDesconto: import_prop_types.default.array.isRequired,
+    productId: import_prop_types.default.string.isRequired
   };
 
   // src/AppReservas/EmbarqueModal.jsx
@@ -5502,7 +5509,8 @@
             getAvailabilityById,
             passageiros,
             dataLimiteDesconto,
-            setDataLimiteDesconto
+            setDataLimiteDesconto,
+            productId
           }
         ),
         paxModalOpen != false && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(

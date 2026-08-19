@@ -17,6 +17,7 @@ const DatesModal = ({
   passageiros,
   setDataLimiteDesconto,
   dataLimiteDesconto,
+  productId
 }) => {
   const [preData, setPreData] = React.useState([]);
   const [visible, setVisible] = React.useState(false);
@@ -134,6 +135,8 @@ const DatesModal = ({
         onClick={(e) => e.stopPropagation()}
       >
         <h3>Selecionar Datas</h3>
+        {productId == '6555' ? <p class="mb-0 small text-center">⚠️ Atenção: escolha a <b>mesma data do seu ingresso</b> para o festival!
+</p> : null}
         <form
           className={`date-list${availableDates.length > 1 ? ' many' : ''}`}
         >
@@ -202,4 +205,5 @@ DatesModal.propTypes = {
   getAvailabilityById: PropTypes.func.isRequired,
   setDataLimiteDesconto: PropTypes.func.isRequired,
   dataLimiteDesconto: PropTypes.array.isRequired,
+  productId: PropTypes.string.isRequired,
 };
