@@ -133,7 +133,7 @@ function ajax_processar_alteracao_tudo() {
 
     $wpdb->update(
         $solicitacoes_table,
-        ['status' => $acao === 'concluido'],
+        ['status' => 'concluido'],
         ['id' => $solic_id]
     );
 
