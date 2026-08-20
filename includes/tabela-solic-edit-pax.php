@@ -187,7 +187,7 @@ function renderizar_pagina_moderacao_passageiros() {
                     </tr>
                 <?php else: ?>
                     <?php foreach ($table_items as $item): ?>
-                        <tr>
+                        <tr id="row-solicitation-<?= $item['solic_id'] ?>">
                             <!-- ID da Reserva -->
                             <td>
                                 <small><strong>Pedido: </strong><a href="<?= get_edit_post_link($item['order_id']) ?> "><?= $item['order_id']; ?></a></small>
@@ -239,13 +239,13 @@ function renderizar_pagina_moderacao_passageiros() {
                                     <div class="pending-solic <?=  $item['status'] === 'concluido' ? 'd-none' : ''; ?>">
                                         <button type="button" 
                                             class="button button-primary button-small btn-acao-linha" 
-                                            onclick="processarTudo(<?= $item['reserva_id']; ?>, 'aceitar')">
+                                            onclick="processarTudo(<?= $item['solic_id']; ?>, 'aceitar')">
                                             <span class="dashicons dashicons-yes-alt" style="font-size:14px; line-height:1.4;"></span> Aceitar Tudo
                                         </button>
                                         <button type="button" 
                                                 class="button button-secondary button-small btn-acao-linha" 
                                                 style="color: #b32d2e; border-color: #b32d2e;"
-                                                onclick="processarTudo(<?= $item['reserva_id']; ?>, 'rejeitar')">
+                                                onclick="processarTudo(<?= $item['solic_id']; ?>, 'rejeitar')">
                                             <span class="dashicons dashicons-dismiss" style="font-size:14px; line-height:1.4;"></span> Rejeitar Tudo
                                         </button>
                                     </div>
@@ -280,7 +280,7 @@ function renderizar_pagina_moderacao_passageiros() {
             ajaxData.append('valor_original', valorOriginal);
             ajaxData.append('nonce', '<?= wp_create_nonce("avaliar_edit_reserva_nonce"); ?>');
 
-            const ajaxDataObject = Object.fromEntries(ajaxData .entries());
+            const ajaxDataObject = Object.fromEntries(ajaxData.entries());
 
             jQuery(function($) {
                 $.ajax({
@@ -317,26 +317,55 @@ function renderizar_pagina_moderacao_passageiros() {
             const primeiraPergunta = acao === 'limpar' ? `Remover essa solicitação?` : `Tem certeza que deseja ${acao} TODAS as alterações desta solicitação?`;
             if(!confirm(primeiraPergunta)) return;
 
-            const data = new FormData();
-            data.append('action', 'processar_alteracao_tudo');
-            data.append('solicitacao_id', solicitationId);
-            data.append('acao', acao);
-            data.append('nonce', '<?= wp_create_nonce("avaliar_edit_reserva_nonce"); ?>');
+            const ajaxData = new FormData();
+            ajaxData.append('action', 'processar_alteracao_tudo');
+            ajaxData.append('solic_id', solicitationId);
+            ajaxData.append('acao', acao);
+            ajaxData.append('nonce', '<?= wp_create_nonce("avaliar_edit_reserva_nonce"); ?>');
+            console.log(Object.fromEntries(ajaxData.entries()));
 
-            fetch(ajaxurl, { method: 'POST', body: data })
-            .then(response => response.json())
-            .then(res => {
-                if(res.success) {
+            const ajaxDataObject = Object.fromEntries(ajaxData.entries());
+
+            jQuery(function($) {
+                $.ajax({
+                url: themeLinks.ajaxUrl,
+                type: 'POST',
+                data: ajaxDataObject,
+                success: async function(response) {
+                        console.log(response);
                     const row = document.getElementById(`row-solicitation-${solicitationId}`);
                     if(row) {
-                        row.style.transition = 'all 0.5s';
-                        row.style.backgroundColor = acao === 'aceitar' ? '#d1e7dd' : '#f8d7da';
-                        setTimeout(() => row.remove(), 600);
+                        const actionsCell = document.getElementById(`actions-${solicitationId}`);
+                        actionsCell.querySelector('.pending-solic').classList.add('d-none');
+                        actionsCell.querySelector('.concluido-solic').classList.remove('d-none');
+
+                        const rowCells = row.querySelectorAll('.diff-container');
+                        rowCells.forEach(cell => {
+                            const campo = cell.id.split('-').pop(); // Extrai o nome do campo do ID
+
+                            let key = '';
+                            if(campo === 'nome') key = 'p_nome';
+                            else if(campo === 'doc') key = 'p_cpf';
+                            else if(campo === 'telefone') key = 'p_telefone';
+                            else if(campo === 'data_nasc') key = 'data_nasc';
+
+                            if(acao === 'aceitar') {
+                                cell.innerHTML = `<span class="badge-status badge-aprovado">Aprovado: ${response.data[key]}</span>`;
+                            } else if(acao === 'rejeitar') {
+                                cell.innerHTML = `<span class="badge-status badge-rejeitado">Rejeitado</span> <br><small>${response.data[key]}</small>`;
+                            } else if(acao === 'limpar') {
+                                cell.remove();
+                            }
+                        });
+                    }else{
+                        console.log('não encontrou row')
                     }
-                } else {
-                    alert('Erro: ' + res.data);
+                },
+                error: function(error) {
+                    alert("Erro: " + error.data);
                 }
-            });
+                });
+            })
         }
 
         function checarConclusaoLinha(solicitationId) {

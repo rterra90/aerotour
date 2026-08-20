@@ -1,7 +1,6 @@
 <?php
-
+// 1. Processar Ação em um Único Campo
 add_action('wp_ajax_avaliar_edit_reserva', 'processar_avaliar_edit_reserva');
-
 function processar_avaliar_edit_reserva(){
   // Executa validações de nonce e permissões
   check_ajax_referer('avaliar_edit_reserva_nonce', 'nonce');
@@ -70,6 +69,75 @@ function processar_avaliar_edit_reserva(){
         'novo_status_solic'    => checar_e_fechar_solicitation_geral($solic_id) ? 'concluido' : 'pendente'
     ]);
 
+}
+
+// 2. Processar "Aceitar Tudo" ou "Rejeitar Tudo" na Linha
+add_action('wp_ajax_processar_alteracao_tudo', 'ajax_processar_alteracao_tudo');
+function ajax_processar_alteracao_tudo() {
+    check_ajax_referer('avaliar_edit_reserva_nonce', 'nonce');
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error('Sem permissão.');
+    }
+
+    global $wpdb;
+    $solic_id = intval($_POST['solic_id']);
+    $acao            = sanitize_text_field($_POST['acao']); // 'aceitar' ou 'rejeitar'
+
+    $solicitacoes_table = $wpdb->prefix . 'solic_edit_pax';
+    $solicitation = $wpdb->get_row($wpdb->prepare("SELECT * FROM $solicitacoes_table WHERE id = %d", $solic_id));
+
+    if (!$solicitation) {
+        wp_send_json_error('Solicitação não encontrada.');
+    }
+
+    $update_reserva = [];
+
+    // Mapeamento de dados
+    $campos = [
+        'status_nome'      => ['p_nome', 'novo_nome'],
+        'status_doc'       => ['p_cpf',           'novo_doc'],
+        'status_telefone'  => ['p_telefone',       'novo_telefone'],
+        'status_data_nasc' => ['data_nasc',     'nova_data_nasc'],
+    ];
+    foreach ($campos as $statusAttr => [$chaveReserva, $propSolicitation]) {
+        if ($solicitation->$statusAttr === 'pendente') {
+            $update_reserva[$chaveReserva] = $solicitation->$propSolicitation;
+        } 
+    }
+
+    foreach($update_reserva as $campo => $valor) {
+        // Atualiza o status do campo na tabela de solicitações
+        $statusAttr = '';
+        if($campo === 'p_nome') $statusAttr = 'status_nome';
+        else if($campo === 'p_cpf') $statusAttr = 'status_doc';
+        else if($campo === 'p_telefone') $statusAttr = 'status_telefone';
+        else if($campo === 'data_nasc') $statusAttr = 'status_data_nasc';
+
+          if ($statusAttr !== false) {
+            $wpdb->update(
+                $solicitacoes_table,
+                [$statusAttr => $acao === 'aceitar' ? 'aprovado' : 'rejeitado'],
+                ['id' => $solic_id]
+            );
+        }
+
+        // Atualiza os novos valores na tabela reservas
+        $reservas_table = $wpdb->prefix . 'reservas'; 
+        $wpdb->update(
+            $reservas_table,
+            [$campo => $valor],
+            ['ID' => $solicitation->reserva_id]
+        );
+    }
+
+    $wpdb->update(
+        $solicitacoes_table,
+        ['status' => $acao === 'concluido'],
+        ['id' => $solic_id]
+    );
+
+    wp_send_json_success($update_reserva);
 }
 
 // Função auxiliar para verificar se todas solicitações estão concluídas
