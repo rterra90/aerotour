@@ -138,6 +138,21 @@ require_once get_template_directory() . '/includes/features/leads/leads-function
 // require_once get_template_directory() . '/includes/functions/contrato.php';
 
 
+
+add_filter( 'woocommerce_add_notice', 'filtrar_notice_confirmacao_email', 10, 1 );
+function filtrar_notice_confirmacao_email( $message ) {
+    // Substitua 'confirme seu e-mail' por uma parte do texto exato exibido no aviso
+    if ( strpos( strtolower( $message ), 'email address to check for past orders' ) !== false || strpos( strtolower( $message ), 'verify your email' ) !== false ) {
+        return false; // Intercepta e ignora essa mensagem específica
+    }
+    return $message;
+}
+
+
+
+
+
+
 // FUNÇÃO GLOBAL PARA RENDERIZAR E-MAILS
 function aer_render_email($template_name, $args = [])
 {
