@@ -139,15 +139,10 @@ require_once get_template_directory() . '/includes/features/leads/leads-function
 
 
 
-add_filter( 'woocommerce_add_notice', 'filtrar_notice_confirmacao_email', 10, 1 );
-function filtrar_notice_confirmacao_email( $message ) {
-    // Substitua 'confirme seu e-mail' por uma parte do texto exato exibido no aviso
-    if ( strpos( strtolower( $message ), 'email address to check for past orders' ) !== false || strpos( strtolower( $message ), 'verify your email' ) !== false ) {
-        return false; // Intercepta e ignora essa mensagem específica
-    }
-    return $message;
+add_action( 'init', 'remover_notificacao_confirmacao_email', 20 );
+function remover_notificacao_confirmacao_email() {
+    remove_action( 'woocommerce_before_account_orders', 'wc_print_notices', 10 );
 }
-
 
 
 
