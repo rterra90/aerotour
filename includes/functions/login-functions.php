@@ -362,7 +362,7 @@ function custom_redirect_guest_checkout() {
 
         // Valida se é uma URL do próprio site
         if (strpos($checkout_url, home_url()) !== false) {
-            // Cria um cookie chamado 'aer_checkout_redirect' válido por 1 hora
+            // Cria um cookie chamado 'checkout_redirect_after_login' válido por 1 hora
             setcookie('checkout_redirect_after_login', $checkout_url, time() + 3600, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
         }
         
