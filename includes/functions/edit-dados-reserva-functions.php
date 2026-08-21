@@ -91,6 +91,16 @@ function ajax_processar_alteracao_tudo() {
         wp_send_json_error('Solicitação não encontrada.');
     }
 
+    if($acao === 'limpar'){
+      //apagar a solicitação do banco solic_edit_pax
+      $delete_solic = $wpdb->delete($solicitacoes_table, ['id' => $solic_id]);
+      if($delete_solic){
+        wp_send_json_success(['message' => 'Solicitação removida com sucesso.']);
+      } else {
+        wp_send_json_error('Erro ao remover a solicitação.');
+      }
+    }
+
     $update_reserva = [];
 
     // Mapeamento de dados

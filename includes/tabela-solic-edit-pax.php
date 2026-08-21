@@ -339,24 +339,33 @@ function renderizar_pagina_moderacao_passageiros() {
                         actionsCell.querySelector('.pending-solic').classList.add('d-none');
                         actionsCell.querySelector('.concluido-solic').classList.remove('d-none');
 
+                        if(acao === 'limpar') {
+                            row.style.transition = 'all 0.5s';
+                            row.style.opacity = '0';
+                            setTimeout(() => row.remove(), 500);
+                            return;
+                        }
+
                         const rowCells = row.querySelectorAll('.diff-container');
-                        rowCells.forEach(cell => {
-                            const campo = cell.id.split('-').pop(); // Extrai o nome do campo do ID
+                        if(rowCells){
+                            rowCells.forEach(cell => {
+                                const campo = cell.id.split('-').pop(); // Extrai o nome do campo do ID
 
-                            let key = '';
-                            if(campo === 'nome') key = 'p_nome';
-                            else if(campo === 'doc') key = 'p_cpf';
-                            else if(campo === 'telefone') key = 'p_telefone';
-                            else if(campo === 'data_nasc') key = 'data_nasc';
+                                let key = '';
+                                if(campo === 'nome') key = 'p_nome';
+                                else if(campo === 'doc') key = 'p_cpf';
+                                else if(campo === 'telefone') key = 'p_telefone';
+                                else if(campo === 'data_nasc') key = 'data_nasc';
 
-                            if(acao === 'aceitar') {
-                                cell.innerHTML = `<span class="badge-status badge-aprovado">Aprovado: ${response.data[key]}</span>`;
-                            } else if(acao === 'rejeitar') {
-                                cell.innerHTML = `<span class="badge-status badge-rejeitado">Rejeitado</span> <br><small>${response.data[key]}</small>`;
-                            } else if(acao === 'limpar') {
-                                cell.remove();
-                            }
-                        });
+                                if(acao === 'aceitar') {
+                                    cell.innerHTML = `<span class="badge-status badge-aprovado">Aprovado: ${response.data[key]}</span>`;
+                                } else if(acao === 'rejeitar') {
+                                    cell.innerHTML = `<span class="badge-status badge-rejeitado">Rejeitado</span> <br><small>${response.data[key]}</small>`;
+                                } else if(acao === 'limpar') {
+                                    cell.remove();
+                                }
+                            });
+                        }
                     }else{
                         console.log('não encontrou row')
                     }
