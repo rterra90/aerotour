@@ -1,24 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 
-do_action('woocommerce_before_account_orders', $has_orders); ?>
-
-
-<?php
-// global $wpdb;
-//     if(isset($_GET['sorteio']) && $_GET['sorteio'] !== 'false'){
-//         $titulo_sorteio = $_GET['sorteio'];
-//         $sorteio_db = $wpdb -> get_results("SELECT * from aer_sorteios WHERE ref = '" . $titulo_sorteio . "'")[0];
-//         $participantes = json_decode($sorteio_db -> participantes, true);
-
-//         if(!in_array(get_current_user_id(), $participantes)) array_push($participantes, get_current_user_id());
-//         else print_r('não tem');
-
-//         //GET na tabela onde $titulo_sorteio = $_POST['sorteio'];  
-//     }
-
-
-?>
+// do_action('woocommerce_before_account_orders', $has_orders); ?>
 
 <h2 class="mb-4">Meus pedidos</h2>
 

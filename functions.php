@@ -137,17 +137,6 @@ require_once get_template_directory() . '/includes/features/leads/leads-function
 
 // require_once get_template_directory() . '/includes/functions/contrato.php';
 
-
-
-add_action( 'init', 'remover_notificacao_confirmacao_email', 20 );
-function remover_notificacao_confirmacao_email() {
-    remove_action( 'woocommerce_before_account_orders', 'wc_print_notices', 10 );
-}
-
-
-
-
-
 // FUNÇÃO GLOBAL PARA RENDERIZAR E-MAILS
 function aer_render_email($template_name, $args = [])
 {
