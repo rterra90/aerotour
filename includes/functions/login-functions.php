@@ -359,6 +359,12 @@ function custom_redirect_guest_checkout() {
     if (is_checkout() && !is_user_logged_in()) {
         $checkout_url = wc_get_checkout_url();
         $my_account_url = get_permalink(wc_get_page_id('myaccount'));
+
+        // Valida se é uma URL do próprio site
+        if (strpos($checkout_url, home_url()) !== false) {
+            // Cria um cookie chamado 'aer_checkout_redirect' válido por 1 hora
+            setcookie('checkout_redirect_after_login', $checkout_url, time() + 3600, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
+        }
         
         // Passamos o parâmetro na URL para a página de login
         $redirect_url = add_query_arg('redirect', urlencode($checkout_url), $my_account_url);
@@ -386,9 +392,12 @@ function custom_process_url_redirect($redirect_to) {
     // Primeiro tenta pegar do $_POST (campo oculto do formulário - funciona com AJAX e convencional)
     if (!empty($_POST['custom_redirect_to'])) {
         $url_destino = esc_url_raw($_POST['custom_redirect_to']);
-    } 
-    // Como plano de contingência, tenta pegar direto do $_GET da URL
-    elseif (!empty($_GET['redirect'])) {
+    } elseif (isset($_COOKIE['checkout_redirect_after_login'])) {
+        $url_destino = esc_url_raw($_COOKIE['checkout_redirect_after_login']);
+        
+        // Apaga o cookie para não ficar em loop nos próximos logins
+        setcookie('checkout_redirect_after_login', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
+    } elseif (!empty($_GET['redirect'])) {    // Como plano de contingência, tenta pegar direto do $_GET da URL
         $url_destino = esc_url_raw(urldecode($_GET['redirect']));
     }
 
