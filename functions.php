@@ -14,6 +14,7 @@ require_once get_template_directory() .
   '/endpoints/participantes_roleta_put.php';
 require_once get_template_directory() . '/endpoints/api_user_get.php';
 require_once get_template_directory() . '/endpoints/api_leads_reserva.php';
+require_once get_template_directory() . '/endpoints/api_archive.php';
 // require_once(get_template_directory() . '/endpoints/api_contratos_post.php');
 
 // Adiciona um tamanho focado em mobile (proporção vertical/centralizada)

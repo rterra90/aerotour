@@ -59,6 +59,9 @@ function aer_cards_slider(
 
             $card_index = $index;
 
+            ?>
+            <div class="col-lg-3 col-md-4 col-sm-5 col-9 display-flex-child">
+            <?php
             // Localiza o template de forma mais eficiente
             $template = locate_template(
               'includes/display/display-card.php'
@@ -66,7 +69,10 @@ function aer_cards_slider(
             if ($template) {
               include $template;
             }
-          } ?>
+
+            ?>
+            </div>
+            <?php } ?>
         </div>
       </div>
     </div>

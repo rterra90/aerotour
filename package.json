@@ -7,7 +7,9 @@
     "build": "esbuild --bundle src/AppReservas/AppReservas.jsx --outfile=js/react_apps/app_reservas_usuario.js",
     "reservas-admin-build": "esbuild --bundle src/AppReservasAdmin/AppReservasAdmin.jsx --outfile=js/react_apps/app_reservas_admin.js",
     "checkin-build": "esbuild --bundle src/AppCheckIn/AppCheckIn.jsx --outfile=js/react_apps/app_checkin.js",
-    "tplogin-build": "esbuild --bundle src/AppThirdPartyLogin/AppThirdPartyLogin.jsx --outfile=js/react_apps/third_party_login.js"
+    "tplogin-build": "esbuild --bundle src/AppThirdPartyLogin/AppThirdPartyLogin.jsx --outfile=js/react_apps/third_party_login.js",
+    "archive-product-build": "esbuild --bundle src/AppArchiveProduct/AppArchiveProduct.tsx --outfile=js/react_apps/app_archive_product.js",
+    "archive-product-dev": "esbuild --bundle src/AppArchiveProduct/AppArchiveProduct.tsx --outfile=js/react_apps/app_archive_product.js --watch"
   },
   "author": "",
   "license": "ISC",

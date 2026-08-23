@@ -94,7 +94,7 @@ if (isset($excursao->attributes['dia'])) {
   });
 }
 ?>
-<div class="col-lg-3 col-md-4 col-sm-5 col-9 display-flex-child reveal-card"
+<div class="reveal-card"
   style="--card-delay: <?= $card_index ?? 0 ?>;"
   data-nome="<?= esc_attr($excursao->get_name()) ?>"
   data-id="<?= $excursao->get_id() ?>">

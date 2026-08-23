@@ -21,11 +21,7 @@ add_action('wp_enqueue_scripts', function () {
     false // Carrega no footer
   );
 
-  // 2. Registra e enfileira o React (preferencialmente local para evitar DNS lookup externo)
-  wp_enqueue_script('react', 'https://unpkg.com/react@18/umd/react.production.min.js', [], '18', true);
-  wp_enqueue_script('react-dom', 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js', ['react'], '18', true);
-
-  // 3. Enfileira o App de Reservas
+  // Enfileira o App de Reservas
   $app_reservas_file = get_stylesheet_directory_uri() . '/js/react_apps/app_reservas_usuario.js';
   wp_enqueue_script(
     'aer-reserva-app',

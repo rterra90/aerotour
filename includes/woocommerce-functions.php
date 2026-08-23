@@ -1,4 +1,8 @@
 <?php
+// Registra e enfileira o React (preferencialmente local para evitar DNS lookup externo)
+wp_enqueue_script('react', 'https://unpkg.com/react@18/umd/react.production.min.js', [], '18', true);
+wp_enqueue_script('react-dom', 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js', ['react'], '18', true);
+
 // // //
 // FUNÇÕES DA PÁGINA SINGLE-PRODUCT
 //Scripts gerais, como react, json-LD, e js da página
@@ -12,6 +16,14 @@ require_once get_template_directory() .
 //Funções que renderizam as seções da página single-product
 require_once get_template_directory() .
     '/includes/classes/render-components-single-product.php';
+
+
+// // //
+// FUNÇÕES DA PÁGINA ARCHIVE-PRODUCT
+require_once get_template_directory() .
+    '/includes/woocommerce/archive-product-functions.php';
+
+
 
 // // //
 // FUNÇÕES DA PÁGINA CHECKOUT
@@ -207,11 +219,11 @@ function render_order_countdown($order_id)
 }
 
 //ADICIONAR SUPORTE WOOCOMMERCE
-function aerotour_add_woocommercer_support()
+function theme_add_woocommerce_support()
 {
     add_theme_support('woocommerce');
 }
-add_action('after_setup_theme', 'aerotour_add_woocommercer_support');
+add_action('after_setup_theme', 'theme_add_woocommerce_support');
 
 /**
  * Remove todos os estilos padrão do WooCommerce

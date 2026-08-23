@@ -5,18 +5,23 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
+    // Direciona os arquivos gerados para a mesma pasta que o esbuild usava
+    outDir: 'js/react_apps',
+    emptyOutDir: false, // Evita apagar outros arquivos da pasta
     rollupOptions: {
       input: {
-        checkin_widget: path.resolve(
-          __dirname,
-          'js/admin-panel-widgets/check-in-widget/check-in-widget.js',
-        ),
+        // Suas aplicações atuais mapeadas
+        app_reservas_usuario: path.resolve(__dirname, 'src/AppReservas/AppReservas.jsx'),
+        app_reservas_admin: path.resolve(__dirname, 'src/AppReservasAdmin/AppReservasAdmin.jsx'),
+        app_checkin: path.resolve(__dirname, 'src/AppCheckIn/AppCheckIn.jsx'),
+        third_party_login: path.resolve(__dirname, 'src/AppThirdPartyLogin/AppThirdPartyLogin.jsx'),
+        // A NOVA aplicação de arquivo
+        app_archive_excursoes: path.resolve(__dirname, 'src/AppArchive/main.tsx'),
       },
       output: {
-        entryFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]',
+        // Garante que o arquivo final tenha o mesmo nome da chave definida acima (ex: app_checkin.js)
+        entryFileNames: '[name].js',
+        assetFileNames: '[name].[ext]',
       },
     },
   },
