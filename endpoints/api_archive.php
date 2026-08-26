@@ -10,6 +10,8 @@ add_action('rest_api_init', function () {
 function get_historico_excursoes($request) {
     $hoje = date('Ymd');
     $page = $request->get_param('page') ? (int) $request->get_param('page') : 1;
+    $search = $request->get_param( 'search' );
+    $genre  = $request->get_param( 'genre' );
 
     $args_passadas = array(
         'post_type'      => 'product',
@@ -26,28 +28,46 @@ function get_historico_excursoes($request) {
         )
     );
 
-    $query = new WP_Query($args_passadas);
-    $html_cards = '';
+    // Aplica busca por texto (título do produto)
+    if ( ! empty( $search ) ) {
+        $args_passadas['s'] = sanitize_text_field( $search );
+    }
 
-    if ($query->have_posts()) {
-        ob_start(); // Inicia o buffer para capturar o HTML do PHP
-        while ($query->have_posts()) {
+    // Aplica filtro por gênero musical
+    if ( ! empty( $genre ) ) {
+        $args_passadas['tax_query'] = array(
+            array(
+                'taxonomy' => 'exc_genre',
+                'field'    => 'slug',
+                'terms'    => sanitize_text_field( $genre ),
+            ),
+        );
+    }
+
+    $query = new WP_Query($args_passadas);
+    $excursoes_html = array();
+
+    if ( $query->have_posts() ) {
+        while ( $query->have_posts() ) {
             $query->the_post();
             global $product;
             $excursao = $product;
             
-            // Inclui seu template atual, que fará a lógica das badges dinâmicas
+            ob_start();
             include get_stylesheet_directory() . '/includes/display/display-card.php';
+            $excursoes_html[] = array(
+                'id'   => get_the_ID(),
+                'html' => ob_get_clean()
+            );
         }
-        $html_cards = ob_get_clean(); // Salva o HTML gerado
         wp_reset_postdata();
     }
 
-    return new WP_REST_Response(array(
-        'html'        => $html_cards,
+    return new WP_REST_Response( array(
+        'items'       => $excursoes_html,
         'max_pages'   => $query->max_num_pages,
         'total_posts' => $query->found_posts
-    ), 200);
+    ), 200 );
 }
 
 ?>

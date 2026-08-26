@@ -1101,7 +1101,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect(create, deps) {
+          function useEffect2(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1113,7 +1113,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useLayoutEffect(create, deps);
           }
-          function useCallback(callback, deps) {
+          function useCallback2(callback, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
@@ -1880,11 +1880,11 @@
           exports.memo = memo;
           exports.startTransition = startTransition;
           exports.unstable_act = act;
-          exports.useCallback = useCallback;
+          exports.useCallback = useCallback2;
           exports.useContext = useContext;
           exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect;
+          exports.useEffect = useEffect2;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
@@ -2439,7 +2439,7 @@
           var HostPortal = 4;
           var HostComponent = 5;
           var HostText = 6;
-          var Fragment = 7;
+          var Fragment2 = 7;
           var Mode = 8;
           var ContextConsumer = 9;
           var ContextProvider = 10;
@@ -3596,7 +3596,7 @@
                 return "DehydratedFragment";
               case ForwardRef:
                 return getWrappedName$1(type, type.render, "ForwardRef");
-              case Fragment:
+              case Fragment2:
                 return "Fragment";
               case HostComponent:
                 return type;
@@ -12025,7 +12025,7 @@
               }
             }
             function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-              if (current2 === null || current2.tag !== Fragment) {
+              if (current2 === null || current2.tag !== Fragment2) {
                 var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
                 created.return = returnFiber;
                 return created;
@@ -12428,7 +12428,7 @@
                 if (child.key === key) {
                   var elementType = element.type;
                   if (elementType === REACT_FRAGMENT_TYPE) {
-                    if (child.tag === Fragment) {
+                    if (child.tag === Fragment2) {
                       deleteRemainingChildren(returnFiber, child.sibling);
                       var existing = useFiber(child, element.props.children);
                       existing.return = returnFiber;
@@ -17904,7 +17904,7 @@
                 var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
                 return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
               }
-              case Fragment:
+              case Fragment2:
                 return updateFragment(current2, workInProgress2, renderLanes2);
               case Mode:
                 return updateMode(current2, workInProgress2, renderLanes2);
@@ -18176,7 +18176,7 @@
               case SimpleMemoComponent:
               case FunctionComponent:
               case ForwardRef:
-              case Fragment:
+              case Fragment2:
               case Mode:
               case Profiler:
               case ContextConsumer:
@@ -22437,7 +22437,7 @@
             return fiber;
           }
           function createFiberFromFragment(elements, mode, lanes, key) {
-            var fiber = createFiber(Fragment, elements, key, mode);
+            var fiber = createFiber(Fragment2, elements, key, mode);
             fiber.lanes = lanes;
             return fiber;
           }
@@ -24498,29 +24498,30 @@
   var AppArchiveProduct = () => {
     const [activeTab, setActiveTab] = (0, import_react.useState)("vigentes");
     const [searchTerm, setSearchTerm] = (0, import_react.useState)("");
-    const [selectedGenre, setSelectedGenre] = (0, import_react.useState)("");
-    const { generos = [], excursoesVigentes = [] } = window.ArchiveProductData || {};
-    console.log("Excursoes Vigentes:", excursoesVigentes);
+    const [selectedCategory, setSelectedCategory] = (0, import_react.useState)("");
+    const [selectedGenres, setSelectedGenres] = (0, import_react.useState)([]);
+    const [selectedVenues, setSelectedVenues] = (0, import_react.useState)([]);
+    const [showAdvancedFilters, setShowAdvancedFilters] = (0, import_react.useState)(false);
+    const [pastExcursions, setPastExcursions] = (0, import_react.useState)([]);
+    const [isLoadingPast, setIsLoadingPast] = (0, import_react.useState)(false);
+    const [pastPage, setPastPage] = (0, import_react.useState)(1);
+    const [hasMorePast, setHasMorePast] = (0, import_react.useState)(false);
+    const { categorias = [], generos = [], locais = [], excursoesVigentes = [] } = window.ArchiveProductData || {};
     const sortedExcursoesVigentes = (0, import_react.useMemo)(() => {
-      return [...excursoesVigentes].sort((a, b) => {
-        return +a.data_limite - +b.data_limite;
-      });
+      return [...excursoesVigentes].sort((a, b) => +a.data_limite - +b.data_limite);
     }, [excursoesVigentes]);
-    console.log("Sorted Vigentes:", sortedExcursoesVigentes);
     const filteredVigentes = (0, import_react.useMemo)(() => {
       return sortedExcursoesVigentes.filter((exc) => {
         const matchesSearch = exc.html.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesGenre = selectedGenre ? exc.genres.includes(selectedGenre) : true;
-        return matchesSearch && matchesGenre;
+        const matchesCategory = selectedCategory ? exc.categorias?.includes(selectedCategory) : true;
+        const matchesGenre = selectedGenres.length > 0 ? exc.genres?.some((g) => selectedGenres.includes(g)) : true;
+        const matchesVenue = selectedVenues.length > 0 ? exc.venues?.some((v) => selectedVenues.includes(v)) : true;
+        return matchesSearch && matchesCategory && matchesGenre && matchesVenue;
       });
-    }, [searchTerm, selectedGenre, excursoesVigentes]);
-    import_react.default.useEffect(() => {
-      if (filteredVigentes.length === 0 || activeTab !== "vigentes") return;
-      console.log("Filtered Vigentes:", filteredVigentes);
-      const cardOptions = {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
-      };
+    }, [searchTerm, selectedCategory, selectedGenres, selectedVenues, sortedExcursoesVigentes]);
+    (0, import_react.useEffect)(() => {
+      const listToObserve = activeTab === "vigentes" ? filteredVigentes : pastExcursions;
+      if (listToObserve.length === 0) return;
       const cardObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -24528,66 +24529,179 @@
             observer.unobserve(entry.target);
           }
         });
-      }, cardOptions);
-      const cards = document.querySelectorAll(".reveal-card");
+      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+      const cards = document.querySelectorAll(".reveal-card:not(.is-visible)");
       cards.forEach((card) => cardObserver.observe(card));
-      return () => {
-        cardObserver.disconnect();
-      };
-    }, [filteredVigentes, activeTab]);
+      return () => cardObserver.disconnect();
+    }, [filteredVigentes, pastExcursions, activeTab]);
+    function capitalizeWords(sentence) {
+      return sentence.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    }
+    const fetchPastExcursions = (0, import_react.useCallback)(async (page, resetList = false) => {
+      setIsLoadingPast(true);
+      const { apiUrl } = window.ArchiveProductData || {};
+      try {
+        const url = new URL(apiUrl);
+        url.searchParams.append("page", page.toString());
+        if (searchTerm) url.searchParams.append("search", searchTerm);
+        if (selectedCategory) url.searchParams.append("category", selectedCategory);
+        if (selectedGenres.length > 0) url.searchParams.append("genres", selectedGenres.join(","));
+        if (selectedVenues.length > 0) url.searchParams.append("venues", selectedVenues.join(","));
+        const response = await fetch(url.toString());
+        const data = await response.json();
+        setPastExcursions((prev) => resetList ? data.items : [...prev, ...data.items]);
+        setHasMorePast(page < data.max_pages);
+      } catch (error) {
+        console.error("Erro ao buscar hist\xF3rico:", error);
+      } finally {
+        setIsLoadingPast(false);
+      }
+    }, [searchTerm, selectedCategory, selectedGenres, selectedVenues]);
+    (0, import_react.useEffect)(() => {
+      if (activeTab === "passadas") {
+        setPastPage(1);
+        fetchPastExcursions(1, true);
+      }
+    }, [activeTab, searchTerm, selectedCategory, selectedGenres, selectedVenues, fetchPastExcursions]);
+    const loadMorePast = () => {
+      const nextPage = pastPage + 1;
+      setPastPage(nextPage);
+      fetchPastExcursions(nextPage, false);
+    };
+    const toggleSelection = (slug, currentSelection, setSelection) => {
+      if (currentSelection.includes(slug)) {
+        setSelection(currentSelection.filter((item) => item !== slug));
+      } else {
+        setSelection([...currentSelection, slug]);
+      }
+    };
+    const renderSkeletons = (count) => {
+      return Array.from({ length: count }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-md-6 col-lg-4 mb-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "card-skeleton", style: { height: "350px", backgroundColor: "#222", borderRadius: "12px", animation: "pulse 1.5s infinite ease-in-out" } }) }, `skeleton-${i}`));
+    };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "aerotour-archive-app", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { className: "archive-header-filters d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 gap-3", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "btn-group", role: "group", "aria-label": "Navega\xE7\xE3o de excurs\xF5es", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { className: "archive-header-filters mb-5", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "d-flex flex-column flex-md-row justify-content-between align-items-center gap-3", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { id: "archive-type-btn-group", className: "btn-group", role: "group", "aria-label": "Navega\xE7\xE3o de excurs\xF5es", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: `btn proximas-btn ${activeTab === "vigentes" ? "active" : ""}`, onClick: () => setActiveTab("vigentes"), children: "Pr\xF3ximas" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: `btn realizadas-btn ${activeTab === "passadas" ? "active" : ""}`, onClick: () => setActiveTab("passadas"), children: "Passadas" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "filters d-flex gap-2 w-100 justify-content-md-end", style: { maxWidth: "720px" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "search-input-wrapper", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                "input",
+                {
+                  type: "text",
+                  className: "form-control bg-dark text-light border-secondary flex-grow-1 px-3 py-2",
+                  placeholder: "Digite para buscar...",
+                  value: searchTerm,
+                  onChange: (e) => setSearchTerm(e.target.value)
+                }
+              ),
+              searchTerm && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "clear-btn", onClick: () => setSearchTerm(""), children: "x" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+              "select",
+              {
+                className: "form-select bg-dark text-light border-secondary w-auto",
+                value: selectedCategory,
+                style: { minWidth: "160px" },
+                onChange: (e) => setSelectedCategory(e.target.value),
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "Todas..." }),
+                  Object.values(categorias).filter((c) => ["shows", "eventos", "festivais"].includes(c.slug)).map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: c.slug, children: c.name }, c.term_id))
+                ]
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+              "button",
+              {
+                id: "archive-filters-toggle-btn",
+                className: `btn ${showAdvancedFilters ? "btn-light" : "btn-outline-light"}`,
+                onClick: () => setShowAdvancedFilters(!showAdvancedFilters),
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { className: "bi bi-sliders" }),
+                  " ",
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Filtros" })
+                ]
+              }
+            )
+          ] })
+        ] }),
+        showAdvancedFilters && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "advanced-filters-panel bg-dark border border-secondary rounded p-4 mt-3 shadow-sm", style: { animation: "fadeIn 0.3s" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "col-12 col-md-6 mb-3 mb-md-0", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h6", { className: "text-uppercase text-secondary mb-2 small fw-bold", children: "G\xEAnero Musical" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "d-flex flex-wrap gap-2", children: generos.map((g) => {
+                const isActive = selectedGenres.includes(g.slug);
+                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+                  "button",
+                  {
+                    onClick: () => toggleSelection(g.slug, selectedGenres, setSelectedGenres),
+                    className: `btn btn-sm rounded-pill transition-all ${isActive ? "btn-danger" : "btn-outline-secondary text-light"}`,
+                    children: [
+                      g.name,
+                      " ",
+                      isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "ms-1", children: "\xD7" })
+                    ]
+                  },
+                  g.term_id
+                );
+              }) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "col-12 col-md-6", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h6", { className: "text-uppercase text-secondary mb-2 small fw-bold", children: "Local do Evento" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "d-flex flex-wrap gap-2", children: locais.map((l) => {
+                const isActive = selectedVenues.includes(l.slug);
+                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+                  "button",
+                  {
+                    onClick: () => toggleSelection(l.slug, selectedVenues, setSelectedVenues),
+                    className: `btn btn-sm rounded-pill transition-all ${isActive ? "btn-danger" : "btn-outline-secondary text-light"}`,
+                    children: [
+                      l.name,
+                      " ",
+                      isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "ms-1", children: "\xD7" })
+                    ]
+                  },
+                  l.term_id
+                );
+              }) })
+            ] })
+          ] }),
+          (selectedGenres.length > 0 || selectedVenues.length > 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             "button",
             {
-              className: `btn ${activeTab === "vigentes" ? "btn-danger" : "btn-dark"}`,
-              onClick: () => setActiveTab("vigentes"),
-              children: "Pr\xF3ximas Viagens"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "button",
-            {
-              className: `btn ${activeTab === "passadas" ? "btn-danger" : "btn-dark"}`,
-              onClick: () => setActiveTab("passadas"),
-              children: "Viagens Realizadas"
+              className: "filtros-limpar-btn",
+              onClick: () => {
+                setSelectedGenres([]);
+                setSelectedVenues([]);
+              },
+              children: "Limpar Sele\xE7\xE3o"
             }
           )
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "filters d-flex gap-2 w-100", style: { maxWidth: "500px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "input",
-            {
-              type: "text",
-              className: "form-control bg-dark text-light border-secondary",
-              placeholder: "Digite para buscar...",
-              value: searchTerm,
-              onChange: (e) => setSearchTerm(e.target.value)
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-            "select",
-            {
-              className: "form-select bg-dark text-light border-secondary w-auto",
-              value: selectedGenre,
-              onChange: (e) => setSelectedGenre(e.target.value),
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "Todos os G\xEAneros" }),
-                generos.map((g) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: g.slug, children: g.name }, g.term_id))
-              ]
-            }
-          )
+        (searchTerm || selectedCategory || selectedGenres.length > 0 || selectedVenues.length > 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "active-filters-summary mt-3 text-light", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Filtrando por:" }),
+          selectedCategory && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "ms-2", children: [
+            "Categorias: ",
+            selectedCategory
+          ] }),
+          selectedGenres.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "ms-2", children: [
+            "G\xEAneros: ",
+            selectedGenres.map((g) => g !== "k-pop" ? g.replace(/-/g, " ") : "k-pop").join(", ")
+          ] }),
+          selectedVenues.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "ms-2", children: [
+            "Locais: ",
+            selectedVenues.map((g) => capitalizeWords(g.replace(/-/g, " "))).join(", ")
+          ] })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "archive-grid row", children: activeTab === "vigentes" ? filteredVigentes.length > 0 ? filteredVigentes.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "div",
-        {
-          className: "col-12 col-md-6 col-lg-3 mb-4",
-          dangerouslySetInnerHTML: { __html: exc.html }
-        },
-        exc.id
-      )) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 text-light", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Nenhuma excurs\xE3o encontrada com estes filtros." }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 text-light", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Carregando hist\xF3rico de excurs\xF5es..." }) }) })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "archive-grid row", children: activeTab === "vigentes" ? filteredVigentes.length > 0 ? filteredVigentes.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-5 px-sm-3", dangerouslySetInnerHTML: { __html: exc.html } }, exc.id)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 text-light", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Nenhuma excurs\xE3o encontrada com estes filtros." }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+        pastExcursions.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-5 px-sm-2", dangerouslySetInnerHTML: { __html: exc.html } }, exc.id)),
+        isLoadingPast && renderSkeletons(pastExcursions.length === 0 ? 8 : 4),
+        !isLoadingPast && pastExcursions.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 text-light", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Nenhum hist\xF3rico encontrado com estes filtros." }) }),
+        !isLoadingPast && hasMorePast && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center mt-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: loadMorePast, className: "btn btn-outline-light", children: "Carregar mais viagens" }) })
+      ] }) })
     ] });
   };
   window.addEventListener("DOMContentLoaded", () => {
@@ -24596,7 +24710,6 @@
       const root = (0, import_client.createRoot)(rootElement);
       root.render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppArchiveProduct, {}));
     } else {
-      console.log(document.querySelector("body"));
       console.error("Elemento #app-archive-product-root n\xE3o encontrado na p\xE1gina.");
     }
   });

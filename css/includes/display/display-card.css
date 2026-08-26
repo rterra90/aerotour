@@ -97,6 +97,7 @@
   max-width: 320px;
   display: flex;
   flex-direction: column;/* Container do Grid */
+  margin: 0 auto;
 }
 .excursion-card:hover {
   transform: translateY(-5px);

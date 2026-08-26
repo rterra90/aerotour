@@ -9,7 +9,7 @@
             // 2. Resgata todos os gêneros para montar o Select de filtros
             $termos_genero = get_terms( array(
                 'taxonomy'   => 'exc_genre',
-                'hide_empty' => true,
+                'hide_empty' => false, // Para mostrar todos os termos, mesmo sem produtos
             ) );
 
             $generos_formatados = array();
@@ -22,6 +22,15 @@
                     );
                 }
             }
+            
+            
+            $termos_categoria = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => true ) );
+            $termos_local = get_terms( array( 'taxonomy' => 'exc_venue', 'hide_empty' => false ) );
+
+            
+
+
+
 
             // 3. Monta a consulta das excursões vigentes
             $hoje = date( 'Ymd' );
@@ -51,39 +60,40 @@
                     $excursao = $product; 
 
                     // Extrai os slugs da taxonomia 'exc_genre' para o filtro do React
+                    $product_cats = wp_get_post_terms( get_the_ID(), 'product_cat', array( 'fields' => 'slugs' ) );
                     $product_genres = wp_get_post_terms( get_the_ID(), 'exc_genre', array( 'fields' => 'slugs' ) );
-                    if ( is_wp_error( $product_genres ) ) {
-                        $product_genres = array();
-                    }
+                    $product_venues = wp_get_post_terms( get_the_ID(), 'exc_venue', array( 'fields' => 'slugs' ) );
+
+                    // if ( is_wp_error( $product_genres ) ) {
+                    //     $product_genres = array();
+                    // }
 
                     // Captura o HTML renderizado do card sem imprimi-lo na tela
                     ob_start();
                     include get_stylesheet_directory() . '/includes/display/display-card.php';
                     $html_card = ob_get_clean();
 
-                    // Monta o objeto que será lido pelo TypeScript
+                    // Monta o objeto da excursão que será lido pelo TypeScript
                     $excursoes_vigentes[] = array(
                         'id'     => get_the_ID(),
                         'html'   => $html_card,
                         'genres' => $product_genres,
                         'data_limite' => intval( get_post_meta( get_the_ID(), 'data_limite_excursao', true ) ),
+                        'categorias' => $product_cats,
+                        'local' => $product_venues
                     );
                 }
                 wp_reset_postdata();
             }
 
-
-
-
-
-
-
-            
-            // Expõe as variáveis para o JavaScript
+            // 4. Expõe as variáveis para o JavaScript
+            // Expõe as variáveis globais de arquivo para o JavaScript
             wp_localize_script('script-archive-app', 'ArchiveProductData', array(
                 'apiUrl' => esc_url_raw(rest_url('api/v1/arquivo')),
                 'nonce' => wp_create_nonce('wp_rest'),
-                'generos' => ['rock', 'pop', 'jazz'], // Exemplo de array de gêneros, substitua conforme necessário
+                'generos' => $generos_formatados,
+                'categorias' => $termos_categoria,
+                'locais' => $termos_local,
                 'excursoesVigentes' => $excursoes_vigentes // Aqui entra o array com os HTMLs processados
             ));
 

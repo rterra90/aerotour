@@ -11,12 +11,14 @@ declare global {
         name: string;
         slug: string;
       }>;
-      excursoesVigentes: Array<{
-        id: number;
-        html: string;
-        genres: string[];
-        data_limite: string;
-      }>;
+      excursoesVigentes: Array<ExcursaoVigente>;
     };
   }
+
+  interface ExcursaoVigente {
+  id: number;
+  html: string;
+  genres: string[];
+  data_limite: string;
+}
 }

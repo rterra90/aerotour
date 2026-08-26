@@ -10,6 +10,99 @@
   flex-direction: row-reverse;
   gap: 48px;
 }
+/* Novo App Arquivo */
+
+/* Filtros */
+.filters .search-input-wrapper{
+  position: relative;
+flex-grow: 1;
+}
+.filters .search-input-wrapper span{
+  width: 18px;
+  height: 18px;
+  background-color: transparent;
+  position: absolute;
+  right: 11px;
+  top: 6px;
+  z-index: 99;
+  cursor: pointer;
+  /* display: none; */
+}
+#archive-type-btn-group{
+  gap: 12px;
+}
+#archive-type-btn-group .btn{
+  padding: 0;
+  font-size: .775rem;
+  text-transform: uppercase;
+  transition: .5s;
+    color: #2e3337;
+
+}
+#archive-type-btn-group .btn.active {
+    color: #c7c7c7;
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: .9rem;
+
+}
+#archive-type-btn-group .btn:not(.active):hover{
+    color: #4d5257;
+    font-size: .8rem;
+
+  
+}
+#archive-type-btn-group .btn:focus{
+  box-shadow: none;
+}
+.advanced-filters-panel{
+  position: relative;
+}
+#archive-filters-toggle-btn{
+  position: relative;
+}
+#archive-filters-toggle-btn span{
+      font-size: .5rem;
+    position: absolute;
+    text-transform: uppercase;
+    bottom: -16px;
+    right: .2rem;
+}
+.advanced-filters-panel .rounded-pill{
+    font-size: .7rem;
+    letter-spacing: .04rem;
+    text-transform: uppercase;
+}
+.advanced-filters-panel .rounded-pill:focus{
+  box-shadow: none!important;
+}
+.filtros-limpar-btn{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    text-decoration: underline;
+    font-size: .6rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #aeaeae;
+    text-transform: uppercase;
+    letter-spacing: 0.04rem;
+}
+.active-filters-summary{
+  font-size: .825rem;
+  letter-spacing: .04rem;
+}
+.active-filters-summary span{
+  background: #212529b5;
+  font-size: .75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+
+
+
 /* Search input */
 .aer-search-wrapper {
   position: relative;

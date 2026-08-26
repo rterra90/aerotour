@@ -388,3 +388,69 @@ function customizar_texto_obrigado($texto, $pedido)
 add_filter('woocommerce_price_format', function () {
     return '%1$s%2$s';
 });
+
+/**
+ * Registra as taxonomias customizadas 'Gênero Musical' e 'Local do Evento' para os Produtos.
+ *
+ * @return void
+ */
+function theme_register_taxonomies() {
+    
+    // 1. Taxonomia: Gênero Musical
+    $labels_genre = array(
+        'name'                       => _x( 'Gêneros Musicais', 'taxonomy general name', 'aerotour' ),
+        'singular_name'              => _x( 'Gênero Musical', 'taxonomy singular name', 'aerotour' ),
+        'search_items'               => __( 'Buscar Gêneros', 'aerotour' ),
+        'popular_items'              => __( 'Gêneros Populares', 'aerotour' ),
+        'all_items'                  => __( 'Todos os Gêneros', 'aerotour' ),
+        'edit_item'                  => __( 'Editar Gênero', 'aerotour' ),
+        'update_item'                => __( 'Atualizar Gênero', 'aerotour' ),
+        'add_new_item'               => __( 'Adicionar Novo Gênero', 'aerotour' ),
+        'new_item_name'              => __( 'Novo Nome de Gênero', 'aerotour' ),
+        'separate_items_with_commas' => __( 'Separe os gêneros por vírgula', 'aerotour' ),
+        'add_or_remove_items'        => __( 'Adicionar ou remover gêneros', 'aerotour' ),
+        'choose_from_most_used'      => __( 'Escolher entre os gêneros mais usados', 'aerotour' ),
+        'menu_name'                  => __( 'Gêneros Musicais', 'aerotour' ),
+    );
+
+    $args_genre = array(
+        'hierarchical'          => false, // Comportamento estilo 'Tags'
+        'labels'                => $labels_genre,
+        'show_ui'               => true,
+        'show_in_rest'          => true,  // Exibe na REST API e no editor Gutenberg
+        'show_admin_column'     => true,  // Adiciona coluna na listagem de produtos do admin
+        'update_count_callback' => '_update_post_term_count',
+        'query_var'             => true,
+        'rewrite'               => array( 'slug' => 'genero-musical' ),
+    );
+
+    register_taxonomy( 'exc_genre', array( 'product' ), $args_genre );
+
+    // 2. Taxonomia: Local / Venue (Ex: Allianz Parque, Sambódromo, etc.)
+    $labels_venue = array(
+        'name'                       => _x( 'Locais do Evento', 'taxonomy general name', 'aerotour' ),
+        'singular_name'              => _x( 'Local do Evento', 'taxonomy singular name', 'aerotour' ),
+        'search_items'               => __( 'Buscar Locais', 'aerotour' ),
+        'all_items'                  => __( 'Todos os Locais', 'aerotour' ),
+        'edit_item'                  => __( 'Editar Local', 'aerotour' ),
+        'update_item'                => __( 'Atualizar Local', 'aerotour' ),
+        'add_new_item'               => __( 'Adicionar Novo Local', 'aerotour' ),
+        'new_item_name'              => __( 'Novo Nome de Local', 'aerotour' ),
+        'menu_name'                  => __( 'Locais / Venues', 'aerotour' ),
+    );
+
+    $args_venue = array(
+        'hierarchical'          => false,
+        'labels'                => $labels_venue,
+        'show_ui'               => true,
+        'show_in_rest'          => true,
+        'show_admin_column'     => true,
+        'update_count_callback' => '_update_post_term_count',
+        'query_var'             => true,
+        'rewrite'               => array( 'slug' => 'local-evento' ),
+    );
+
+    register_taxonomy( 'exc_venue', array( 'product' ), $args_venue );
+}
+add_action( 'init', 'theme_register_taxonomies', 0 );
+
