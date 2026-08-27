@@ -24498,7 +24498,15 @@
   var AppArchiveProduct = () => {
     const [activeTab, setActiveTab] = (0, import_react.useState)("vigentes");
     const [searchTerm, setSearchTerm] = (0, import_react.useState)("");
-    const [selectedCategory, setSelectedCategory] = (0, import_react.useState)("");
+    const [selectedCategory, setSelectedCategory] = (0, import_react.useState)([""]);
+    const [hasFiltersApplied, setHasFiltersApplied] = (0, import_react.useState)(false);
+    const categoryToggleSelection = (item, selectedItems, setSelectedItems) => {
+      if (selectedItems.includes(item)) {
+        setSelectedItems(selectedItems.filter((i) => i !== item));
+      } else {
+        setSelectedItems([...selectedItems, item]);
+      }
+    };
     const [selectedGenres, setSelectedGenres] = (0, import_react.useState)([]);
     const [selectedVenues, setSelectedVenues] = (0, import_react.useState)([]);
     const [showAdvancedFilters, setShowAdvancedFilters] = (0, import_react.useState)(false);
@@ -24513,12 +24521,17 @@
     const filteredVigentes = (0, import_react.useMemo)(() => {
       return sortedExcursoesVigentes.filter((exc) => {
         const matchesSearch = exc.html.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = selectedCategory ? exc.categorias?.includes(selectedCategory) : true;
+        const matchesCategory = selectedCategory.length === 1 && selectedCategory[0] === "" ? true : exc.categorias?.some((c) => selectedCategory.filter((c2) => c2 !== "").includes(c));
         const matchesGenre = selectedGenres.length > 0 ? exc.genres?.some((g) => selectedGenres.includes(g)) : true;
         const matchesVenue = selectedVenues.length > 0 ? exc.venues?.some((v) => selectedVenues.includes(v)) : true;
         return matchesSearch && matchesCategory && matchesGenre && matchesVenue;
       });
     }, [searchTerm, selectedCategory, selectedGenres, selectedVenues, sortedExcursoesVigentes]);
+    (0, import_react.useEffect)(() => {
+      setHasFiltersApplied(
+        selectedCategory.filter((c) => c !== "").length > 0 || selectedGenres.length > 0 || selectedVenues.length > 0
+      );
+    }, [searchTerm, selectedCategory, selectedGenres, selectedVenues]);
     (0, import_react.useEffect)(() => {
       const listToObserve = activeTab === "vigentes" ? filteredVigentes : pastExcursions;
       if (listToObserve.length === 0) return;
@@ -24591,7 +24604,7 @@
                 "input",
                 {
                   type: "text",
-                  className: "form-control bg-dark text-light border-secondary flex-grow-1 px-3 py-2",
+                  className: "form-control border-secondary flex-grow-1 px-3 py-2",
                   placeholder: "Digite para buscar...",
                   value: searchTerm,
                   onChange: (e) => setSearchTerm(e.target.value)
@@ -24600,35 +24613,40 @@
               searchTerm && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "clear-btn", onClick: () => setSearchTerm(""), children: "x" })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-              "select",
-              {
-                className: "form-select bg-dark text-light border-secondary w-auto",
-                value: selectedCategory,
-                style: { minWidth: "160px" },
-                onChange: (e) => setSelectedCategory(e.target.value),
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "Todas..." }),
-                  Object.values(categorias).filter((c) => ["shows", "eventos", "festivais"].includes(c.slug)).map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: c.slug, children: c.name }, c.term_id))
-                ]
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
               "button",
               {
                 id: "archive-filters-toggle-btn",
-                className: `btn ${showAdvancedFilters ? "btn-light" : "btn-outline-light"}`,
+                className: `btn border-secondary ${showAdvancedFilters ? "active" : ""}`,
                 onClick: () => setShowAdvancedFilters(!showAdvancedFilters),
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { className: "bi bi-sliders" }),
-                  " ",
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Filtros" })
+                  !showAdvancedFilters && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Filtros" })
                 ]
               }
             )
           ] })
         ] }),
-        showAdvancedFilters && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "advanced-filters-panel bg-dark border border-secondary rounded p-4 mt-3 shadow-sm", style: { animation: "fadeIn 0.3s" }, children: [
+        showAdvancedFilters && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "advanced-filters-panel border border-secondary rounded p-4 mt-3 shadow-sm", style: { animation: "fadeIn 0.3s" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "col-12 mb-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h6", { className: "text-uppercase text-secondary mb-2 small fw-bold", children: "Categoria" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "d-flex flex-wrap gap-2", children: Array.from(Object.values(categorias).filter((c) => ["shows", "eventos", "festivais"].includes(c.slug))).map((c) => {
+                const isActive = selectedCategory.includes(c.slug);
+                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+                  "button",
+                  {
+                    onClick: () => categoryToggleSelection(c.slug, selectedCategory, setSelectedCategory),
+                    className: `btn btn-sm rounded-pill transition-all ${isActive ? "active" : ""}`,
+                    children: [
+                      c.name,
+                      " ",
+                      isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "ms-1", children: "\xD7" })
+                    ]
+                  },
+                  c.term_id
+                );
+              }) })
+            ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "col-12 col-md-6 mb-3 mb-md-0", children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h6", { className: "text-uppercase text-secondary mb-2 small fw-bold", children: "G\xEAnero Musical" }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "d-flex flex-wrap gap-2", children: generos.map((g) => {
@@ -24637,7 +24655,7 @@
                   "button",
                   {
                     onClick: () => toggleSelection(g.slug, selectedGenres, setSelectedGenres),
-                    className: `btn btn-sm rounded-pill transition-all ${isActive ? "btn-danger" : "btn-outline-secondary text-light"}`,
+                    className: `btn btn-sm rounded-pill transition-all ${isActive ? "active" : ""}`,
                     children: [
                       g.name,
                       " ",
@@ -24656,7 +24674,7 @@
                   "button",
                   {
                     onClick: () => toggleSelection(l.slug, selectedVenues, setSelectedVenues),
-                    className: `btn btn-sm rounded-pill transition-all ${isActive ? "btn-danger" : "btn-outline-secondary text-light"}`,
+                    className: `btn btn-sm rounded-pill transition-all ${isActive ? "active" : ""}`,
                     children: [
                       l.name,
                       " ",
@@ -24668,23 +24686,24 @@
               }) })
             ] })
           ] }),
-          (selectedGenres.length > 0 || selectedVenues.length > 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          (selectedGenres.length > 0 || selectedVenues.length > 0 || selectedCategory.filter((c) => c !== "").length > 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             "button",
             {
               className: "filtros-limpar-btn",
               onClick: () => {
                 setSelectedGenres([]);
                 setSelectedVenues([]);
+                setSelectedCategory([""]);
               },
               children: "Limpar Sele\xE7\xE3o"
             }
           )
         ] }),
-        (searchTerm || selectedCategory || selectedGenres.length > 0 || selectedVenues.length > 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "active-filters-summary mt-3 text-light", children: [
+        hasFiltersApplied && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "active-filters-summary mt-3", children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Filtrando por:" }),
-          selectedCategory && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "ms-2", children: [
-            "Categorias: ",
-            selectedCategory
+          selectedCategory.filter((c) => c !== "").length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "ms-2", children: [
+            "Categoria: ",
+            capitalizeWords(selectedCategory.filter((c) => c !== "").join(", "))
           ] }),
           selectedGenres.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "ms-2", children: [
             "G\xEAneros: ",
@@ -24696,8 +24715,12 @@
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "archive-grid row", children: activeTab === "vigentes" ? filteredVigentes.length > 0 ? filteredVigentes.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-5 px-sm-3", dangerouslySetInnerHTML: { __html: exc.html } }, exc.id)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 text-light", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Nenhuma excurs\xE3o encontrada com estes filtros." }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-        pastExcursions.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-5 px-sm-2", dangerouslySetInnerHTML: { __html: exc.html } }, exc.id)),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "archive-grid row", children: activeTab === "vigentes" ? filteredVigentes.length > 0 ? filteredVigentes.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-4 px-sm-2 px-xxl-3", dangerouslySetInnerHTML: { __html: exc.html } }, exc.id)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 no-results-message", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+        "Nenhuma excurs\xE3o encontrada",
+        hasFiltersApplied || searchTerm !== "" ? " com estes filtros" : "",
+        "."
+      ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+        pastExcursions.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-4 px-sm-2", dangerouslySetInnerHTML: { __html: exc.html } }, exc.id)),
         isLoadingPast && renderSkeletons(pastExcursions.length === 0 ? 8 : 4),
         !isLoadingPast && pastExcursions.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 text-light", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Nenhum hist\xF3rico encontrado com estes filtros." }) }),
         !isLoadingPast && hasMorePast && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center mt-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: loadMorePast, className: "btn btn-outline-light", children: "Carregar mais viagens" }) })

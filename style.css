@@ -12,6 +12,9 @@ Description: Tema criado para o site da Aerotour Caravanas
   background-color: var(--aer-bg-light);
 }
 body {
+  --page-title-color: #0c0c0c;
+
+
   --aer-light-text: #b6b6b6;
   --aer-link-hover: #534da1;
   --aer-bg-light: #e7e7e7;
@@ -37,7 +40,8 @@ body {
   min-height: 100vh;
 }
 body.theme-dark{
-  background-color: #0C0C0C;
+  background-color: #111111;
+  --page-title-color: #f9f9f9;
 }
 
 /* Accent color */

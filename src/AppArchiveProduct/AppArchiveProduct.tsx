@@ -33,7 +33,17 @@ declare global {
 const AppArchiveProduct: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabState>('vigentes');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string[]>(['']);
+  const [hasFiltersApplied, setHasFiltersApplied] = useState(false);
+
+  // Função para alternar a seleção de itens em uma lista
+  const categoryToggleSelection = (item: string, selectedItems: string[], setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems(selectedItems.filter(i => i !== item));
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
+  };
   
   // Estados para seleção múltipla (Tag Cloud)
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
@@ -56,10 +66,10 @@ const AppArchiveProduct: React.FC = () => {
   const filteredVigentes = useMemo(() => {
     return sortedExcursoesVigentes.filter((exc) => {
       const matchesSearch = exc.html.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory ? exc.categorias?.includes(selectedCategory) : true;
-      
+      // se categoria === '', então matchesCategory é false, caso contrário, verifica se a excursão tem pelo menos uma das categorias selecionadas, exceto "all"
+      const matchesCategory = selectedCategory.length === 1 && selectedCategory[0] === '' ? true : exc.categorias?.some(c => selectedCategory.filter(c => c !== "").includes(c));
       // Se há gêneros selecionados, a excursão deve ter pelo menos um deles (Lógica OR)
-      const matchesGenre = selectedGenres.length > 0 
+      const matchesGenre = selectedGenres.length > 0  
         ? exc.genres?.some(g => selectedGenres.includes(g)) 
         : true;
         
@@ -71,6 +81,15 @@ const AppArchiveProduct: React.FC = () => {
       return matchesSearch && matchesCategory && matchesGenre && matchesVenue;
     });
   }, [searchTerm, selectedCategory, selectedGenres, selectedVenues, sortedExcursoesVigentes]);
+
+  // Atualiza o estado hasFiltersApplied sempre que os filtros mudam
+  useEffect(() => {
+    setHasFiltersApplied(
+      selectedCategory.filter(c => c !== "").length > 0 ||
+      selectedGenres.length > 0 ||
+      selectedVenues.length > 0
+    );
+  }, [searchTerm, selectedCategory, selectedGenres, selectedVenues]);
 
   // Observer de Intersecção
   useEffect(() => {
@@ -171,7 +190,7 @@ const AppArchiveProduct: React.FC = () => {
                <div className="search-input-wrapper">
                   <input 
                   type="text" 
-                  className="form-control bg-dark text-light border-secondary flex-grow-1 px-3 py-2" 
+                  className="form-control border-secondary flex-grow-1 px-3 py-2" 
                   // style={{ minWidth: '200px' }}
                   placeholder="Digite para buscar..." 
                   value={searchTerm}
@@ -183,8 +202,9 @@ const AppArchiveProduct: React.FC = () => {
                </div>
             
             
-               <select 
-               className="form-select bg-dark text-light border-secondary w-auto" 
+               {/* <select 
+               id="categorias-select"
+               className="form-select border-secondary w-auto" 
                value={selectedCategory} 
                style={{ minWidth: '160px' }}
                onChange={(e) => setSelectedCategory(e.target.value)} 
@@ -195,22 +215,42 @@ const AppArchiveProduct: React.FC = () => {
                  .map((c) => (
                    <option key={c.term_id} value={c.slug}>{c.name}</option>
                ))}
-               </select>
+               </select> */}
 
                <button 
                id="archive-filters-toggle-btn"
-               className={`btn ${showAdvancedFilters ? 'btn-light' : 'btn-outline-light'}`}
+               className={`btn border-secondary ${showAdvancedFilters ? 'active' : ''}`}
                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                >
-                  <i className="bi bi-sliders"></i> <span>Filtros</span>
+                  <i className="bi bi-sliders"></i>
+                  {!showAdvancedFilters && <span>Filtros</span>}
+                  
                </button>
             </div>
         </div>
 
         {/* Seção Retrátil de Filtros Avançados (Tag Cloud) */}
         {showAdvancedFilters && (
-          <div className="advanced-filters-panel bg-dark border border-secondary rounded p-4 mt-3 shadow-sm" style={{ animation: 'fadeIn 0.3s' }}>
+          <div className="advanced-filters-panel border border-secondary rounded p-4 mt-3 shadow-sm" style={{ animation: 'fadeIn 0.3s' }}>
             <div className="row">
+               {/* Nuvem de categorias (corrigir para permitir seleção múltipla) */}
+               <div className="col-12 mb-3">
+                  <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Categoria</h6>
+                  <div className="d-flex flex-wrap gap-2">
+                    {Array.from(Object.values(categorias).filter((c) => ['shows', 'eventos', 'festivais'].includes(c.slug))).map((c) => {
+                      const isActive = selectedCategory.includes(c.slug);
+                      return (
+                        <button 
+                          key={c.term_id}
+                          onClick={() => categoryToggleSelection(c.slug, selectedCategory, setSelectedCategory)}
+                          className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
+                        >
+                          {c.name} {isActive && <span className="ms-1">&times;</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+               </div>
               {/* Nuvem de Gêneros Musicais */}
               <div className="col-12 col-md-6 mb-3 mb-md-0">
                 <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Gênero Musical</h6>
@@ -221,7 +261,7 @@ const AppArchiveProduct: React.FC = () => {
                       <button 
                         key={g.term_id}
                         onClick={() => toggleSelection(g.slug, selectedGenres, setSelectedGenres)}
-                        className={`btn btn-sm rounded-pill transition-all ${isActive ? 'btn-danger' : 'btn-outline-secondary text-light'}`}
+                        className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
                       >
                         {g.name} {isActive && <span className="ms-1">&times;</span>}
                       </button>
@@ -240,7 +280,7 @@ const AppArchiveProduct: React.FC = () => {
                       <button 
                         key={l.term_id}
                         onClick={() => toggleSelection(l.slug, selectedVenues, setSelectedVenues)}
-                        className={`btn btn-sm rounded-pill transition-all ${isActive ? 'btn-danger' : 'btn-outline-secondary text-light'}`}
+                        className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
                       >
                         {l.name} {isActive && <span className="ms-1">&times;</span>}
                       </button>
@@ -251,11 +291,11 @@ const AppArchiveProduct: React.FC = () => {
             </div>
             
             {/* Botão de Limpar Filtros */}
-            {(selectedGenres.length > 0 || selectedVenues.length > 0) && (
+            {(selectedGenres.length > 0 || selectedVenues.length > 0 || selectedCategory.filter(c => c !== "").length > 0) && (
 
                 <button 
                   className="filtros-limpar-btn"
-                  onClick={() => { setSelectedGenres([]); setSelectedVenues([]); }}
+                  onClick={() => { setSelectedGenres([]); setSelectedVenues([]); setSelectedCategory(['']); }}
                 >
                   Limpar Seleção
                 </button>
@@ -265,10 +305,10 @@ const AppArchiveProduct: React.FC = () => {
         )}
 
          {/* Resumo dos Filtros Ativos */}
-        {(searchTerm || selectedCategory || selectedGenres.length > 0 || selectedVenues.length > 0) && (
-          <div className="active-filters-summary mt-3 text-light">
+        {hasFiltersApplied && (
+          <div className="active-filters-summary mt-3">
             <strong>Filtrando por:</strong>
-            {selectedCategory && <span className="ms-2">Categoria: {capitalizeWords(selectedCategory)}</span>}
+            {selectedCategory.filter(c => c !== "").length > 0 && <span className="ms-2">Categoria: {capitalizeWords(selectedCategory.filter(c => c !== "").join(', '))}</span>}
             {selectedGenres.length > 0 && <span className="ms-2">Gêneros: {selectedGenres.map(g => g !== 'k-pop' ? g.replace(/-/g, ' ') : 'k-pop').join(', ')}</span>}
             {selectedVenues.length > 0 && <span className="ms-2">Locais: {selectedVenues.map(g => capitalizeWords(g.replace(/-/g, ' '))).join(', ')}</span>}
           </div>
@@ -279,17 +319,17 @@ const AppArchiveProduct: React.FC = () => {
         {activeTab === 'vigentes' ? (
           filteredVigentes.length > 0 ? (
             filteredVigentes.map((exc) => (
-               <div key={exc.id} className="col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-5 px-sm-3" dangerouslySetInnerHTML={{ __html: exc.html }} />
+               <div key={exc.id} className="col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-4 px-sm-2 px-xxl-3" dangerouslySetInnerHTML={{ __html: exc.html }} />
             ))
           ) : (
-            <div className="col-12 text-center py-5 text-light">
-              <p>Nenhuma excursão encontrada com estes filtros.</p>
+            <div className="col-12 text-center py-5 no-results-message">
+              <p>Nenhuma excursão encontrada{hasFiltersApplied || searchTerm !== '' ? ' com estes filtros' : ''}.</p>
             </div>
           )
         ) : (
           <>
             {pastExcursions.map((exc) => (
-              <div key={exc.id} className="col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-5 px-sm-2" dangerouslySetInnerHTML={{ __html: exc.html }} />
+              <div key={exc.id} className="col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-4 px-sm-2" dangerouslySetInnerHTML={{ __html: exc.html }} />
             ))}
             
             {isLoadingPast && renderSkeletons(pastExcursions.length === 0 ? 8 : 4)}

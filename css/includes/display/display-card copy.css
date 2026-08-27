@@ -1,17 +1,13 @@
 /* Variáveis para utilizar nos cards */
 :root {
   --card-border-radius: 1rem;
-  --card-border: 2px solid #d9d9d9;
-  --card-bg: #e7e7e7;
-  --card-secondary-bg: #d6d6d6;
-  --card-text-color: #3d3d3d;
-  --card-text-secondary-color: #6d6d6d;
-}
-body.theme-dark{
-  --card-border: 2px solid #232323;
-  --card-bg: #1a1a1a;
-  --card-secondary-bg: #222222;
-  --card-text-color: #c7c7c7;
+  --card-dark-bg: #1a1a1a;
+  --card-dark-bg-2: #222222;
+  --card-dark-text: #c7c7c7;
+  --card-dark-text-2: #6d6d6d;
+  --card-light-bg: #e7e7e7;
+  --card-light-bg-2: #d6d6d6;
+  --card-light-text: #3d3d3d;
 }
 
 /* Estado inicial: Invisível e deslocado para cima */
@@ -219,13 +215,18 @@ font-size: .85rem;
     text-overflow: ellipsis;
     display: block;
 }
+.excursion-card.light .title{
+
+}
 .excursion-card .location {
   font-size: 0.85rem; 
   margin-bottom: 8px;
   padding: 16px 18px;
-  background-color: var(--card-secondary-bg);
+  background-color: var(--card-dark-bg-2);
 }
-
+.excursion-card.light .location{
+  background-color: var(--card-light-bg-2);
+}
 .excursion-card .location .location-inner{
     align-items: start;
   display: flex;
@@ -248,6 +249,7 @@ font-size: .85rem;
         white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    /* width: calc(100% - 32px); */
 }
 
 .excursion-card .location span {
@@ -278,7 +280,7 @@ font-size: .85rem;
   text-transform: uppercase;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  color: #fff;
+    color: #fff;
   border: none;
   display: block;
   width: calc(100% - 20px);
@@ -297,20 +299,54 @@ font-size: .85rem;
   font-size: 0.85rem; 
   text-align: center;
 } 
+/* Variação Light  */
+.excursion-card.light button.cta a {
+    color: #400f0f;
+}
 
 /* Responsividade Mobile [cite: 31, 32] */
 @media (max-width: 576px) {
   .excursion-card .image-container {
     height: 150px;
   }
+  
+  /* .excursion-card .title {
+    font-size: 1rem;
+  } */
 }
 
 
+
 /* Variações de fundo */
-.excursion-card {
-  background-color: var(--card-bg);
-  color: var(--card-text-color);
-  border: var(--card-border);
+.excursion-card.dark {
+  background-color: var(--card-dark-bg);
+  color: var(--card-dark-text);
+}
+
+.excursion-card.light {
+  background-color: var(--card-light-bg);
+  color: var(--card-light-text);
+  border: 2px solid #d9d9d9;
+}
+.excursion-card.light .title{
+  color: var(--card-light-text);
+
+}
+
+.excursion-card.light .title-overlay {
+  background-color: rgba(231, 231, 231, 0.6);
+  color: #111;
+}
+
+.excursion-cd.light .badge {
+  background-color: #400f0f;
+  color: #fff;
+}
+
+.excursion-card.light .cta {
+  box-shadow: inset 0px 0px 1px 1px var(--aer-accent);
+  color: var(--aer-accent);
+  background-color: unset;
 }
 
 @media (max-width: 576px) {
