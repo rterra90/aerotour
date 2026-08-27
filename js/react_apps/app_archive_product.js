@@ -24498,7 +24498,18 @@
   var AppArchiveProduct = () => {
     const [activeTab, setActiveTab] = (0, import_react.useState)("vigentes");
     const [searchTerm, setSearchTerm] = (0, import_react.useState)("");
-    const [selectedCategory, setSelectedCategory] = (0, import_react.useState)([""]);
+    const [selectedCategory, setSelectedCategory] = (0, import_react.useState)(() => {
+      const { categorias: categorias2 = [] } = window.ArchiveProductData || {};
+      const categoriasArray = Array.isArray(categorias2) ? categorias2 : Object.values(categorias2);
+      if (typeof window !== "undefined") {
+        const pathSegments = window.location.pathname.split("/").filter(Boolean);
+        const matchedCategory = categoriasArray.find(
+          (c) => pathSegments.includes(c.slug) && ["shows", "eventos", "festivais"].includes(c.slug)
+        );
+        if (matchedCategory) return [matchedCategory.slug];
+      }
+      return [""];
+    });
     const [hasFiltersApplied, setHasFiltersApplied] = (0, import_react.useState)(false);
     const categoryToggleSelection = (item, selectedItems, setSelectedItems) => {
       if (selectedItems.includes(item)) {
@@ -24507,9 +24518,36 @@
         setSelectedItems([...selectedItems, item]);
       }
     };
-    const [selectedGenres, setSelectedGenres] = (0, import_react.useState)([]);
-    const [selectedVenues, setSelectedVenues] = (0, import_react.useState)([]);
-    const [showAdvancedFilters, setShowAdvancedFilters] = (0, import_react.useState)(false);
+    const [selectedGenres, setSelectedGenres] = (0, import_react.useState)(() => {
+      const { generos: generos2 = [] } = window.ArchiveProductData || {};
+      const generosArray = Array.isArray(generos2) ? generos2 : Object.values(generos2);
+      if (typeof window !== "undefined") {
+        const pathSegments = window.location.pathname.split("/").filter(Boolean);
+        const matchedGenre = generosArray.find(
+          (g) => pathSegments.includes(g.slug)
+        );
+        if (matchedGenre) return [matchedGenre.slug];
+      }
+      return [];
+    });
+    const [selectedVenues, setSelectedVenues] = (0, import_react.useState)(() => {
+      const { locais: locais2 = [] } = window.ArchiveProductData || {};
+      const locaisArray = Array.isArray(locais2) ? locais2 : Object.values(locais2);
+      if (typeof window !== "undefined") {
+        const pathSegments = window.location.pathname.split("/").filter(Boolean);
+        const matchedVenue = locaisArray.find(
+          (l) => pathSegments.includes(l.slug)
+        );
+        if (matchedVenue) return [matchedVenue.slug];
+      }
+      return [];
+    });
+    const [showAdvancedFilters, setShowAdvancedFilters] = (0, import_react.useState)(() => {
+      const hasCategory = selectedCategory.length > 0 && selectedCategory[0] !== "";
+      const hasGenre = selectedGenres.length > 0;
+      const hasVenue = selectedVenues.length > 0;
+      return hasCategory || hasGenre || hasVenue;
+    });
     const [pastExcursions, setPastExcursions] = (0, import_react.useState)([]);
     const [isLoadingPast, setIsLoadingPast] = (0, import_react.useState)(false);
     const [pastPage, setPastPage] = (0, import_react.useState)(1);
@@ -24592,9 +24630,9 @@
       return Array.from({ length: count }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-md-6 col-lg-4 mb-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "card-skeleton", style: { height: "350px", backgroundColor: "#222", borderRadius: "12px", animation: "pulse 1.5s infinite ease-in-out" } }) }, `skeleton-${i}`));
     };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "aerotour-archive-app", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { className: "archive-header-filters mb-5", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { className: "archive-header", children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "d-flex flex-column flex-md-row justify-content-between align-items-center gap-3", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { id: "archive-type-btn-group", className: "btn-group", role: "group", "aria-label": "Navega\xE7\xE3o de excurs\xF5es", children: [
+          true ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mb-0 mb-sm-1 archive-intro", children: "Escolha seu pr\xF3ximo destino com a Aerotour" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { id: "archive-type-btn-group", className: "btn-group", role: "group", "aria-label": "Navega\xE7\xE3o de excurs\xF5es", children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: `btn proximas-btn ${activeTab === "vigentes" ? "active" : ""}`, onClick: () => setActiveTab("vigentes"), children: "Pr\xF3ximas" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: `btn realizadas-btn ${activeTab === "passadas" ? "active" : ""}`, onClick: () => setActiveTab("passadas"), children: "Passadas" })
           ] }),
@@ -24626,7 +24664,7 @@
             )
           ] })
         ] }),
-        showAdvancedFilters && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "advanced-filters-panel border border-secondary rounded p-4 mt-3 shadow-sm", style: { animation: "fadeIn 0.3s" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: `advanced-filters-panel border border-secondary rounded shadow-sm ${showAdvancedFilters ? "open" : ""}`, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "row", children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "col-12 mb-3", children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h6", { className: "text-uppercase text-secondary mb-2 small fw-bold", children: "Categoria" }),
@@ -24713,6 +24751,13 @@
             "Locais: ",
             selectedVenues.map((g) => capitalizeWords(g.replace(/-/g, " "))).join(", ")
           ] })
+        ] }),
+        activeTab === "vigentes" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { id: "archive-count", children: [
+          filteredVigentes.length,
+          " excurs",
+          filteredVigentes.length !== 1 ? "\xF5es" : "\xE3o",
+          " encontrada",
+          filteredVigentes.length !== 1 ? "s" : ""
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "archive-grid row", children: activeTab === "vigentes" ? filteredVigentes.length > 0 ? filteredVigentes.map((exc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 col-sm-6 col-md-4 col-xl-3 mb-4 px-4 px-sm-2 px-xxl-3", dangerouslySetInnerHTML: { __html: exc.html } }, exc.id)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "col-12 text-center py-5 no-results-message", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [

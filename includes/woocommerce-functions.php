@@ -421,7 +421,11 @@ function theme_register_taxonomies() {
         'show_admin_column'     => true,  // Adiciona coluna na listagem de produtos do admin
         'update_count_callback' => '_update_post_term_count',
         'query_var'             => true,
-        'rewrite'               => array( 'slug' => 'genero-musical' ),
+        'rewrite'           => array( 
+            'slug'         => 'excursoes/genero', 
+            'with_front'   => false,
+            'hierarchical' => false 
+        ),
     );
 
     register_taxonomy( 'exc_genre', array( 'product' ), $args_genre );
@@ -447,7 +451,11 @@ function theme_register_taxonomies() {
         'show_admin_column'     => true,
         'update_count_callback' => '_update_post_term_count',
         'query_var'             => true,
-        'rewrite'               => array( 'slug' => 'local-evento' ),
+        'rewrite'           => array( 
+            'slug'         => 'excursoes/local', 
+            'with_front'   => false,
+            'hierarchical' => false 
+        ),
     );
 
     register_taxonomy( 'exc_venue', array( 'product' ), $args_venue );

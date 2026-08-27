@@ -33,7 +33,23 @@ declare global {
 const AppArchiveProduct: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabState>('vigentes');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string[]>(['']);
+
+   // 1. Identifica a categoria na URL durante o carregamento inicial
+   const [selectedCategory, setSelectedCategory] = useState<string[]>(() => {
+      const { categorias = [] } = window.ArchiveProductData || {};
+      // Garante que é um array, pois o PHP pode enviar como objeto associativo
+      const categoriasArray = Array.isArray(categorias) ? categorias : Object.values(categorias);
+      
+      if (typeof window !== 'undefined') {
+         const pathSegments = window.location.pathname.split('/').filter(Boolean);
+         const matchedCategory = (categoriasArray as Termo[]).find(
+         (c) => pathSegments.includes(c.slug) && ['shows', 'eventos', 'festivais'].includes(c.slug)
+         );
+         if (matchedCategory) return [matchedCategory.slug];
+      }
+      return [''];
+   }); 
+
   const [hasFiltersApplied, setHasFiltersApplied] = useState(false);
 
   // Função para alternar a seleção de itens em uma lista
@@ -46,11 +62,44 @@ const AppArchiveProduct: React.FC = () => {
   };
   
   // Estados para seleção múltipla (Tag Cloud)
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
+// 2. Identifica Gêneros Musicais na URL (/excursoes/genero/slug)
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(() => {
+    const { generos = [] } = window.ArchiveProductData || {};
+    const generosArray = Array.isArray(generos) ? generos : Object.values(generos);
+
+    if (typeof window !== 'undefined') {
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const matchedGenre = (generosArray as Termo[]).find(
+        (g) => pathSegments.includes(g.slug)
+      );
+      if (matchedGenre) return [matchedGenre.slug];
+    }
+    return [];
+  });
+
+  // 3. Identifica Locais/Venues na URL (/excursoes/local/slug)
+  const [selectedVenues, setSelectedVenues] = useState<string[]>(() => {
+    const { locais = [] } = window.ArchiveProductData || {};
+    const locaisArray = Array.isArray(locais) ? locais : Object.values(locais);
+
+    if (typeof window !== 'undefined') {
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const matchedVenue = (locaisArray as Termo[]).find(
+        (l) => pathSegments.includes(l.slug)
+      );
+      if (matchedVenue) return [matchedVenue.slug];
+    }
+    return [];
+  });
   
-  // Estado para exibir/ocultar os filtros avançados
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+// 4. Abre o painel avançado automaticamente se qualquer um dos filtros estiver ativo na URL
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(() => {
+    const hasCategory = selectedCategory.length > 0 && selectedCategory[0] !== '';
+    const hasGenre = selectedGenres.length > 0;
+    const hasVenue = selectedVenues.length > 0;
+
+    return hasCategory || hasGenre || hasVenue;
+  });
 
   const [pastExcursions, setPastExcursions] = useState<ExcursaoVigente[]>([]);
   const [isLoadingPast, setIsLoadingPast] = useState(false);
@@ -177,14 +226,15 @@ const AppArchiveProduct: React.FC = () => {
 
   return (
     <div className="aerotour-archive-app">
-      <header className="archive-header-filters mb-5">
+      <header className="archive-header">
         
         {/* Barra Principal de Filtros */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-            <div id="archive-type-btn-group" className="btn-group" role="group" aria-label="Navegação de excursões">
+            {true ? <p className="mb-0 mb-sm-1 archive-intro">Escolha seu próximo destino com a Aerotour</p> : <div id="archive-type-btn-group" className="btn-group" role="group" aria-label="Navegação de excursões">
                <button className={`btn proximas-btn ${activeTab === 'vigentes' ? 'active' : ''}`} onClick={() => setActiveTab('vigentes')}>Próximas</button>
                <button className={`btn realizadas-btn ${activeTab === 'passadas' ? 'active' : ''}`} onClick={() => setActiveTab('passadas')}>Passadas</button>
-            </div>
+            </div>}
+            
             
             <div className="filters d-flex gap-2 w-100 justify-content-md-end" style={{ maxWidth: '720px' }}>
                <div className="search-input-wrapper">
@@ -200,22 +250,6 @@ const AppArchiveProduct: React.FC = () => {
                   <span className="clear-btn" onClick={() => setSearchTerm('')}>x</span>
                   )}
                </div>
-            
-            
-               {/* <select 
-               id="categorias-select"
-               className="form-select border-secondary w-auto" 
-               value={selectedCategory} 
-               style={{ minWidth: '160px' }}
-               onChange={(e) => setSelectedCategory(e.target.value)} 
-               >
-               <option value="">Todas...</option>
-               {Object.values(categorias)
-                 .filter((c) => ['shows', 'eventos', 'festivais'].includes(c.slug))
-                 .map((c) => (
-                   <option key={c.term_id} value={c.slug}>{c.name}</option>
-               ))}
-               </select> */}
 
                <button 
                id="archive-filters-toggle-btn"
@@ -230,79 +264,79 @@ const AppArchiveProduct: React.FC = () => {
         </div>
 
         {/* Seção Retrátil de Filtros Avançados (Tag Cloud) */}
-        {showAdvancedFilters && (
-          <div className="advanced-filters-panel border border-secondary rounded p-4 mt-3 shadow-sm" style={{ animation: 'fadeIn 0.3s' }}>
-            <div className="row">
-               {/* Nuvem de categorias (corrigir para permitir seleção múltipla) */}
-               <div className="col-12 mb-3">
-                  <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Categoria</h6>
-                  <div className="d-flex flex-wrap gap-2">
-                    {Array.from(Object.values(categorias).filter((c) => ['shows', 'eventos', 'festivais'].includes(c.slug))).map((c) => {
-                      const isActive = selectedCategory.includes(c.slug);
-                      return (
-                        <button 
-                          key={c.term_id}
-                          onClick={() => categoryToggleSelection(c.slug, selectedCategory, setSelectedCategory)}
-                          className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
-                        >
-                          {c.name} {isActive && <span className="ms-1">&times;</span>}
-                        </button>
-                      );
-                    })}
-                  </div>
+
+         <div className={`advanced-filters-panel border border-secondary rounded shadow-sm ${showAdvancedFilters ? 'open' : ''}`}>
+         <div className="row">
+            {/* Nuvem de categorias (corrigir para permitir seleção múltipla) */}
+            <div className="col-12 mb-3">
+               <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Categoria</h6>
+               <div className="d-flex flex-wrap gap-2">
+                  {Array.from(Object.values(categorias).filter((c) => ['shows', 'eventos', 'festivais'].includes(c.slug))).map((c) => {
+                     const isActive = selectedCategory.includes(c.slug);
+                     return (
+                     <button 
+                        key={c.term_id}
+                        onClick={() => categoryToggleSelection(c.slug, selectedCategory, setSelectedCategory)}
+                        className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
+                     >
+                        {c.name} {isActive && <span className="ms-1">&times;</span>}
+                     </button>
+                     );
+                  })}
                </div>
-              {/* Nuvem de Gêneros Musicais */}
-              <div className="col-12 col-md-6 mb-3 mb-md-0">
-                <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Gênero Musical</h6>
-                <div className="d-flex flex-wrap gap-2">
-                  {generos.map((g) => {
-                    const isActive = selectedGenres.includes(g.slug);
-                    return (
-                      <button 
-                        key={g.term_id}
-                        onClick={() => toggleSelection(g.slug, selectedGenres, setSelectedGenres)}
-                        className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
-                      >
-                        {g.name} {isActive && <span className="ms-1">&times;</span>}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Nuvem de Locais */}
-              <div className="col-12 col-md-6">
-                <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Local do Evento</h6>
-                <div className="d-flex flex-wrap gap-2">
-                  {locais.map((l) => {
-                    const isActive = selectedVenues.includes(l.slug);
-                    return (
-                      <button 
-                        key={l.term_id}
-                        onClick={() => toggleSelection(l.slug, selectedVenues, setSelectedVenues)}
-                        className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
-                      >
-                        {l.name} {isActive && <span className="ms-1">&times;</span>}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
             </div>
-            
-            {/* Botão de Limpar Filtros */}
-            {(selectedGenres.length > 0 || selectedVenues.length > 0 || selectedCategory.filter(c => c !== "").length > 0) && (
+            {/* Nuvem de Gêneros Musicais */}
+            <div className="col-12 col-md-6 mb-3 mb-md-0">
+               <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Gênero Musical</h6>
+               <div className="d-flex flex-wrap gap-2">
+               {generos.map((g) => {
+                  const isActive = selectedGenres.includes(g.slug);
+                  return (
+                     <button 
+                     key={g.term_id}
+                     onClick={() => toggleSelection(g.slug, selectedGenres, setSelectedGenres)}
+                     className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
+                     >
+                     {g.name} {isActive && <span className="ms-1">&times;</span>}
+                     </button>
+                  );
+               })}
+               </div>
+            </div>
 
-                <button 
-                  className="filtros-limpar-btn"
-                  onClick={() => { setSelectedGenres([]); setSelectedVenues([]); setSelectedCategory(['']); }}
-                >
-                  Limpar Seleção
-                </button>
+            {/* Nuvem de Locais */}
+            <div className="col-12 col-md-6">
+               <h6 className="text-uppercase text-secondary mb-2 small fw-bold">Local do Evento</h6>
+               <div className="d-flex flex-wrap gap-2">
+               {locais.map((l) => {
+                  const isActive = selectedVenues.includes(l.slug);
+                  return (
+                     <button 
+                     key={l.term_id}
+                     onClick={() => toggleSelection(l.slug, selectedVenues, setSelectedVenues)}
+                     className={`btn btn-sm rounded-pill transition-all ${isActive ? 'active' : ''}`}
+                     >
+                     {l.name} {isActive && <span className="ms-1">&times;</span>}
+                     </button>
+                  );
+               })}
+               </div>
+            </div>
+         </div>
+         
+         {/* Botão de Limpar Filtros */}
+         {(selectedGenres.length > 0 || selectedVenues.length > 0 || selectedCategory.filter(c => c !== "").length > 0) && (
 
-            )}
-          </div>
-        )}
+               <button 
+               className="filtros-limpar-btn"
+               onClick={() => { setSelectedGenres([]); setSelectedVenues([]); setSelectedCategory(['']); }}
+               >
+               Limpar Seleção
+               </button>
+
+         )}
+         </div>
+        
 
          {/* Resumo dos Filtros Ativos */}
         {hasFiltersApplied && (
@@ -311,6 +345,12 @@ const AppArchiveProduct: React.FC = () => {
             {selectedCategory.filter(c => c !== "").length > 0 && <span className="ms-2">Categoria: {capitalizeWords(selectedCategory.filter(c => c !== "").join(', '))}</span>}
             {selectedGenres.length > 0 && <span className="ms-2">Gêneros: {selectedGenres.map(g => g !== 'k-pop' ? g.replace(/-/g, ' ') : 'k-pop').join(', ')}</span>}
             {selectedVenues.length > 0 && <span className="ms-2">Locais: {selectedVenues.map(g => capitalizeWords(g.replace(/-/g, ' '))).join(', ')}</span>}
+          </div>
+        )}
+
+        {activeTab === 'vigentes' && (
+          <div id="archive-count">
+            {filteredVigentes.length} excurs{filteredVigentes.length !== 1 ? 'ões' : 'ão'} encontrada{filteredVigentes.length !== 1 ? 's' : ''}
           </div>
         )}
       </header>
