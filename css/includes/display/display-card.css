@@ -1,21 +1,24 @@
 /* Variáveis para utilizar nos cards */
-:root {
-  --card-border-radius: 1rem;
-  --card-border: 2px solid #d9d9d9;
-  --card-bg: #e7e7e7;
-  --card-secondary-bg: #d6d6d6;
-  --card-text-color: #3d3d3d;
-  --card-text-secondary-color: #6d6d6d;
+:root{
+  --card-border-radius:1rem;
 }
-body.theme-dark{
-  --card-border: 2px solid #232323;
-  --card-bg: #1a1a1a;
-  --card-secondary-bg: #222222;
-  --card-text-color: #c7c7c7;
+body.theme-light, body.theme-dark.single-product{
+  --card-border:2px solid #d9d9d9;
+  --card-bg:#e7e7e7;
+  --card-secondary-bg:#d6d6d6;
+  --card-text-color:#3d3d3d;
+  --card-text-secondary-color:#6d6d6d;
+}
+body.theme-dark, body.theme-light.page-template-page-home{
+  --card-border:2px solid #232323;
+  --card-bg:#1a1a1a;
+  --card-secondary-bg:#222222;
+  --card-text-color:#c7c7c7;
 }
 
 /* Estado inicial: Invisível e deslocado para cima */
 .reveal-card {
+    width: 100%;
     opacity: 0;
     transform: translateY(-30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
