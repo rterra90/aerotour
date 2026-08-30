@@ -4,15 +4,11 @@
 }
 body.theme-light, body.theme-dark.single-product{
   --card-border:2px solid #d9d9d9;
-  --card-bg:#e7e7e7;
-  --card-secondary-bg:#d6d6d6;
   --card-text-color:#3d3d3d;
   --card-text-secondary-color:#6d6d6d;
 }
 body.theme-dark{
   --card-border:2px solid #232323;
-  --card-bg:#1a1a1a;
-  --card-secondary-bg:#222222;
   --card-text-color:#c7c7c7;
 }
 
@@ -226,7 +222,7 @@ font-size: .85rem;
   font-size: 0.85rem; 
   margin-bottom: 8px;
   padding: 16px 18px;
-  background-color: var(--card-secondary-bg);
+  background-color: var(--box-bg-2);
 }
 
 .excursion-card .location .location-inner{
@@ -311,7 +307,7 @@ font-size: .85rem;
 
 /* Variações de fundo */
 .excursion-card {
-  background-color: var(--card-bg);
+  background-color: var(--box-bg-1);
   color: var(--card-text-color);
   border: var(--card-border);
 }
