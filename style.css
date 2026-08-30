@@ -7,6 +7,22 @@ Version: 1.0
 Description: Tema criado para o site da Aerotour Caravanas
 */
 @import url(css/bootstrap.min.css);
+:root{
+  --default-radius: .75rem;
+  --light-text: #f9f9f9;
+  --text-color-1: #111111;
+  --text-color-2: #555555;
+  --text-invert-color-1: #f9f9f9;
+  --text-invert-color-2: #b6b6b6;
+  --box-bg-1: #f8f8f8;
+}
+body.theme-dark{
+  --text-color-1: #f9f9f9;
+  --text-color-2: #b6b6b6;
+  --text-invert-color-1: #111111;
+  --text-invert-color-2: #555555;
+  --box-bg-1: #1a1a1a;
+}
 .aer-bg-light,
 .aer-box {
   background-color: var(--aer-bg-light);

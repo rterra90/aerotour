@@ -15,7 +15,7 @@ function aer_get_segmented_css()
         // Estilos globais
         'global' => [
             'condition' => true, // Carrega em todas as páginas
-            'files' => ['/css/header.min.css', '/css/footer.min.css'],
+            'files' => ['/css/header.min.css', '/css/footer.min.css', '/css/blog/blog-post-card.min.css'],
         ],
         // Home Page
         'home' => [

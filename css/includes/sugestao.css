@@ -1,5 +1,5 @@
 .card-moderno {
-    background: #2a2a2a;
+    background: var(--box-bg-1);
     border-radius: 15px;
     padding: 26px;
     box-shadow: 0 10px 30px rgba(0,0,0,.08);
@@ -7,7 +7,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 36px;
-    color: var(--aer-text-light);
+    color: var(--text-color-1);
 }
 .card-moderno strong{
   display: block;
@@ -15,6 +15,7 @@
 }
 .card-moderno strong + span{
   font-size: .925rem;
+  color: var(--text-color-2);
 }
 .card-moderno .input-container {
     display: flex;
@@ -36,7 +37,7 @@
 
 .card-moderno #btn-sugerir {
     background: var(--aer-accent-hover);
-    color: white;
+    color: var(--light-text);
     border: none;
     padding: 0 25px;
     border-radius: 8px;
@@ -178,7 +179,7 @@
 /* Botões de Ação */
 .btn-enviar-modal, .btn-ir, .btn-reservar {
     background: var(--aer-accent);
-    color: #fff !important;
+    color: var(--light-text) !important;
     border: none;
     padding: 14px 28px;
     border-radius: 12px;
@@ -209,7 +210,7 @@
 
 .icon-check {
     background: var(--aer-accent);
-    color: white;
+    color: var(--light-text);
     width: 40px;
     height: 40px;
     border-radius: 50%;

@@ -93,7 +93,7 @@ $dados_js = array_map(function ($p) {
       ];
       $query = new WP_Query($args);
       if ($query->have_posts()): ?>
-        <section class="post-list container-md">
+        <section id="blog-posts-home-section" class="post-list container-md">
           <h2>Blog</h2>
           <ul class="d-flex">
             <?php while ($query->have_posts()):
@@ -106,25 +106,24 @@ $dados_js = array_map(function ($p) {
             ?>
 
               <li>
-                <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-                  <div>
-                    <a href="<?php the_permalink(); ?>" aria-label="<?= the_title() ?>">
-                      <div class="header-img" style="background-image: url('<?= $main_img[0] ?>')"></div>
-                    </a>
+                <article id="post-<?php the_ID(); ?>" <?php post_class('blog-post-card'); ?> class="blog-post-card">
+
+                  <a href="<?php the_permalink(); ?>" aria-label="<?= the_title() ?>">
+                    <div class="header-img" style="background-image: url('<?= $main_img[0] ?>')"></div>
+                  </a>
 
 
-                    <div class="blog-card-body px-2 px-sm-3 pb-2 mt-2">
+                  <div class="blog-card-body px-2 px-sm-3 pb-2 mt-2">
+                    <div class="blog-card-content">
                       <div class="blog-card-header d-flex justify-content-between">
                         <span class="posted-on"><?php echo get_the_date(); ?></span>
                         <div class="badges"></div>
                       </div>
                       <h3><a href="<?php the_permalink(); ?>"><?= the_title() ?></a></h3>
-
-
-                      <footer class="entry-footer d-flex justify-content-end">
+                    </div>
+                    <footer class="entry-footer d-flex justify-content-end">
                         <a href="<?php the_permalink(); ?>" class="read-more">Leia mais</a>
                       </footer>
-                    </div>
                   </div>
 
 
