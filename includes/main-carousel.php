@@ -72,8 +72,8 @@ if (count($destaques_hero) > 0): ?>
 
             <div class="carousel-item-flex d-flex hero-container">
               <div class="carousel-info">
-                <span data-animate class="pre-title" style="animation-delay:.5s">Excursão</span>
-                <h3 data-animate style="animation-delay:.8s"><a href="<?= get_permalink(
+                <span data-animate class="pre-title hero-colored-bg" style="animation-delay:.5s">Excursão</span>
+                <h3 data-animate style="animation-delay:.8s" class="mb-4 mb-sm-2"><a href="<?= get_permalink(
                     $excursao->get_id(),
                 ) ?>"><?= $excursao->get_name() ?></a></h3>
 
@@ -87,24 +87,27 @@ if (count($destaques_hero) > 0): ?>
                   </div>
                   <div>
                     <div class="data-local" data-animate style="animation-delay:1s">
-                      <div><?= aer_icons('calendar', 18, 18) ?><span>
-                        <?php
-                        $datas_array = $excursao->attributes['dia']['options'];
-                        foreach (
-                            $excursao->attributes['dia']['options']
-                            as $i => $data
-                        ) {
-                            if ($i === 0) {
-                                echo substr($data, 0, 5);
-                            } elseif ($i === sizeof($datas_array) - 1) {
-                                echo ' e ' . substr($data, 0, 5);
-                            } else {
-                                echo ', ' . substr($data, 0, 5);
-                            }
-                        }
-                        ?></span>
+                      <div class="hero-date-wrapper hero-colored-bg">
+                        <?= aer_icons('calendar', 18, 18) ?>
+                        <span>
+                          <?php
+                          $datas_array = array_values($excursao->attributes['dia']['options'] ?? []);
+                          $total = count($datas_array);
+
+                          if ($total === 1) {
+                              echo substr($datas_array[0], 0, 5);
+                          } elseif ($total === 2) {
+                              echo substr($datas_array[0], 0, 5) . ' e ' . substr($datas_array[1], 0, 5);
+                          } elseif ($total > 2) {
+                              $primeira = substr($datas_array[0], 0, 5);
+                              $ultima = substr(end($datas_array), 0, 5);
+                              echo 'Entre ' . $primeira . ' e ' . $ultima;
+                          }
+                          ?>
+                        </span>
                       </div>
-                      <div>
+
+                      <div class="hero-local-wrapper hero-colored-bg">
                         <?= aer_icons('pin', 18, 18) ?>
                         <span>
                         <?= get_post_meta(
@@ -117,10 +120,10 @@ if (count($destaques_hero) > 0): ?>
                   </div>
                 </div>
 
-                <div class="carousel-buttons" data-animate style="animation-delay:1.5s">
-                  <a data-btn-reactive aria-label="Informações e reservas" href="<?= get_permalink(
+                <div class="hero-buttons" data-animate style="animation-delay:1.5s">
+                  <a class="main-btn" data-btn-reactive aria-label="Informações e reservas" href="<?= get_permalink(
                       $excursao->get_id(),
-                  ) ?>">Informações e reservas</a>
+                  ) ?>"><span>Informações e reservas</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
                 </div>
               </div>
               <div class="carousel-img desktop">

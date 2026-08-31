@@ -1,15 +1,27 @@
 /* Variáveis para utilizar nos cards */
-:root{
-  --card-border-radius:1rem;
-}
-body.theme-light, body.theme-dark.single-product{
+
+:root, body.theme-light{
   --card-border:2px solid #d9d9d9;
   --card-text-color:#3d3d3d;
   --card-text-secondary-color:#6d6d6d;
+  --card-bg: #f8f8f8;
+  --card-bg-2: #d2d2d2!;
 }
 body.theme-dark{
   --card-border:2px solid #232323;
   --card-text-color:#c7c7c7;
+  --card-bg: #1a1a1a;
+  --card-bg-2: #222222;
+  
+}
+:root, body.theme-dark.single-product{
+  --card-border-radius:1rem;
+  --card-bg: #f8f8f8!important;
+  --card-bg-2: #d2d2d2!important;
+  --card-border:2px solid #d9d9d9!important;
+  --card-text-color:#3d3d3d!important;
+
+
 }
 
 /* Estado inicial: Invisível e deslocado para cima */
@@ -222,7 +234,7 @@ font-size: .85rem;
   font-size: 0.85rem; 
   margin-bottom: 8px;
   padding: 16px 18px;
-  background-color: var(--box-bg-2);
+  background-color: var(--card-bg-2);
 }
 
 .excursion-card .location .location-inner{
@@ -307,7 +319,7 @@ font-size: .85rem;
 
 /* Variações de fundo */
 .excursion-card {
-  background-color: var(--box-bg-1);
+  background-color: var(--card-bg-1);
   color: var(--card-text-color);
   border: var(--card-border);
 }

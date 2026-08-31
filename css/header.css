@@ -84,6 +84,7 @@ top: 0px;
 }
 /* Ajuste de Transparência e Fixação */
 header#aer_header {
+  max-height: 101px;
 }
 
 header#aer_header.inner-header, 
