@@ -349,4 +349,85 @@ function int_data_to_iso($data_dmy)
   [$dia, $mes, $ano] = $partes;
   return sprintf('%04d-%02d-%02d', $ano, $mes, $dia);
 }
+
+// Função para atualizar a data limite do produto pai baseada nas variações (utilities)
+function aer_atualizar_data_limite_produto($product_id)
+{
+  $product = wc_get_product($product_id);
+  if (!$product || !$product->is_type('variable')) {
+    return;
+  }
+
+  $maior_timestamp = 0;
+  $menor_timestamp = 0;
+  $variations = $product->get_available_variations();
+
+  foreach ($variations as $variation) {
+    // Extrai a data do nome da variação (ex: "Show - 25/12/2024")
+    if (
+      preg_match(
+        '/(\d{2})\/(\d{2})\/(\d{4})/',
+        $variation['attributes']['attribute_dia'] ?? '',
+        $matches
+      )
+    ) {
+      $timestamp = strtotime("{$matches[3]}-{$matches[2]}-{$matches[1]}");
+      if ($timestamp > $maior_timestamp) {
+        $maior_timestamp = $timestamp;
+      }
+      if ($menor_timestamp === 0 || $timestamp < $menor_timestamp) {
+        $menor_timestamp = $timestamp;
+      }
+    }
+  }
+
+  if ($maior_timestamp > 0) {
+    // Salva no formato YYYYMMDD para busca rápida no banco
+    update_post_meta(
+      $product_id,
+      'data_limite_excursao',
+      date('Ymd', $maior_timestamp)
+    );
+  }
+  if ($menor_timestamp > 0) {
+    // Salva no formato YYYYMMDD para busca rápida no banco
+    update_post_meta(
+      $product_id,
+      'data_inicio_excursao',
+      date('Ymd', $menor_timestamp)
+    );
+  }
+}
+
+// Executa sempre que um produto for salvo/atualizado
+add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');
+
+/**
+ * Executa o loop em todos os produtos via parâmetro na URL
+ */
+add_action( 'init', 'aerotour_script_atualizar_todas_datas_iniciais' );
+function aerotour_script_atualizar_todas_datas_iniciais() {
+    // Só executa se a URL tiver ?atualizar_datas_iniciais=1 e for um admin logado
+    if ( ! isset( $_GET['atualizar_datas_iniciais'] ) || ! current_user_can( 'administrator' ) ) {
+        return;
+    }
+
+    $args = array(
+        'post_type'      => 'product',
+        'posts_per_page' => -1,
+        'post_status'    => 'any',
+    );
+
+    $produtos = new WP_Query( $args );
+
+    if ( $produtos->have_posts() ) {
+        while ( $produtos->have_posts() ) {
+            $produtos->the_post();
+            aer_atualizar_data_limite_produto( get_the_ID() );
+        }
+        wp_reset_postdata();
+    }
+
+    die( 'Script finalizado com sucesso! As datas iniciais de todas as excursões foram salvas.' );
+}
 ?>

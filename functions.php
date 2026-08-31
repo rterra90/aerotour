@@ -438,50 +438,6 @@ function filter_function_name($title, $sep, $seplocation)
   return $title;
 }
 
-
-
-// Função para atualizar a data limite do produto pai baseada nas variações (utilities)
-function aer_atualizar_data_limite_produto($product_id)
-{
-  $product = wc_get_product($product_id);
-  if (!$product || !$product->is_type('variable')) {
-    return;
-  }
-
-  $maior_timestamp = 0;
-  $variations = $product->get_available_variations();
-
-  foreach ($variations as $variation) {
-    // Extrai a data do nome da variação (ex: "Show - 25/12/2024")
-    if (
-      preg_match(
-        '/(\d{2})\/(\d{2})\/(\d{4})/',
-        $variation['attributes']['attribute_dia'] ?? '',
-        $matches
-      )
-    ) {
-      $timestamp = strtotime("{$matches[3]}-{$matches[2]}-{$matches[1]}");
-      if ($timestamp > $maior_timestamp) {
-        $maior_timestamp = $timestamp;
-      }
-    }
-  }
-
-  if ($maior_timestamp > 0) {
-    // Salva no formato YYYYMMDD para busca rápida no banco
-    update_post_meta(
-      $product_id,
-      'data_limite_excursao',
-      date('Ymd', $maior_timestamp)
-    );
-  }
-}
-
-// Executa sempre que um produto for salvo/atualizado
-add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');
-
-
-
 //FUNÇÕES QUE CARREGAM APENAS NO PAINEL ADMIN
 if (is_admin()) {
 

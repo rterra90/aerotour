@@ -151,10 +151,6 @@ if (isset($excursao->attributes['dia'])) {
         <?php endif; ?>
       </a>
 
-
-
-
-
     </div>
     <div class="info">
       <!-- Título  -->
