@@ -10,6 +10,7 @@ if (count($destaques_hero) > 0): ?>
       <?php
       $i_button = 0;
       foreach (aer_proximas_excursoes($excursoes, 'destaque') as $excursao) {
+        // wp_die(print_r($excursao, true));
           if (get_post_meta($excursao->get_id())['destaque'][0] === 'yes') { ?>
           <button type="button" data-bs-target="#hero" data-bs-slide-to="<?= $i_button ?>" class="
           <?= $i_button === 0 ? 'active' : '' ?>" aria-current="

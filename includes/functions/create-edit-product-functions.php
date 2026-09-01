@@ -401,33 +401,4 @@ function aer_atualizar_data_limite_produto($product_id)
 
 // Executa sempre que um produto for salvo/atualizado
 add_action('woocommerce_update_product', 'aer_atualizar_data_limite_produto');
-
-/**
- * Executa o loop em todos os produtos via parâmetro na URL
- */
-add_action( 'init', 'aerotour_script_atualizar_todas_datas_iniciais' );
-function aerotour_script_atualizar_todas_datas_iniciais() {
-    // Só executa se a URL tiver ?atualizar_datas_iniciais=1 e for um admin logado
-    if ( ! isset( $_GET['atualizar_datas_iniciais'] ) || ! current_user_can( 'administrator' ) ) {
-        return;
-    }
-
-    $args = array(
-        'post_type'      => 'product',
-        'posts_per_page' => -1,
-        'post_status'    => 'any',
-    );
-
-    $produtos = new WP_Query( $args );
-
-    if ( $produtos->have_posts() ) {
-        while ( $produtos->have_posts() ) {
-            $produtos->the_post();
-            aer_atualizar_data_limite_produto( get_the_ID() );
-        }
-        wp_reset_postdata();
-    }
-
-    die( 'Script finalizado com sucesso! As datas iniciais de todas as excursões foram salvas.' );
-}
 ?>

@@ -5,11 +5,15 @@ function aer_proximas_excursoes($excursoes, $filter = null)
     return [];
   }
 
+  
   $proximas_exc = [];
   $agora = time();
 
   foreach ($excursoes as $excursao) {
     $exc_id = $excursao->get_id();
+    //obter a meta "data_inicio_excursao" para ordenar as excursões próximas e adicionar ao objeto da excursão
+    $data_inicio_excursao = get_post_meta($exc_id, 'data_inicio_excursao', true);
+    $excursao->data_inicio_excursao = $data_inicio_excursao;
 
     // Filtro de Destaque: aproveita o objeto já existente
     if ($filter === 'destaque') {
@@ -17,6 +21,7 @@ function aer_proximas_excursoes($excursoes, $filter = null)
       if ($excursao->is_featured()) {
         $proximas_exc[] = $excursao;
       }
+
       continue;
     }
 
@@ -37,6 +42,14 @@ function aer_proximas_excursoes($excursoes, $filter = null)
       break;
     }
   }
+
+
+  //ordena os produtos pela meta "data_inicio_excursao" após adicionar à lista, data mais antiga primeiro
+  usort($proximas_exc, function ($a, $b) {
+    $a_data = $a->data_inicio_excursao ?? get_post_meta($a->get_id(), 'data_inicio_excursao', true);
+    $b_data = $b->data_inicio_excursao ?? get_post_meta($b->get_id(), 'data_inicio_excursao', true);
+    return $a_data <=> $b_data;
+  });
 
   return $proximas_exc;
 }

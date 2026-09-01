@@ -44,7 +44,7 @@ function aer_get_hero_data()
         ]
       ],
       'orderby'     => 'meta_value_num',
-      'meta_key'    => 'data_limite_excursao', // Necessário para o orderby saber qual meta usar
+      'meta_key'    => 'data_inicio_excursao', // Necessário para o orderby saber qual meta usar
       'order'       => 'ASC',
     ]);
 
