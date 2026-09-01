@@ -11,6 +11,9 @@ class Single_Product_Helper
     $product = wc_get_product($product_id);
     if (!$product) return null;
 
+    // obter os resultados de taxonomia exc_venue
+    $venue_terms = wp_get_post_terms($product_id, 'exc_venue', array('fields' => 'all'));
+
     $variacoes = $product->get_available_variations();
 
     // agrupa os ids de embarque globais e embarques por variação
@@ -79,7 +82,7 @@ class Single_Product_Helper
       'img'           => wp_get_attachment_image_src($product->get_image_id(), 'full')[0] ?? null,
       'variacoes'     => $variacoes,
       'datas'         => $datas,
-      'local'         => get_post_meta($product_id, 'local_evento', true),
+      'local'         => $venue_terms[0] ? $venue_terms[0]->name . ' / ' . $venue_terms[0]->description : get_post_meta($product_id, 'local_evento', true),
       'chegada'       => get_post_meta($product_id, 'previsao_chegada', true),
       'ingressos'     => [
         'url'   => get_post_meta($product_id, 'ingressos_link', true),

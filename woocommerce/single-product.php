@@ -47,7 +47,7 @@ $header_type_class = get_theme_mod('theme_header_type', 'header-fixed');
 
 
 
-          <?php if ($excursao['id'] == 7484): ?>
+          <?php if ($excursao['id'] == 748400): ?>
             <div class="promo-badge mb-md-3" id="promoBadge">
                 <!-- Imagem de fundo e overlay escuro -->
                 <div class="promo-bg" id="promoBg"></div>
