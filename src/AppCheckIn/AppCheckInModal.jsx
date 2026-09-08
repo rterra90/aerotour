@@ -125,7 +125,7 @@ const AppCheckInModal = ({
   function successCheckIn(success, paxId, sentido, valor) {
     console.log('check_in', success);
     setPassageiros((prev) =>
-      prev.map((p) => (p.ID === paxId ? { ...p, [sentido]: valor } : p)),
+      prev.map((p) => (p.id === paxId ? { ...p, [sentido]: valor } : p)),
     );
   }
   return (
@@ -233,7 +233,7 @@ const AppCheckInModal = ({
                         <ul>
                           {grupo.passageiros.map((pax) => (
                             <AppCheckInPaxLi
-                              key={pax.ID}
+                              key={pax.id}
                               pax={pax}
                               setModalPax={setModalPax}
                               toggleCheck={toggleCheck}
@@ -248,7 +248,7 @@ const AppCheckInModal = ({
                     {passageirosProcessados.map((pax) => {
                       return (
                         <AppCheckInPaxLi
-                          key={pax.ID}
+                          key={pax.id}
                           pax={pax}
                           setModalPax={setModalPax}
                           toggleCheck={toggleCheck}

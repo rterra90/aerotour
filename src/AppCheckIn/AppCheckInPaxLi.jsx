@@ -5,7 +5,7 @@ import { Check } from 'lucide-react';
 
 const AppCheckInPaxLi = ({ pax, setModalPax, toggleCheck }) => {
   return (
-    <li key={pax.ID} className="pax-item">
+    <li key={pax.id} className="pax-item">
       <span
         className="pax-nome"
         onClick={() => setModalPax(pax)}
@@ -21,7 +21,7 @@ const AppCheckInPaxLi = ({ pax, setModalPax, toggleCheck }) => {
           }`}
           onClick={({ currentTarget }) =>
             pax.rota != 3 &&
-            toggleCheck(pax.ID, 'saida', !pax.saida, currentTarget)
+            toggleCheck(pax.id, 'saida', !pax.saida, currentTarget)
           }
         >
           {pax.saida && <Check size={14} strokeWidth={5} />}
@@ -32,7 +32,7 @@ const AppCheckInPaxLi = ({ pax, setModalPax, toggleCheck }) => {
           }`}
           onClick={({ currentTarget }) =>
             pax.rota != 2 &&
-            toggleCheck(pax.ID, 'volta', !pax.volta, currentTarget)
+            toggleCheck(pax.id, 'volta', !pax.volta, currentTarget)
           }
         >
           {pax.volta && <Check size={14} strokeWidth={5} />}

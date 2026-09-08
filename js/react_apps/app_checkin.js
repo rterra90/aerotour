@@ -7,7 +7,11 @@
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    try {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    } catch (e) {
+      throw mod = 0, e;
+    }
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -34,24 +38,24 @@
         (function() {
           "use strict";
           var hasSymbol = typeof Symbol === "function" && Symbol.for;
-          var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for("react.element") : 60103;
-          var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for("react.portal") : 60106;
-          var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for("react.fragment") : 60107;
-          var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for("react.strict_mode") : 60108;
-          var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for("react.profiler") : 60114;
-          var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for("react.provider") : 60109;
-          var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for("react.context") : 60110;
-          var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for("react.async_mode") : 60111;
-          var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for("react.concurrent_mode") : 60111;
-          var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for("react.forward_ref") : 60112;
-          var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for("react.suspense") : 60113;
-          var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for("react.suspense_list") : 60120;
-          var REACT_MEMO_TYPE = hasSymbol ? Symbol.for("react.memo") : 60115;
-          var REACT_LAZY_TYPE = hasSymbol ? Symbol.for("react.lazy") : 60116;
-          var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for("react.block") : 60121;
-          var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for("react.fundamental") : 60117;
-          var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for("react.responder") : 60118;
-          var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for("react.scope") : 60119;
+          var REACT_ELEMENT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.element") : 60103;
+          var REACT_PORTAL_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.portal") : 60106;
+          var REACT_FRAGMENT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.fragment") : 60107;
+          var REACT_STRICT_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.strict_mode") : 60108;
+          var REACT_PROFILER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.profiler") : 60114;
+          var REACT_PROVIDER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.provider") : 60109;
+          var REACT_CONTEXT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.context") : 60110;
+          var REACT_ASYNC_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.async_mode") : 60111;
+          var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.concurrent_mode") : 60111;
+          var REACT_FORWARD_REF_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.forward_ref") : 60112;
+          var REACT_SUSPENSE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.suspense") : 60113;
+          var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.suspense_list") : 60120;
+          var REACT_MEMO_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.memo") : 60115;
+          var REACT_LAZY_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.lazy") : 60116;
+          var REACT_BLOCK_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.block") : 60121;
+          var REACT_FUNDAMENTAL_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.fundamental") : 60117;
+          var REACT_RESPONDER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.responder") : 60118;
+          var REACT_SCOPE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.scope") : 60119;
           function isValidElementType(type) {
             return typeof type === "string" || typeof type === "function" || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
             type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === "object" && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
@@ -814,19 +818,19 @@
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
           var ReactVersion = "18.3.1";
-          var REACT_ELEMENT_TYPE = Symbol.for("react.element");
-          var REACT_PORTAL_TYPE = Symbol.for("react.portal");
-          var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
-          var REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");
-          var REACT_PROFILER_TYPE = Symbol.for("react.profiler");
-          var REACT_PROVIDER_TYPE = Symbol.for("react.provider");
-          var REACT_CONTEXT_TYPE = Symbol.for("react.context");
-          var REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
-          var REACT_SUSPENSE_TYPE = Symbol.for("react.suspense");
-          var REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list");
-          var REACT_MEMO_TYPE = Symbol.for("react.memo");
-          var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-          var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
+          var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element");
+          var REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal");
+          var REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment");
+          var REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode");
+          var REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler");
+          var REACT_PROVIDER_TYPE = /* @__PURE__ */ Symbol.for("react.provider");
+          var REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context");
+          var REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref");
+          var REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense");
+          var REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list");
+          var REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo");
+          var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+          var REACT_OFFSCREEN_TYPE = /* @__PURE__ */ Symbol.for("react.offscreen");
           var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
           var FAUX_ITERATOR_SYMBOL = "@@iterator";
           function getIteratorFn(maybeIterable) {
@@ -1790,7 +1794,7 @@
           }
           var REACT_MODULE_REFERENCE;
           {
-            REACT_MODULE_REFERENCE = Symbol.for("react.module.reference");
+            REACT_MODULE_REFERENCE = /* @__PURE__ */ Symbol.for("react.module.reference");
           }
           function isValidElementType(type) {
             if (typeof type === "string" || typeof type === "function") {
@@ -2697,19 +2701,19 @@
         (function() {
           "use strict";
           var React2 = require_react();
-          var REACT_ELEMENT_TYPE = Symbol.for("react.element");
-          var REACT_PORTAL_TYPE = Symbol.for("react.portal");
-          var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
-          var REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");
-          var REACT_PROFILER_TYPE = Symbol.for("react.profiler");
-          var REACT_PROVIDER_TYPE = Symbol.for("react.provider");
-          var REACT_CONTEXT_TYPE = Symbol.for("react.context");
-          var REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
-          var REACT_SUSPENSE_TYPE = Symbol.for("react.suspense");
-          var REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list");
-          var REACT_MEMO_TYPE = Symbol.for("react.memo");
-          var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-          var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
+          var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element");
+          var REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal");
+          var REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment");
+          var REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode");
+          var REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler");
+          var REACT_PROVIDER_TYPE = /* @__PURE__ */ Symbol.for("react.provider");
+          var REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context");
+          var REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref");
+          var REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense");
+          var REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list");
+          var REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo");
+          var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+          var REACT_OFFSCREEN_TYPE = /* @__PURE__ */ Symbol.for("react.offscreen");
           var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
           var FAUX_ITERATOR_SYMBOL = "@@iterator";
           function getIteratorFn(maybeIterable) {
@@ -2755,7 +2759,7 @@
           var enableDebugTracing = false;
           var REACT_MODULE_REFERENCE;
           {
-            REACT_MODULE_REFERENCE = Symbol.for("react.module.reference");
+            REACT_MODULE_REFERENCE = /* @__PURE__ */ Symbol.for("react.module.reference");
           }
           function isValidElementType(type) {
             if (typeof type === "string" || typeof type === "function") {
@@ -3794,7 +3798,7 @@
           "button",
           {
             className: `check-box ${pax.saida ? "checked" : ""} ${pax.rota == 3 ? "disabled" : ""}`,
-            onClick: ({ currentTarget }) => pax.rota != 3 && toggleCheck(pax.ID, "saida", !pax.saida, currentTarget),
+            onClick: ({ currentTarget }) => pax.rota != 3 && toggleCheck(pax.id, "saida", !pax.saida, currentTarget),
             children: pax.saida && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 5 })
           }
         ),
@@ -3802,12 +3806,12 @@
           "button",
           {
             className: `check-box ${pax.volta ? "checked" : ""} ${pax.rota == 2 ? "disabled" : ""}`,
-            onClick: ({ currentTarget }) => pax.rota != 2 && toggleCheck(pax.ID, "volta", !pax.volta, currentTarget),
+            onClick: ({ currentTarget }) => pax.rota != 2 && toggleCheck(pax.id, "volta", !pax.volta, currentTarget),
             children: pax.volta && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 14, strokeWidth: 5 })
           }
         )
       ] })
-    ] }, pax.ID);
+    ] }, pax.id);
   };
   AppCheckInPaxLi.propTypes = {
     pax: import_prop_types2.default.object.isRequired,
@@ -3819,10 +3823,8 @@
   // src/Utilities.jsx
   function convertDate(inputDate, action) {
     function detectFormat(dateStr) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr))
-        return "ISO";
-      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr))
-        return "DMY";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return "ISO";
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return "DMY";
       return "UNKNOWN";
     }
     function dmyToIso(dmy) {
@@ -3881,8 +3883,7 @@
       if (_sortType === "boarding") {
         const agrupado = list.reduce((acc, pax) => {
           const embarque = pax.embarque || "Sem embarque";
-          if (!acc[embarque])
-            acc[embarque] = [];
+          if (!acc[embarque]) acc[embarque] = [];
           acc[embarque].push(pax);
           return acc;
         }, {});
@@ -3897,10 +3898,8 @@
       return list;
     };
     const filterPassageiros = (list) => {
-      if (filterType === "sem-ida")
-        return list.filter((p) => !p.saida);
-      if (filterType === "sem-volta")
-        return list.filter((p) => !p.volta);
+      if (filterType === "sem-ida") return list.filter((p) => !p.saida);
+      if (filterType === "sem-volta") return list.filter((p) => !p.volta);
       return list;
     };
     const passageirosProcessados = React.useMemo(() => {
@@ -3941,8 +3940,7 @@
       };
     }, []);
     const toggleCheck = (paxId, sentido, valor, element) => {
-      if (element.classList.contains("loading"))
-        return;
+      if (element.classList.contains("loading")) return;
       element.classList.add("loading");
       if (element.children[0] && element.children[0].tagName === "svg")
         element.children[0].style.visibility = "hidden";
@@ -3959,7 +3957,7 @@
     function successCheckIn(success, paxId, sentido, valor) {
       console.log("check_in", success);
       setPassageiros(
-        (prev) => prev.map((p) => p.ID === paxId ? { ...p, [sentido]: valor } : p)
+        (prev) => prev.map((p) => p.id === paxId ? { ...p, [sentido]: valor } : p)
       );
     }
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { id: "checkInModal", ref: modalElement, children: [
@@ -4068,7 +4066,7 @@
                 setModalPax,
                 toggleCheck
               },
-              pax.ID
+              pax.id
             )) })
           ] }, grupo.embarque)) }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: passageirosProcessados.map((pax) => {
             return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
@@ -4078,7 +4076,7 @@
                 setModalPax,
                 toggleCheck
               },
-              pax.ID
+              pax.id
             );
           }) }) }) })
         ] })
@@ -4102,8 +4100,7 @@
     const [modalOpen, setModalOpen] = React.useState(false);
     const listaExcursoesElement = React.useRef(null);
     function openCheckInModal(variation_id, data) {
-      if (modalOpen)
-        return;
+      if (modalOpen) return;
       listaExcursoesElement.current.scrollIntoView({
         behavior: "smooth",
         block: "start"
@@ -4118,8 +4115,7 @@
         "get_excursoes",
         { filter: "variacoes" },
         (success, data) => {
-          if (cancelled)
-            return;
+          if (cancelled) return;
           if (success && data?.atuais) {
             console.log("get_excursoes", success, data);
             setExcursoes(data.atuais);
@@ -4233,61 +4229,12 @@ react/cjs/react-jsx-runtime.development.js:
    *)
 
 lucide-react/dist/esm/shared/src/utils.js:
-  (**
-   * @license lucide-react v0.548.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/defaultAttributes.js:
-  (**
-   * @license lucide-react v0.548.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/Icon.js:
-  (**
-   * @license lucide-react v0.548.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/createLucideIcon.js:
-  (**
-   * @license lucide-react v0.548.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/icons/check.js:
-  (**
-   * @license lucide-react v0.548.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/icons/phone.js:
-  (**
-   * @license lucide-react v0.548.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/icons/send.js:
-  (**
-   * @license lucide-react v0.548.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
 lucide-react/dist/esm/lucide-react.js:
   (**
    * @license lucide-react v0.548.0 - ISC
