@@ -10942,7 +10942,7 @@
             setToast,
             adminAjax
           },
-          reserva.ID
+          reserva.id
         )) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(

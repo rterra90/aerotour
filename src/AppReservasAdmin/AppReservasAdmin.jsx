@@ -116,7 +116,7 @@ function AppReservasAdmin({ ajaxUrl }) {
         <tbody>
           {reservasPaginadas.map(reserva => (
             <ItemReserva
-              key={reserva.ID}
+              key={reserva.id}
               reserva={reserva}
               excDetails={excDetails}
               setToast={setToast}
