@@ -126,12 +126,12 @@ function renderizar_pagina_moderacao_passageiros() {
     }, $solicitacoes);
     $reservas_ids_str = implode(',', array_map('intval', $reservas_ids));
 
-    $reservas_originais = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}reservas WHERE ID IN($reservas_ids_str)");
+    $reservas_originais = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}reservas WHERE id IN($reservas_ids_str)");
     
     $table_items = array();
     
     foreach($solicitacoes as $solic){
-        $original = array_filter($reservas_originais, function($r) use($solic) { return $r -> ID == $solic -> reserva_id; });
+        $original = array_filter($reservas_originais, function($r) use($solic) { return $r -> id == $solic -> reserva_id; });
         $original = array_values($original)[0];
 
         $item = array(
