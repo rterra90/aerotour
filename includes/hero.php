@@ -28,6 +28,8 @@ if (count($destaques_hero) > 0): ?>
           aer_proximas_excursoes($excursoes, 'destaque')
           as $_i => $excursao
       ) {
+          $venue = wp_get_post_terms($excursao->get_id(), 'exc_venue', array('fields' => 'all'));
+          $local_evento = isset($venue[0]) ? $venue[0]->name . ' / ' . $venue[0]->description : get_post_meta($excursao->get_id(), 'local_evento', true);
           $datas_array = $excursao->attributes['dia']['options'];
           $img = wp_get_attachment_image_src(
               get_post_thumbnail_id($excursao->get_id()),
@@ -111,11 +113,7 @@ if (count($destaques_hero) > 0): ?>
                       <div class="hero-local-wrapper hero-colored-bg">
                         <?= aer_icons('pin', 18, 18) ?>
                         <span>
-                        <?= get_post_meta(
-                            $excursao->get_id(),
-                            'local_evento',
-                            true,
-                        ) ?></span></div>
+                        <?= $local_evento; ?></span></div>
 
                     </div>
                   </div>

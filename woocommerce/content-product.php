@@ -23,6 +23,6 @@ global $product;
 if ( empty( $product ) || ! $product->is_visible() ) {
 	return;
 }
-include __DIR__ . '/../includes/aer-card.php'
+// include __DIR__ . '/../includes/aer-card.php'
 ?>
 

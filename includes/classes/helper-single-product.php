@@ -76,13 +76,14 @@ class Single_Product_Helper
     }
 
     $datas = self::get_datas_da_excursao($product);
+    $local_do_evento = isset($venue_terms) && !empty($venue_terms) ? $venue_terms[0]->name . ' / ' . $venue_terms[0]->description : get_post_meta($product_id, 'local_evento', true);
     return [
       'id'            => $product_id,
       'nome'          => $product->get_name(),
       'img'           => wp_get_attachment_image_src($product->get_image_id(), 'full')[0] ?? null,
       'variacoes'     => $variacoes,
       'datas'         => $datas,
-      'local'         => $venue_terms[0] ? $venue_terms[0]->name . ' / ' . $venue_terms[0]->description : get_post_meta($product_id, 'local_evento', true),
+      'local'         => $local_do_evento,
       'chegada'       => get_post_meta($product_id, 'previsao_chegada', true),
       'ingressos'     => [
         'url'   => get_post_meta($product_id, 'ingressos_link', true),

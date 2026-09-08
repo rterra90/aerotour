@@ -59,6 +59,8 @@ foreach ($reservas_db as $reg) {
 
   $data_pt = $variacao->get_attribute('dia'); // "dd/mm/aaaa"
   $data_iso = implode('-', array_reverse(explode('/', $data_pt))); // "aaaa-mm-dd"
+  $venue = wp_get_post_terms($variacao->get_parent_id(), 'exc_venue', array('fields' => 'all'));
+  $local_evento = isset($venue[0]) ? $venue[0]->name . ' / ' . $venue[0]->description : get_post_meta($variacao->get_parent_id(), 'local_evento', true);
 
   // Dados do passageiro
   $passageiro = [
@@ -81,7 +83,7 @@ foreach ($reservas_db as $reg) {
         'id' => $v_id,
         'nome' => substr($variacao->get_title(), 0, -5),
         'data' => $data_pt,
-        'local_evento' => get_post_meta($variacao->get_parent_id(), 'local_evento', true),
+        'local_evento' => $local_evento,
         'passageiros' => [],
 
 
@@ -101,7 +103,7 @@ foreach ($reservas_db as $reg) {
       'nome' => substr($variacao->get_title(), 0, -5),
       'data' => $data_pt,
       'data_std' => $data_iso,
-      'local_evento' => get_post_meta($variacao->get_parent_id(), 'local_evento', true),
+        'local_evento' => $local_evento,
       'local_embarque' => $local_embarque,
       'horario' => substr($reg['horario'], 0, -3) ?: '00:00',
       'img' => $variacao->get_image('medium'),

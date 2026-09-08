@@ -72,11 +72,11 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
         switch (target.dataset.opcao) {
           case 'Cancelar reserva':
             target.parentElement.classList.add('loading');
-            adminAjax.update_reserva(reserva.ID, 'cancelar', updateReservaDom);
+            adminAjax.update_reserva(reserva.id, 'cancelar', updateReservaDom);
             break;
           case 'Reativar reserva':
             target.parentElement.classList.add('loading');
-            adminAjax.update_reserva(reserva.ID, 'reativar', updateReservaDom);
+            adminAjax.update_reserva(reserva.id, 'reativar', updateReservaDom);
             break;
 
           case 'Copiar dados':
@@ -158,7 +158,7 @@ const ItemReserva = ({ reserva, excDetails, adminAjax, setToast }) => {
 
 
   return (
-    <tr onClick={openOptionsMenu} data-reserva-id={reserva.ID} className={reserva.status === 'cancel' ? 'reserva-cancelada' : ''}>
+    <tr onClick={openOptionsMenu} data-reserva-id={reserva.id} className={reserva.status === 'cancel' ? 'reserva-cancelada' : ''}>
       <td data-coluna="order-id">
         <a href={orderLink}>{reserva.order_id}</a>
       </td>

@@ -27,16 +27,6 @@ function exc_advanced_details()
       <?= wc_help_tip('Selecione os produtos antigos. Nestes produtos, um aviso será exibido redirecionando para esta página atual.'); ?>
     </p>
   </div>
-  <!-- Local do evento -->
-  <div class="options_group options_group_local_evento">
-    <?php woocommerce_wp_text_input([
-      'id' => 'meta_local_evento',
-      'value' => get_post_meta(get_the_ID(), 'local_evento', true),
-      'label' => 'Local do evento',
-      'desc_tip' => true,
-      'description' => 'Ex.: Allianz Park/SP'
-    ]); ?>
-  </div>
   <!-- Previsão de chegada -->
   <div class="options_group">
     <?php woocommerce_wp_text_input([

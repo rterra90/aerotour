@@ -5,7 +5,8 @@ if (!$excursao) {
 }
 
 $ex_id = $excursao->get_id();
-$local_evento = get_post_meta($excursao->get_id(), 'local_evento', true);
+$venue = wp_get_post_terms($excursao->get_id(), 'exc_venue', array('fields' => 'all'));
+$local_evento = isset($venue[0]) ? $venue[0]->name . ' / ' . $venue[0]->description : get_post_meta($excursao->get_id(), 'local_evento', true);
 $img_url = wp_get_attachment_image_src(
   get_post_thumbnail_id($excursao->get_id()),
   'medium'

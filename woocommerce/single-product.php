@@ -309,6 +309,7 @@ background: linear-gradient(90deg, rgb(64 15 15 / 66%) 0%, rgb(35 8 8 / 80%) 50%
             <?php Single_Product_Template::render_info_grid($excursao); ?>
           </section>
 
+
           <a href="#reservaBox" class="cta-button">
             <?= aer_icons('bookmark-light', 16, 16, '.webp') ?> Reservar agora
           </a>
@@ -356,5 +357,7 @@ background: linear-gradient(90deg, rgb(64 15 15 / 66%) 0%, rgb(35 8 8 / 80%) 50%
   </div>
 </section>
 <?php Single_Product_Template::render_product_modals($excursao); ?>
+
+
 
 <?php get_footer(); ?>

@@ -7,7 +7,11 @@
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    try {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    } catch (e) {
+      throw mod = 0, e;
+    }
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -34,24 +38,24 @@
         (function() {
           "use strict";
           var hasSymbol = typeof Symbol === "function" && Symbol.for;
-          var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for("react.element") : 60103;
-          var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for("react.portal") : 60106;
-          var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for("react.fragment") : 60107;
-          var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for("react.strict_mode") : 60108;
-          var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for("react.profiler") : 60114;
-          var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for("react.provider") : 60109;
-          var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for("react.context") : 60110;
-          var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for("react.async_mode") : 60111;
-          var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for("react.concurrent_mode") : 60111;
-          var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for("react.forward_ref") : 60112;
-          var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for("react.suspense") : 60113;
-          var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for("react.suspense_list") : 60120;
-          var REACT_MEMO_TYPE = hasSymbol ? Symbol.for("react.memo") : 60115;
-          var REACT_LAZY_TYPE = hasSymbol ? Symbol.for("react.lazy") : 60116;
-          var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for("react.block") : 60121;
-          var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for("react.fundamental") : 60117;
-          var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for("react.responder") : 60118;
-          var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for("react.scope") : 60119;
+          var REACT_ELEMENT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.element") : 60103;
+          var REACT_PORTAL_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.portal") : 60106;
+          var REACT_FRAGMENT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.fragment") : 60107;
+          var REACT_STRICT_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.strict_mode") : 60108;
+          var REACT_PROFILER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.profiler") : 60114;
+          var REACT_PROVIDER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.provider") : 60109;
+          var REACT_CONTEXT_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.context") : 60110;
+          var REACT_ASYNC_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.async_mode") : 60111;
+          var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.concurrent_mode") : 60111;
+          var REACT_FORWARD_REF_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.forward_ref") : 60112;
+          var REACT_SUSPENSE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.suspense") : 60113;
+          var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.suspense_list") : 60120;
+          var REACT_MEMO_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.memo") : 60115;
+          var REACT_LAZY_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.lazy") : 60116;
+          var REACT_BLOCK_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.block") : 60121;
+          var REACT_FUNDAMENTAL_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.fundamental") : 60117;
+          var REACT_RESPONDER_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.responder") : 60118;
+          var REACT_SCOPE_TYPE = hasSymbol ? /* @__PURE__ */ Symbol.for("react.scope") : 60119;
           function isValidElementType(type) {
             return typeof type === "string" || typeof type === "function" || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
             type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === "object" && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
@@ -814,19 +818,19 @@
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
           var ReactVersion = "18.3.1";
-          var REACT_ELEMENT_TYPE = Symbol.for("react.element");
-          var REACT_PORTAL_TYPE = Symbol.for("react.portal");
-          var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
-          var REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");
-          var REACT_PROFILER_TYPE = Symbol.for("react.profiler");
-          var REACT_PROVIDER_TYPE = Symbol.for("react.provider");
-          var REACT_CONTEXT_TYPE = Symbol.for("react.context");
-          var REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
-          var REACT_SUSPENSE_TYPE = Symbol.for("react.suspense");
-          var REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list");
-          var REACT_MEMO_TYPE = Symbol.for("react.memo");
-          var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-          var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
+          var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element");
+          var REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal");
+          var REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment");
+          var REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode");
+          var REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler");
+          var REACT_PROVIDER_TYPE = /* @__PURE__ */ Symbol.for("react.provider");
+          var REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context");
+          var REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref");
+          var REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense");
+          var REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list");
+          var REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo");
+          var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+          var REACT_OFFSCREEN_TYPE = /* @__PURE__ */ Symbol.for("react.offscreen");
           var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
           var FAUX_ITERATOR_SYMBOL = "@@iterator";
           function getIteratorFn(maybeIterable) {
@@ -1790,7 +1794,7 @@
           }
           var REACT_MODULE_REFERENCE;
           {
-            REACT_MODULE_REFERENCE = Symbol.for("react.module.reference");
+            REACT_MODULE_REFERENCE = /* @__PURE__ */ Symbol.for("react.module.reference");
           }
           function isValidElementType(type) {
             if (typeof type === "string" || typeof type === "function") {
@@ -2697,19 +2701,19 @@
         (function() {
           "use strict";
           var React2 = require_react();
-          var REACT_ELEMENT_TYPE = Symbol.for("react.element");
-          var REACT_PORTAL_TYPE = Symbol.for("react.portal");
-          var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
-          var REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");
-          var REACT_PROFILER_TYPE = Symbol.for("react.profiler");
-          var REACT_PROVIDER_TYPE = Symbol.for("react.provider");
-          var REACT_CONTEXT_TYPE = Symbol.for("react.context");
-          var REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
-          var REACT_SUSPENSE_TYPE = Symbol.for("react.suspense");
-          var REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list");
-          var REACT_MEMO_TYPE = Symbol.for("react.memo");
-          var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-          var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
+          var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element");
+          var REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal");
+          var REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment");
+          var REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode");
+          var REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler");
+          var REACT_PROVIDER_TYPE = /* @__PURE__ */ Symbol.for("react.provider");
+          var REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context");
+          var REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref");
+          var REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense");
+          var REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list");
+          var REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo");
+          var REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+          var REACT_OFFSCREEN_TYPE = /* @__PURE__ */ Symbol.for("react.offscreen");
           var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
           var FAUX_ITERATOR_SYMBOL = "@@iterator";
           function getIteratorFn(maybeIterable) {
@@ -2755,7 +2759,7 @@
           var enableDebugTracing = false;
           var REACT_MODULE_REFERENCE;
           {
-            REACT_MODULE_REFERENCE = Symbol.for("react.module.reference");
+            REACT_MODULE_REFERENCE = /* @__PURE__ */ Symbol.for("react.module.reference");
           }
           function isValidElementType(type) {
             if (typeof type === "string" || typeof type === "function") {
@@ -3829,18 +3833,15 @@
     const orderLink = `${theme_links.adminUrl}post.php?post=${reserva.order_id}&action=edit`;
     const dia = excDetails["id_" + reserva.variation_id] ? excDetails["id_" + reserva.variation_id][1] : "";
     const rotaDaViagem = () => {
-      if (reserva.rota === "2")
-        return "\u27A1";
-      if (reserva.rota === "3")
-        return "\u2B05";
+      if (reserva.rota === "2") return "\u27A1";
+      if (reserva.rota === "3") return "\u2B05";
       return "";
     };
     function getAncestorByTag(element, tagName) {
       let ancestor = element;
       tagName = tagName.toLowerCase();
       while (ancestor) {
-        if (ancestor.tagName.toLowerCase() === tagName)
-          return ancestor;
+        if (ancestor.tagName.toLowerCase() === tagName) return ancestor;
         ancestor = ancestor.parentElement;
       }
       return null;
@@ -3867,8 +3868,7 @@
       );
       if (domElement) {
         setCurrentReserva(reservaAtualizada);
-        if (reservaAtualizada.status === "cancel")
-          domElement.classList.add("reserva-cancelada");
+        if (reservaAtualizada.status === "cancel") domElement.classList.add("reserva-cancelada");
         else {
           domElement.classList.remove("reserva-cancelada");
         }
@@ -3888,11 +3888,11 @@
           switch (target.dataset.opcao) {
             case "Cancelar reserva":
               target.parentElement.classList.add("loading");
-              adminAjax.update_reserva(reserva.ID, "cancelar", updateReservaDom);
+              adminAjax.update_reserva(reserva.id, "cancelar", updateReservaDom);
               break;
             case "Reativar reserva":
               target.parentElement.classList.add("loading");
-              adminAjax.update_reserva(reserva.ID, "reativar", updateReservaDom);
+              adminAjax.update_reserva(reserva.id, "reativar", updateReservaDom);
               break;
             case "Copiar dados":
               copyToClipboard(
@@ -3933,12 +3933,10 @@
         opcoes.forEach((_opcao) => {
           switch (_opcao) {
             case "Reativar reserva":
-              if (currentReserva.status === "cancel")
-                menuOption(_opcao);
+              if (currentReserva.status === "cancel") menuOption(_opcao);
               break;
             case "Cancelar reserva":
-              if (currentReserva.status !== "cancel")
-                menuOption(_opcao);
+              if (currentReserva.status !== "cancel") menuOption(_opcao);
               break;
             default:
               menuOption(_opcao);
@@ -3955,7 +3953,7 @@
         }, 80);
       }
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("tr", { onClick: openOptionsMenu, "data-reserva-id": reserva.ID, className: reserva.status === "cancel" ? "reserva-cancelada" : "", children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("tr", { onClick: openOptionsMenu, "data-reserva-id": reserva.id, className: reserva.status === "cancel" ? "reserva-cancelada" : "", children: [
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("td", { "data-coluna": "order-id", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("a", { href: orderLink, children: reserva.order_id }) }),
       /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("td", { "data-coluna": "excursao", children: [
         excDetails["id_" + reserva.variation_id] ? excDetails["id_" + reserva.variation_id][0] : "",
@@ -4052,8 +4050,7 @@
     /* MISC */
   };
   var set_ansi = function(cp) {
-    if (VALID_ANSI.indexOf(cp) == -1)
-      return;
+    if (VALID_ANSI.indexOf(cp) == -1) return;
     current_ansi = CS2CP[0] = cp;
   };
   function reset_ansi() {
@@ -4139,72 +4136,61 @@
     }
     return o;
   }
-  var has_buf = /* @__PURE__ */ function() {
+  var has_buf = /* @__PURE__ */ (function() {
     return typeof Buffer !== "undefined" && typeof process !== "undefined" && typeof process.versions !== "undefined" && !!process.versions.node;
-  }();
-  var Buffer_from = /* @__PURE__ */ function() {
+  })();
+  var Buffer_from = /* @__PURE__ */ (function() {
     if (typeof Buffer !== "undefined") {
       var nbfs = !Buffer.from;
-      if (!nbfs)
-        try {
-          Buffer.from("foo", "utf8");
-        } catch (e) {
-          nbfs = true;
-        }
+      if (!nbfs) try {
+        Buffer.from("foo", "utf8");
+      } catch (e) {
+        nbfs = true;
+      }
       return nbfs ? function(buf, enc) {
         return enc ? new Buffer(buf, enc) : new Buffer(buf);
       } : Buffer.from.bind(Buffer);
     }
     return function() {
     };
-  }();
-  var buf_utf16le = /* @__PURE__ */ function() {
-    if (typeof Buffer === "undefined")
-      return false;
+  })();
+  var buf_utf16le = /* @__PURE__ */ (function() {
+    if (typeof Buffer === "undefined") return false;
     var x = Buffer_from([65, 0]);
-    if (!x)
-      return false;
+    if (!x) return false;
     var o = x.toString("utf16le");
     return o.length == 1;
-  }();
+  })();
   function new_raw_buf(len) {
-    if (has_buf)
-      return Buffer.alloc ? Buffer.alloc(len) : new Buffer(len);
+    if (has_buf) return Buffer.alloc ? Buffer.alloc(len) : new Buffer(len);
     return typeof Uint8Array != "undefined" ? new Uint8Array(len) : new Array(len);
   }
   function new_unsafe_buf(len) {
-    if (has_buf)
-      return Buffer.allocUnsafe ? Buffer.allocUnsafe(len) : new Buffer(len);
+    if (has_buf) return Buffer.allocUnsafe ? Buffer.allocUnsafe(len) : new Buffer(len);
     return typeof Uint8Array != "undefined" ? new Uint8Array(len) : new Array(len);
   }
   var s2a = function s2a2(s) {
-    if (has_buf)
-      return Buffer_from(s, "binary");
+    if (has_buf) return Buffer_from(s, "binary");
     return s.split("").map(function(x) {
       return x.charCodeAt(0) & 255;
     });
   };
   function s2ab(s) {
-    if (typeof ArrayBuffer === "undefined")
-      return s2a(s);
+    if (typeof ArrayBuffer === "undefined") return s2a(s);
     var buf = new ArrayBuffer(s.length), view = new Uint8Array(buf);
-    for (var i = 0; i != s.length; ++i)
-      view[i] = s.charCodeAt(i) & 255;
+    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 255;
     return buf;
   }
   function a2s(data) {
-    if (Array.isArray(data))
-      return data.map(function(c) {
-        return String.fromCharCode(c);
-      }).join("");
+    if (Array.isArray(data)) return data.map(function(c) {
+      return String.fromCharCode(c);
+    }).join("");
     var o = [];
-    for (var i = 0; i < data.length; ++i)
-      o[i] = String.fromCharCode(data[i]);
+    for (var i = 0; i < data.length; ++i) o[i] = String.fromCharCode(data[i]);
     return o.join("");
   }
   function a2u(data) {
-    if (typeof Uint8Array === "undefined")
-      throw new Error("Unsupported");
+    if (typeof Uint8Array === "undefined") throw new Error("Unsupported");
     return new Uint8Array(data);
   }
   var bconcat = has_buf ? function(bufs) {
@@ -4214,18 +4200,14 @@
   } : function(bufs) {
     if (typeof Uint8Array !== "undefined") {
       var i = 0, maxlen = 0;
-      for (i = 0; i < bufs.length; ++i)
-        maxlen += bufs[i].length;
+      for (i = 0; i < bufs.length; ++i) maxlen += bufs[i].length;
       var o = new Uint8Array(maxlen);
       var len = 0;
       for (i = 0, maxlen = 0; i < bufs.length; maxlen += len, ++i) {
         len = bufs[i].length;
-        if (bufs[i] instanceof Uint8Array)
-          o.set(bufs[i], maxlen);
-        else if (typeof bufs[i] == "string")
-          o.set(new Uint8Array(s2a(bufs[i])), maxlen);
-        else
-          o.set(new Uint8Array(bufs[i]), maxlen);
+        if (bufs[i] instanceof Uint8Array) o.set(bufs[i], maxlen);
+        else if (typeof bufs[i] == "string") o.set(new Uint8Array(s2a(bufs[i])), maxlen);
+        else o.set(new Uint8Array(bufs[i]), maxlen);
       }
       return o;
     }
@@ -4238,8 +4220,7 @@
     var o = new_raw_buf(content.length + 255);
     for (var ridx = 0; ridx < content.length; ++ridx) {
       var c = content.charCodeAt(ridx);
-      if (c < 128)
-        o[widx++] = c;
+      if (c < 128) o[widx++] = c;
       else if (c < 2048) {
         o[widx++] = 192 | c >> 6 & 31;
         o[widx++] = 128 | c & 63;
@@ -4269,8 +4250,7 @@
   var chr1 = /[\u0001-\u0006]/g;
   function _strrev(x) {
     var o = "", i = x.length - 1;
-    while (i >= 0)
-      o += x.charAt(i--);
+    while (i >= 0) o += x.charAt(i--);
     return o;
   }
   function pad0(v, d) {
@@ -4295,8 +4275,7 @@
   }
   var p2_32 = /* @__PURE__ */ Math.pow(2, 32);
   function pad0r(v, d) {
-    if (v > p2_32 || v < -p2_32)
-      return pad0r1(v, d);
+    if (v > p2_32 || v < -p2_32) return pad0r1(v, d);
     var i = Math.round(v);
     return pad0r2(i, d);
   }
@@ -4328,8 +4307,7 @@
     ["D", "Dec", "December"]
   ];
   function SSF_init_table(t) {
-    if (!t)
-      t = {};
+    if (!t) t = {};
     t[0] = "General";
     t[1] = "0";
     t[2] = "0.00";
@@ -4479,8 +4457,7 @@
       A = Math.floor(B);
       P = A * P_1 + P_2;
       Q = A * Q_1 + Q_2;
-      if (B - A < 5e-8)
-        break;
+      if (B - A < 5e-8) break;
       B = 1 / (B - A);
       P_2 = P_1;
       P_1 = P;
@@ -4496,8 +4473,7 @@
         P = P_1;
       }
     }
-    if (!mixed)
-      return [0, sgn * P, Q];
+    if (!mixed) return [0, sgn * P, Q];
     var q = Math.floor(sgn * P / Q);
     return [q, sgn * P - q * Q, Q];
   }
@@ -4512,16 +4488,13 @@
     return Number(n);
   }
   function SSF_parse_date_code(v, opts, b2) {
-    if (v > 2958465 || v < 0)
-      return null;
+    if (v > 2958465 || v < 0) return null;
     v = SSF_normalize_xl_unsafe(v);
     var date = v | 0, time = Math.floor(86400 * (v - date)), dow = 0;
     var dout = [];
     var out = { D: date, T: time, u: 86400 * (v - date) - time, y: 0, m: 0, d: 0, H: 0, M: 0, S: 0, q: 0 };
-    if (Math.abs(out.u) < 1e-6)
-      out.u = 0;
-    if (opts && opts.date1904)
-      date += 1462;
+    if (Math.abs(out.u) < 1e-6) out.u = 0;
+    if (opts && opts.date1904) date += 1462;
     if (out.u > 0.9999) {
       out.u = 0;
       if (++time == 86400) {
@@ -4537,16 +4510,13 @@
       dout = b2 ? [1317, 8, 29] : [1900, 1, 0];
       dow = 6;
     } else {
-      if (date > 60)
-        --date;
+      if (date > 60) --date;
       var d = new Date(1900, 0, 1);
       d.setDate(d.getDate() + date - 1);
       dout = [d.getFullYear(), d.getMonth() + 1, d.getDate()];
       dow = d.getDay();
-      if (date < 60)
-        dow = (dow + 6) % 7;
-      if (b2)
-        dow = SSF_fix_hijri(d, dout);
+      if (date < 60) dow = (dow + 6) % 7;
+      if (b2) dow = SSF_fix_hijri(d, dout);
     }
     out.y = dout[0];
     out.m = dout[1];
@@ -4563,18 +4533,15 @@
     return o.indexOf(".") == -1 ? o : o.replace(/(?:\.0*|(\.\d*[1-9])0+)$/, "$1");
   }
   function SSF_normalize_exp(o) {
-    if (o.indexOf("E") == -1)
-      return o;
+    if (o.indexOf("E") == -1) return o;
     return o.replace(/(?:\.0*|(\.\d*[1-9])0+)[Ee]/, "$1E").replace(/(E[+-])(\d)$/, "$10$2");
   }
   function SSF_small_exp(v) {
     var w = v < 0 ? 12 : 11;
     var o = SSF_strip_decimal(v.toFixed(12));
-    if (o.length <= w)
-      return o;
+    if (o.length <= w) return o;
     o = v.toPrecision(10);
-    if (o.length <= w)
-      return o;
+    if (o.length <= w) return o;
     return v.toExponential(5);
   }
   function SSF_large_exp(v) {
@@ -4582,17 +4549,12 @@
     return o.length > (v < 0 ? 12 : 11) || o === "0" || o === "-0" ? v.toPrecision(6) : o;
   }
   function SSF_general_num(v) {
-    if (!isFinite(v))
-      return isNaN(v) ? "#NUM!" : "#DIV/0!";
+    if (!isFinite(v)) return isNaN(v) ? "#NUM!" : "#DIV/0!";
     var V = Math.floor(Math.log(Math.abs(v)) * Math.LOG10E), o;
-    if (V >= -4 && V <= -1)
-      o = v.toPrecision(10 + V);
-    else if (Math.abs(V) <= 9)
-      o = SSF_small_exp(v);
-    else if (V === 10)
-      o = v.toFixed(10).substr(0, 12);
-    else
-      o = SSF_large_exp(v);
+    if (V >= -4 && V <= -1) o = v.toPrecision(10 + V);
+    else if (Math.abs(V) <= 9) o = SSF_small_exp(v);
+    else if (V === 10) o = v.toFixed(10).substr(0, 12);
+    else o = SSF_large_exp(v);
     return SSF_strip_decimal(SSF_normalize_exp(o.toUpperCase()));
   }
   function SSF_general(v, opts) {
@@ -4606,18 +4568,15 @@
       case "undefined":
         return "";
       case "object":
-        if (v == null)
-          return "";
-        if (v instanceof Date)
-          return SSF_format(14, datenum(v, opts && opts.date1904), opts);
+        if (v == null) return "";
+        if (v instanceof Date) return SSF_format(14, datenum(v, opts && opts.date1904), opts);
     }
     throw new Error("unsupported value in General format: " + v);
   }
   function SSF_fix_hijri(date, o) {
     o[0] -= 581;
     var dow = date.getDay();
-    if (date < 60)
-      dow = (dow + 6) % 7;
+    if (date < 60) dow = (dow + 6) % 7;
     return dow;
   }
   function SSF_write_date(type, fmt, val2, ss0) {
@@ -4625,6 +4584,7 @@
     switch (type) {
       case 98:
         y = val2.y + 543;
+      /* falls through */
       case 121:
         switch (fmt.length) {
           case 1:
@@ -4700,22 +4660,15 @@
         }
         break;
       case 115:
-        if (fmt != "s" && fmt != "ss" && fmt != ".0" && fmt != ".00" && fmt != ".000")
-          throw "bad second format: " + fmt;
-        if (val2.u === 0 && (fmt == "s" || fmt == "ss"))
-          return pad0(val2.S, fmt.length);
-        if (ss0 >= 2)
-          tt = ss0 === 3 ? 1e3 : 100;
-        else
-          tt = ss0 === 1 ? 10 : 1;
+        if (fmt != "s" && fmt != "ss" && fmt != ".0" && fmt != ".00" && fmt != ".000") throw "bad second format: " + fmt;
+        if (val2.u === 0 && (fmt == "s" || fmt == "ss")) return pad0(val2.S, fmt.length);
+        if (ss0 >= 2) tt = ss0 === 3 ? 1e3 : 100;
+        else tt = ss0 === 1 ? 10 : 1;
         ss = Math.round(tt * (val2.S + val2.u));
-        if (ss >= 60 * tt)
-          ss = 0;
-        if (fmt === "s")
-          return ss === 0 ? "0" : "" + ss / tt;
+        if (ss >= 60 * tt) ss = 0;
+        if (fmt === "s") return ss === 0 ? "0" : "" + ss / tt;
         o = pad0(ss, 2 + ss0);
-        if (fmt === "ss")
-          return o.substr(0, 2);
+        if (fmt === "ss") return o.substr(0, 2);
         return "." + o.substr(2, fmt.length - 1);
       case 90:
         switch (fmt) {
@@ -4746,11 +4699,9 @@
   }
   function commaify(s) {
     var w = 3;
-    if (s.length <= w)
-      return s;
+    if (s.length <= w) return s;
     var j = s.length % w, o = s.substr(0, j);
-    for (; j != s.length; j += w)
-      o += (o.length > 0 ? "," : "") + s.substr(j, w);
+    for (; j != s.length; j += w) o += (o.length > 0 ? "," : "") + s.substr(j, w);
     return o;
   }
   var pct1 = /%/g;
@@ -4760,31 +4711,24 @@
   }
   function write_num_cm(type, fmt, val2) {
     var idx = fmt.length - 1;
-    while (fmt.charCodeAt(idx - 1) === 44)
-      --idx;
+    while (fmt.charCodeAt(idx - 1) === 44) --idx;
     return write_num(type, fmt.substr(0, idx), val2 / Math.pow(10, 3 * (fmt.length - idx)));
   }
   function write_num_exp(fmt, val2) {
     var o;
     var idx = fmt.indexOf("E") - fmt.indexOf(".") - 1;
     if (fmt.match(/^#+0.0E\+0$/)) {
-      if (val2 == 0)
-        return "0.0E+0";
-      else if (val2 < 0)
-        return "-" + write_num_exp(fmt, -val2);
+      if (val2 == 0) return "0.0E+0";
+      else if (val2 < 0) return "-" + write_num_exp(fmt, -val2);
       var period = fmt.indexOf(".");
-      if (period === -1)
-        period = fmt.indexOf("E");
+      if (period === -1) period = fmt.indexOf("E");
       var ee = Math.floor(Math.log(val2) * Math.LOG10E) % period;
-      if (ee < 0)
-        ee += period;
+      if (ee < 0) ee += period;
       o = (val2 / Math.pow(10, ee)).toPrecision(idx + 1 + (period + ee) % period);
       if (o.indexOf("e") === -1) {
         var fakee = Math.floor(Math.log(val2) * Math.LOG10E);
-        if (o.indexOf(".") === -1)
-          o = o.charAt(0) + "." + o.substr(1) + "E+" + (fakee - o.length + ee);
-        else
-          o += "E+" + (fakee - ee);
+        if (o.indexOf(".") === -1) o = o.charAt(0) + "." + o.substr(1) + "E+" + (fakee - o.length + ee);
+        else o += "E+" + (fakee - ee);
         while (o.substr(0, 2) === "0.") {
           o = o.charAt(0) + o.substr(2, period) + "." + o.substr(2 + period);
           o = o.replace(/^0+([1-9])/, "$1").replace(/^0+\./, "0.");
@@ -4794,12 +4738,9 @@
       o = o.replace(/^([+-]?)(\d*)\.(\d*)[Ee]/, function($$, $1, $2, $3) {
         return $1 + $2 + $3.substr(0, (period + ee) % period) + "." + $3.substr(ee) + "E";
       });
-    } else
-      o = val2.toExponential(idx);
-    if (fmt.match(/E\+00$/) && o.match(/e[+-]\d$/))
-      o = o.substr(0, o.length - 1) + "0" + o.charAt(o.length - 1);
-    if (fmt.match(/E\-/) && o.match(/e\+/))
-      o = o.replace(/e\+/, "e");
+    } else o = val2.toExponential(idx);
+    if (fmt.match(/E\+00$/) && o.match(/e[+-]\d$/)) o = o.substr(0, o.length - 1) + "0" + o.charAt(o.length - 1);
+    if (fmt.match(/E\-/) && o.match(/e\+/)) o = o.replace(/e\+/, "e");
     return o.replace("e", "E");
   }
   var frac1 = /# (\?+)( ?)\/( ?)(\d+)/;
@@ -4816,19 +4757,18 @@
   var phone = /\(###\) ###\\?-####/;
   function hashq(str) {
     var o = "", cc;
-    for (var i = 0; i != str.length; ++i)
-      switch (cc = str.charCodeAt(i)) {
-        case 35:
-          break;
-        case 63:
-          o += " ";
-          break;
-        case 48:
-          o += "0";
-          break;
-        default:
-          o += String.fromCharCode(cc);
-      }
+    for (var i = 0; i != str.length; ++i) switch (cc = str.charCodeAt(i)) {
+      case 35:
+        break;
+      case 63:
+        o += " ";
+        break;
+      case 48:
+        o += "0";
+        break;
+      default:
+        o += String.fromCharCode(cc);
+    }
     return o;
   }
   function rnd(val2, d) {
@@ -4837,8 +4777,7 @@
   }
   function dec(val2, d) {
     var _frac = val2 - Math.floor(val2), dd = Math.pow(10, d);
-    if (d < ("" + Math.round(_frac * dd)).length)
-      return 0;
+    if (d < ("" + Math.round(_frac * dd)).length) return 0;
     return Math.round(_frac * dd);
   }
   function carry(val2, d) {
@@ -4848,39 +4787,29 @@
     return 0;
   }
   function flr(val2) {
-    if (val2 < 2147483647 && val2 > -2147483648)
-      return "" + (val2 >= 0 ? val2 | 0 : val2 - 1 | 0);
+    if (val2 < 2147483647 && val2 > -2147483648) return "" + (val2 >= 0 ? val2 | 0 : val2 - 1 | 0);
     return "" + Math.floor(val2);
   }
   function write_num_flt(type, fmt, val2) {
     if (type.charCodeAt(0) === 40 && !fmt.match(closeparen)) {
       var ffmt = fmt.replace(/\( */, "").replace(/ \)/, "").replace(/\)/, "");
-      if (val2 >= 0)
-        return write_num_flt("n", ffmt, val2);
+      if (val2 >= 0) return write_num_flt("n", ffmt, val2);
       return "(" + write_num_flt("n", ffmt, -val2) + ")";
     }
-    if (fmt.charCodeAt(fmt.length - 1) === 44)
-      return write_num_cm(type, fmt, val2);
-    if (fmt.indexOf("%") !== -1)
-      return write_num_pct(type, fmt, val2);
-    if (fmt.indexOf("E") !== -1)
-      return write_num_exp(fmt, val2);
-    if (fmt.charCodeAt(0) === 36)
-      return "$" + write_num_flt(type, fmt.substr(fmt.charAt(1) == " " ? 2 : 1), val2);
+    if (fmt.charCodeAt(fmt.length - 1) === 44) return write_num_cm(type, fmt, val2);
+    if (fmt.indexOf("%") !== -1) return write_num_pct(type, fmt, val2);
+    if (fmt.indexOf("E") !== -1) return write_num_exp(fmt, val2);
+    if (fmt.charCodeAt(0) === 36) return "$" + write_num_flt(type, fmt.substr(fmt.charAt(1) == " " ? 2 : 1), val2);
     var o;
     var r, ri, ff, aval = Math.abs(val2), sign = val2 < 0 ? "-" : "";
-    if (fmt.match(/^00+$/))
-      return sign + pad0r(aval, fmt.length);
+    if (fmt.match(/^00+$/)) return sign + pad0r(aval, fmt.length);
     if (fmt.match(/^[#?]+$/)) {
       o = pad0r(val2, 0);
-      if (o === "0")
-        o = "";
+      if (o === "0") o = "";
       return o.length > fmt.length ? o : hashq(fmt.substr(0, fmt.length - o.length)) + o;
     }
-    if (r = fmt.match(frac1))
-      return write_num_f1(r, aval, sign);
-    if (fmt.match(/^#+0+$/))
-      return sign + pad0r(aval, fmt.length - fmt.indexOf("0"));
+    if (r = fmt.match(frac1)) return write_num_f1(r, aval, sign);
+    if (fmt.match(/^#+0+$/)) return sign + pad0r(aval, fmt.length - fmt.indexOf("0"));
     if (r = fmt.match(dec1)) {
       o = rnd(val2, r[1].length).replace(/^([^\.]+)$/, "$1." + hashq(r[1])).replace(/\.$/, "." + hashq(r[1])).replace(/\.(\d*)$/, function($$, $1) {
         return "." + $1 + fill("0", hashq(
@@ -4894,13 +4823,11 @@
     if (r = fmt.match(/^(0*)\.(#*)$/)) {
       return sign + rnd(aval, r[2].length).replace(/\.(\d*[1-9])0*$/, ".$1").replace(/^(-?\d*)$/, "$1.").replace(/^0\./, r[1].length ? "0." : ".");
     }
-    if (r = fmt.match(/^#{1,3},##0(\.?)$/))
-      return sign + commaify(pad0r(aval, 0));
+    if (r = fmt.match(/^#{1,3},##0(\.?)$/)) return sign + commaify(pad0r(aval, 0));
     if (r = fmt.match(/^#,##0\.([#0]*0)$/)) {
       return val2 < 0 ? "-" + write_num_flt(type, fmt, -val2) : commaify("" + (Math.floor(val2) + carry(val2, r[1].length))) + "." + pad0(dec(val2, r[1].length), r[1].length);
     }
-    if (r = fmt.match(/^#,#*,#0/))
-      return write_num_flt(type, fmt.replace(/^#,#*,/, ""), val2);
+    if (r = fmt.match(/^#,#*,#0/)) return write_num_flt(type, fmt.replace(/^#,#*,/, ""), val2);
     if (r = fmt.match(/^([0#]+)(\\?-([0#]+))+$/)) {
       o = _strrev(write_num_flt(type, fmt.replace(/[\\-]/g, ""), val2));
       ri = 0;
@@ -4927,14 +4854,12 @@
         r[1],
         ff[1]
       );
-      if (oa.charAt(oa.length - 1) == " ")
-        oa = oa.substr(0, oa.length - 1) + "0";
+      if (oa.charAt(oa.length - 1) == " ") oa = oa.substr(0, oa.length - 1) + "0";
       o += oa + /*::String(*/
       r[2] + "/" + /*::String(*/
       r[3];
       oa = rpad_(ff[2], ri);
-      if (oa.length < r[4].length)
-        oa = hashq(r[4].substr(r[4].length - oa.length)) + oa;
+      if (oa.length < r[4].length) oa = hashq(r[4].substr(r[4].length - oa.length)) + oa;
       o += oa;
       return o;
     }
@@ -4945,8 +4870,7 @@
     }
     if (r = fmt.match(/^[#0?]+$/)) {
       o = pad0r(val2, 0);
-      if (fmt.length <= o.length)
-        return o;
+      if (fmt.length <= o.length) return o;
       return hashq(fmt.substr(0, fmt.length - o.length)) + o;
     }
     if (r = fmt.match(/^([#0?]+)\.([#0]+)$/)) {
@@ -4979,8 +4903,7 @@
   }
   function write_num_cm2(type, fmt, val2) {
     var idx = fmt.length - 1;
-    while (fmt.charCodeAt(idx - 1) === 44)
-      --idx;
+    while (fmt.charCodeAt(idx - 1) === 44) --idx;
     return write_num(type, fmt.substr(0, idx), val2 / Math.pow(10, 3 * (fmt.length - idx)));
   }
   function write_num_pct2(type, fmt, val2) {
@@ -4991,65 +4914,47 @@
     var o;
     var idx = fmt.indexOf("E") - fmt.indexOf(".") - 1;
     if (fmt.match(/^#+0.0E\+0$/)) {
-      if (val2 == 0)
-        return "0.0E+0";
-      else if (val2 < 0)
-        return "-" + write_num_exp2(fmt, -val2);
+      if (val2 == 0) return "0.0E+0";
+      else if (val2 < 0) return "-" + write_num_exp2(fmt, -val2);
       var period = fmt.indexOf(".");
-      if (period === -1)
-        period = fmt.indexOf("E");
+      if (period === -1) period = fmt.indexOf("E");
       var ee = Math.floor(Math.log(val2) * Math.LOG10E) % period;
-      if (ee < 0)
-        ee += period;
+      if (ee < 0) ee += period;
       o = (val2 / Math.pow(10, ee)).toPrecision(idx + 1 + (period + ee) % period);
       if (!o.match(/[Ee]/)) {
         var fakee = Math.floor(Math.log(val2) * Math.LOG10E);
-        if (o.indexOf(".") === -1)
-          o = o.charAt(0) + "." + o.substr(1) + "E+" + (fakee - o.length + ee);
-        else
-          o += "E+" + (fakee - ee);
+        if (o.indexOf(".") === -1) o = o.charAt(0) + "." + o.substr(1) + "E+" + (fakee - o.length + ee);
+        else o += "E+" + (fakee - ee);
         o = o.replace(/\+-/, "-");
       }
       o = o.replace(/^([+-]?)(\d*)\.(\d*)[Ee]/, function($$, $1, $2, $3) {
         return $1 + $2 + $3.substr(0, (period + ee) % period) + "." + $3.substr(ee) + "E";
       });
-    } else
-      o = val2.toExponential(idx);
-    if (fmt.match(/E\+00$/) && o.match(/e[+-]\d$/))
-      o = o.substr(0, o.length - 1) + "0" + o.charAt(o.length - 1);
-    if (fmt.match(/E\-/) && o.match(/e\+/))
-      o = o.replace(/e\+/, "e");
+    } else o = val2.toExponential(idx);
+    if (fmt.match(/E\+00$/) && o.match(/e[+-]\d$/)) o = o.substr(0, o.length - 1) + "0" + o.charAt(o.length - 1);
+    if (fmt.match(/E\-/) && o.match(/e\+/)) o = o.replace(/e\+/, "e");
     return o.replace("e", "E");
   }
   function write_num_int(type, fmt, val2) {
     if (type.charCodeAt(0) === 40 && !fmt.match(closeparen)) {
       var ffmt = fmt.replace(/\( */, "").replace(/ \)/, "").replace(/\)/, "");
-      if (val2 >= 0)
-        return write_num_int("n", ffmt, val2);
+      if (val2 >= 0) return write_num_int("n", ffmt, val2);
       return "(" + write_num_int("n", ffmt, -val2) + ")";
     }
-    if (fmt.charCodeAt(fmt.length - 1) === 44)
-      return write_num_cm2(type, fmt, val2);
-    if (fmt.indexOf("%") !== -1)
-      return write_num_pct2(type, fmt, val2);
-    if (fmt.indexOf("E") !== -1)
-      return write_num_exp2(fmt, val2);
-    if (fmt.charCodeAt(0) === 36)
-      return "$" + write_num_int(type, fmt.substr(fmt.charAt(1) == " " ? 2 : 1), val2);
+    if (fmt.charCodeAt(fmt.length - 1) === 44) return write_num_cm2(type, fmt, val2);
+    if (fmt.indexOf("%") !== -1) return write_num_pct2(type, fmt, val2);
+    if (fmt.indexOf("E") !== -1) return write_num_exp2(fmt, val2);
+    if (fmt.charCodeAt(0) === 36) return "$" + write_num_int(type, fmt.substr(fmt.charAt(1) == " " ? 2 : 1), val2);
     var o;
     var r, ri, ff, aval = Math.abs(val2), sign = val2 < 0 ? "-" : "";
-    if (fmt.match(/^00+$/))
-      return sign + pad0(aval, fmt.length);
+    if (fmt.match(/^00+$/)) return sign + pad0(aval, fmt.length);
     if (fmt.match(/^[#?]+$/)) {
       o = "" + val2;
-      if (val2 === 0)
-        o = "";
+      if (val2 === 0) o = "";
       return o.length > fmt.length ? o : hashq(fmt.substr(0, fmt.length - o.length)) + o;
     }
-    if (r = fmt.match(frac1))
-      return write_num_f2(r, aval, sign);
-    if (fmt.match(/^#+0+$/))
-      return sign + pad0(aval, fmt.length - fmt.indexOf("0"));
+    if (r = fmt.match(frac1)) return write_num_f2(r, aval, sign);
+    if (fmt.match(/^#+0+$/)) return sign + pad0(aval, fmt.length - fmt.indexOf("0"));
     if (r = fmt.match(dec1)) {
       o = ("" + val2).replace(/^([^\.]+)$/, "$1." + hashq(r[1])).replace(/\.$/, "." + hashq(r[1]));
       o = o.replace(/\.(\d*)$/, function($$, $1) {
@@ -5061,13 +4966,11 @@
     if (r = fmt.match(/^(0*)\.(#*)$/)) {
       return sign + ("" + aval).replace(/\.(\d*[1-9])0*$/, ".$1").replace(/^(-?\d*)$/, "$1.").replace(/^0\./, r[1].length ? "0." : ".");
     }
-    if (r = fmt.match(/^#{1,3},##0(\.?)$/))
-      return sign + commaify("" + aval);
+    if (r = fmt.match(/^#{1,3},##0(\.?)$/)) return sign + commaify("" + aval);
     if (r = fmt.match(/^#,##0\.([#0]*0)$/)) {
       return val2 < 0 ? "-" + write_num_int(type, fmt, -val2) : commaify("" + val2) + "." + fill("0", r[1].length);
     }
-    if (r = fmt.match(/^#,#*,#0/))
-      return write_num_int(type, fmt.replace(/^#,#*,/, ""), val2);
+    if (r = fmt.match(/^#,#*,#0/)) return write_num_int(type, fmt.replace(/^#,#*,/, ""), val2);
     if (r = fmt.match(/^([0#]+)(\\?-([0#]+))+$/)) {
       o = _strrev(write_num_int(type, fmt.replace(/[\\-]/g, ""), val2));
       ri = 0;
@@ -5094,14 +4997,12 @@
         r[1],
         ff[1]
       );
-      if (oa.charAt(oa.length - 1) == " ")
-        oa = oa.substr(0, oa.length - 1) + "0";
+      if (oa.charAt(oa.length - 1) == " ") oa = oa.substr(0, oa.length - 1) + "0";
       o += oa + /*::String(*/
       r[2] + "/" + /*::String(*/
       r[3];
       oa = rpad_(ff[2], ri);
-      if (oa.length < r[4].length)
-        oa = hashq(r[4].substr(r[4].length - oa.length)) + oa;
+      if (oa.length < r[4].length) oa = hashq(r[4].substr(r[4].length - oa.length)) + oa;
       o += oa;
       return o;
     }
@@ -5112,8 +5013,7 @@
     }
     if (r = fmt.match(/^[#0?]+$/)) {
       o = "" + val2;
-      if (fmt.length <= o.length)
-        return o;
+      if (fmt.length <= o.length) return o;
       return hashq(fmt.substr(0, fmt.length - o.length)) + o;
     }
     if (r = fmt.match(/^([#0]+)\.([#0]+)$/)) {
@@ -5134,8 +5034,7 @@
         var x = commaify("" + aval);
         return x !== "0" ? sign + x : "";
       default:
-        if (fmt.match(/\.[0#?]*$/))
-          return write_num_int(type, fmt.slice(0, fmt.lastIndexOf(".")), val2) + hashq(fmt.slice(fmt.lastIndexOf(".")));
+        if (fmt.match(/\.[0#?]*$/)) return write_num_int(type, fmt.slice(0, fmt.lastIndexOf(".")), val2) + hashq(fmt.slice(fmt.lastIndexOf(".")));
     }
     throw new Error("unsupported format |" + fmt + "|");
   }
@@ -5145,26 +5044,24 @@
   function SSF_split_fmt(fmt) {
     var out = [];
     var in_str = false;
-    for (var i = 0, j = 0; i < fmt.length; ++i)
-      switch (
-        /*cc=*/
-        fmt.charCodeAt(i)
-      ) {
-        case 34:
-          in_str = !in_str;
-          break;
-        case 95:
-        case 42:
-        case 92:
-          ++i;
-          break;
-        case 59:
-          out[out.length] = fmt.substr(j, i - j);
-          j = i + 1;
-      }
+    for (var i = 0, j = 0; i < fmt.length; ++i) switch (
+      /*cc=*/
+      fmt.charCodeAt(i)
+    ) {
+      case 34:
+        in_str = !in_str;
+        break;
+      case 95:
+      case 42:
+      case 92:
+        ++i;
+        break;
+      case 59:
+        out[out.length] = fmt.substr(j, i - j);
+        j = i + 1;
+    }
     out[out.length] = fmt.substr(j);
-    if (in_str === true)
-      throw new Error("Format |" + fmt + "| unterminated string ");
+    if (in_str === true) throw new Error("Format |" + fmt + "| unterminated string ");
     return out;
   }
   var SSF_abstime = /\[[HhMmSs\u0E0A\u0E19\u0E17]*\]/;
@@ -5173,8 +5070,7 @@
     while (i < fmt.length) {
       switch (c = fmt.charAt(i)) {
         case "G":
-          if (SSF_isgeneral(fmt, i))
-            i += 6;
+          if (SSF_isgeneral(fmt, i)) i += 6;
           i++;
           break;
         case '"':
@@ -5197,14 +5093,15 @@
           break;
         case "B":
         case "b":
-          if (fmt.charAt(i + 1) === "1" || fmt.charAt(i + 1) === "2")
-            return true;
+          if (fmt.charAt(i + 1) === "1" || fmt.charAt(i + 1) === "2") return true;
+        /* falls through */
         case "M":
         case "D":
         case "Y":
         case "H":
         case "S":
         case "E":
+        /* falls through */
         case "m":
         case "d":
         case "y":
@@ -5216,22 +5113,18 @@
         case "A":
         case "a":
         case "\u4E0A":
-          if (fmt.substr(i, 3).toUpperCase() === "A/P")
-            return true;
-          if (fmt.substr(i, 5).toUpperCase() === "AM/PM")
-            return true;
-          if (fmt.substr(i, 5).toUpperCase() === "\u4E0A\u5348/\u4E0B\u5348")
-            return true;
+          if (fmt.substr(i, 3).toUpperCase() === "A/P") return true;
+          if (fmt.substr(i, 5).toUpperCase() === "AM/PM") return true;
+          if (fmt.substr(i, 5).toUpperCase() === "\u4E0A\u5348/\u4E0B\u5348") return true;
           ++i;
           break;
         case "[":
           o = c;
-          while (fmt.charAt(i++) !== "]" && i < fmt.length)
-            o += fmt.charAt(i);
-          if (o.match(SSF_abstime))
-            return true;
+          while (fmt.charAt(i++) !== "]" && i < fmt.length) o += fmt.charAt(i);
+          if (o.match(SSF_abstime)) return true;
           break;
         case ".":
+        /* falls through */
         case "0":
         case "#":
           while (i < fmt.length && ("0#?.,E+-%".indexOf(c = fmt.charAt(++i)) > -1 || c == "\\" && fmt.charAt(i + 1) == "-" && "0#".indexOf(fmt.charAt(i + 2)) > -1)) {
@@ -5243,8 +5136,7 @@
           break;
         case "*":
           ++i;
-          if (fmt.charAt(i) == " " || fmt.charAt(i) == "*")
-            ++i;
+          if (fmt.charAt(i) == " " || fmt.charAt(i) == "*") ++i;
           break;
         case "(":
         case ")":
@@ -5278,14 +5170,12 @@
     while (i < fmt.length) {
       switch (c = fmt.charAt(i)) {
         case "G":
-          if (!SSF_isgeneral(fmt, i))
-            throw new Error("unrecognized character " + c + " in " + fmt);
+          if (!SSF_isgeneral(fmt, i)) throw new Error("unrecognized character " + c + " in " + fmt);
           out[out.length] = { t: "G", v: "General" };
           i += 7;
           break;
         case '"':
-          for (o = ""; (cc = fmt.charCodeAt(++i)) !== 34 && i < fmt.length; )
-            o += String.fromCharCode(cc);
+          for (o = ""; (cc = fmt.charCodeAt(++i)) !== 34 && i < fmt.length; ) o += String.fromCharCode(cc);
           out[out.length] = { t: "t", v: o };
           ++i;
           break;
@@ -5307,14 +5197,14 @@
           if (fmt.charAt(i + 1) === "1" || fmt.charAt(i + 1) === "2") {
             if (dt == null) {
               dt = SSF_parse_date_code(v, opts, fmt.charAt(i + 1) === "2");
-              if (dt == null)
-                return "";
+              if (dt == null) return "";
             }
             out[out.length] = { t: "X", v: fmt.substr(i, 2) };
             lst = c;
             i += 2;
             break;
           }
+        /* falls through */
         case "M":
         case "D":
         case "Y":
@@ -5322,6 +5212,7 @@
         case "S":
         case "E":
           c = c.toLowerCase();
+        /* falls through */
         case "m":
         case "d":
         case "y":
@@ -5329,20 +5220,15 @@
         case "s":
         case "e":
         case "g":
-          if (v < 0)
-            return "";
+          if (v < 0) return "";
           if (dt == null) {
             dt = SSF_parse_date_code(v, opts);
-            if (dt == null)
-              return "";
+            if (dt == null) return "";
           }
           o = c;
-          while (++i < fmt.length && fmt.charAt(i).toLowerCase() === c)
-            o += c;
-          if (c === "m" && lst.toLowerCase() === "h")
-            c = "M";
-          if (c === "h")
-            c = hr;
+          while (++i < fmt.length && fmt.charAt(i).toLowerCase() === c) o += c;
+          if (c === "m" && lst.toLowerCase() === "h") c = "M";
+          if (c === "h") c = hr;
           out[out.length] = { t: c, v: o };
           lst = c;
           break;
@@ -5350,23 +5236,19 @@
         case "a":
         case "\u4E0A":
           var q = { t: c, v: c };
-          if (dt == null)
-            dt = SSF_parse_date_code(v, opts);
+          if (dt == null) dt = SSF_parse_date_code(v, opts);
           if (fmt.substr(i, 3).toUpperCase() === "A/P") {
-            if (dt != null)
-              q.v = dt.H >= 12 ? fmt.charAt(i + 2) : c;
+            if (dt != null) q.v = dt.H >= 12 ? fmt.charAt(i + 2) : c;
             q.t = "T";
             hr = "h";
             i += 3;
           } else if (fmt.substr(i, 5).toUpperCase() === "AM/PM") {
-            if (dt != null)
-              q.v = dt.H >= 12 ? "PM" : "AM";
+            if (dt != null) q.v = dt.H >= 12 ? "PM" : "AM";
             q.t = "T";
             i += 5;
             hr = "h";
           } else if (fmt.substr(i, 5).toUpperCase() === "\u4E0A\u5348/\u4E0B\u5348") {
-            if (dt != null)
-              q.v = dt.H >= 12 ? "\u4E0B\u5348" : "\u4E0A\u5348";
+            if (dt != null) q.v = dt.H >= 12 ? "\u4E0B\u5348" : "\u4E0A\u5348";
             q.t = "T";
             i += 5;
             hr = "h";
@@ -5374,58 +5256,52 @@
             q.t = "t";
             ++i;
           }
-          if (dt == null && q.t === "T")
-            return "";
+          if (dt == null && q.t === "T") return "";
           out[out.length] = q;
           lst = c;
           break;
         case "[":
           o = c;
-          while (fmt.charAt(i++) !== "]" && i < fmt.length)
-            o += fmt.charAt(i);
-          if (o.slice(-1) !== "]")
-            throw 'unterminated "[" block: |' + o + "|";
+          while (fmt.charAt(i++) !== "]" && i < fmt.length) o += fmt.charAt(i);
+          if (o.slice(-1) !== "]") throw 'unterminated "[" block: |' + o + "|";
           if (o.match(SSF_abstime)) {
             if (dt == null) {
               dt = SSF_parse_date_code(v, opts);
-              if (dt == null)
-                return "";
+              if (dt == null) return "";
             }
             out[out.length] = { t: "Z", v: o.toLowerCase() };
             lst = o.charAt(1);
           } else if (o.indexOf("$") > -1) {
             o = (o.match(/\$([^-\[\]]*)/) || [])[1] || "$";
-            if (!fmt_is_date(fmt))
-              out[out.length] = { t: "t", v: o };
+            if (!fmt_is_date(fmt)) out[out.length] = { t: "t", v: o };
           }
           break;
+        /* Numbers */
         case ".":
           if (dt != null) {
             o = c;
-            while (++i < fmt.length && (c = fmt.charAt(i)) === "0")
-              o += c;
+            while (++i < fmt.length && (c = fmt.charAt(i)) === "0") o += c;
             out[out.length] = { t: "s", v: o };
             break;
           }
+        /* falls through */
         case "0":
         case "#":
           o = c;
-          while (++i < fmt.length && "0#?.,E+-%".indexOf(c = fmt.charAt(i)) > -1)
-            o += c;
+          while (++i < fmt.length && "0#?.,E+-%".indexOf(c = fmt.charAt(i)) > -1) o += c;
           out[out.length] = { t: "n", v: o };
           break;
         case "?":
           o = c;
-          while (fmt.charAt(++i) === c)
-            o += c;
+          while (fmt.charAt(++i) === c) o += c;
           out[out.length] = { t: c, v: o };
           lst = c;
           break;
         case "*":
           ++i;
-          if (fmt.charAt(i) == " " || fmt.charAt(i) == "*")
-            ++i;
+          if (fmt.charAt(i) == " " || fmt.charAt(i) == "*") ++i;
           break;
+        // **
         case "(":
         case ")":
           out[out.length] = { t: flen === 1 ? "t" : c, v: c };
@@ -5441,8 +5317,7 @@
         case "8":
         case "9":
           o = c;
-          while (i < fmt.length && "0123456789".indexOf(fmt.charAt(++i)) > -1)
-            o += fmt.charAt(i);
+          while (i < fmt.length && "0123456789".indexOf(fmt.charAt(++i)) > -1) o += fmt.charAt(i);
           out[out.length] = { t: "D", v: o };
           break;
         case " ":
@@ -5454,8 +5329,7 @@
           ++i;
           break;
         default:
-          if (",$-+/():!^&'~{}<>=\u20ACacfijklopqrtuvwxzP".indexOf(c) === -1)
-            throw new Error("unrecognized character " + c + " in " + fmt);
+          if (",$-+/():!^&'~{}<>=\u20ACacfijklopqrtuvwxzP".indexOf(c) === -1) throw new Error("unrecognized character " + c + " in " + fmt);
           out[out.length] = { t: "t", v: c };
           ++i;
           break;
@@ -5468,16 +5342,15 @@
         case "H":
           out[i].t = hr;
           lst = "h";
-          if (bt < 1)
-            bt = 1;
+          if (bt < 1) bt = 1;
           break;
         case "s":
           if (ssm = out[i].v.match(/\.0+$/)) {
             ss0 = Math.max(ss0, ssm[0].length - 1);
             bt = 4;
           }
-          if (bt < 3)
-            bt = 3;
+          if (bt < 3) bt = 3;
+        /* falls through */
         case "d":
         case "y":
         case "e":
@@ -5485,25 +5358,20 @@
           break;
         case "M":
           lst = out[i].t;
-          if (bt < 2)
-            bt = 2;
+          if (bt < 2) bt = 2;
           break;
         case "m":
           if (lst === "s") {
             out[i].t = "M";
-            if (bt < 2)
-              bt = 2;
+            if (bt < 2) bt = 2;
           }
           break;
         case "X":
           break;
         case "Z":
-          if (bt < 1 && out[i].v.match(/[Hh]/))
-            bt = 1;
-          if (bt < 2 && out[i].v.match(/[Mm]/))
-            bt = 2;
-          if (bt < 3 && out[i].v.match(/[Ss]/))
-            bt = 3;
+          if (bt < 1 && out[i].v.match(/[Hh]/)) bt = 1;
+          if (bt < 2 && out[i].v.match(/[Mm]/)) bt = 2;
+          if (bt < 3 && out[i].v.match(/[Ss]/)) bt = 3;
       }
     }
     var _dt;
@@ -5629,21 +5497,18 @@
       }
       jj = ostr.length - 1;
       var decpt = out.length;
-      for (i = 0; i < out.length; ++i)
-        if (out[i] != null && out[i].t != "t" && out[i].v.indexOf(".") > -1) {
-          decpt = i;
-          break;
-        }
+      for (i = 0; i < out.length; ++i) if (out[i] != null && out[i].t != "t" && out[i].v.indexOf(".") > -1) {
+        decpt = i;
+        break;
+      }
       var lasti = out.length;
       if (decpt === out.length && ostr.indexOf("E") === -1) {
         for (i = out.length - 1; i >= 0; --i) {
-          if (out[i] == null || "n?".indexOf(out[i].t) === -1)
-            continue;
+          if (out[i] == null || "n?".indexOf(out[i].t) === -1) continue;
           if (jj >= out[i].v.length - 1) {
             jj -= out[i].v.length;
             out[i].v = ostr.substr(jj + 1, out[i].v.length);
-          } else if (jj < 0)
-            out[i].v = "";
+          } else if (jj < 0) out[i].v = "";
           else {
             out[i].v = ostr.substr(0, jj + 1);
             jj = -1;
@@ -5651,34 +5516,28 @@
           out[i].t = "t";
           lasti = i;
         }
-        if (jj >= 0 && lasti < out.length)
-          out[lasti].v = ostr.substr(0, jj + 1) + out[lasti].v;
+        if (jj >= 0 && lasti < out.length) out[lasti].v = ostr.substr(0, jj + 1) + out[lasti].v;
       } else if (decpt !== out.length && ostr.indexOf("E") === -1) {
         jj = ostr.indexOf(".") - 1;
         for (i = decpt; i >= 0; --i) {
-          if (out[i] == null || "n?".indexOf(out[i].t) === -1)
-            continue;
+          if (out[i] == null || "n?".indexOf(out[i].t) === -1) continue;
           j = out[i].v.indexOf(".") > -1 && i === decpt ? out[i].v.indexOf(".") - 1 : out[i].v.length - 1;
           vv = out[i].v.substr(j + 1);
           for (; j >= 0; --j) {
-            if (jj >= 0 && (out[i].v.charAt(j) === "0" || out[i].v.charAt(j) === "#"))
-              vv = ostr.charAt(jj--) + vv;
+            if (jj >= 0 && (out[i].v.charAt(j) === "0" || out[i].v.charAt(j) === "#")) vv = ostr.charAt(jj--) + vv;
           }
           out[i].v = vv;
           out[i].t = "t";
           lasti = i;
         }
-        if (jj >= 0 && lasti < out.length)
-          out[lasti].v = ostr.substr(0, jj + 1) + out[lasti].v;
+        if (jj >= 0 && lasti < out.length) out[lasti].v = ostr.substr(0, jj + 1) + out[lasti].v;
         jj = ostr.indexOf(".") + 1;
         for (i = decpt; i < out.length; ++i) {
-          if (out[i] == null || "n?(".indexOf(out[i].t) === -1 && i !== decpt)
-            continue;
+          if (out[i] == null || "n?(".indexOf(out[i].t) === -1 && i !== decpt) continue;
           j = out[i].v.indexOf(".") > -1 && i === decpt ? out[i].v.indexOf(".") + 1 : 0;
           vv = out[i].v.substr(0, j);
           for (; j < out[i].v.length; ++j) {
-            if (jj < ostr.length)
-              vv += ostr.charAt(jj++);
+            if (jj < ostr.length) vv += ostr.charAt(jj++);
           }
           out[i].v = vv;
           out[i].t = "t";
@@ -5686,47 +5545,37 @@
         }
       }
     }
-    for (i = 0; i < out.length; ++i)
-      if (out[i] != null && "n?".indexOf(out[i].t) > -1) {
-        myv = flen > 1 && v < 0 && i > 0 && out[i - 1].v === "-" ? -v : v;
-        out[i].v = write_num(out[i].t, out[i].v, myv);
-        out[i].t = "t";
-      }
+    for (i = 0; i < out.length; ++i) if (out[i] != null && "n?".indexOf(out[i].t) > -1) {
+      myv = flen > 1 && v < 0 && i > 0 && out[i - 1].v === "-" ? -v : v;
+      out[i].v = write_num(out[i].t, out[i].v, myv);
+      out[i].t = "t";
+    }
     var retval = "";
-    for (i = 0; i !== out.length; ++i)
-      if (out[i] != null)
-        retval += out[i].v;
+    for (i = 0; i !== out.length; ++i) if (out[i] != null) retval += out[i].v;
     return retval;
   }
   var cfregex2 = /\[(=|>[=]?|<[>=]?)(-?\d+(?:\.\d*)?)\]/;
   function chkcond(v, rr) {
-    if (rr == null)
-      return false;
+    if (rr == null) return false;
     var thresh = parseFloat(rr[2]);
     switch (rr[1]) {
       case "=":
-        if (v == thresh)
-          return true;
+        if (v == thresh) return true;
         break;
       case ">":
-        if (v > thresh)
-          return true;
+        if (v > thresh) return true;
         break;
       case "<":
-        if (v < thresh)
-          return true;
+        if (v < thresh) return true;
         break;
       case "<>":
-        if (v != thresh)
-          return true;
+        if (v != thresh) return true;
         break;
       case ">=":
-        if (v >= thresh)
-          return true;
+        if (v >= thresh) return true;
         break;
       case "<=":
-        if (v <= thresh)
-          return true;
+        if (v <= thresh) return true;
         break;
     }
     return false;
@@ -5734,14 +5583,10 @@
   function choose_fmt(f, v) {
     var fmt = SSF_split_fmt(f);
     var l = fmt.length, lat = fmt[l - 1].indexOf("@");
-    if (l < 4 && lat > -1)
-      --l;
-    if (fmt.length > 4)
-      throw new Error("cannot find right format for |" + fmt.join("|") + "|");
-    if (typeof v !== "number")
-      return [4, fmt.length === 4 || lat > -1 ? fmt[fmt.length - 1] : "@"];
-    if (typeof v === "number" && !isFinite(v))
-      v = 0;
+    if (l < 4 && lat > -1) --l;
+    if (fmt.length > 4) throw new Error("cannot find right format for |" + fmt.join("|") + "|");
+    if (typeof v !== "number") return [4, fmt.length === 4 || lat > -1 ? fmt[fmt.length - 1] : "@"];
+    if (typeof v === "number" && !isFinite(v)) v = 0;
     switch (fmt.length) {
       case 1:
         fmt = lat > -1 ? ["General", "General", "General", fmt[0]] : [fmt[0], fmt[0], fmt[0], "@"];
@@ -5756,8 +5601,7 @@
         break;
     }
     var ff = v > 0 ? fmt[0] : v < 0 ? fmt[1] : fmt[2];
-    if (fmt[0].indexOf("[") === -1 && fmt[1].indexOf("[") === -1)
-      return [l, ff];
+    if (fmt[0].indexOf("[") === -1 && fmt[1].indexOf("[") === -1) return [l, ff];
     if (fmt[0].match(/\[[=<>]/) != null || fmt[1].match(/\[[=<>]/) != null) {
       var m1 = fmt[0].match(cfregex2);
       var m2 = fmt[1].match(cfregex2);
@@ -5766,44 +5610,29 @@
     return [l, ff];
   }
   function SSF_format(fmt, v, o) {
-    if (o == null)
-      o = {};
+    if (o == null) o = {};
     var sfmt = "";
     switch (typeof fmt) {
       case "string":
-        if (fmt == "m/d/yy" && o.dateNF)
-          sfmt = o.dateNF;
-        else
-          sfmt = fmt;
+        if (fmt == "m/d/yy" && o.dateNF) sfmt = o.dateNF;
+        else sfmt = fmt;
         break;
       case "number":
-        if (fmt == 14 && o.dateNF)
-          sfmt = o.dateNF;
-        else
-          sfmt = (o.table != null ? o.table : table_fmt)[fmt];
-        if (sfmt == null)
-          sfmt = o.table && o.table[SSF_default_map[fmt]] || table_fmt[SSF_default_map[fmt]];
-        if (sfmt == null)
-          sfmt = SSF_default_str[fmt] || "General";
+        if (fmt == 14 && o.dateNF) sfmt = o.dateNF;
+        else sfmt = (o.table != null ? o.table : table_fmt)[fmt];
+        if (sfmt == null) sfmt = o.table && o.table[SSF_default_map[fmt]] || table_fmt[SSF_default_map[fmt]];
+        if (sfmt == null) sfmt = SSF_default_str[fmt] || "General";
         break;
     }
-    if (SSF_isgeneral(sfmt, 0))
-      return SSF_general(v, o);
-    if (v instanceof Date)
-      v = datenum(v, o.date1904);
+    if (SSF_isgeneral(sfmt, 0)) return SSF_general(v, o);
+    if (v instanceof Date) v = datenum(v, o.date1904);
     var f = choose_fmt(sfmt, v);
-    if (SSF_isgeneral(f[1]))
-      return SSF_general(v, o);
-    if (v === true)
-      v = "TRUE";
-    else if (v === false)
-      v = "FALSE";
-    else if (v === "" || v == null)
-      return "";
-    else if (isNaN(v) && f[1].indexOf("0") > -1)
-      return "#NUM!";
-    else if (!isFinite(v) && f[1].indexOf("0") > -1)
-      return "#DIV/0!";
+    if (SSF_isgeneral(f[1])) return SSF_general(v, o);
+    if (v === true) v = "TRUE";
+    else if (v === false) v = "FALSE";
+    else if (v === "" || v == null) return "";
+    else if (isNaN(v) && f[1].indexOf("0") > -1) return "#NUM!";
+    else if (!isFinite(v) && f[1].indexOf("0") > -1) return "#DIV/0!";
     return eval_fmt(f[1], v, o, f[0]);
   }
   function SSF_load(fmt, idx) {
@@ -5811,8 +5640,7 @@
       idx = +idx || -1;
       for (var i = 0; i < 392; ++i) {
         if (table_fmt[i] == void 0) {
-          if (idx < 0)
-            idx = i;
+          if (idx < 0) idx = i;
           continue;
         }
         if (table_fmt[i] == fmt) {
@@ -5820,16 +5648,14 @@
           break;
         }
       }
-      if (idx < 0)
-        idx = 391;
+      if (idx < 0) idx = 391;
     }
     table_fmt[idx] = fmt;
     return idx;
   }
   function SSF_load_table(tbl) {
     for (var i = 0; i != 392; ++i)
-      if (tbl[i] !== void 0)
-        SSF_load(tbl[i], i);
+      if (tbl[i] !== void 0) SSF_load(tbl[i], i);
   }
   function make_ssf() {
     table_fmt = SSF_init_table();
@@ -5841,7 +5667,7 @@
   function SSF__load(fmt, idx) {
     return SSF_load(bad_formats[fmt] || fmt, idx);
   }
-  var CRC32 = /* @__PURE__ */ function() {
+  var CRC32 = /* @__PURE__ */ (function() {
     var CRC322 = {};
     CRC322.version = "1.2.0";
     function signed_crc_table() {
@@ -5863,16 +5689,13 @@
     var T0 = signed_crc_table();
     function slice_by_16_tables(T) {
       var c = 0, v = 0, n = 0, table = typeof Int32Array !== "undefined" ? new Int32Array(4096) : new Array(4096);
-      for (n = 0; n != 256; ++n)
-        table[n] = T[n];
+      for (n = 0; n != 256; ++n) table[n] = T[n];
       for (n = 0; n != 256; ++n) {
         v = T[n];
-        for (c = 256 + n; c < 4096; c += 256)
-          v = table[c] = v >>> 8 ^ T[v & 255];
+        for (c = 256 + n; c < 4096; c += 256) v = table[c] = v >>> 8 ^ T[v & 255];
       }
       var out = [];
-      for (n = 1; n != 16; ++n)
-        out[n - 1] = typeof Int32Array !== "undefined" && typeof table.subarray == "function" ? table.subarray(n * 256, n * 256 + 256) : table.slice(n * 256, n * 256 + 256);
+      for (n = 1; n != 16; ++n) out[n - 1] = typeof Int32Array !== "undefined" && typeof table.subarray == "function" ? table.subarray(n * 256, n * 256 + 256) : table.slice(n * 256, n * 256 + 256);
       return out;
     }
     var TT = slice_by_16_tables(T0);
@@ -5881,17 +5704,14 @@
     var Tb = TT[10], Tc = TT[11], Td = TT[12], Te = TT[13], Tf = TT[14];
     function crc32_bstr(bstr, seed) {
       var C = seed ^ -1;
-      for (var i = 0, L = bstr.length; i < L; )
-        C = C >>> 8 ^ T0[(C ^ bstr.charCodeAt(i++)) & 255];
+      for (var i = 0, L = bstr.length; i < L; ) C = C >>> 8 ^ T0[(C ^ bstr.charCodeAt(i++)) & 255];
       return ~C;
     }
     function crc32_buf(B, seed) {
       var C = seed ^ -1, L = B.length - 15, i = 0;
-      for (; i < L; )
-        C = Tf[B[i++] ^ C & 255] ^ Te[B[i++] ^ C >> 8 & 255] ^ Td[B[i++] ^ C >> 16 & 255] ^ Tc[B[i++] ^ C >>> 24] ^ Tb[B[i++]] ^ Ta[B[i++]] ^ T9[B[i++]] ^ T8[B[i++]] ^ T7[B[i++]] ^ T6[B[i++]] ^ T5[B[i++]] ^ T4[B[i++]] ^ T3[B[i++]] ^ T2[B[i++]] ^ T1[B[i++]] ^ T0[B[i++]];
+      for (; i < L; ) C = Tf[B[i++] ^ C & 255] ^ Te[B[i++] ^ C >> 8 & 255] ^ Td[B[i++] ^ C >> 16 & 255] ^ Tc[B[i++] ^ C >>> 24] ^ Tb[B[i++]] ^ Ta[B[i++]] ^ T9[B[i++]] ^ T8[B[i++]] ^ T7[B[i++]] ^ T6[B[i++]] ^ T5[B[i++]] ^ T4[B[i++]] ^ T3[B[i++]] ^ T2[B[i++]] ^ T1[B[i++]] ^ T0[B[i++]];
       L += 15;
-      while (i < L)
-        C = C >>> 8 ^ T0[(C ^ B[i++]) & 255];
+      while (i < L) C = C >>> 8 ^ T0[(C ^ B[i++]) & 255];
       return ~C;
     }
     function crc32_str(str, seed) {
@@ -5923,8 +5743,8 @@
     CRC322.buf = crc32_buf;
     CRC322.str = crc32_str;
     return CRC322;
-  }();
-  var CFB = /* @__PURE__ */ function _CFB() {
+  })();
+  var CFB = /* @__PURE__ */ (function _CFB() {
     var exports = (
       /*::(*/
       {}
@@ -5933,28 +5753,23 @@
     function namecmp(l, r) {
       var L = l.split("/"), R = r.split("/");
       for (var i2 = 0, c = 0, Z = Math.min(L.length, R.length); i2 < Z; ++i2) {
-        if (c = L[i2].length - R[i2].length)
-          return c;
-        if (L[i2] != R[i2])
-          return L[i2] < R[i2] ? -1 : 1;
+        if (c = L[i2].length - R[i2].length) return c;
+        if (L[i2] != R[i2]) return L[i2] < R[i2] ? -1 : 1;
       }
       return L.length - R.length;
     }
     function dirname(p) {
-      if (p.charAt(p.length - 1) == "/")
-        return p.slice(0, -1).indexOf("/") === -1 ? p : dirname(p.slice(0, -1));
+      if (p.charAt(p.length - 1) == "/") return p.slice(0, -1).indexOf("/") === -1 ? p : dirname(p.slice(0, -1));
       var c = p.lastIndexOf("/");
       return c === -1 ? p : p.slice(0, c + 1);
     }
     function filename(p) {
-      if (p.charAt(p.length - 1) == "/")
-        return filename(p.slice(0, -1));
+      if (p.charAt(p.length - 1) == "/") return filename(p.slice(0, -1));
       var c = p.lastIndexOf("/");
       return c === -1 ? p : p.slice(c + 1);
     }
     function write_dos_date(buf, date) {
-      if (typeof date === "string")
-        date = new Date(date);
+      if (typeof date === "string") date = new Date(date);
       var hms = date.getHours();
       hms = hms << 6 | date.getMinutes();
       hms = hms << 5 | date.getSeconds() >>> 1;
@@ -5997,21 +5812,19 @@
         var sz = blob.read_shift(2), tgt = blob.l + sz;
         var p = {};
         switch (type) {
+          /* UNIX-style Timestamps */
           case 21589:
             {
               flags = blob.read_shift(1);
-              if (flags & 1)
-                p.mtime = blob.read_shift(4);
+              if (flags & 1) p.mtime = blob.read_shift(4);
               if (sz > 5) {
-                if (flags & 2)
-                  p.atime = blob.read_shift(4);
-                if (flags & 4)
-                  p.ctime = blob.read_shift(4);
+                if (flags & 2) p.atime = blob.read_shift(4);
+                if (flags & 4) p.ctime = blob.read_shift(4);
               }
-              if (p.mtime)
-                p.mt = new Date(p.mtime * 1e3);
+              if (p.mtime) p.mt = new Date(p.mtime * 1e3);
             }
             break;
+          /* ZIP64 Extended Information Field */
           case 1:
             {
               var sz1 = blob.read_shift(4), sz2 = blob.read_shift(4);
@@ -6032,12 +5845,9 @@
       return fs || (fs = _fs);
     }
     function parse(file, options) {
-      if (file[0] == 80 && file[1] == 75)
-        return parse_zip(file, options);
-      if ((file[0] | 32) == 109 && (file[1] | 32) == 105)
-        return parse_mad(file, options);
-      if (file.length < 512)
-        throw new Error("CFB file size " + file.length + " < 512");
+      if (file[0] == 80 && file[1] == 75) return parse_zip(file, options);
+      if ((file[0] | 32) == 109 && (file[1] | 32) == 105) return parse_mad(file, options);
+      if (file.length < 512) throw new Error("CFB file size " + file.length + " < 512");
       var mver = 3;
       var ssz = 512;
       var nmfs = 0;
@@ -6061,8 +5871,8 @@
           ssz = 4096;
           break;
         case 0:
-          if (mv[1] == 0)
-            return parse_zip(file, options);
+          if (mv[1] == 0) return parse_zip(file, options);
+        /* falls through */
         default:
           throw new Error("Major Version: Expected 3 or 4 saw " + mver);
       }
@@ -6078,8 +5888,7 @@
       var header = file.slice(0, ssz);
       check_shifts(blob, mver);
       var dir_cnt = blob.read_shift(4, "i");
-      if (mver === 3 && dir_cnt !== 0)
-        throw new Error("# Directory Sectors: Expected 0 saw " + dir_cnt);
+      if (mver === 3 && dir_cnt !== 0) throw new Error("# Directory Sectors: Expected 0 saw " + dir_cnt);
       blob.l += 4;
       dir_start = blob.read_shift(4, "i");
       blob.l += 4;
@@ -6090,17 +5899,14 @@
       difat_sec_cnt = blob.read_shift(4, "i");
       for (var q2 = -1, j = 0; j < 109; ++j) {
         q2 = blob.read_shift(4, "i");
-        if (q2 < 0)
-          break;
+        if (q2 < 0) break;
         fat_addrs[j] = q2;
       }
       var sectors = sectorify(file, ssz);
       sleuth_fat(difat_start, difat_sec_cnt, sectors, ssz, fat_addrs);
       var sector_list = make_sector_list(sectors, dir_start, fat_addrs, ssz);
-      if (dir_start < sector_list.length)
-        sector_list[dir_start].name = "!Directory";
-      if (nmfs > 0 && minifat_start !== ENDOFCHAIN)
-        sector_list[minifat_start].name = "!MiniFAT";
+      if (dir_start < sector_list.length) sector_list[dir_start].name = "!Directory";
+      if (nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
       sector_list[fat_addrs[0]].name = "!FAT";
       sector_list.fat_addrs = fat_addrs;
       sector_list.ssz = ssz;
@@ -6112,13 +5918,11 @@
         FileIndex,
         FullPaths
       };
-      if (options && options.raw)
-        o.raw = { header, sectors };
+      if (options && options.raw) o.raw = { header, sectors };
       return o;
     }
     function check_get_mver(blob) {
-      if (blob[blob.l] == 80 && blob[blob.l + 1] == 75)
-        return [0, 0];
+      if (blob[blob.l] == 80 && blob[blob.l + 1] == 75) return [0, 0];
       blob.chk(HEADER_SIGNATURE, "Header Signature: ");
       blob.l += 16;
       var mver = blob.read_shift(2, "u");
@@ -6129,12 +5933,10 @@
       blob.l += 2;
       switch (shift = blob.read_shift(2)) {
         case 9:
-          if (mver != 3)
-            throw new Error("Sector Shift: Expected 9 saw " + shift);
+          if (mver != 3) throw new Error("Sector Shift: Expected 9 saw " + shift);
           break;
         case 12:
-          if (mver != 4)
-            throw new Error("Sector Shift: Expected 12 saw " + shift);
+          if (mver != 4) throw new Error("Sector Shift: Expected 12 saw " + shift);
           break;
         default:
           throw new Error("Sector Shift: Expected 9 or 12 saw " + shift);
@@ -6145,8 +5947,7 @@
     function sectorify(file, ssz) {
       var nsectors = Math.ceil(file.length / ssz) - 1;
       var sectors = [];
-      for (var i2 = 1; i2 < nsectors; ++i2)
-        sectors[i2 - 1] = file.slice(i2 * ssz, (i2 + 1) * ssz);
+      for (var i2 = 1; i2 < nsectors; ++i2) sectors[i2 - 1] = file.slice(i2 * ssz, (i2 + 1) * ssz);
       sectors[nsectors - 1] = file.slice(nsectors * ssz);
       return sectors;
     }
@@ -6163,46 +5964,35 @@
         R = FI[i2].R;
         C = FI[i2].C;
         if (dad[i2] === i2) {
-          if (L !== -1 && dad[L] !== L)
-            dad[i2] = dad[L];
-          if (R !== -1 && dad[R] !== R)
-            dad[i2] = dad[R];
+          if (L !== -1 && dad[L] !== L) dad[i2] = dad[L];
+          if (R !== -1 && dad[R] !== R) dad[i2] = dad[R];
         }
-        if (C !== -1)
-          dad[C] = i2;
+        if (C !== -1) dad[C] = i2;
         if (L !== -1 && i2 != dad[i2]) {
           dad[L] = dad[i2];
-          if (q2.lastIndexOf(L) < j)
-            q2.push(L);
+          if (q2.lastIndexOf(L) < j) q2.push(L);
         }
         if (R !== -1 && i2 != dad[i2]) {
           dad[R] = dad[i2];
-          if (q2.lastIndexOf(R) < j)
-            q2.push(R);
+          if (q2.lastIndexOf(R) < j) q2.push(R);
         }
       }
-      for (i2 = 1; i2 < pl; ++i2)
-        if (dad[i2] === i2) {
-          if (R !== -1 && dad[R] !== R)
-            dad[i2] = dad[R];
-          else if (L !== -1 && dad[L] !== L)
-            dad[i2] = dad[L];
-        }
+      for (i2 = 1; i2 < pl; ++i2) if (dad[i2] === i2) {
+        if (R !== -1 && dad[R] !== R) dad[i2] = dad[R];
+        else if (L !== -1 && dad[L] !== L) dad[i2] = dad[L];
+      }
       for (i2 = 1; i2 < pl; ++i2) {
-        if (FI[i2].type === 0)
-          continue;
+        if (FI[i2].type === 0) continue;
         j = i2;
-        if (j != dad[j])
-          do {
-            j = dad[j];
-            FP[i2] = FP[j] + "/" + FP[i2];
-          } while (j !== 0 && -1 !== dad[j] && j != dad[j]);
+        if (j != dad[j]) do {
+          j = dad[j];
+          FP[i2] = FP[j] + "/" + FP[i2];
+        } while (j !== 0 && -1 !== dad[j] && j != dad[j]);
         dad[i2] = -1;
       }
       FP[0] += "/";
       for (i2 = 1; i2 < pl; ++i2) {
-        if (FI[i2].type !== 2)
-          FP[i2] += "/";
+        if (FI[i2].type !== 2) FP[i2] += "/";
       }
     }
     function get_mfat_entry(entry, payload, mini) {
@@ -6214,32 +6004,26 @@
         size -= MSSZ;
         idx = __readInt32LE(mini, idx * 4);
       }
-      if (o.length === 0)
-        return new_buf(0);
+      if (o.length === 0) return new_buf(0);
       return bconcat(o).slice(0, entry.size);
     }
     function sleuth_fat(idx, cnt, sectors, ssz, fat_addrs) {
       var q2 = ENDOFCHAIN;
       if (idx === ENDOFCHAIN) {
-        if (cnt !== 0)
-          throw new Error("DIFAT chain shorter than expected");
+        if (cnt !== 0) throw new Error("DIFAT chain shorter than expected");
       } else if (idx !== -1) {
         var sector = sectors[idx], m = (ssz >>> 2) - 1;
-        if (!sector)
-          return;
+        if (!sector) return;
         for (var i2 = 0; i2 < m; ++i2) {
-          if ((q2 = __readInt32LE(sector, i2 * 4)) === ENDOFCHAIN)
-            break;
+          if ((q2 = __readInt32LE(sector, i2 * 4)) === ENDOFCHAIN) break;
           fat_addrs.push(q2);
         }
-        if (cnt >= 1)
-          sleuth_fat(__readInt32LE(sector, ssz - 4), cnt - 1, sectors, ssz, fat_addrs);
+        if (cnt >= 1) sleuth_fat(__readInt32LE(sector, ssz - 4), cnt - 1, sectors, ssz, fat_addrs);
       }
     }
     function get_sector_list(sectors, start, fat_addrs, ssz, chkd) {
       var buf = [], buf_chain = [];
-      if (!chkd)
-        chkd = [];
+      if (!chkd) chkd = [];
       var modulus = ssz - 1, j = 0, jj = 0;
       for (j = start; j >= 0; ) {
         chkd[j] = true;
@@ -6247,10 +6031,8 @@
         buf_chain.push(sectors[j]);
         var addr = fat_addrs[Math.floor(j * 4 / ssz)];
         jj = j * 4 & modulus;
-        if (ssz < 4 + jj)
-          throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
-        if (!sectors[addr])
-          break;
+        if (ssz < 4 + jj) throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
+        if (!sectors[addr]) break;
         j = __readInt32LE(sectors[addr], jj);
       }
       return { nodes: buf, data: __toBuffer([buf_chain]) };
@@ -6262,10 +6044,8 @@
       for (i2 = 0; i2 < sl; ++i2) {
         buf = [];
         k = i2 + dir_start;
-        if (k >= sl)
-          k -= sl;
-        if (chkd[k])
-          continue;
+        if (k >= sl) k -= sl;
+        if (chkd[k]) continue;
         buf_chain = [];
         var seen = [];
         for (j = k; j >= 0; ) {
@@ -6275,13 +6055,10 @@
           buf_chain.push(sectors[j]);
           var addr = fat_addrs[Math.floor(j * 4 / ssz)];
           jj = j * 4 & modulus;
-          if (ssz < 4 + jj)
-            throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
-          if (!sectors[addr])
-            break;
+          if (ssz < 4 + jj) throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
+          if (!sectors[addr]) break;
           j = __readInt32LE(sectors[addr], jj);
-          if (seen[j])
-            break;
+          if (seen[j]) break;
         }
         sector_list[k] = { nodes: buf, data: __toBuffer([buf_chain]) };
       }
@@ -6313,11 +6090,9 @@
           size: 0
         };
         var ctime = blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2);
-        if (ctime !== 0)
-          o.ct = read_date(blob, blob.l - 8);
+        if (ctime !== 0) o.ct = read_date(blob, blob.l - 8);
         var mtime = blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2);
-        if (mtime !== 0)
-          o.mt = read_date(blob, blob.l - 8);
+        if (mtime !== 0) o.mt = read_date(blob, blob.l - 8);
         o.start = blob.read_shift(4, "i");
         o.size = blob.read_shift(4, "i");
         if (o.size < 0 && o.start < 0) {
@@ -6327,24 +6102,20 @@
         }
         if (o.type === 5) {
           minifat_store = o.start;
-          if (nmfs > 0 && minifat_store !== ENDOFCHAIN)
-            sector_list[minifat_store].name = "!StreamData";
+          if (nmfs > 0 && minifat_store !== ENDOFCHAIN) sector_list[minifat_store].name = "!StreamData";
         } else if (o.size >= 4096) {
           o.storage = "fat";
-          if (sector_list[o.start] === void 0)
-            sector_list[o.start] = get_sector_list(sectors, o.start, sector_list.fat_addrs, sector_list.ssz);
+          if (sector_list[o.start] === void 0) sector_list[o.start] = get_sector_list(sectors, o.start, sector_list.fat_addrs, sector_list.ssz);
           sector_list[o.start].name = o.name;
           o.content = sector_list[o.start].data.slice(0, o.size);
         } else {
           o.storage = "minifat";
-          if (o.size < 0)
-            o.size = 0;
+          if (o.size < 0) o.size = 0;
           else if (minifat_store !== ENDOFCHAIN && o.start !== ENDOFCHAIN && sector_list[minifat_store]) {
             o.content = get_mfat_entry(o, sector_list[minifat_store].data, (sector_list[mini] || {}).data);
           }
         }
-        if (o.content)
-          prep_blob(o.content, 0);
+        if (o.content) prep_blob(o.content, 0);
         files[name] = o;
         FileIndex.push(o);
       }
@@ -6359,8 +6130,7 @@
     function read(blob, options) {
       var type = options && options.type;
       if (!type) {
-        if (has_buf && Buffer.isBuffer(blob))
-          type = "buffer";
+        if (has_buf && Buffer.isBuffer(blob)) type = "buffer";
       }
       switch (type || "base64") {
         case "file":
@@ -6378,24 +6148,19 @@
     }
     function init_cfb(cfb, opts) {
       var o = opts || {}, root = o.root || "Root Entry";
-      if (!cfb.FullPaths)
-        cfb.FullPaths = [];
-      if (!cfb.FileIndex)
-        cfb.FileIndex = [];
-      if (cfb.FullPaths.length !== cfb.FileIndex.length)
-        throw new Error("inconsistent CFB structure");
+      if (!cfb.FullPaths) cfb.FullPaths = [];
+      if (!cfb.FileIndex) cfb.FileIndex = [];
+      if (cfb.FullPaths.length !== cfb.FileIndex.length) throw new Error("inconsistent CFB structure");
       if (cfb.FullPaths.length === 0) {
         cfb.FullPaths[0] = root + "/";
         cfb.FileIndex[0] = { name: root, type: 5 };
       }
-      if (o.CLSID)
-        cfb.FileIndex[0].clsid = o.CLSID;
+      if (o.CLSID) cfb.FileIndex[0].clsid = o.CLSID;
       seed_cfb(cfb);
     }
     function seed_cfb(cfb) {
       var nm = "Sh33tJ5";
-      if (CFB.find(cfb, "/" + nm))
-        return;
+      if (CFB.find(cfb, "/" + nm)) return;
       var p = new_buf(4);
       p[0] = 55;
       p[1] = p[3] = 50;
@@ -6411,8 +6176,7 @@
         var _file = cfb.FileIndex[i2];
         switch (_file.type) {
           case 0:
-            if (s)
-              gc = true;
+            if (s) gc = true;
             else {
               cfb.FileIndex.pop();
               cfb.FullPaths.pop();
@@ -6422,33 +6186,28 @@
           case 2:
           case 5:
             s = true;
-            if (isNaN(_file.R * _file.L * _file.C))
-              gc = true;
-            if (_file.R > -1 && _file.L > -1 && _file.R == _file.L)
-              gc = true;
+            if (isNaN(_file.R * _file.L * _file.C)) gc = true;
+            if (_file.R > -1 && _file.L > -1 && _file.R == _file.L) gc = true;
             break;
           default:
             gc = true;
             break;
         }
       }
-      if (!gc && !f)
-        return;
+      if (!gc && !f) return;
       var now = new Date(1987, 1, 19), j = 0;
       var fullPaths = Object.create ? /* @__PURE__ */ Object.create(null) : {};
       var data = [];
       for (i2 = 0; i2 < cfb.FullPaths.length; ++i2) {
         fullPaths[cfb.FullPaths[i2]] = true;
-        if (cfb.FileIndex[i2].type === 0)
-          continue;
+        if (cfb.FileIndex[i2].type === 0) continue;
         data.push([cfb.FullPaths[i2], cfb.FileIndex[i2]]);
       }
       for (i2 = 0; i2 < data.length; ++i2) {
         var dad = dirname(data[i2][0]);
         s = fullPaths[dad];
         while (!s) {
-          while (dirname(dad) && !fullPaths[dirname(dad)])
-            dad = dirname(dad);
+          while (dirname(dad) && !fullPaths[dirname(dad)]) dad = dirname(dad);
           data.push([dad, {
             name: filename(dad).replace("/", ""),
             type: 1,
@@ -6484,43 +6243,34 @@
           elt.size = 0;
           elt.type = 5;
         } else if (nm.slice(-1) == "/") {
-          for (j = i2 + 1; j < data.length; ++j)
-            if (dirname(cfb.FullPaths[j]) == nm)
-              break;
+          for (j = i2 + 1; j < data.length; ++j) if (dirname(cfb.FullPaths[j]) == nm) break;
           elt.C = j >= data.length ? -1 : j;
-          for (j = i2 + 1; j < data.length; ++j)
-            if (dirname(cfb.FullPaths[j]) == dirname(nm))
-              break;
+          for (j = i2 + 1; j < data.length; ++j) if (dirname(cfb.FullPaths[j]) == dirname(nm)) break;
           elt.R = j >= data.length ? -1 : j;
           elt.type = 1;
         } else {
-          if (dirname(cfb.FullPaths[i2 + 1] || "") == dirname(nm))
-            elt.R = i2 + 1;
+          if (dirname(cfb.FullPaths[i2 + 1] || "") == dirname(nm)) elt.R = i2 + 1;
           elt.type = 2;
         }
       }
     }
     function _write(cfb, options) {
       var _opts = options || {};
-      if (_opts.fileType == "mad")
-        return write_mad(cfb, _opts);
+      if (_opts.fileType == "mad") return write_mad(cfb, _opts);
       rebuild_cfb(cfb);
       switch (_opts.fileType) {
         case "zip":
           return write_zip(cfb, _opts);
       }
-      var L = function(cfb2) {
+      var L = (function(cfb2) {
         var mini_size = 0, fat_size = 0;
         for (var i3 = 0; i3 < cfb2.FileIndex.length; ++i3) {
           var file2 = cfb2.FileIndex[i3];
-          if (!file2.content)
-            continue;
+          if (!file2.content) continue;
           var flen2 = file2.content.length;
           if (flen2 > 0) {
-            if (flen2 < 4096)
-              mini_size += flen2 + 63 >> 6;
-            else
-              fat_size += flen2 + 511 >> 9;
+            if (flen2 < 4096) mini_size += flen2 + 63 >> 6;
+            else fat_size += flen2 + 511 >> 9;
           }
         }
         var dir_cnt = cfb2.FullPaths.length + 3 >> 2;
@@ -6529,27 +6279,23 @@
         var fat_base = mini_cnt + fat_size + dir_cnt + mfat_cnt;
         var fat_cnt = fat_base + 127 >> 7;
         var difat_cnt = fat_cnt <= 109 ? 0 : Math.ceil((fat_cnt - 109) / 127);
-        while (fat_base + fat_cnt + difat_cnt + 127 >> 7 > fat_cnt)
-          difat_cnt = ++fat_cnt <= 109 ? 0 : Math.ceil((fat_cnt - 109) / 127);
+        while (fat_base + fat_cnt + difat_cnt + 127 >> 7 > fat_cnt) difat_cnt = ++fat_cnt <= 109 ? 0 : Math.ceil((fat_cnt - 109) / 127);
         var L2 = [1, difat_cnt, fat_cnt, mfat_cnt, dir_cnt, fat_size, mini_size, 0];
         cfb2.FileIndex[0].size = mini_size << 6;
         L2[7] = (cfb2.FileIndex[0].start = L2[0] + L2[1] + L2[2] + L2[3] + L2[4] + L2[5]) + (L2[6] + 7 >> 3);
         return L2;
-      }(cfb);
+      })(cfb);
       var o = new_buf(L[7] << 9);
       var i2 = 0, T = 0;
       {
-        for (i2 = 0; i2 < 8; ++i2)
-          o.write_shift(1, HEADER_SIG[i2]);
-        for (i2 = 0; i2 < 8; ++i2)
-          o.write_shift(2, 0);
+        for (i2 = 0; i2 < 8; ++i2) o.write_shift(1, HEADER_SIG[i2]);
+        for (i2 = 0; i2 < 8; ++i2) o.write_shift(2, 0);
         o.write_shift(2, 62);
         o.write_shift(2, 3);
         o.write_shift(2, 65534);
         o.write_shift(2, 9);
         o.write_shift(2, 6);
-        for (i2 = 0; i2 < 3; ++i2)
-          o.write_shift(2, 0);
+        for (i2 = 0; i2 < 3; ++i2) o.write_shift(2, 0);
         o.write_shift(4, 0);
         o.write_shift(4, L[2]);
         o.write_shift(4, L[0] + L[1] + L[2] + L[3] - 1);
@@ -6559,73 +6305,58 @@
         o.write_shift(4, L[3]);
         o.write_shift(-4, L[1] ? L[0] - 1 : ENDOFCHAIN);
         o.write_shift(4, L[1]);
-        for (i2 = 0; i2 < 109; ++i2)
-          o.write_shift(-4, i2 < L[2] ? L[1] + i2 : -1);
+        for (i2 = 0; i2 < 109; ++i2) o.write_shift(-4, i2 < L[2] ? L[1] + i2 : -1);
       }
       if (L[1]) {
         for (T = 0; T < L[1]; ++T) {
-          for (; i2 < 236 + T * 127; ++i2)
-            o.write_shift(-4, i2 < L[2] ? L[1] + i2 : -1);
+          for (; i2 < 236 + T * 127; ++i2) o.write_shift(-4, i2 < L[2] ? L[1] + i2 : -1);
           o.write_shift(-4, T === L[1] - 1 ? ENDOFCHAIN : T + 1);
         }
       }
       var chainit = function(w) {
-        for (T += w; i2 < T - 1; ++i2)
-          o.write_shift(-4, i2 + 1);
+        for (T += w; i2 < T - 1; ++i2) o.write_shift(-4, i2 + 1);
         if (w) {
           ++i2;
           o.write_shift(-4, ENDOFCHAIN);
         }
       };
       T = i2 = 0;
-      for (T += L[1]; i2 < T; ++i2)
-        o.write_shift(-4, consts.DIFSECT);
-      for (T += L[2]; i2 < T; ++i2)
-        o.write_shift(-4, consts.FATSECT);
+      for (T += L[1]; i2 < T; ++i2) o.write_shift(-4, consts.DIFSECT);
+      for (T += L[2]; i2 < T; ++i2) o.write_shift(-4, consts.FATSECT);
       chainit(L[3]);
       chainit(L[4]);
       var j = 0, flen = 0;
       var file = cfb.FileIndex[0];
       for (; j < cfb.FileIndex.length; ++j) {
         file = cfb.FileIndex[j];
-        if (!file.content)
-          continue;
+        if (!file.content) continue;
         flen = file.content.length;
-        if (flen < 4096)
-          continue;
+        if (flen < 4096) continue;
         file.start = T;
         chainit(flen + 511 >> 9);
       }
       chainit(L[6] + 7 >> 3);
-      while (o.l & 511)
-        o.write_shift(-4, consts.ENDOFCHAIN);
+      while (o.l & 511) o.write_shift(-4, consts.ENDOFCHAIN);
       T = i2 = 0;
       for (j = 0; j < cfb.FileIndex.length; ++j) {
         file = cfb.FileIndex[j];
-        if (!file.content)
-          continue;
+        if (!file.content) continue;
         flen = file.content.length;
-        if (!flen || flen >= 4096)
-          continue;
+        if (!flen || flen >= 4096) continue;
         file.start = T;
         chainit(flen + 63 >> 6);
       }
-      while (o.l & 511)
-        o.write_shift(-4, consts.ENDOFCHAIN);
+      while (o.l & 511) o.write_shift(-4, consts.ENDOFCHAIN);
       for (i2 = 0; i2 < L[4] << 2; ++i2) {
         var nm = cfb.FullPaths[i2];
         if (!nm || nm.length === 0) {
-          for (j = 0; j < 17; ++j)
-            o.write_shift(4, 0);
-          for (j = 0; j < 3; ++j)
-            o.write_shift(4, -1);
-          for (j = 0; j < 12; ++j)
-            o.write_shift(4, 0);
+          for (j = 0; j < 17; ++j) o.write_shift(4, 0);
+          for (j = 0; j < 3; ++j) o.write_shift(4, -1);
+          for (j = 0; j < 12; ++j) o.write_shift(4, 0);
           continue;
         }
         file = cfb.FileIndex[i2];
-        if (i2 === 0)
-          file.start = file.size ? file.start - 1 : ENDOFCHAIN;
+        if (i2 === 0) file.start = file.size ? file.start - 1 : ENDOFCHAIN;
         var _nm = i2 === 0 && _opts.root || file.name;
         if (_nm.length > 31) {
           console.error("Name " + _nm + " will be truncated to " + _nm.slice(0, 31));
@@ -6639,11 +6370,8 @@
         o.write_shift(-4, file.L);
         o.write_shift(-4, file.R);
         o.write_shift(-4, file.C);
-        if (!file.clsid)
-          for (j = 0; j < 4; ++j)
-            o.write_shift(4, 0);
-        else
-          o.write_shift(16, file.clsid, "hex");
+        if (!file.clsid) for (j = 0; j < 4; ++j) o.write_shift(4, 0);
+        else o.write_shift(16, file.clsid, "hex");
         o.write_shift(4, file.state || 0);
         o.write_shift(4, 0);
         o.write_shift(4, 0);
@@ -6661,10 +6389,8 @@
             file.content.copy(o, o.l, 0, file.size);
             o.l += file.size + 511 & -512;
           } else {
-            for (j = 0; j < file.size; ++j)
-              o.write_shift(1, file.content[j]);
-            for (; j & 511; ++j)
-              o.write_shift(1, 0);
+            for (j = 0; j < file.size; ++j) o.write_shift(1, file.content[j]);
+            for (; j & 511; ++j) o.write_shift(1, 0);
           }
         }
       }
@@ -6675,18 +6401,15 @@
             file.content.copy(o, o.l, 0, file.size);
             o.l += file.size + 63 & -64;
           } else {
-            for (j = 0; j < file.size; ++j)
-              o.write_shift(1, file.content[j]);
-            for (; j & 63; ++j)
-              o.write_shift(1, 0);
+            for (j = 0; j < file.size; ++j) o.write_shift(1, file.content[j]);
+            for (; j & 63; ++j) o.write_shift(1, 0);
           }
         }
       }
       if (has_buf) {
         o.l = o.length;
       } else {
-        while (o.l < o.length)
-          o.write_shift(1, 0);
+        while (o.l < o.length) o.write_shift(1, 0);
       }
       return o;
     }
@@ -6702,21 +6425,16 @@
       if (path.charCodeAt(0) === 47) {
         k = true;
         path = UCFullPaths[0].slice(0, -1) + path;
-      } else
-        k = path.indexOf("/") !== -1;
+      } else k = path.indexOf("/") !== -1;
       var UCPath = path.toUpperCase();
       var w = k === true ? UCFullPaths.indexOf(UCPath) : UCPaths.indexOf(UCPath);
-      if (w !== -1)
-        return cfb.FileIndex[w];
+      if (w !== -1) return cfb.FileIndex[w];
       var m = !UCPath.match(chr1);
       UCPath = UCPath.replace(chr0, "");
-      if (m)
-        UCPath = UCPath.replace(chr1, "!");
+      if (m) UCPath = UCPath.replace(chr1, "!");
       for (w = 0; w < UCFullPaths.length; ++w) {
-        if ((m ? UCFullPaths[w].replace(chr1, "!") : UCFullPaths[w]).replace(chr0, "") == UCPath)
-          return cfb.FileIndex[w];
-        if ((m ? UCPaths[w].replace(chr1, "!") : UCPaths[w]).replace(chr0, "") == UCPath)
-          return cfb.FileIndex[w];
+        if ((m ? UCFullPaths[w].replace(chr1, "!") : UCFullPaths[w]).replace(chr0, "") == UCPath) return cfb.FileIndex[w];
+        if ((m ? UCPaths[w].replace(chr1, "!") : UCPaths[w]).replace(chr0, "") == UCPath) return cfb.FileIndex[w];
       }
       return null;
     }
@@ -6748,8 +6466,7 @@
     }
     function a2s2(o) {
       var out = new Array(o.length);
-      for (var i2 = 0; i2 < o.length; ++i2)
-        out[i2] = String.fromCharCode(o[i2]);
+      for (var i2 = 0; i2 < o.length; ++i2) out[i2] = String.fromCharCode(o[i2]);
       return out.join("");
     }
     function write(cfb, options) {
@@ -6764,8 +6481,8 @@
         case "base64":
           return Base64_encode(typeof o == "string" ? o : a2s2(o));
         case "buffer":
-          if (has_buf)
-            return Buffer.isBuffer(o) ? o : Buffer_from(o);
+          if (has_buf) return Buffer.isBuffer(o) ? o : Buffer_from(o);
+        /* falls through */
         case "array":
           return typeof o == "string" ? s2a(o) : o;
       }
@@ -6777,17 +6494,14 @@
         var InflateRaw = zlib.InflateRaw;
         var InflRaw = new InflateRaw();
         InflRaw._processChunk(new Uint8Array([3, 0]), InflRaw._finishFlushFlag);
-        if (InflRaw.bytesRead)
-          _zlib = zlib;
-        else
-          throw new Error("zlib does not expose bytesRead");
+        if (InflRaw.bytesRead) _zlib = zlib;
+        else throw new Error("zlib does not expose bytesRead");
       } catch (e) {
         console.error("cannot use native zlib: " + (e.message || e));
       }
     }
     function _inflateRawSync(payload, usz) {
-      if (!_zlib)
-        return _inflate(payload, usz);
+      if (!_zlib) return _inflate(payload, usz);
       var InflateRaw = _zlib.InflateRaw;
       var InflRaw = new InflateRaw();
       var out = InflRaw._processChunk(payload.slice(payload.l), InflRaw._finishFlushFlag);
@@ -6806,15 +6520,12 @@
     }
     var use_typed_arrays = typeof Uint8Array !== "undefined";
     var bitswap8 = use_typed_arrays ? new Uint8Array(1 << 8) : [];
-    for (var q = 0; q < 1 << 8; ++q)
-      bitswap8[q] = bit_swap_8(q);
+    for (var q = 0; q < 1 << 8; ++q) bitswap8[q] = bit_swap_8(q);
     function bit_swap_n(n, b) {
       var rev = bitswap8[n & 255];
-      if (b <= 8)
-        return rev >>> 8 - b;
+      if (b <= 8) return rev >>> 8 - b;
       rev = rev << 8 | bitswap8[n >> 8 & 255];
-      if (b <= 16)
-        return rev >>> 16 - b;
+      if (b <= 16) return rev >>> 16 - b;
       rev = rev << 8 | bitswap8[n >> 16 & 255];
       return rev >>> 24 - b;
     }
@@ -6841,21 +6552,17 @@
     function read_bits_n(buf, bl, n) {
       var w = bl & 7, h = bl >>> 3, f = (1 << n) - 1;
       var v = buf[h] >>> w;
-      if (n < 8 - w)
-        return v & f;
+      if (n < 8 - w) return v & f;
       v |= buf[h + 1] << 8 - w;
-      if (n < 16 - w)
-        return v & f;
+      if (n < 16 - w) return v & f;
       v |= buf[h + 2] << 16 - w;
-      if (n < 24 - w)
-        return v & f;
+      if (n < 24 - w) return v & f;
       v |= buf[h + 3] << 24 - w;
       return v & f;
     }
     function write_bits_3(buf, bl, v) {
       var w = bl & 7, h = bl >>> 3;
-      if (w <= 5)
-        buf[h] |= (v & 7) << w;
+      if (w <= 5) buf[h] |= (v & 7) << w;
       else {
         buf[h] |= v << w & 255;
         buf[h + 1] = (v & 7) >> 8 - w;
@@ -6887,23 +6594,16 @@
     }
     function realloc(b, sz) {
       var L = b.length, M = 2 * L > sz ? 2 * L : sz + 5, i2 = 0;
-      if (L >= sz)
-        return b;
+      if (L >= sz) return b;
       if (has_buf) {
         var o = new_unsafe_buf(M);
-        if (b.copy)
-          b.copy(o);
-        else
-          for (; i2 < b.length; ++i2)
-            o[i2] = b[i2];
+        if (b.copy) b.copy(o);
+        else for (; i2 < b.length; ++i2) o[i2] = b[i2];
         return o;
       } else if (use_typed_arrays) {
         var a = new Uint8Array(M);
-        if (a.set)
-          a.set(b);
-        else
-          for (; i2 < L; ++i2)
-            a[i2] = b[i2];
+        if (a.set) a.set(b);
+        else for (; i2 < L; ++i2) a[i2] = b[i2];
         return a;
       }
       b.length = M;
@@ -6911,32 +6611,26 @@
     }
     function zero_fill_array(n) {
       var o = new Array(n);
-      for (var i2 = 0; i2 < n; ++i2)
-        o[i2] = 0;
+      for (var i2 = 0; i2 < n; ++i2) o[i2] = 0;
       return o;
     }
     function build_tree(clens, cmap, MAX) {
       var maxlen = 1, w = 0, i2 = 0, j = 0, ccode = 0, L = clens.length;
       var bl_count = use_typed_arrays ? new Uint16Array(32) : zero_fill_array(32);
-      for (i2 = 0; i2 < 32; ++i2)
-        bl_count[i2] = 0;
-      for (i2 = L; i2 < MAX; ++i2)
-        clens[i2] = 0;
+      for (i2 = 0; i2 < 32; ++i2) bl_count[i2] = 0;
+      for (i2 = L; i2 < MAX; ++i2) clens[i2] = 0;
       L = clens.length;
       var ctree = use_typed_arrays ? new Uint16Array(L) : zero_fill_array(L);
       for (i2 = 0; i2 < L; ++i2) {
         bl_count[w = clens[i2]]++;
-        if (maxlen < w)
-          maxlen = w;
+        if (maxlen < w) maxlen = w;
         ctree[i2] = 0;
       }
       bl_count[0] = 0;
-      for (i2 = 1; i2 <= maxlen; ++i2)
-        bl_count[i2 + 16] = ccode = ccode + bl_count[i2 - 1] << 1;
+      for (i2 = 1; i2 <= maxlen; ++i2) bl_count[i2 + 16] = ccode = ccode + bl_count[i2 - 1] << 1;
       for (i2 = 0; i2 < L; ++i2) {
         ccode = clens[i2];
-        if (ccode != 0)
-          ctree[i2] = bl_count[ccode + 16]++;
+        if (ccode != 0) ctree[i2] = bl_count[ccode + 16]++;
       }
       var cleni = 0;
       for (i2 = 0; i2 < L; ++i2) {
@@ -6952,42 +6646,32 @@
     var fix_lmap = use_typed_arrays ? new Uint16Array(512) : zero_fill_array(512);
     var fix_dmap = use_typed_arrays ? new Uint16Array(32) : zero_fill_array(32);
     if (!use_typed_arrays) {
-      for (var i = 0; i < 512; ++i)
-        fix_lmap[i] = 0;
-      for (i = 0; i < 32; ++i)
-        fix_dmap[i] = 0;
+      for (var i = 0; i < 512; ++i) fix_lmap[i] = 0;
+      for (i = 0; i < 32; ++i) fix_dmap[i] = 0;
     }
     (function() {
       var dlens = [];
       var i2 = 0;
-      for (; i2 < 32; i2++)
-        dlens.push(5);
+      for (; i2 < 32; i2++) dlens.push(5);
       build_tree(dlens, fix_dmap, 32);
       var clens = [];
       i2 = 0;
-      for (; i2 <= 143; i2++)
-        clens.push(8);
-      for (; i2 <= 255; i2++)
-        clens.push(9);
-      for (; i2 <= 279; i2++)
-        clens.push(7);
-      for (; i2 <= 287; i2++)
-        clens.push(8);
+      for (; i2 <= 143; i2++) clens.push(8);
+      for (; i2 <= 255; i2++) clens.push(9);
+      for (; i2 <= 279; i2++) clens.push(7);
+      for (; i2 <= 287; i2++) clens.push(8);
       build_tree(clens, fix_lmap, 288);
     })();
-    var _deflateRaw = /* @__PURE__ */ function _deflateRawIIFE() {
+    var _deflateRaw = /* @__PURE__ */ (function _deflateRawIIFE() {
       var DST_LN_RE = use_typed_arrays ? new Uint8Array(32768) : [];
       var j = 0, k = 0;
       for (; j < DST_LN.length - 1; ++j) {
-        for (; k < DST_LN[j + 1]; ++k)
-          DST_LN_RE[k] = j;
+        for (; k < DST_LN[j + 1]; ++k) DST_LN_RE[k] = j;
       }
-      for (; k < 32768; ++k)
-        DST_LN_RE[k] = 29;
+      for (; k < 32768; ++k) DST_LN_RE[k] = 29;
       var LEN_LN_RE = use_typed_arrays ? new Uint8Array(259) : [];
       for (j = 0, k = 0; j < LEN_LN.length - 1; ++j) {
-        for (; k < LEN_LN[j + 1]; ++k)
-          LEN_LN_RE[k] = j;
+        for (; k < LEN_LN[j + 1]; ++k) LEN_LN_RE[k] = j;
       }
       function write_stored(data, out) {
         var boff = 0;
@@ -6997,8 +6681,7 @@
           out.write_shift(1, +h);
           out.write_shift(2, L);
           out.write_shift(2, ~L & 65535);
-          while (L-- > 0)
-            out[out.l++] = data[boff++];
+          while (L-- > 0) out[out.l++] = data[boff++];
         }
         return out.l;
       }
@@ -7013,13 +6696,11 @@
           );
           if (L < 10) {
             bl = write_bits_3(out, bl, +!!(boff + L == data.length));
-            if (bl & 7)
-              bl += 8 - (bl & 7);
+            if (bl & 7) bl += 8 - (bl & 7);
             out.l = bl / 8 | 0;
             out.write_shift(2, L);
             out.write_shift(2, ~L & 65535);
-            while (L-- > 0)
-              out[out.l++] = data[boff++];
+            while (L-- > 0) out[out.l++] = data[boff++];
             bl = out.l * 8;
             continue;
           }
@@ -7031,16 +6712,12 @@
             var match = -1, mlen = 0;
             if (match = addrs[hash]) {
               match |= boff & ~32767;
-              if (match > boff)
-                match -= 32768;
-              if (match < boff)
-                while (data[match + mlen] == data[boff + mlen] && mlen < 250)
-                  ++mlen;
+              if (match > boff) match -= 32768;
+              if (match < boff) while (data[match + mlen] == data[boff + mlen] && mlen < 250) ++mlen;
             }
             if (mlen > 2) {
               d = LEN_LN_RE[mlen];
-              if (d <= 22)
-                bl = write_bits_8(out, bl, bitswap8[d + 1] >> 1) - 1;
+              if (d <= 22) bl = write_bits_8(out, bl, bitswap8[d + 1] >> 1) - 1;
               else {
                 write_bits_8(out, bl, 3);
                 bl += 5;
@@ -7067,10 +6744,8 @@
               }
               L -= mlen - 1;
             } else {
-              if (d <= 143)
-                d = d + 48;
-              else
-                bl = write_bits_1(out, bl, 1);
+              if (d <= 143) d = d + 48;
+              else bl = write_bits_1(out, bl, 1);
               bl = write_bits_8(out, bl, bitswap8[d]);
               addrs[hash] = boff & 32767;
               ++boff;
@@ -7082,11 +6757,10 @@
         return out.l;
       }
       return function _deflateRaw2(data, out) {
-        if (data.length < 8)
-          return write_stored(data, out);
+        if (data.length < 8) return write_stored(data, out);
         return write_huff_fixed(data, out);
       };
-    }();
+    })();
     function _deflate(data) {
       var buf = new_buf(50 + Math.floor(data.length * 1.1));
       var off = _deflateRaw(data, buf);
@@ -7112,25 +6786,20 @@
       var L = clens.length;
       for (var i2 = 0; i2 < _HCLEN; ++i2) {
         clens[CLEN_ORDER[i2]] = w = read_bits_3(data, boff);
-        if (maxlen < w)
-          maxlen = w;
+        if (maxlen < w) maxlen = w;
         bl_count[w]++;
         boff += 3;
       }
       var ccode = 0;
       bl_count[0] = 0;
-      for (i2 = 1; i2 <= maxlen; ++i2)
-        next_code[i2] = ccode = ccode + bl_count[i2 - 1] << 1;
-      for (i2 = 0; i2 < L; ++i2)
-        if ((ccode = clens[i2]) != 0)
-          ctree[i2] = next_code[ccode]++;
+      for (i2 = 1; i2 <= maxlen; ++i2) next_code[i2] = ccode = ccode + bl_count[i2 - 1] << 1;
+      for (i2 = 0; i2 < L; ++i2) if ((ccode = clens[i2]) != 0) ctree[i2] = next_code[ccode]++;
       var cleni = 0;
       for (i2 = 0; i2 < L; ++i2) {
         cleni = clens[i2];
         if (cleni != 0) {
           ccode = bitswap8[ctree[i2]] >> 8 - cleni;
-          for (var j = (1 << 7 - cleni) - 1; j >= 0; --j)
-            dyn_cmap[ccode | j << cleni] = cleni & 7 | i2 << 3;
+          for (var j = (1 << 7 - cleni) - 1; j >= 0; --j) dyn_cmap[ccode | j << cleni] = cleni & 7 | i2 << 3;
         }
       }
       var hcodes = [];
@@ -7143,33 +6812,27 @@
             w = 3 + read_bits_2(data, boff);
             boff += 2;
             ccode = hcodes[hcodes.length - 1];
-            while (w-- > 0)
-              hcodes.push(ccode);
+            while (w-- > 0) hcodes.push(ccode);
             break;
           case 17:
             w = 3 + read_bits_3(data, boff);
             boff += 3;
-            while (w-- > 0)
-              hcodes.push(0);
+            while (w-- > 0) hcodes.push(0);
             break;
           case 18:
             w = 11 + read_bits_7(data, boff);
             boff += 7;
-            while (w-- > 0)
-              hcodes.push(0);
+            while (w-- > 0) hcodes.push(0);
             break;
           default:
             hcodes.push(ccode);
-            if (maxlen < ccode)
-              maxlen = ccode;
+            if (maxlen < ccode) maxlen = ccode;
             break;
         }
       }
       var h1 = hcodes.slice(0, _HLIT), h2 = hcodes.slice(_HLIT);
-      for (i2 = _HLIT; i2 < 286; ++i2)
-        h1[i2] = 0;
-      for (i2 = _HDIST; i2 < 30; ++i2)
-        h2[i2] = 0;
+      for (i2 = _HLIT; i2 < 286; ++i2) h1[i2] = 0;
+      for (i2 = _HDIST; i2 < 30; ++i2) h2[i2] = 0;
       dyn_len_1 = build_tree(h1, dyn_lmap, 286);
       dyn_len_2 = build_tree(h2, dyn_dmap, 30);
       return boff;
@@ -7188,8 +6851,7 @@
         header = read_bits_3(data, boff);
         boff += 3;
         if (header >>> 1 == 0) {
-          if (boff & 7)
-            boff += 8 - (boff & 7);
+          if (boff & 7) boff += 8 - (boff & 7);
           var sz = data[boff >>> 3] | data[(boff >>> 3) + 1] << 8;
           boff += 32;
           if (sz > 0) {
@@ -7220,15 +6882,12 @@
           var code = header >>> 1 == 1 ? fix_lmap[bits] : dyn_lmap[bits];
           boff += code & 15;
           code >>>= 4;
-          if ((code >>> 8 & 255) === 0)
-            outbuf[woff++] = code;
-          else if (code == 256)
-            break;
+          if ((code >>> 8 & 255) === 0) outbuf[woff++] = code;
+          else if (code == 256) break;
           else {
             code -= 257;
             var len_eb = code < 8 ? 0 : code - 4 >> 2;
-            if (len_eb > 5)
-              len_eb = 0;
+            if (len_eb > 5) len_eb = 0;
             var tgt = woff + LEN_LN[code];
             if (len_eb > 0) {
               tgt += read_bits_n(data, boff, len_eb);
@@ -7255,8 +6914,7 @@
           }
         }
       }
-      if (usz)
-        return [outbuf, boff + 7 >>> 3];
+      if (usz) return [outbuf, boff + 7 >>> 3];
       return [outbuf.slice(0, woff), boff + 7 >>> 3];
     }
     function _inflate(payload, usz) {
@@ -7267,10 +6925,8 @@
     }
     function warn_or_throw(wrn, msg) {
       if (wrn) {
-        if (typeof console !== "undefined")
-          console.error(msg);
-      } else
-        throw new Error(msg);
+        if (typeof console !== "undefined") console.error(msg);
+      } else throw new Error(msg);
     }
     function parse_zip(file, options) {
       var blob = (
@@ -7285,8 +6941,7 @@
       };
       init_cfb(o, { root: options.root });
       var i2 = blob.length - 4;
-      while ((blob[i2] != 80 || blob[i2 + 1] != 75 || blob[i2 + 2] != 5 || blob[i2 + 3] != 6) && i2 >= 0)
-        --i2;
+      while ((blob[i2] != 80 || blob[i2 + 1] != 75 || blob[i2 + 2] != 5 || blob[i2 + 3] != 6) && i2 >= 0) --i2;
       blob.l = i2 + 4;
       blob.l += 4;
       var fcnt = blob.read_shift(2);
@@ -7311,10 +6966,8 @@
         var L = blob.l;
         blob.l = offset + 4;
         if (EF && EF[1]) {
-          if ((EF[1] || {}).usz)
-            usz = EF[1].usz;
-          if ((EF[1] || {}).csz)
-            csz = EF[1].csz;
+          if ((EF[1] || {}).usz) usz = EF[1].usz;
+          if ((EF[1] || {}).csz) csz = EF[1].csz;
         }
         parse_local_file(blob, csz, usz, o, EF);
         blob.l = L;
@@ -7326,35 +6979,27 @@
       var flags = blob.read_shift(2);
       var meth = blob.read_shift(2);
       var date = parse_dos_date(blob);
-      if (flags & 8257)
-        throw new Error("Unsupported ZIP encryption");
+      if (flags & 8257) throw new Error("Unsupported ZIP encryption");
       var crc32 = blob.read_shift(4);
       var _csz = blob.read_shift(4);
       var _usz = blob.read_shift(4);
       var namelen = blob.read_shift(2);
       var efsz = blob.read_shift(2);
       var name = "";
-      for (var i2 = 0; i2 < namelen; ++i2)
-        name += String.fromCharCode(blob[blob.l++]);
+      for (var i2 = 0; i2 < namelen; ++i2) name += String.fromCharCode(blob[blob.l++]);
       if (efsz) {
         var ef = parse_extra_field(
           /*::(*/
           blob.slice(blob.l, blob.l + efsz)
           /*:: :any)*/
         );
-        if ((ef[21589] || {}).mt)
-          date = ef[21589].mt;
-        if ((ef[1] || {}).usz)
-          _usz = ef[1].usz;
-        if ((ef[1] || {}).csz)
-          _csz = ef[1].csz;
+        if ((ef[21589] || {}).mt) date = ef[21589].mt;
+        if ((ef[1] || {}).usz) _usz = ef[1].usz;
+        if ((ef[1] || {}).csz) _csz = ef[1].csz;
         if (EF) {
-          if ((EF[21589] || {}).mt)
-            date = EF[21589].mt;
-          if ((EF[1] || {}).usz)
-            _usz = EF[1].usz;
-          if ((EF[1] || {}).csz)
-            _csz = EF[1].csz;
+          if ((EF[21589] || {}).mt) date = EF[21589].mt;
+          if ((EF[1] || {}).usz) _usz = EF[1].usz;
+          if ((EF[1] || {}).csz) _csz = EF[1].csz;
         }
       }
       blob.l += efsz;
@@ -7366,6 +7011,7 @@
         case 0:
           blob.l += _csz;
           break;
+        // TODO: scan for magic number
         default:
           throw new Error("Unsupported ZIP Compression method " + meth);
       }
@@ -7379,10 +7025,8 @@
         _csz = blob.read_shift(4);
         _usz = blob.read_shift(4);
       }
-      if (_csz != csz)
-        warn_or_throw(wrn, "Bad compressed size: " + csz + " != " + _csz);
-      if (_usz != usz)
-        warn_or_throw(wrn, "Bad uncompressed size: " + usz + " != " + _usz);
+      if (_csz != csz) warn_or_throw(wrn, "Bad compressed size: " + csz + " != " + _csz);
+      if (_usz != usz) warn_or_throw(wrn, "Bad uncompressed size: " + usz + " != " + _usz);
       cfb_add(o, name, data, { unsafe: true, mt: date });
     }
     function write_zip(cfb, options) {
@@ -7391,8 +7035,7 @@
       var o = new_buf(1);
       var method = _opts.compression ? 8 : 0, flags = 0;
       var desc = false;
-      if (desc)
-        flags |= 8;
+      if (desc) flags |= 8;
       var i2 = 0, j = 0;
       var start_cd = 0, fcnt = 0;
       var root = cfb.FullPaths[0], fp = root, fi = cfb.FileIndex[0];
@@ -7401,12 +7044,10 @@
       for (i2 = 1; i2 < cfb.FullPaths.length; ++i2) {
         fp = cfb.FullPaths[i2].slice(root.length);
         fi = cfb.FileIndex[i2];
-        if (!fi.size || !fi.content || Array.isArray(fi.content) && fi.content.length == 0 || fp == "Sh33tJ5")
-          continue;
+        if (!fi.size || !fi.content || Array.isArray(fi.content) && fi.content.length == 0 || fp == "Sh33tJ5") continue;
         var start = start_cd;
         var namebuf = new_buf(fp.length);
-        for (j = 0; j < fp.length; ++j)
-          namebuf.write_shift(1, fp.charCodeAt(j) & 127);
+        for (j = 0; j < fp.length; ++j) namebuf.write_shift(1, fp.charCodeAt(j) & 127);
         namebuf = namebuf.slice(0, namebuf.l);
         crcs[fcnt] = typeof fi.content == "string" ? CRC32.bstr(fi.content, 0) : CRC32.buf(
           /*::((*/
@@ -7414,17 +7055,14 @@
           0
         );
         var outbuf = typeof fi.content == "string" ? s2a(fi.content) : fi.content;
-        if (method == 8)
-          outbuf = _deflateRawSync(outbuf);
+        if (method == 8) outbuf = _deflateRawSync(outbuf);
         o = new_buf(30);
         o.write_shift(4, 67324752);
         o.write_shift(2, 20);
         o.write_shift(2, flags);
         o.write_shift(2, method);
-        if (fi.mt)
-          write_dos_date(o, fi.mt);
-        else
-          o.write_shift(4, 0);
+        if (fi.mt) write_dos_date(o, fi.mt);
+        else o.write_shift(4, 0);
         o.write_shift(-4, flags & 8 ? 0 : crcs[fcnt]);
         o.write_shift(4, flags & 8 ? 0 : outbuf.length);
         o.write_shift(4, flags & 8 ? 0 : (
@@ -7500,23 +7138,19 @@
       "sh33tj5": "application/octet-stream"
     };
     function get_content_type(fi, fp) {
-      if (fi.ctype)
-        return fi.ctype;
+      if (fi.ctype) return fi.ctype;
       var ext = fi.name || "", m = ext.match(/\.([^\.]+)$/);
-      if (m && ContentTypeMap[m[1]])
-        return ContentTypeMap[m[1]];
+      if (m && ContentTypeMap[m[1]]) return ContentTypeMap[m[1]];
       if (fp) {
         m = (ext = fp).match(/[\.\\]([^\.\\])+$/);
-        if (m && ContentTypeMap[m[1]])
-          return ContentTypeMap[m[1]];
+        if (m && ContentTypeMap[m[1]]) return ContentTypeMap[m[1]];
       }
       return "application/octet-stream";
     }
     function write_base64_76(bstr) {
       var data = Base64_encode(bstr);
       var o = [];
-      for (var i2 = 0; i2 < data.length; i2 += 76)
-        o.push(data.slice(i2, i2 + 76));
+      for (var i2 = 0; i2 < data.length; i2 += 76) o.push(data.slice(i2, i2 + 76));
       return o.join("\r\n") + "\r\n";
     }
     function write_quoted_printable(text) {
@@ -7525,8 +7159,7 @@
         return "=" + (w.length == 1 ? "0" + w : w);
       });
       encoded = encoded.replace(/ $/mg, "=20").replace(/\t$/mg, "=09");
-      if (encoded.charAt(0) == "\n")
-        encoded = "=0D" + encoded.slice(1);
+      if (encoded.charAt(0) == "\n") encoded = "=0D" + encoded.slice(1);
       encoded = encoded.replace(/\r(?!\n)/mg, "=0D").replace(/\n\n/mg, "\n=0A").replace(/([^\r\n])\n/mg, "$1=0A");
       var o = [], split = encoded.split("\r\n");
       for (var si = 0; si < split.length; ++si) {
@@ -7538,16 +7171,12 @@
         for (var i2 = 0; i2 < str.length; ) {
           var end = 76;
           var tmp = str.slice(i2, i2 + end);
-          if (tmp.charAt(end - 1) == "=")
-            end--;
-          else if (tmp.charAt(end - 2) == "=")
-            end -= 2;
-          else if (tmp.charAt(end - 3) == "=")
-            end -= 3;
+          if (tmp.charAt(end - 1) == "=") end--;
+          else if (tmp.charAt(end - 2) == "=") end -= 2;
+          else if (tmp.charAt(end - 3) == "=") end -= 3;
           tmp = str.slice(i2, i2 + end);
           i2 += end;
-          if (i2 < str.length)
-            tmp += "=";
+          if (i2 < str.length) tmp += "=";
           o.push(tmp);
         }
       }
@@ -7557,14 +7186,12 @@
       var o = [];
       for (var di = 0; di < data.length; ++di) {
         var line = data[di];
-        while (di <= data.length && line.charAt(line.length - 1) == "=")
-          line = line.slice(0, line.length - 1) + data[++di];
+        while (di <= data.length && line.charAt(line.length - 1) == "=") line = line.slice(0, line.length - 1) + data[++di];
         o.push(line);
       }
-      for (var oi = 0; oi < o.length; ++oi)
-        o[oi] = o[oi].replace(/[=][0-9A-Fa-f]{2}/g, function($$) {
-          return String.fromCharCode(parseInt($$.slice(1), 16));
-        });
+      for (var oi = 0; oi < o.length; ++oi) o[oi] = o[oi].replace(/[=][0-9A-Fa-f]{2}/g, function($$) {
+        return String.fromCharCode(parseInt($$.slice(1), 16));
+      });
       return s2a(o.join("\r\n"));
     }
     function parse_mime(cfb, data, root) {
@@ -7572,21 +7199,19 @@
       var di = 0;
       for (; di < 10; ++di) {
         var line = data[di];
-        if (!line || line.match(/^\s*$/))
-          break;
+        if (!line || line.match(/^\s*$/)) break;
         var m = line.match(/^([^:]*?):\s*([^\s].*)$/);
-        if (m)
-          switch (m[1].toLowerCase()) {
-            case "content-location":
-              fname = m[2].trim();
-              break;
-            case "content-type":
-              ctype = m[2].trim();
-              break;
-            case "content-transfer-encoding":
-              cte = m[2].trim();
-              break;
-          }
+        if (m) switch (m[1].toLowerCase()) {
+          case "content-location":
+            fname = m[2].trim();
+            break;
+          case "content-type":
+            ctype = m[2].trim();
+            break;
+          case "content-transfer-encoding":
+            cte = m[2].trim();
+            break;
+        }
       }
       ++di;
       switch (cte.toLowerCase()) {
@@ -7600,34 +7225,27 @@
           throw new Error("Unsupported Content-Transfer-Encoding " + cte);
       }
       var file = cfb_add(cfb, fname.slice(root.length), fdata, { unsafe: true });
-      if (ctype)
-        file.ctype = ctype;
+      if (ctype) file.ctype = ctype;
     }
     function parse_mad(file, options) {
-      if (a2s2(file.slice(0, 13)).toLowerCase() != "mime-version:")
-        throw new Error("Unsupported MAD header");
+      if (a2s2(file.slice(0, 13)).toLowerCase() != "mime-version:") throw new Error("Unsupported MAD header");
       var root = options && options.root || "";
       var data = (has_buf && Buffer.isBuffer(file) ? file.toString("binary") : a2s2(file)).split("\r\n");
       var di = 0, row = "";
       for (di = 0; di < data.length; ++di) {
         row = data[di];
-        if (!/^Content-Location:/i.test(row))
-          continue;
+        if (!/^Content-Location:/i.test(row)) continue;
         row = row.slice(row.indexOf("file"));
-        if (!root)
-          root = row.slice(0, row.lastIndexOf("/") + 1);
-        if (row.slice(0, root.length) == root)
-          continue;
+        if (!root) root = row.slice(0, row.lastIndexOf("/") + 1);
+        if (row.slice(0, root.length) == root) continue;
         while (root.length > 0) {
           root = root.slice(0, root.length - 1);
           root = root.slice(0, root.lastIndexOf("/") + 1);
-          if (row.slice(0, root.length) == root)
-            break;
+          if (row.slice(0, root.length) == root) break;
         }
       }
       var mboundary = (data[1] || "").match(/boundary="(.*?)"/);
-      if (!mboundary)
-        throw new Error("MAD cannot find boundary");
+      if (!mboundary) throw new Error("MAD cannot find boundary");
       var boundary = "--" + (mboundary[1] || "");
       var FileIndex = [], FullPaths = [];
       var o = {
@@ -7638,10 +7256,8 @@
       var start_di, fcnt = 0;
       for (di = 0; di < data.length; ++di) {
         var line = data[di];
-        if (line !== boundary && line !== boundary + "--")
-          continue;
-        if (fcnt++)
-          parse_mime(o, data.slice(start_di, di), root);
+        if (line !== boundary && line !== boundary + "--") continue;
+        if (fcnt++) parse_mime(o, data.slice(start_di, di), root);
         start_di = di;
       }
       return o;
@@ -7661,8 +7277,7 @@
       for (var i2 = 1; i2 < cfb.FullPaths.length; ++i2) {
         fp = cfb.FullPaths[i2].slice(root.length);
         fi = cfb.FileIndex[i2];
-        if (!fi.size || !fi.content || fp == "Sh33tJ5")
-          continue;
+        if (!fi.size || !fi.content || fp == "Sh33tJ5") continue;
         fp = fp.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7E-\xFF]/g, function(c) {
           return "_x" + c.charCodeAt(0).toString(16) + "_";
         }).replace(/[\u0080-\uFFFF]/g, function(u) {
@@ -7671,9 +7286,7 @@
         var ca = fi.content;
         var cstr = has_buf && Buffer.isBuffer(ca) ? ca.toString("binary") : a2s2(ca);
         var dispcnt = 0, L = Math.min(1024, cstr.length), cc = 0;
-        for (var csl = 0; csl <= L; ++csl)
-          if ((cc = cstr.charCodeAt(csl)) >= 32 && cc < 128)
-            ++dispcnt;
+        for (var csl = 0; csl <= L; ++csl) if ((cc = cstr.charCodeAt(csl)) >= 32 && cc < 128) ++dispcnt;
         var qp = dispcnt >= L * 4 / 5;
         out.push(boundary);
         out.push("Content-Location: " + (opts.root || "file:///C:/SheetJS/") + fp);
@@ -7692,33 +7305,26 @@
     }
     function cfb_add(cfb, name, content, opts) {
       var unsafe = opts && opts.unsafe;
-      if (!unsafe)
-        init_cfb(cfb);
+      if (!unsafe) init_cfb(cfb);
       var file = !unsafe && CFB.find(cfb, name);
       if (!file) {
         var fpath = cfb.FullPaths[0];
-        if (name.slice(0, fpath.length) == fpath)
-          fpath = name;
+        if (name.slice(0, fpath.length) == fpath) fpath = name;
         else {
-          if (fpath.slice(-1) != "/")
-            fpath += "/";
+          if (fpath.slice(-1) != "/") fpath += "/";
           fpath = (fpath + name).replace("//", "/");
         }
         file = { name: filename(name), type: 2 };
         cfb.FileIndex.push(file);
         cfb.FullPaths.push(fpath);
-        if (!unsafe)
-          CFB.utils.cfb_gc(cfb);
+        if (!unsafe) CFB.utils.cfb_gc(cfb);
       }
       file.content = content;
       file.size = content ? content.length : 0;
       if (opts) {
-        if (opts.CLSID)
-          file.clsid = opts.CLSID;
-        if (opts.mt)
-          file.mt = opts.mt;
-        if (opts.ct)
-          file.ct = opts.ct;
+        if (opts.CLSID) file.clsid = opts.CLSID;
+        if (opts.mt) file.mt = opts.mt;
+        if (opts.ct) file.ct = opts.ct;
       }
       return file;
     }
@@ -7726,12 +7332,11 @@
       init_cfb(cfb);
       var file = CFB.find(cfb, name);
       if (file) {
-        for (var j = 0; j < cfb.FileIndex.length; ++j)
-          if (cfb.FileIndex[j] == file) {
-            cfb.FileIndex.splice(j, 1);
-            cfb.FullPaths.splice(j, 1);
-            return true;
-          }
+        for (var j = 0; j < cfb.FileIndex.length; ++j) if (cfb.FileIndex[j] == file) {
+          cfb.FileIndex.splice(j, 1);
+          cfb.FullPaths.splice(j, 1);
+          return true;
+        }
       }
       return false;
     }
@@ -7739,12 +7344,11 @@
       init_cfb(cfb);
       var file = CFB.find(cfb, old_name);
       if (file) {
-        for (var j = 0; j < cfb.FileIndex.length; ++j)
-          if (cfb.FileIndex[j] == file) {
-            cfb.FileIndex[j].name = filename(new_name);
-            cfb.FullPaths[j] = new_name;
-            return true;
-          }
+        for (var j = 0; j < cfb.FileIndex.length; ++j) if (cfb.FileIndex[j] == file) {
+          cfb.FileIndex[j].name = filename(new_name);
+          cfb.FullPaths[j] = new_name;
+          return true;
+        }
       }
       return false;
     }
@@ -7772,48 +7376,41 @@
       consts
     };
     return exports;
-  }();
+  })();
   var _fs;
   function blobify(data) {
-    if (typeof data === "string")
-      return s2ab(data);
-    if (Array.isArray(data))
-      return a2u(data);
+    if (typeof data === "string") return s2ab(data);
+    if (Array.isArray(data)) return a2u(data);
     return data;
   }
   function write_dl(fname, payload, enc) {
-    if (typeof _fs !== "undefined" && _fs.writeFileSync)
-      return enc ? _fs.writeFileSync(fname, payload, enc) : _fs.writeFileSync(fname, payload);
+    if (typeof _fs !== "undefined" && _fs.writeFileSync) return enc ? _fs.writeFileSync(fname, payload, enc) : _fs.writeFileSync(fname, payload);
     if (typeof Deno !== "undefined") {
-      if (enc && typeof payload == "string")
-        switch (enc) {
-          case "utf8":
-            payload = new TextEncoder(enc).encode(payload);
-            break;
-          case "binary":
-            payload = s2ab(payload);
-            break;
-          default:
-            throw new Error("Unsupported encoding " + enc);
-        }
+      if (enc && typeof payload == "string") switch (enc) {
+        case "utf8":
+          payload = new TextEncoder(enc).encode(payload);
+          break;
+        case "binary":
+          payload = s2ab(payload);
+          break;
+        /* TODO: binary equivalent */
+        default:
+          throw new Error("Unsupported encoding " + enc);
+      }
       return Deno.writeFileSync(fname, payload);
     }
     var data = enc == "utf8" ? utf8write(payload) : payload;
-    if (typeof IE_SaveFile !== "undefined")
-      return IE_SaveFile(data, fname);
+    if (typeof IE_SaveFile !== "undefined") return IE_SaveFile(data, fname);
     if (typeof Blob !== "undefined") {
       var blob = new Blob([blobify(data)], { type: "application/octet-stream" });
-      if (typeof navigator !== "undefined" && navigator.msSaveBlob)
-        return navigator.msSaveBlob(blob, fname);
-      if (typeof saveAs !== "undefined")
-        return saveAs(blob, fname);
+      if (typeof navigator !== "undefined" && navigator.msSaveBlob) return navigator.msSaveBlob(blob, fname);
+      if (typeof saveAs !== "undefined") return saveAs(blob, fname);
       if (typeof URL !== "undefined" && typeof document !== "undefined" && document.createElement && URL.createObjectURL) {
         var url = URL.createObjectURL(blob);
         if (typeof chrome === "object" && typeof (chrome.downloads || {}).download == "function") {
-          if (URL.revokeObjectURL && typeof setTimeout !== "undefined")
-            setTimeout(function() {
-              URL.revokeObjectURL(url);
-            }, 6e4);
+          if (URL.revokeObjectURL && typeof setTimeout !== "undefined") setTimeout(function() {
+            URL.revokeObjectURL(url);
+          }, 6e4);
           return chrome.downloads.download({ url, filename: fname, saveAs: true });
         }
         var a = document.createElement("a");
@@ -7823,10 +7420,9 @@
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-          if (URL.revokeObjectURL && typeof setTimeout !== "undefined")
-            setTimeout(function() {
-              URL.revokeObjectURL(url);
-            }, 6e4);
+          if (URL.revokeObjectURL && typeof setTimeout !== "undefined") setTimeout(function() {
+            URL.revokeObjectURL(url);
+          }, 6e4);
           return url;
         }
       } else if (typeof URL !== "undefined" && !URL.createObjectURL && typeof chrome === "object") {
@@ -7834,46 +7430,38 @@
         return chrome.downloads.download({ url: b64, filename: fname, saveAs: true });
       }
     }
-    if (typeof $ !== "undefined" && typeof File !== "undefined" && typeof Folder !== "undefined")
-      try {
-        var out = File(fname);
-        out.open("w");
-        out.encoding = "binary";
-        if (Array.isArray(payload))
-          payload = a2s(payload);
-        out.write(payload);
-        out.close();
-        return payload;
-      } catch (e) {
-        if (!e.message || e.message.indexOf("onstruct") == -1)
-          throw e;
-      }
+    if (typeof $ !== "undefined" && typeof File !== "undefined" && typeof Folder !== "undefined") try {
+      var out = File(fname);
+      out.open("w");
+      out.encoding = "binary";
+      if (Array.isArray(payload)) payload = a2s(payload);
+      out.write(payload);
+      out.close();
+      return payload;
+    } catch (e) {
+      if (!e.message || e.message.indexOf("onstruct") == -1) throw e;
+    }
     throw new Error("cannot save file " + fname);
   }
   function keys(o) {
     var ks = Object.keys(o), o2 = [];
-    for (var i = 0; i < ks.length; ++i)
-      if (Object.prototype.hasOwnProperty.call(o, ks[i]))
-        o2.push(ks[i]);
+    for (var i = 0; i < ks.length; ++i) if (Object.prototype.hasOwnProperty.call(o, ks[i])) o2.push(ks[i]);
     return o2;
   }
   function evert(obj) {
     var o = [], K = keys(obj);
-    for (var i = 0; i !== K.length; ++i)
-      o[obj[K[i]]] = K[i];
+    for (var i = 0; i !== K.length; ++i) o[obj[K[i]]] = K[i];
     return o;
   }
   function evert_num(obj) {
     var o = [], K = keys(obj);
-    for (var i = 0; i !== K.length; ++i)
-      o[obj[K[i]]] = parseInt(K[i], 10);
+    for (var i = 0; i !== K.length; ++i) o[obj[K[i]]] = parseInt(K[i], 10);
     return o;
   }
   function evert_arr(obj) {
     var o = [], K = keys(obj);
     for (var i = 0; i !== K.length; ++i) {
-      if (o[obj[K[i]]] == null)
-        o[obj[K[i]]] = [];
+      if (o[obj[K[i]]] == null) o[obj[K[i]]] = [];
       o[obj[K[i]]].push(K[i]);
     }
     return o;
@@ -7891,8 +7479,7 @@
     return res < 60 ? res - 1 : res;
   }
   function numdate(v) {
-    if (v >= 60 && v < 61)
-      return v;
+    if (v >= 60 && v < 61) return v;
     var out = /* @__PURE__ */ new Date();
     out.setTime((v > 60 ? v : v + 1) * 24 * 60 * 60 * 1e3 + dnthresh);
     return out;
@@ -7901,58 +7488,44 @@
   var pdre2 = /^(\d+)-(\d+)-(\d+)$/;
   var pdre3 = /^(\d+)-(\d+)-(\d+)[T ](\d+):(\d+)(:\d+)?(\.\d+)?$/;
   function parseDate(str, date1904) {
-    if (str instanceof Date)
-      return str;
+    if (str instanceof Date) return str;
     var m = str.match(pdre1);
-    if (m)
-      return new Date((date1904 ? dnthresh2 : dnthresh1) + ((parseInt(m[1], 10) * 60 + parseInt(m[2], 10)) * 60 + (m[3] ? parseInt(m[3].slice(1), 10) : 0)) * 1e3 + (m[4] ? parseInt((m[4] + "000").slice(1, 4), 10) : 0));
+    if (m) return new Date((date1904 ? dnthresh2 : dnthresh1) + ((parseInt(m[1], 10) * 60 + parseInt(m[2], 10)) * 60 + (m[3] ? parseInt(m[3].slice(1), 10) : 0)) * 1e3 + (m[4] ? parseInt((m[4] + "000").slice(1, 4), 10) : 0));
     m = str.match(pdre2);
-    if (m)
-      return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 0, 0, 0, 0));
+    if (m) return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 0, 0, 0, 0));
     m = str.match(pdre3);
-    if (m)
-      return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], m[6] && parseInt(m[6].slice(1), 10) || 0, m[7] && parseInt((m[7] + "0000").slice(1, 4), 10) || 0));
+    if (m) return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], m[6] && parseInt(m[6].slice(1), 10) || 0, m[7] && parseInt((m[7] + "0000").slice(1, 4), 10) || 0));
     var d = new Date(str);
     return d;
   }
   function dup(o) {
-    if (typeof JSON != "undefined" && !Array.isArray(o))
-      return JSON.parse(JSON.stringify(o));
-    if (typeof o != "object" || o == null)
-      return o;
-    if (o instanceof Date)
-      return new Date(o.getTime());
+    if (typeof JSON != "undefined" && !Array.isArray(o)) return JSON.parse(JSON.stringify(o));
+    if (typeof o != "object" || o == null) return o;
+    if (o instanceof Date) return new Date(o.getTime());
     var out = {};
-    for (var k in o)
-      if (Object.prototype.hasOwnProperty.call(o, k))
-        out[k] = dup(o[k]);
+    for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) out[k] = dup(o[k]);
     return out;
   }
   function fill(c, l) {
     var o = "";
-    while (o.length < l)
-      o += c;
+    while (o.length < l) o += c;
     return o;
   }
   function fuzzynum(s) {
     var v = Number(s);
-    if (!isNaN(v))
-      return isFinite(v) ? v : NaN;
-    if (!/\d/.test(s))
-      return v;
+    if (!isNaN(v)) return isFinite(v) ? v : NaN;
+    if (!/\d/.test(s)) return v;
     var wt = 1;
     var ss = s.replace(/([\d]),([\d])/g, "$1$2").replace(/[$]/g, "").replace(/[%]/g, function() {
       wt *= 100;
       return "";
     });
-    if (!isNaN(v = Number(ss)))
-      return v / wt;
+    if (!isNaN(v = Number(ss))) return v / wt;
     ss = ss.replace(/[(]([^()]*)[)]/, function($$, $1) {
       wt = -wt;
       return $1;
     });
-    if (!isNaN(v = Number(ss)))
-      return v / wt;
+    if (!isNaN(v = Number(ss))) return v / wt;
     return v;
   }
   var FDRE1 = /^(0?\d|1[0-2])(?:|:([0-5]?\d)(?:|(\.\d+)(?:|:([0-5]?\d))|:([0-5]?\d)(|\.\d+)))\s+([ap])m?$/;
@@ -7960,58 +7533,40 @@
   var FDISO = /^(\d+)-(\d+)-(\d+)[T ](\d+):(\d+)(:\d+)(\.\d+)?[Z]?$/;
   var utc_append_works = (/* @__PURE__ */ new Date("6/9/69 00:00 UTC")).valueOf() == -177984e5;
   function fuzzytime1(M) {
-    if (!M[2])
-      return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), 0, 0, 0));
+    if (!M[2]) return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), 0, 0, 0));
     if (M[3]) {
-      if (M[4])
-        return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), +M[2], +M[4], parseFloat(M[3]) * 1e3));
-      else
-        return new Date(Date.UTC(1899, 11, 31, M[7] == "p" ? 12 : 0, +M[1], +M[2], parseFloat(M[3]) * 1e3));
-    } else if (M[5])
-      return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), +M[2], +M[5], M[6] ? parseFloat(M[6]) * 1e3 : 0));
-    else
-      return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), +M[2], 0, 0));
+      if (M[4]) return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), +M[2], +M[4], parseFloat(M[3]) * 1e3));
+      else return new Date(Date.UTC(1899, 11, 31, M[7] == "p" ? 12 : 0, +M[1], +M[2], parseFloat(M[3]) * 1e3));
+    } else if (M[5]) return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), +M[2], +M[5], M[6] ? parseFloat(M[6]) * 1e3 : 0));
+    else return new Date(Date.UTC(1899, 11, 31, +M[1] % 12 + (M[7] == "p" ? 12 : 0), +M[2], 0, 0));
   }
   function fuzzytime2(M) {
-    if (!M[2])
-      return new Date(Date.UTC(1899, 11, 31, +M[1], 0, 0, 0));
+    if (!M[2]) return new Date(Date.UTC(1899, 11, 31, +M[1], 0, 0, 0));
     if (M[3]) {
-      if (M[4])
-        return new Date(Date.UTC(1899, 11, 31, +M[1], +M[2], +M[4], parseFloat(M[3]) * 1e3));
-      else
-        return new Date(Date.UTC(1899, 11, 31, 0, +M[1], +M[2], parseFloat(M[3]) * 1e3));
-    } else if (M[5])
-      return new Date(Date.UTC(1899, 11, 31, +M[1], +M[2], +M[5], M[6] ? parseFloat(M[6]) * 1e3 : 0));
-    else
-      return new Date(Date.UTC(1899, 11, 31, +M[1], +M[2], 0, 0));
+      if (M[4]) return new Date(Date.UTC(1899, 11, 31, +M[1], +M[2], +M[4], parseFloat(M[3]) * 1e3));
+      else return new Date(Date.UTC(1899, 11, 31, 0, +M[1], +M[2], parseFloat(M[3]) * 1e3));
+    } else if (M[5]) return new Date(Date.UTC(1899, 11, 31, +M[1], +M[2], +M[5], M[6] ? parseFloat(M[6]) * 1e3 : 0));
+    else return new Date(Date.UTC(1899, 11, 31, +M[1], +M[2], 0, 0));
   }
   var lower_months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
   function fuzzydate(s) {
-    if (FDISO.test(s))
-      return s.indexOf("Z") == -1 ? local_to_utc(new Date(s)) : new Date(s);
+    if (FDISO.test(s)) return s.indexOf("Z") == -1 ? local_to_utc(new Date(s)) : new Date(s);
     var lower = s.toLowerCase();
     var lnos = lower.replace(/\s+/g, " ").trim();
     var M = lnos.match(FDRE1);
-    if (M)
-      return fuzzytime1(M);
+    if (M) return fuzzytime1(M);
     M = lnos.match(FDRE2);
-    if (M)
-      return fuzzytime2(M);
+    if (M) return fuzzytime2(M);
     M = lnos.match(pdre3);
-    if (M)
-      return new Date(Date.UTC(+M[1], +M[2] - 1, +M[3], +M[4], +M[5], M[6] && parseInt(M[6].slice(1), 10) || 0, M[7] && parseInt((M[7] + "0000").slice(1, 4), 10) || 0));
+    if (M) return new Date(Date.UTC(+M[1], +M[2] - 1, +M[3], +M[4], +M[5], M[6] && parseInt(M[6].slice(1), 10) || 0, M[7] && parseInt((M[7] + "0000").slice(1, 4), 10) || 0));
     var o = new Date(utc_append_works && s.indexOf("UTC") == -1 ? s + " UTC" : s), n = /* @__PURE__ */ new Date(NaN);
     var y = o.getYear(), m = o.getMonth(), d = o.getDate();
-    if (isNaN(d))
-      return n;
+    if (isNaN(d)) return n;
     if (lower.match(/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/)) {
       lower = lower.replace(/[^a-z]/g, "").replace(/([^a-z]|^)[ap]m?([^a-z]|$)/, "");
-      if (lower.length > 3 && lower_months.indexOf(lower) == -1)
-        return n;
-    } else if (lower.replace(/[ap]m?/, "").match(/[a-z]/))
-      return n;
-    if (y < 0 || y > 8099 || s.match(/[^-0-9:,\/\\\ ]/))
-      return n;
+      if (lower.length > 3 && lower_months.indexOf(lower) == -1) return n;
+    } else if (lower.replace(/[ap]m?/, "").match(/[a-z]/)) return n;
+    if (y < 0 || y > 8099 || s.match(/[^-0-9:,\/\\\ ]/)) return n;
     return o;
   }
   function utc_to_local(utc) {
@@ -8027,15 +7582,12 @@
       }
       if (typeof content == "string") {
         var res;
-        if (has_buf)
-          res = Buffer_from(content);
-        else
-          res = utf8decode(content);
+        if (has_buf) res = Buffer_from(content);
+        else res = utf8decode(content);
         return CFB.utils.cfb_add(zip, path, res);
       }
       CFB.utils.cfb_add(zip, path, content);
-    } else
-      zip.file(path, content);
+    } else zip.file(path, content);
   }
   function zip_new() {
     return CFB.utils.cfb_new();
@@ -8099,8 +7651,7 @@
     var out = new_raw_buf(2 * data.length), w, i, j = 1, k = 0, ww = 0, c;
     for (i = 0; i < data.length; i += j) {
       j = 1;
-      if ((c = data.charCodeAt(i)) < 128)
-        w = c;
+      if ((c = data.charCodeAt(i)) < 128) w = c;
       else if (c < 224) {
         w = (c & 31) * 64 + (data.charCodeAt(i + 1) & 63);
         j = 2;
@@ -8159,7 +7710,7 @@
     }
     return out.join("");
   };
-  var htmldecode = /* @__PURE__ */ function() {
+  var htmldecode = /* @__PURE__ */ (function() {
     var entities = [
       ["nbsp", " "],
       ["middot", "\xB7"],
@@ -8173,11 +7724,10 @@
     });
     return function htmldecode2(str) {
       var o = str.replace(/^[\t\n\r ]+/, "").replace(/(^|[^\t\n\r ])[\t\n\r ]+$/, "$1").replace(/>\s+/g, ">").replace(/\b\s+</g, "<").replace(/[\t\n\r ]+/g, " ").replace(/<\s*[bB][rR]\s*\/?>/g, "\n").replace(/<[^<>]*>/g, "");
-      for (var i = 0; i < entities.length; ++i)
-        o = o.replace(entities[i][0], entities[i][1]);
+      for (var i = 0; i < entities.length; ++i) o = o.replace(entities[i][0], entities[i][1]);
       return o;
     };
-  }();
+  })();
   var wtregex = /(^\s|\s$|\n)/;
   function writetag(f, g) {
     return "<" + f + (g.match(wtregex) ? ' xml:space="preserve"' : "") + ">" + g + "</" + f + ">";
@@ -8194,8 +7744,7 @@
     try {
       return d.toISOString().replace(/\.\d*/, "");
     } catch (e) {
-      if (t)
-        throw e;
+      if (t) throw e;
     }
     return "";
   }
@@ -8203,16 +7752,14 @@
     switch (typeof s) {
       case "string":
         var o = writextag("vt:lpwstr", escapexml(s));
-        if (xlsx)
-          o = o.replace(/&quot;/g, "_x0022_");
+        if (xlsx) o = o.replace(/&quot;/g, "_x0022_");
         return o;
       case "number":
         return writextag((s | 0) == s ? "vt:i4" : "vt:r8", escapexml(String(s)));
       case "boolean":
         return writextag("vt:bool", s ? "true" : "false");
     }
-    if (s instanceof Date)
-      return writextag("vt:filetime", write_w3cdtf(s));
+    if (s instanceof Date) return writextag("vt:filetime", write_w3cdtf(s));
     throw new Error("Unable to serialize " + s);
   }
   var XMLNS = {
@@ -8251,12 +7798,9 @@
     var s = 1 - 2 * (b[idx + 7] >>> 7);
     var e = ((b[idx + 7] & 127) << 4) + (b[idx + 6] >>> 4 & 15);
     var m = b[idx + 6] & 15;
-    for (var i = 5; i >= 0; --i)
-      m = m * 256 + b[idx + i];
-    if (e == 2047)
-      return m == 0 ? s * Infinity : NaN;
-    if (e == 0)
-      e = -1022;
+    for (var i = 5; i >= 0; --i) m = m * 256 + b[idx + i];
+    if (e == 2047) return m == 0 ? s * Infinity : NaN;
+    if (e == 0) e = -1022;
     else {
       e -= 1023;
       m += Math.pow(2, 52);
@@ -8269,8 +7813,7 @@
     if (!isFinite(av)) {
       e = 2047;
       m = isNaN(v) ? 26985 : 0;
-    } else if (av == 0)
-      e = m = 0;
+    } else if (av == 0) e = m = 0;
     else {
       e = Math.floor(Math.log(av) / Math.LN2);
       m = av * Math.pow(2, 52 - e);
@@ -8281,17 +7824,13 @@
         e += 1023;
       }
     }
-    for (var i = 0; i <= 5; ++i, m /= 256)
-      b[idx + i] = m & 255;
+    for (var i = 0; i <= 5; ++i, m /= 256) b[idx + i] = m & 255;
     b[idx + 6] = (e & 15) << 4 | m & 15;
     b[idx + 7] = e >> 4 | bs;
   }
   var ___toBuffer = function(bufs) {
     var x = [], w = 10240;
-    for (var i = 0; i < bufs[0].length; ++i)
-      if (bufs[0][i])
-        for (var j = 0, L = bufs[0][i].length; j < L; j += w)
-          x.push.apply(x, bufs[0][i].slice(j, j + w));
+    for (var i = 0; i < bufs[0].length; ++i) if (bufs[0][i]) for (var j = 0, L = bufs[0][i].length; j < L; j += w) x.push.apply(x, bufs[0][i].slice(j, j + w));
     return x;
   };
   var __toBuffer = has_buf ? function(bufs) {
@@ -8301,19 +7840,16 @@
   } : ___toBuffer;
   var ___utf16le = function(b, s, e) {
     var ss = [];
-    for (var i = s; i < e; i += 2)
-      ss.push(String.fromCharCode(__readUInt16LE(b, i)));
+    for (var i = s; i < e; i += 2) ss.push(String.fromCharCode(__readUInt16LE(b, i)));
     return ss.join("").replace(chr0, "");
   };
   var __utf16le = has_buf ? function(b, s, e) {
-    if (!Buffer.isBuffer(b) || !buf_utf16le)
-      return ___utf16le(b, s, e);
+    if (!Buffer.isBuffer(b) || !buf_utf16le) return ___utf16le(b, s, e);
     return b.toString("utf16le", s, e).replace(chr0, "");
   } : ___utf16le;
   var ___hexlify = function(b, s, l) {
     var ss = [];
-    for (var i = s; i < s + l; ++i)
-      ss.push(("0" + b[i].toString(16)).slice(-2));
+    for (var i = s; i < s + l; ++i) ss.push(("0" + b[i].toString(16)).slice(-2));
     return ss.join("");
   };
   var __hexlify = has_buf ? function(b, s, l) {
@@ -8321,8 +7857,7 @@
   } : ___hexlify;
   var ___utf8 = function(b, s, e) {
     var ss = [];
-    for (var i = s; i < e; i++)
-      ss.push(String.fromCharCode(__readUInt8(b, i)));
+    for (var i = s; i < e; i++) ss.push(String.fromCharCode(__readUInt8(b, i)));
     return ss.join("");
   };
   var __utf8 = has_buf ? function utf8_b(b, s, e) {
@@ -8362,38 +7897,32 @@
   };
   if (has_buf) {
     __lpstr = function lpstr_b(b, i) {
-      if (!Buffer.isBuffer(b))
-        return ___lpstr(b, i);
+      if (!Buffer.isBuffer(b)) return ___lpstr(b, i);
       var len = b.readUInt32LE(i);
       return len > 0 ? b.toString("utf8", i + 4, i + 4 + len - 1) : "";
     };
     __cpstr = function cpstr_b(b, i) {
-      if (!Buffer.isBuffer(b))
-        return ___cpstr(b, i);
+      if (!Buffer.isBuffer(b)) return ___cpstr(b, i);
       var len = b.readUInt32LE(i);
       return len > 0 ? b.toString("utf8", i + 4, i + 4 + len - 1) : "";
     };
     __lpwstr = function lpwstr_b(b, i) {
-      if (!Buffer.isBuffer(b) || !buf_utf16le)
-        return ___lpwstr(b, i);
+      if (!Buffer.isBuffer(b) || !buf_utf16le) return ___lpwstr(b, i);
       var len = 2 * b.readUInt32LE(i);
       return b.toString("utf16le", i + 4, i + 4 + len - 1);
     };
     __lpp4 = function lpp4_b(b, i) {
-      if (!Buffer.isBuffer(b) || !buf_utf16le)
-        return ___lpp4(b, i);
+      if (!Buffer.isBuffer(b) || !buf_utf16le) return ___lpp4(b, i);
       var len = b.readUInt32LE(i);
       return b.toString("utf16le", i + 4, i + 4 + len);
     };
     __8lpp4 = function lpp4_8b(b, i) {
-      if (!Buffer.isBuffer(b))
-        return ___8lpp4(b, i);
+      if (!Buffer.isBuffer(b)) return ___8lpp4(b, i);
       var len = b.readUInt32LE(i);
       return b.toString("utf8", i + 4, i + 4 + len);
     };
     __double = function double_(b, i) {
-      if (Buffer.isBuffer(b))
-        return b.readDoubleLE(i);
+      if (Buffer.isBuffer(b)) return b.readDoubleLE(i);
       return ___double(b, i);
     };
     is_buf = function is_buf_b(a) {
@@ -8428,8 +7957,7 @@
       return len > 0 ? $cptable.utils.decode(65001, b.slice(i + 4, i + 4 + len)) : "";
     };
   }
-  if (typeof $cptable !== "undefined")
-    cpdoit();
+  if (typeof $cptable !== "undefined") cpdoit();
   var __readUInt8 = function(b, idx) {
     return b[idx];
   };
@@ -8454,13 +7982,11 @@
     switch (t) {
       case "dbcs":
         loc = this.l;
-        if (has_buf && Buffer.isBuffer(this) && buf_utf16le)
-          o = this.slice(this.l, this.l + 2 * size).toString("utf16le");
-        else
-          for (i = 0; i < size; ++i) {
-            o += String.fromCharCode(__readUInt16LE(this, loc));
-            loc += 2;
-          }
+        if (has_buf && Buffer.isBuffer(this) && buf_utf16le) o = this.slice(this.l, this.l + 2 * size).toString("utf16le");
+        else for (i = 0; i < size; ++i) {
+          o += String.fromCharCode(__readUInt16LE(this, loc));
+          loc += 2;
+        }
         size *= 2;
         break;
       case "utf8":
@@ -8471,12 +7997,11 @@
         o = __utf16le(this, this.l, this.l + size);
         break;
       case "wstr":
-        if (typeof $cptable !== "undefined")
-          o = $cptable.utils.decode(current_codepage, this.slice(this.l, this.l + 2 * size));
-        else
-          return ReadShift.call(this, size, "dbcs");
+        if (typeof $cptable !== "undefined") o = $cptable.utils.decode(current_codepage, this.slice(this.l, this.l + 2 * size));
+        else return ReadShift.call(this, size, "dbcs");
         size = 2 * size;
         break;
+      /* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
       case "lpstr-ansi":
         o = __lpstr(this, this.l);
         size = 4 + __readUInt32LE(this, this.l);
@@ -8485,27 +8010,27 @@
         o = __cpstr(this, this.l);
         size = 4 + __readUInt32LE(this, this.l);
         break;
+      /* [MS-OLEDS] 2.1.5 LengthPrefixedUnicodeString */
       case "lpwstr":
         o = __lpwstr(this, this.l);
         size = 4 + 2 * __readUInt32LE(this, this.l);
         break;
+      /* [MS-OFFCRYPTO] 2.1.2 Length-Prefixed Padded Unicode String (UNICODE-LP-P4) */
       case "lpp4":
         size = 4 + __readUInt32LE(this, this.l);
         o = __lpp4(this, this.l);
-        if (size & 2)
-          size += 2;
+        if (size & 2) size += 2;
         break;
+      /* [MS-OFFCRYPTO] 2.1.3 Length-Prefixed UTF-8 String (UTF-8-LP-P4) */
       case "8lpp4":
         size = 4 + __readUInt32LE(this, this.l);
         o = __8lpp4(this, this.l);
-        if (size & 3)
-          size += 4 - (size & 3);
+        if (size & 3) size += 4 - (size & 3);
         break;
       case "cstr":
         size = 0;
         o = "";
-        while ((w = __readUInt8(this, this.l + size++)) !== 0)
-          oo.push(_getchar(w));
+        while ((w = __readUInt8(this, this.l + size++)) !== 0) oo.push(_getchar(w));
         o = oo.join("");
         break;
       case "_wstr":
@@ -8518,6 +8043,7 @@
         size += 2;
         o = oo.join("");
         break;
+      /* sbcs and dbcs support continue records in the SST way TODO codepages */
       case "dbcs-cont":
         o = "";
         loc = this.l;
@@ -8539,6 +8065,7 @@
           o = $cptable.utils.decode(current_codepage, this.slice(this.l, this.l + size));
           break;
         }
+      /* falls through */
       case "sbcs-cont":
         o = "";
         loc = this.l;
@@ -8578,14 +8105,12 @@
           case 8:
           case -8:
             if (t === "f") {
-              if (size == 8)
-                oR = __double(this, this.l);
-              else
-                oR = __double([this[this.l + 7], this[this.l + 6], this[this.l + 5], this[this.l + 4], this[this.l + 3], this[this.l + 2], this[this.l + 1], this[this.l + 0]], 0);
+              if (size == 8) oR = __double(this, this.l);
+              else oR = __double([this[this.l + 7], this[this.l + 6], this[this.l + 5], this[this.l + 4], this[this.l + 3], this[this.l + 2], this[this.l + 1], this[this.l + 0]], 0);
               this.l += 8;
               return oR;
-            } else
-              size = 8;
+            } else size = 8;
+          /* falls through */
           case 16:
             o = __hexlify(this, this.l, size);
             break;
@@ -8613,8 +8138,7 @@
   function WriteShift(t, val2, f) {
     var size = 0, i = 0;
     if (f === "dbcs") {
-      for (i = 0; i != val2.length; ++i)
-        __writeUInt16LE(this, val2.charCodeAt(i), this.l + 2 * i);
+      for (i = 0; i != val2.length; ++i) __writeUInt16LE(this, val2.charCodeAt(i), this.l + 2 * i);
       size = 2 * val2.length;
     } else if (f === "sbcs" || f == "cpstr") {
       if (typeof $cptable !== "undefined" && current_ansi == 874) {
@@ -8626,22 +8150,16 @@
       } else if (typeof $cptable !== "undefined" && f == "cpstr") {
         cpp = $cptable.utils.encode(current_codepage, val2);
         if (cpp.length == val2.length) {
-          for (i = 0; i < val2.length; ++i)
-            if (cpp[i] == 0 && val2.charCodeAt(i) != 0)
-              cpp[i] = 95;
+          for (i = 0; i < val2.length; ++i) if (cpp[i] == 0 && val2.charCodeAt(i) != 0) cpp[i] = 95;
         }
         if (cpp.length == 2 * val2.length) {
-          for (i = 0; i < val2.length; ++i)
-            if (cpp[2 * i] == 0 && cpp[2 * i + 1] == 0 && val2.charCodeAt(i) != 0)
-              cpp[2 * i] = 95;
+          for (i = 0; i < val2.length; ++i) if (cpp[2 * i] == 0 && cpp[2 * i + 1] == 0 && val2.charCodeAt(i) != 0) cpp[2 * i] = 95;
         }
-        for (i = 0; i < cpp.length; ++i)
-          this[this.l + i] = cpp[i];
+        for (i = 0; i < cpp.length; ++i) this[this.l + i] = cpp[i];
         size = cpp.length;
       } else {
         val2 = val2.replace(/[^\x00-\x7F]/g, "_");
-        for (i = 0; i != val2.length; ++i)
-          this[this.l + i] = val2.charCodeAt(i) & 255;
+        for (i = 0; i != val2.length; ++i) this[this.l + i] = val2.charCodeAt(i) & 255;
         size = val2.length;
       }
     } else if (f === "hex") {
@@ -8656,53 +8174,51 @@
         this[this.l++] = cc & 255;
         this[this.l++] = cc >> 8;
       }
-      while (this.l < end)
-        this[this.l++] = 0;
+      while (this.l < end) this[this.l++] = 0;
       return this;
-    } else
-      switch (t) {
-        case 1:
-          size = 1;
-          this[this.l] = val2 & 255;
+    } else switch (t) {
+      case 1:
+        size = 1;
+        this[this.l] = val2 & 255;
+        break;
+      case 2:
+        size = 2;
+        this[this.l] = val2 & 255;
+        val2 >>>= 8;
+        this[this.l + 1] = val2 & 255;
+        break;
+      case 3:
+        size = 3;
+        this[this.l] = val2 & 255;
+        val2 >>>= 8;
+        this[this.l + 1] = val2 & 255;
+        val2 >>>= 8;
+        this[this.l + 2] = val2 & 255;
+        break;
+      case 4:
+        size = 4;
+        __writeUInt32LE(this, val2, this.l);
+        break;
+      case 8:
+        size = 8;
+        if (f === "f") {
+          write_double_le(this, val2, this.l);
           break;
-        case 2:
-          size = 2;
-          this[this.l] = val2 & 255;
-          val2 >>>= 8;
-          this[this.l + 1] = val2 & 255;
-          break;
-        case 3:
-          size = 3;
-          this[this.l] = val2 & 255;
-          val2 >>>= 8;
-          this[this.l + 1] = val2 & 255;
-          val2 >>>= 8;
-          this[this.l + 2] = val2 & 255;
-          break;
-        case 4:
-          size = 4;
-          __writeUInt32LE(this, val2, this.l);
-          break;
-        case 8:
-          size = 8;
-          if (f === "f") {
-            write_double_le(this, val2, this.l);
-            break;
-          }
-        case 16:
-          break;
-        case -4:
-          size = 4;
-          __writeInt32LE(this, val2, this.l);
-          break;
-      }
+        }
+      /* falls through */
+      case 16:
+        break;
+      case -4:
+        size = 4;
+        __writeInt32LE(this, val2, this.l);
+        break;
+    }
     this.l += size;
     return this;
   }
   function CheckField(hexstr, fld) {
     var m = __hexlify(this, this.l, hexstr.length >> 1);
-    if (m !== hexstr)
-      throw new Error(fld + "Expected " + hexstr + " saw " + m);
+    if (m !== hexstr) throw new Error(fld + "Expected " + hexstr + " saw " + m);
     this.l += hexstr.length >> 1;
   }
   function prep_blob(blob, pos) {
@@ -8728,16 +8244,13 @@
   }
   function decode_col(colstr) {
     var c = unfix_col(colstr), d = 0, i = 0;
-    for (; i !== c.length; ++i)
-      d = 26 * d + c.charCodeAt(i) - 64;
+    for (; i !== c.length; ++i) d = 26 * d + c.charCodeAt(i) - 64;
     return d - 1;
   }
   function encode_col(col) {
-    if (col < 0)
-      throw new Error("invalid column " + col);
+    if (col < 0) throw new Error("invalid column " + col);
     var s = "";
-    for (++col; col; col = Math.floor((col - 1) / 26))
-      s = String.fromCharCode((col - 1) % 26 + 65) + s;
+    for (++col; col; col = Math.floor((col - 1) / 26)) s = String.fromCharCode((col - 1) % 26 + 65) + s;
     return s;
   }
   function unfix_col(cstr) {
@@ -8750,34 +8263,28 @@
     var R = 0, C = 0;
     for (var i = 0; i < cstr.length; ++i) {
       var cc = cstr.charCodeAt(i);
-      if (cc >= 48 && cc <= 57)
-        R = 10 * R + (cc - 48);
-      else if (cc >= 65 && cc <= 90)
-        C = 26 * C + (cc - 64);
+      if (cc >= 48 && cc <= 57) R = 10 * R + (cc - 48);
+      else if (cc >= 65 && cc <= 90) C = 26 * C + (cc - 64);
     }
     return { c: C - 1, r: R - 1 };
   }
   function encode_cell(cell) {
     var col = cell.c + 1;
     var s = "";
-    for (; col; col = (col - 1) / 26 | 0)
-      s = String.fromCharCode((col - 1) % 26 + 65) + s;
+    for (; col; col = (col - 1) / 26 | 0) s = String.fromCharCode((col - 1) % 26 + 65) + s;
     return s + (cell.r + 1);
   }
   function decode_range(range) {
     var idx = range.indexOf(":");
-    if (idx == -1)
-      return { s: decode_cell(range), e: decode_cell(range) };
+    if (idx == -1) return { s: decode_cell(range), e: decode_cell(range) };
     return { s: decode_cell(range.slice(0, idx)), e: decode_cell(range.slice(idx + 1)) };
   }
   function encode_range(cs, ce) {
     if (typeof ce === "undefined" || typeof ce === "number") {
       return encode_range(cs.s, cs.e);
     }
-    if (typeof cs !== "string")
-      cs = encode_cell(cs);
-    if (typeof ce !== "string")
-      ce = encode_cell(ce);
+    if (typeof cs !== "string") cs = encode_cell(cs);
+    if (typeof ce !== "string") ce = encode_cell(ce);
     return cs == ce ? cs : cs + ":" + ce;
   }
   function fix_range(a1) {
@@ -8785,10 +8292,8 @@
     return "$" + encode_col(s.s.c) + "$" + encode_row(s.s.r) + ":$" + encode_col(s.e.c) + "$" + encode_row(s.e.r);
   }
   function formula_quote_sheet_name(sname, opts) {
-    if (!sname && !(opts && opts.biff <= 5 && opts.biff >= 2))
-      throw new Error("empty sheet name");
-    if (/[^\w\u4E00-\u9FFF\u3040-\u30FF]/.test(sname))
-      return "'" + sname.replace(/'/g, "''") + "'";
+    if (!sname && !(opts && opts.biff <= 5 && opts.biff >= 2)) throw new Error("empty sheet name");
+    if (/[^\w\u4E00-\u9FFF\u3040-\u30FF]/.test(sname)) return "'" + sname.replace(/'/g, "''") + "'";
     return sname;
   }
   function safe_decode_range(range) {
@@ -8796,14 +8301,12 @@
     var idx = 0, i = 0, cc = 0;
     var len = range.length;
     for (idx = 0; i < len; ++i) {
-      if ((cc = range.charCodeAt(i) - 64) < 1 || cc > 26)
-        break;
+      if ((cc = range.charCodeAt(i) - 64) < 1 || cc > 26) break;
       idx = 26 * idx + cc;
     }
     o.s.c = --idx;
     for (idx = 0; i < len; ++i) {
-      if ((cc = range.charCodeAt(i) - 48) < 0 || cc > 9)
-        break;
+      if ((cc = range.charCodeAt(i) - 48) < 0 || cc > 9) break;
       idx = 10 * idx + cc;
     }
     o.s.r = --idx;
@@ -8814,14 +8317,12 @@
     }
     ++i;
     for (idx = 0; i != len; ++i) {
-      if ((cc = range.charCodeAt(i) - 64) < 1 || cc > 26)
-        break;
+      if ((cc = range.charCodeAt(i) - 64) < 1 || cc > 26) break;
       idx = 26 * idx + cc;
     }
     o.e.c = --idx;
     for (idx = 0; i != len; ++i) {
-      if ((cc = range.charCodeAt(i) - 48) < 0 || cc > 9)
-        break;
+      if ((cc = range.charCodeAt(i) - 48) < 0 || cc > 9) break;
       idx = 10 * idx + cc;
     }
     o.e.r = --idx;
@@ -8829,11 +8330,10 @@
   }
   function safe_format_cell(cell, v) {
     var q = cell.t == "d" && v instanceof Date;
-    if (cell.z != null)
-      try {
-        return cell.w = SSF_format(cell.z, q ? datenum(v) : v);
-      } catch (e) {
-      }
+    if (cell.z != null) try {
+      return cell.w = SSF_format(cell.z, q ? datenum(v) : v);
+    } catch (e) {
+    }
     try {
       return cell.w = SSF_format((cell.XF || {}).numFmtId || (q ? 14 : 0), q ? datenum(v) : v);
     } catch (e) {
@@ -8841,16 +8341,11 @@
     }
   }
   function format_cell(cell, v, o) {
-    if (cell == null || cell.t == null || cell.t == "z")
-      return "";
-    if (cell.w !== void 0)
-      return cell.w;
-    if (cell.t == "d" && !cell.z && o && o.dateNF)
-      cell.z = o.dateNF;
-    if (cell.t == "e")
-      return BErr[cell.v] || cell.v;
-    if (v == void 0)
-      return safe_format_cell(cell, cell.v);
+    if (cell == null || cell.t == null || cell.t == "z") return "";
+    if (cell.w !== void 0) return cell.w;
+    if (cell.t == "d" && !cell.z && o && o.dateNF) cell.z = o.dateNF;
+    if (cell.t == "e") return BErr[cell.v] || cell.v;
+    if (v == void 0) return safe_format_cell(cell, cell.v);
     return safe_format_cell(cell, v);
   }
   function sheet_to_workbook(sheet, opts) {
@@ -8862,22 +8357,18 @@
   function sheet_new(opts) {
     var out = {};
     var o = opts || {};
-    if (o.dense)
-      out["!data"] = [];
+    if (o.dense) out["!data"] = [];
     return out;
   }
   function sheet_add_aoa(_ws, data, opts) {
     var o = opts || {};
     var dense = _ws ? _ws["!data"] != null : o.dense;
-    if (DENSE != null && dense == null)
-      dense = DENSE;
+    if (DENSE != null && dense == null) dense = DENSE;
     var ws = _ws || (dense ? { "!data": [] } : {});
-    if (dense && !ws["!data"])
-      ws["!data"] = [];
+    if (dense && !ws["!data"]) ws["!data"] = [];
     var _R = 0, _C = 0;
     if (ws && o.origin != null) {
-      if (typeof o.origin == "number")
-        _R = o.origin;
+      if (typeof o.origin == "number") _R = o.origin;
       else {
         var _origin = typeof o.origin == "string" ? decode_cell(o.origin) : o.origin;
         _R = _origin.r;
@@ -8891,58 +8382,44 @@
       range.s.r = _range.s.r;
       range.e.c = Math.max(range.e.c, _range.e.c);
       range.e.r = Math.max(range.e.r, _range.e.r);
-      if (_R == -1)
-        range.e.r = _R = ws["!ref"] ? _range.e.r + 1 : 0;
+      if (_R == -1) range.e.r = _R = ws["!ref"] ? _range.e.r + 1 : 0;
     } else {
       range.s.c = range.e.c = range.s.r = range.e.r = 0;
     }
     var row = [], seen = false;
     for (var R = 0; R != data.length; ++R) {
-      if (!data[R])
-        continue;
-      if (!Array.isArray(data[R]))
-        throw new Error("aoa_to_sheet expects an array of arrays");
+      if (!data[R]) continue;
+      if (!Array.isArray(data[R])) throw new Error("aoa_to_sheet expects an array of arrays");
       var __R = _R + R;
       if (dense) {
-        if (!ws["!data"][__R])
-          ws["!data"][__R] = [];
+        if (!ws["!data"][__R]) ws["!data"][__R] = [];
         row = ws["!data"][__R];
       }
       var data_R = data[R];
       for (var C = 0; C != data_R.length; ++C) {
-        if (typeof data_R[C] === "undefined")
-          continue;
+        if (typeof data_R[C] === "undefined") continue;
         var cell = { v: data_R[C], t: "" };
         var __C = _C + C;
-        if (range.s.r > __R)
-          range.s.r = __R;
-        if (range.s.c > __C)
-          range.s.c = __C;
-        if (range.e.r < __R)
-          range.e.r = __R;
-        if (range.e.c < __C)
-          range.e.c = __C;
+        if (range.s.r > __R) range.s.r = __R;
+        if (range.s.c > __C) range.s.c = __C;
+        if (range.e.r < __R) range.e.r = __R;
+        if (range.e.c < __C) range.e.c = __C;
         seen = true;
-        if (data_R[C] && typeof data_R[C] === "object" && !Array.isArray(data_R[C]) && !(data_R[C] instanceof Date))
-          cell = data_R[C];
+        if (data_R[C] && typeof data_R[C] === "object" && !Array.isArray(data_R[C]) && !(data_R[C] instanceof Date)) cell = data_R[C];
         else {
           if (Array.isArray(cell.v)) {
             cell.f = data_R[C][1];
             cell.v = cell.v[0];
           }
           if (cell.v === null) {
-            if (cell.f)
-              cell.t = "n";
+            if (cell.f) cell.t = "n";
             else if (o.nullError) {
               cell.t = "e";
               cell.v = 0;
-            } else if (!o.sheetStubs)
-              continue;
-            else
-              cell.t = "z";
+            } else if (!o.sheetStubs) continue;
+            else cell.t = "z";
           } else if (typeof cell.v === "number") {
-            if (isFinite(cell.v))
-              cell.t = "n";
+            if (isFinite(cell.v)) cell.t = "n";
             else if (isNaN(cell.v)) {
               cell.t = "e";
               cell.v = 15;
@@ -8950,12 +8427,10 @@
               cell.t = "e";
               cell.v = 7;
             }
-          } else if (typeof cell.v === "boolean")
-            cell.t = "b";
+          } else if (typeof cell.v === "boolean") cell.t = "b";
           else if (cell.v instanceof Date) {
             cell.z = o.dateNF || table_fmt[14];
-            if (!o.UTC)
-              cell.v = local_to_utc(cell.v);
+            if (!o.UTC) cell.v = local_to_utc(cell.v);
             if (o.cellDates) {
               cell.t = "d";
               cell.w = SSF_format(cell.z, datenum(cell.v, o.date1904));
@@ -8964,23 +8439,19 @@
               cell.v = datenum(cell.v, o.date1904);
               cell.w = SSF_format(cell.z, cell.v);
             }
-          } else
-            cell.t = "s";
+          } else cell.t = "s";
         }
         if (dense) {
-          if (row[__C] && row[__C].z)
-            cell.z = row[__C].z;
+          if (row[__C] && row[__C].z) cell.z = row[__C].z;
           row[__C] = cell;
         } else {
           var cell_ref = encode_col(__C) + (__R + 1);
-          if (ws[cell_ref] && ws[cell_ref].z)
-            cell.z = ws[cell_ref].z;
+          if (ws[cell_ref] && ws[cell_ref].z) cell.z = ws[cell_ref].z;
           ws[cell_ref] = cell;
         }
       }
     }
-    if (seen && range.s.c < 104e5)
-      ws["!ref"] = encode_range(range);
+    if (seen && range.s.c < 104e5) ws["!ref"] = encode_range(range);
     return ws;
   }
   function aoa_to_sheet(data, opts) {
@@ -9346,25 +8817,18 @@
     return o.join("");
   }
   function add_rels(rels, rId, f, type, relobj, targetmode) {
-    if (!relobj)
-      relobj = {};
-    if (!rels["!id"])
-      rels["!id"] = {};
-    if (!rels["!idx"])
-      rels["!idx"] = 1;
-    if (rId < 0)
-      for (rId = rels["!idx"]; rels["!id"]["rId" + rId]; ++rId) {
-      }
+    if (!relobj) relobj = {};
+    if (!rels["!id"]) rels["!id"] = {};
+    if (!rels["!idx"]) rels["!idx"] = 1;
+    if (rId < 0) for (rId = rels["!idx"]; rels["!id"]["rId" + rId]; ++rId) {
+    }
     rels["!idx"] = rId + 1;
     relobj.Id = "rId" + rId;
     relobj.Type = type;
     relobj.Target = f;
-    if (targetmode)
-      relobj.TargetMode = targetmode;
-    else if ([RELS.HLINK, RELS.XPATH, RELS.XMISS].indexOf(relobj.Type) > -1)
-      relobj.TargetMode = "External";
-    if (rels["!id"][relobj.Id])
-      throw new Error("Cannot rewrite rId " + rId);
+    if (targetmode) relobj.TargetMode = targetmode;
+    else if ([RELS.HLINK, RELS.XPATH, RELS.XMISS].indexOf(relobj.Type) > -1) relobj.TargetMode = "External";
+    if (rels["!id"][relobj.Id]) throw new Error("Cannot rewrite rId " + rId);
     rels["!id"][relobj.Id] = relobj;
     rels[("/" + relobj.Target).replace("//", "/")] = relobj;
     return rId;
@@ -9387,8 +8851,7 @@
     ["dcterms:modified", "ModifiedDate", "date"]
   ];
   function cp_doit(f, g, h, o, p) {
-    if (p[f] != null || g == null || g === "")
-      return;
+    if (p[f] != null || g == null || g === "") return;
     p[f] = g;
     g = escapexml(g);
     o[o.length] = h ? writextag(f, g, h) : writetag(f, g);
@@ -9403,25 +8866,18 @@
       "xmlns:dcmitype": XMLNS.dcmitype,
       "xmlns:xsi": XMLNS.xsi
     })], p = {};
-    if (!cp && !opts.Props)
-      return o.join("");
+    if (!cp && !opts.Props) return o.join("");
     if (cp) {
-      if (cp.CreatedDate != null)
-        cp_doit("dcterms:created", typeof cp.CreatedDate === "string" ? cp.CreatedDate : write_w3cdtf(cp.CreatedDate, opts.WTF), { "xsi:type": "dcterms:W3CDTF" }, o, p);
-      if (cp.ModifiedDate != null)
-        cp_doit("dcterms:modified", typeof cp.ModifiedDate === "string" ? cp.ModifiedDate : write_w3cdtf(cp.ModifiedDate, opts.WTF), { "xsi:type": "dcterms:W3CDTF" }, o, p);
+      if (cp.CreatedDate != null) cp_doit("dcterms:created", typeof cp.CreatedDate === "string" ? cp.CreatedDate : write_w3cdtf(cp.CreatedDate, opts.WTF), { "xsi:type": "dcterms:W3CDTF" }, o, p);
+      if (cp.ModifiedDate != null) cp_doit("dcterms:modified", typeof cp.ModifiedDate === "string" ? cp.ModifiedDate : write_w3cdtf(cp.ModifiedDate, opts.WTF), { "xsi:type": "dcterms:W3CDTF" }, o, p);
     }
     for (var i = 0; i != CORE_PROPS.length; ++i) {
       var f = CORE_PROPS[i];
       var v = opts.Props && opts.Props[f[1]] != null ? opts.Props[f[1]] : cp ? cp[f[1]] : null;
-      if (v === true)
-        v = "1";
-      else if (v === false)
-        v = "0";
-      else if (typeof v == "number")
-        v = String(v);
-      if (v != null)
-        cp_doit(f[0], v, null, o, p);
+      if (v === true) v = "1";
+      else if (v === false) v = "0";
+      else if (typeof v == "number") v = String(v);
+      if (v != null) cp_doit(f[0], v, null, o, p);
     }
     if (o.length > 2) {
       o[o.length] = "</cp:coreProperties>";
@@ -9444,8 +8900,7 @@
   ];
   function write_ext_props(cp) {
     var o = [], W = writextag;
-    if (!cp)
-      cp = {};
+    if (!cp) cp = {};
     cp.Application = "SheetJS";
     o[o.length] = XML_HEADER;
     o[o.length] = writextag("Properties", null, {
@@ -9453,8 +8908,7 @@
       "xmlns:vt": XMLNS.vt
     });
     EXT_PROPS.forEach(function(f) {
-      if (cp[f[1]] === void 0)
-        return;
+      if (cp[f[1]] === void 0) return;
       var v;
       switch (f[2]) {
         case "string":
@@ -9464,8 +8918,7 @@
           v = cp[f[1]] ? "true" : "false";
           break;
       }
-      if (v !== void 0)
-        o[o.length] = W(f[0], v);
+      if (v !== void 0) o[o.length] = W(f[0], v);
     });
     o[o.length] = W("HeadingPairs", W("vt:vector", W("vt:variant", "<vt:lpstr>Worksheets</vt:lpstr>") + W("vt:variant", W("vt:i4", String(cp.Worksheets))), { size: 2, baseType: "variant" }));
     o[o.length] = W("TitlesOfParts", W("vt:vector", cp.SheetNames.map(function(s) {
@@ -9482,8 +8935,7 @@
       "xmlns": XMLNS.CUST_PROPS,
       "xmlns:vt": XMLNS.vt
     })];
-    if (!cp)
-      return o.join("");
+    if (!cp) return o.join("");
     var pid = 1;
     keys(cp).forEach(function custprop(k) {
       ++pid;
@@ -9501,8 +8953,7 @@
   }
   var straywsregex = /^\s|\s$|[\t\n\r]/;
   function write_sst_xml(sst, opts) {
-    if (!opts.bookSST)
-      return "";
+    if (!opts.bookSST) return "";
     var o = [XML_HEADER];
     o[o.length] = writextag("sst", null, {
       xmlns: XMLNS_main[0],
@@ -9510,20 +8961,15 @@
       uniqueCount: sst.Unique
     });
     for (var i = 0; i != sst.length; ++i) {
-      if (sst[i] == null)
-        continue;
+      if (sst[i] == null) continue;
       var s = sst[i];
       var sitag = "<si>";
-      if (s.r)
-        sitag += s.r;
+      if (s.r) sitag += s.r;
       else {
         sitag += "<t";
-        if (!s.t)
-          s.t = "";
-        if (typeof s.t !== "string")
-          s.t = String(s.t);
-        if (s.t.match(straywsregex))
-          sitag += ' xml:space="preserve"';
+        if (!s.t) s.t = "";
+        if (typeof s.t !== "string") s.t = String(s.t);
+        if (s.t.match(straywsregex)) sitag += ' xml:space="preserve"';
         sitag += ">" + escapexml(s.t) + "</t>";
       }
       sitag += "</si>";
@@ -9536,11 +8982,9 @@
     return o.join("");
   }
   function _JS2ANSI(str) {
-    if (typeof $cptable !== "undefined")
-      return $cptable.utils.encode(current_ansi, str);
+    if (typeof $cptable !== "undefined") return $cptable.utils.encode(current_ansi, str);
     var o = [], oo = str.split("");
-    for (var i = 0; i < oo.length; ++i)
-      o[i] = oo[i].charCodeAt(0);
+    for (var i = 0; i < oo.length; ++i) o[i] = oo[i].charCodeAt(0);
     return o;
   }
   function crypto_CreatePasswordVerifier_Method1(Password) {
@@ -9550,8 +8994,7 @@
     var Intermediate1, Intermediate2, Intermediate3;
     PasswordArray = new_raw_buf(len);
     PasswordArray[0] = PasswordDecoded.length;
-    for (i = 1; i != len; ++i)
-      PasswordArray[i] = PasswordDecoded[i - 1];
+    for (i = 1; i != len; ++i) PasswordArray[i] = PasswordDecoded[i - 1];
     for (i = len - 1; i >= 0; --i) {
       PasswordByte = PasswordArray[i];
       Intermediate1 = (Verifier & 16384) === 0 ? 0 : 1;
@@ -9582,12 +9025,9 @@
       /*66],[164,*/
       392
     ]].forEach(function(r) {
-      for (var i = r[0]; i <= r[1]; ++i)
-        if (NF[i] != null)
-          o[o.length] = writextag("numFmt", null, { numFmtId: i, formatCode: escapexml(NF[i]) });
+      for (var i = r[0]; i <= r[1]; ++i) if (NF[i] != null) o[o.length] = writextag("numFmt", null, { numFmtId: i, formatCode: escapexml(NF[i]) });
     });
-    if (o.length === 1)
-      return "";
+    if (o.length === 1) return "";
     o[o.length] = "</numFmts>";
     o[0] = writextag("numFmts", null, { count: o.length - 2 }).replace("/>", ">");
     return o.join("");
@@ -9599,8 +9039,7 @@
       o[o.length] = writextag("xf", null, c);
     });
     o[o.length] = "</cellXfs>";
-    if (o.length === 2)
-      return "";
+    if (o.length === 2) return "";
     o[0] = writextag("cellXfs", null, { count: o.length - 2 }).replace("/>", ">");
     return o.join("");
   }
@@ -9609,14 +9048,12 @@
       "xmlns": XMLNS_main[0],
       "xmlns:vt": XMLNS.vt
     })], w;
-    if (wb.SSF && (w = write_numFmts(wb.SSF)) != null)
-      o[o.length] = w;
+    if (wb.SSF && (w = write_numFmts(wb.SSF)) != null) o[o.length] = w;
     o[o.length] = '<fonts count="1"><font><sz val="12"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>';
     o[o.length] = '<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>';
     o[o.length] = '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>';
     o[o.length] = '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>';
-    if (w = write_cellXfs(opts.cellXfs))
-      o[o.length] = w;
+    if (w = write_cellXfs(opts.cellXfs)) o[o.length] = w;
     o[o.length] = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>';
     o[o.length] = '<dxfs count="0"/>';
     o[o.length] = '<tableStyles count="0" defaultTableStyle="TableStyleMedium9" defaultPivotStyle="PivotStyleMedium4"/>';
@@ -9627,10 +9064,8 @@
     return o.join("");
   }
   function write_theme(Themes, opts) {
-    if (opts && opts.themeXLSX)
-      return opts.themeXLSX;
-    if (Themes && typeof Themes.raw == "string")
-      return Themes.raw;
+    if (opts && opts.themeXLSX) return opts.themeXLSX;
+    if (Themes && typeof Themes.raw == "string") return Themes.raw;
     var o = [XML_HEADER];
     o[o.length] = '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Office Theme">';
     o[o.length] = "<a:themeElements>";
@@ -9809,11 +9244,10 @@
     ];
     var _shapeid = 65536 * rId;
     var _comments = comments || [];
-    if (_comments.length > 0)
-      o.push(writextag("v:shapetype", [
-        writextag("v:stroke", null, { joinstyle: "miter" }),
-        writextag("v:path", null, { gradientshapeok: "t", "o:connecttype": "rect" })
-      ].join(""), { id: "_x0000_t202", coordsize: csize.join(","), "o:spt": 202, path: bbox }));
+    if (_comments.length > 0) o.push(writextag("v:shapetype", [
+      writextag("v:stroke", null, { joinstyle: "miter" }),
+      writextag("v:path", null, { gradientshapeok: "t", "o:connecttype": "rect" })
+    ].join(""), { id: "_x0000_t202", coordsize: csize.join(","), "o:spt": 202, path: bbox }));
     _comments.forEach(function(x) {
       ++_shapeid;
       o.push(write_vml_comment(x, _shapeid));
@@ -9827,8 +9261,7 @@
       /*::(*/
       { "color2": "#BEFF82", "type": "gradient" }
     );
-    if (fillopts.type == "gradient")
-      fillopts.angle = "-180";
+    if (fillopts.type == "gradient") fillopts.angle = "-180";
     var fillparm = fillopts.type == "gradient" ? writextag("o:fill", null, { type: "gradientUnscaled", "v:ext": "view" }) : null;
     var fillxml = writextag("v:fill", fillparm, fillopts);
     var shadata = { on: "t", "obscured": "t" };
@@ -9882,13 +9315,10 @@
     o.push("<commentList>");
     data.forEach(function(d) {
       var lastauthor = 0, ts = [], tcnt = 0;
-      if (d[1][0] && d[1][0].T && d[1][0].ID)
-        lastauthor = iauthor.indexOf("tc=" + d[1][0].ID);
+      if (d[1][0] && d[1][0].T && d[1][0].ID) lastauthor = iauthor.indexOf("tc=" + d[1][0].ID);
       d[1].forEach(function(c) {
-        if (c.a)
-          lastauthor = iauthor.indexOf(escapexml(c.a));
-        if (c.T)
-          ++tcnt;
+        if (c.a) lastauthor = iauthor.indexOf(escapexml(c.a));
+        if (c.T) ++tcnt;
         ts.push(c.t == null ? "" : escapexml(c.t));
       });
       if (tcnt === 0) {
@@ -9898,12 +9328,10 @@
           o.push("</text></comment>");
         });
       } else {
-        if (d[1][0] && d[1][0].T && d[1][0].ID)
-          lastauthor = iauthor.indexOf("tc=" + d[1][0].ID);
+        if (d[1][0] && d[1][0].T && d[1][0].ID) lastauthor = iauthor.indexOf("tc=" + d[1][0].ID);
         o.push('<comment ref="' + d[0] + '" authorId="' + lastauthor + '"><text>');
         var t = "Comment:\n    " + ts[0] + "\n";
-        for (var i = 1; i < ts.length; ++i)
-          t += "Reply:\n    " + ts[i] + "\n";
+        for (var i = 1; i < ts.length; ++i) t += "Reply:\n    " + ts[i] + "\n";
         o.push(writetag("t", escapexml(t)));
         o.push("</text></comment>");
       }
@@ -9924,19 +9352,15 @@
           delete c.ID;
           return;
         }
-        if (c.a && people.indexOf(c.a) == -1)
-          people.push(c.a);
+        if (c.a && people.indexOf(c.a) == -1) people.push(c.a);
         var tcopts = {
           ref: carr[0],
           id: "{54EE7951-7262-4200-6969-" + ("000000000000" + opts.tcid++).slice(-12) + "}"
         };
-        if (idx == 0)
-          rootid = tcopts.id;
-        else
-          tcopts.parentId = rootid;
+        if (idx == 0) rootid = tcopts.id;
+        else tcopts.parentId = rootid;
         c.ID = tcopts.id;
-        if (c.a)
-          tcopts.personId = "{54EE7950-7262-4200-6969-" + ("000000000000" + people.indexOf(c.a)).slice(-12) + "}";
+        if (c.a) tcopts.personId = "{54EE7950-7262-4200-6969-" + ("000000000000" + people.indexOf(c.a)).slice(-12) + "}";
         o.push(writextag("threadedComment", writetag("text", c.t || ""), tcopts));
       });
     });
@@ -9978,24 +9402,21 @@
           }
         }
       }
-    } else
-      for (; i < len; ++i) {
-        if (sst[i].t === str) {
-          sst.Count++;
-          return i;
-        }
+    } else for (; i < len; ++i) {
+      if (sst[i].t === str) {
+        sst.Count++;
+        return i;
       }
+    }
     sst[len] = { t: str };
     sst.Count++;
     sst.Unique++;
     if (rev) {
       if (browser_has_Map) {
-        if (!rev.has(str))
-          rev.set(str, []);
+        if (!rev.has(str)) rev.set(str, []);
         rev.get(str).push(len);
       } else {
-        if (!Object.prototype.hasOwnProperty.call(rev, str))
-          rev[str] = [];
+        if (!Object.prototype.hasOwnProperty.call(rev, str)) rev[str] = [];
         rev[str].push(len);
       }
     }
@@ -10004,60 +9425,43 @@
   function col_obj_w(C, col) {
     var p = { min: C + 1, max: C + 1 };
     var wch = -1;
-    if (col.MDW)
-      MDW = col.MDW;
-    if (col.width != null)
-      p.customWidth = 1;
-    else if (col.wpx != null)
-      wch = px2char(col.wpx);
-    else if (col.wch != null)
-      wch = col.wch;
+    if (col.MDW) MDW = col.MDW;
+    if (col.width != null) p.customWidth = 1;
+    else if (col.wpx != null) wch = px2char(col.wpx);
+    else if (col.wch != null) wch = col.wch;
     if (wch > -1) {
       p.width = char2width(wch);
       p.customWidth = 1;
-    } else if (col.width != null)
-      p.width = col.width;
-    if (col.hidden)
-      p.hidden = true;
+    } else if (col.width != null) p.width = col.width;
+    if (col.hidden) p.hidden = true;
     if (col.level != null) {
       p.outlineLevel = p.level = col.level;
     }
     return p;
   }
   function default_margins(margins, mode) {
-    if (!margins)
-      return;
+    if (!margins) return;
     var defs = [0.7, 0.7, 0.75, 0.75, 0.3, 0.3];
-    if (mode == "xlml")
-      defs = [1, 1, 1, 1, 0.5, 0.5];
-    if (margins.left == null)
-      margins.left = defs[0];
-    if (margins.right == null)
-      margins.right = defs[1];
-    if (margins.top == null)
-      margins.top = defs[2];
-    if (margins.bottom == null)
-      margins.bottom = defs[3];
-    if (margins.header == null)
-      margins.header = defs[4];
-    if (margins.footer == null)
-      margins.footer = defs[5];
+    if (mode == "xlml") defs = [1, 1, 1, 1, 0.5, 0.5];
+    if (margins.left == null) margins.left = defs[0];
+    if (margins.right == null) margins.right = defs[1];
+    if (margins.top == null) margins.top = defs[2];
+    if (margins.bottom == null) margins.bottom = defs[3];
+    if (margins.header == null) margins.header = defs[4];
+    if (margins.footer == null) margins.footer = defs[5];
   }
   function get_cell_style(styles, cell, opts) {
     var z = opts.revssf[cell.z != null ? cell.z : "General"];
     var i = 60, len = styles.length;
     if (z == null && opts.ssf) {
-      for (; i < 392; ++i)
-        if (opts.ssf[i] == null) {
-          SSF__load(cell.z, i);
-          opts.ssf[i] = cell.z;
-          opts.revssf[cell.z] = z = i;
-          break;
-        }
+      for (; i < 392; ++i) if (opts.ssf[i] == null) {
+        SSF__load(cell.z, i);
+        opts.ssf[i] = cell.z;
+        opts.revssf[cell.z] = z = i;
+        break;
+      }
     }
-    for (i = 0; i != len; ++i)
-      if (styles[i].numFmtId === z)
-        return i;
+    for (i = 0; i != len; ++i) if (styles[i].numFmtId === z) return i;
     styles[len] = {
       numFmtId: z,
       fontId: 0,
@@ -10071,16 +9475,13 @@
   function check_ws(ws, sname, i) {
     if (ws && ws["!ref"]) {
       var range = safe_decode_range(ws["!ref"]);
-      if (range.e.c < range.s.c || range.e.r < range.s.r)
-        throw new Error("Bad range (" + i + "): " + ws["!ref"]);
+      if (range.e.c < range.s.c || range.e.r < range.s.r) throw new Error("Bad range (" + i + "): " + ws["!ref"]);
     }
   }
   function write_ws_xml_merges(merges) {
-    if (merges.length === 0)
-      return "";
+    if (merges.length === 0) return "";
     var o = '<mergeCells count="' + merges.length + '">';
-    for (var i = 0; i != merges.length; ++i)
-      o += '<mergeCell ref="' + encode_range(merges[i]) + '"/>';
+    for (var i = 0; i != merges.length; ++i) o += '<mergeCell ref="' + encode_range(merges[i]) + '"/>';
     return o + "</mergeCells>";
   }
   function write_ws_xml_sheetpr(ws, wb, idx, opts, o) {
@@ -10089,8 +9490,7 @@
     if (opts.bookType !== "xlsx" && wb.vbaraw) {
       var cname = wb.SheetNames[idx];
       try {
-        if (wb.Workbook)
-          cname = wb.Workbook.Sheets[idx].CodeName || cname;
+        if (wb.Workbook) cname = wb.Workbook.Sheets[idx].CodeName || cname;
       } catch (e) {
       }
       needed = true;
@@ -10098,14 +9498,11 @@
     }
     if (ws && ws["!outline"]) {
       var outlineprops = { summaryBelow: 1, summaryRight: 1 };
-      if (ws["!outline"].above)
-        outlineprops.summaryBelow = 0;
-      if (ws["!outline"].left)
-        outlineprops.summaryRight = 0;
+      if (ws["!outline"].above) outlineprops.summaryBelow = 0;
+      if (ws["!outline"].left) outlineprops.summaryRight = 0;
       payload = (payload || "") + writextag("outlinePr", null, outlineprops);
     }
-    if (!needed && !payload)
-      return;
+    if (!needed && !payload) return;
     o[o.length] = writextag("sheetPr", payload, props);
   }
   var sheetprot_deffalse = ["objects", "scenarios", "selectLockedCells", "selectUnlockedCells"];
@@ -10125,15 +9522,12 @@
   function write_ws_xml_protection(sp) {
     var o = { sheet: 1 };
     sheetprot_deffalse.forEach(function(n) {
-      if (sp[n] != null && sp[n])
-        o[n] = "1";
+      if (sp[n] != null && sp[n]) o[n] = "1";
     });
     sheetprot_deftrue.forEach(function(n) {
-      if (sp[n] != null && !sp[n])
-        o[n] = "0";
+      if (sp[n] != null && !sp[n]) o[n] = "0";
     });
-    if (sp.password)
-      o.password = crypto_CreatePasswordVerifier_Method1(sp.password).toString(16).toUpperCase();
+    if (sp.password) o.password = crypto_CreatePasswordVerifier_Method1(sp.password).toString(16).toUpperCase();
     return writextag("sheetProtection", null, o);
   }
   function write_ws_xml_margins(margin) {
@@ -10143,8 +9537,7 @@
   function write_ws_xml_cols(ws, cols) {
     var o = ["<cols>"], col;
     for (var i = 0; i != cols.length; ++i) {
-      if (!(col = cols[i]))
-        continue;
+      if (!(col = cols[i])) continue;
       o[o.length] = writextag("col", null, col_obj_w(i, col));
     }
     o[o.length] = "</cols>";
@@ -10152,10 +9545,8 @@
   }
   function write_ws_xml_autofilter(data, ws, wb, idx) {
     var ref = typeof data.ref == "string" ? data.ref : encode_range(data.ref);
-    if (!wb.Workbook)
-      wb.Workbook = { Sheets: [] };
-    if (!wb.Workbook.Names)
-      wb.Workbook.Names = [];
+    if (!wb.Workbook) wb.Workbook = { Sheets: [] };
+    if (!wb.Workbook.Names) wb.Workbook.Names = [];
     var names = wb.Workbook.Names;
     var range = decode_range(ref);
     if (range.s.r == range.e.r) {
@@ -10164,70 +9555,59 @@
     }
     for (var i = 0; i < names.length; ++i) {
       var name = names[i];
-      if (name.Name != "_xlnm._FilterDatabase")
-        continue;
-      if (name.Sheet != idx)
-        continue;
+      if (name.Name != "_xlnm._FilterDatabase") continue;
+      if (name.Sheet != idx) continue;
       name.Ref = formula_quote_sheet_name(wb.SheetNames[idx]) + "!" + fix_range(ref);
       break;
     }
-    if (i == names.length)
-      names.push({ Name: "_xlnm._FilterDatabase", Sheet: idx, Ref: "'" + wb.SheetNames[idx] + "'!" + ref });
+    if (i == names.length) names.push({ Name: "_xlnm._FilterDatabase", Sheet: idx, Ref: "'" + wb.SheetNames[idx] + "'!" + ref });
     return writextag("autoFilter", null, { ref });
   }
   function write_ws_xml_sheetviews(ws, opts, idx, wb) {
     var sview = { workbookViewId: "0" };
-    if ((((wb || {}).Workbook || {}).Views || [])[0])
-      sview.rightToLeft = wb.Workbook.Views[0].RTL ? "1" : "0";
+    if ((((wb || {}).Workbook || {}).Views || [])[0]) sview.rightToLeft = wb.Workbook.Views[0].RTL ? "1" : "0";
     return writextag("sheetViews", writextag("sheetView", null, sview), {});
   }
   function write_ws_xml_cell(cell, ref, ws, opts, idx, wb, date1904) {
-    if (cell.c)
-      ws["!comments"].push([ref, cell.c]);
-    if ((cell.v === void 0 || cell.t === "z" && !(opts || {}).sheetStubs) && typeof cell.f !== "string" && typeof cell.z == "undefined")
-      return "";
+    if (cell.c) ws["!comments"].push([ref, cell.c]);
+    if ((cell.v === void 0 || cell.t === "z" && !(opts || {}).sheetStubs) && typeof cell.f !== "string" && typeof cell.z == "undefined") return "";
     var vv = "";
     var oldt = cell.t, oldv = cell.v;
-    if (cell.t !== "z")
-      switch (cell.t) {
-        case "b":
-          vv = cell.v ? "1" : "0";
-          break;
-        case "n":
-          if (isNaN(cell.v)) {
-            cell.t = "e";
-            vv = BErr[cell.v = 36];
-          } else if (!isFinite(cell.v)) {
-            cell.t = "e";
-            vv = BErr[cell.v = 7];
-          } else
-            vv = "" + cell.v;
-          break;
-        case "e":
-          vv = BErr[cell.v];
-          break;
-        case "d":
-          if (opts && opts.cellDates) {
-            var _vv = parseDate(cell.v, date1904);
-            vv = _vv.toISOString();
-            if (_vv.getUTCFullYear() < 1900)
-              vv = vv.slice(vv.indexOf("T") + 1).replace("Z", "");
-          } else {
-            cell = dup(cell);
-            cell.t = "n";
-            vv = "" + (cell.v = datenum(parseDate(cell.v, date1904), date1904));
-          }
-          if (typeof cell.z === "undefined")
-            cell.z = table_fmt[14];
-          break;
-        default:
-          vv = cell.v;
-          break;
-      }
+    if (cell.t !== "z") switch (cell.t) {
+      case "b":
+        vv = cell.v ? "1" : "0";
+        break;
+      case "n":
+        if (isNaN(cell.v)) {
+          cell.t = "e";
+          vv = BErr[cell.v = 36];
+        } else if (!isFinite(cell.v)) {
+          cell.t = "e";
+          vv = BErr[cell.v = 7];
+        } else vv = "" + cell.v;
+        break;
+      case "e":
+        vv = BErr[cell.v];
+        break;
+      case "d":
+        if (opts && opts.cellDates) {
+          var _vv = parseDate(cell.v, date1904);
+          vv = _vv.toISOString();
+          if (_vv.getUTCFullYear() < 1900) vv = vv.slice(vv.indexOf("T") + 1).replace("Z", "");
+        } else {
+          cell = dup(cell);
+          cell.t = "n";
+          vv = "" + (cell.v = datenum(parseDate(cell.v, date1904), date1904));
+        }
+        if (typeof cell.z === "undefined") cell.z = table_fmt[14];
+        break;
+      default:
+        vv = cell.v;
+        break;
+    }
     var v = cell.t == "z" || cell.v == null ? "" : writetag("v", escapexml(vv)), o = { r: ref };
     var os = get_cell_style(opts.cellXfs, cell, opts);
-    if (os !== 0)
-      o.s = os;
+    if (os !== 0) o.s = os;
     switch (cell.t) {
       case "n":
         break;
@@ -10247,14 +9627,12 @@
           delete cell.t;
           break;
         }
-        if (cell.v.length > 32767)
-          throw new Error("Text length must not exceed 32767 characters");
+        if (cell.v.length > 32767) throw new Error("Text length must not exceed 32767 characters");
         if (opts && opts.bookSST) {
           v = writetag("v", "" + get_sst_id(opts.Strings, cell.v, opts.revStrings));
           o.t = "s";
           break;
-        } else
-          o.t = "str";
+        } else o.t = "str";
         break;
     }
     if (cell.t != oldt) {
@@ -10269,8 +9647,7 @@
       cell.l.display = escapexml(vv);
       ws["!links"].push([ref, cell.l]);
     }
-    if (cell.D)
-      o.cm = 1;
+    if (cell.D) o.cm = 1;
     return writextag("c", v, o);
   }
   function write_ws_xml_data(ws, opts, idx, wb) {
@@ -10278,8 +9655,7 @@
     var dense = ws["!data"] != null, data = dense ? ws["!data"] : [];
     var params = { r: rr }, row, height = -1;
     var date1904 = (((wb || {}).Workbook || {}).WBProps || {}).date1904;
-    for (C = range.s.c; C <= range.e.c; ++C)
-      cols[C] = encode_col(C);
+    for (C = range.s.c; C <= range.e.c; ++C) cols[C] = encode_col(C);
     for (R = range.s.r; R <= range.e.r; ++R) {
       r = [];
       rr = encode_row(R);
@@ -10287,22 +9663,17 @@
       for (C = range.s.c; C <= range.e.c; ++C) {
         ref = cols[C] + rr;
         var _cell = dense ? data_R[C] : ws[ref];
-        if (_cell === void 0)
-          continue;
-        if ((cell = write_ws_xml_cell(_cell, ref, ws, opts, idx, wb, date1904)) != null)
-          r.push(cell);
+        if (_cell === void 0) continue;
+        if ((cell = write_ws_xml_cell(_cell, ref, ws, opts, idx, wb, date1904)) != null) r.push(cell);
       }
       if (r.length > 0 || rows && rows[R]) {
         params = { r: rr };
         if (rows && rows[R]) {
           row = rows[R];
-          if (row.hidden)
-            params.hidden = 1;
+          if (row.hidden) params.hidden = 1;
           height = -1;
-          if (row.hpx)
-            height = px2pt(row.hpx);
-          else if (row.hpt)
-            height = row.hpt;
+          if (row.hpx) height = px2pt(row.hpx);
+          else if (row.hpt) height = row.hpt;
           if (height > -1) {
             params.ht = height;
             params.customHeight = 1;
@@ -10314,28 +9685,24 @@
         o[o.length] = writextag("row", r.join(""), params);
       }
     }
-    if (rows)
-      for (; R < rows.length; ++R) {
-        if (rows && rows[R]) {
-          params = { r: R + 1 };
-          row = rows[R];
-          if (row.hidden)
-            params.hidden = 1;
-          height = -1;
-          if (row.hpx)
-            height = px2pt(row.hpx);
-          else if (row.hpt)
-            height = row.hpt;
-          if (height > -1) {
-            params.ht = height;
-            params.customHeight = 1;
-          }
-          if (row.level) {
-            params.outlineLevel = row.level;
-          }
-          o[o.length] = writextag("row", "", params);
+    if (rows) for (; R < rows.length; ++R) {
+      if (rows && rows[R]) {
+        params = { r: R + 1 };
+        row = rows[R];
+        if (row.hidden) params.hidden = 1;
+        height = -1;
+        if (row.hpx) height = px2pt(row.hpx);
+        else if (row.hpt) height = row.hpt;
+        if (height > -1) {
+          params.ht = height;
+          params.customHeight = 1;
         }
+        if (row.level) {
+          params.outlineLevel = row.level;
+        }
+        o[o.length] = writextag("row", "", params);
       }
+    }
     return o.join("");
   }
   function write_ws_xml(idx, opts, wb, rels) {
@@ -10345,49 +9712,40 @@
     })];
     var s = wb.SheetNames[idx], sidx = 0, rdata = "";
     var ws = wb.Sheets[s];
-    if (ws == null)
-      ws = {};
+    if (ws == null) ws = {};
     var ref = ws["!ref"] || "A1";
     var range = safe_decode_range(ref);
     if (range.e.c > 16383 || range.e.r > 1048575) {
-      if (opts.WTF)
-        throw new Error("Range " + ref + " exceeds format limit A1:XFD1048576");
+      if (opts.WTF) throw new Error("Range " + ref + " exceeds format limit A1:XFD1048576");
       range.e.c = Math.min(range.e.c, 16383);
       range.e.r = Math.min(range.e.c, 1048575);
       ref = encode_range(range);
     }
-    if (!rels)
-      rels = {};
+    if (!rels) rels = {};
     ws["!comments"] = [];
     var _drawing = [];
     write_ws_xml_sheetpr(ws, wb, idx, opts, o);
     o[o.length] = writextag("dimension", null, { "ref": ref });
     o[o.length] = write_ws_xml_sheetviews(ws, opts, idx, wb);
-    if (opts.sheetFormat)
-      o[o.length] = writextag("sheetFormatPr", null, {
-        defaultRowHeight: opts.sheetFormat.defaultRowHeight || "16",
-        baseColWidth: opts.sheetFormat.baseColWidth || "10",
-        outlineLevelRow: opts.sheetFormat.outlineLevelRow || "7"
-      });
-    if (ws["!cols"] != null && ws["!cols"].length > 0)
-      o[o.length] = write_ws_xml_cols(ws, ws["!cols"]);
+    if (opts.sheetFormat) o[o.length] = writextag("sheetFormatPr", null, {
+      defaultRowHeight: opts.sheetFormat.defaultRowHeight || "16",
+      baseColWidth: opts.sheetFormat.baseColWidth || "10",
+      outlineLevelRow: opts.sheetFormat.outlineLevelRow || "7"
+    });
+    if (ws["!cols"] != null && ws["!cols"].length > 0) o[o.length] = write_ws_xml_cols(ws, ws["!cols"]);
     o[sidx = o.length] = "<sheetData/>";
     ws["!links"] = [];
     if (ws["!ref"] != null) {
       rdata = write_ws_xml_data(ws, opts, idx, wb, rels);
-      if (rdata.length > 0)
-        o[o.length] = rdata;
+      if (rdata.length > 0) o[o.length] = rdata;
     }
     if (o.length > sidx + 1) {
       o[o.length] = "</sheetData>";
       o[sidx] = o[sidx].replace("/>", ">");
     }
-    if (ws["!protect"])
-      o[o.length] = write_ws_xml_protection(ws["!protect"]);
-    if (ws["!autofilter"] != null)
-      o[o.length] = write_ws_xml_autofilter(ws["!autofilter"], ws, wb, idx);
-    if (ws["!merges"] != null && ws["!merges"].length > 0)
-      o[o.length] = write_ws_xml_merges(ws["!merges"]);
+    if (ws["!protect"]) o[o.length] = write_ws_xml_protection(ws["!protect"]);
+    if (ws["!autofilter"] != null) o[o.length] = write_ws_xml_autofilter(ws["!autofilter"], ws, wb, idx);
+    if (ws["!merges"] != null && ws["!merges"].length > 0) o[o.length] = write_ws_xml_merges(ws["!merges"]);
     var relc = -1, rel, rId = -1;
     if (
       /*::(*/
@@ -10395,27 +9753,22 @@
     ) {
       o[o.length] = "<hyperlinks>";
       ws["!links"].forEach(function(l) {
-        if (!l[1].Target)
-          return;
+        if (!l[1].Target) return;
         rel = { "ref": l[0] };
         if (l[1].Target.charAt(0) != "#") {
           rId = add_rels(rels, -1, escapexml(l[1].Target).replace(/#[\s\S]*$/, ""), RELS.HLINK);
           rel["r:id"] = "rId" + rId;
         }
-        if ((relc = l[1].Target.indexOf("#")) > -1)
-          rel.location = escapexml(l[1].Target.slice(relc + 1));
-        if (l[1].Tooltip)
-          rel.tooltip = escapexml(l[1].Tooltip);
+        if ((relc = l[1].Target.indexOf("#")) > -1) rel.location = escapexml(l[1].Target.slice(relc + 1));
+        if (l[1].Tooltip) rel.tooltip = escapexml(l[1].Tooltip);
         rel.display = l[1].display;
         o[o.length] = writextag("hyperlink", null, rel);
       });
       o[o.length] = "</hyperlinks>";
     }
     delete ws["!links"];
-    if (ws["!margins"] != null)
-      o[o.length] = write_ws_xml_margins(ws["!margins"]);
-    if (!opts || opts.ignoreEC || opts.ignoreEC == void 0)
-      o[o.length] = writetag("ignoredErrors", writextag("ignoredError", null, { numberStoredAsText: 1, sqref: ref }));
+    if (ws["!margins"] != null) o[o.length] = write_ws_xml_margins(ws["!margins"]);
+    if (!opts || opts.ignoreEC || opts.ignoreEC == void 0) o[o.length] = writetag("ignoredErrors", writextag("ignoredError", null, { numberStoredAsText: 1, sqref: ref }));
     if (_drawing.length > 0) {
       rId = add_rels(rels, -1, "../drawings/drawing" + (idx + 1) + ".xml", RELS.DRAW);
       o[o.length] = writextag("drawing", null, { "r:id": "rId" + rId });
@@ -10455,22 +9808,16 @@
   var badchars = /* @__PURE__ */ ":][*?/\\".split("");
   function check_ws_name(n, safe) {
     try {
-      if (n == "")
-        throw new Error("Sheet name cannot be blank");
-      if (n.length > 31)
-        throw new Error("Sheet name cannot exceed 31 chars");
-      if (n.charCodeAt(0) == 39 || n.charCodeAt(n.length - 1) == 39)
-        throw new Error("Sheet name cannot start or end with apostrophe (')");
-      if (n.toLowerCase() == "history")
-        throw new Error("Sheet name cannot be 'History'");
+      if (n == "") throw new Error("Sheet name cannot be blank");
+      if (n.length > 31) throw new Error("Sheet name cannot exceed 31 chars");
+      if (n.charCodeAt(0) == 39 || n.charCodeAt(n.length - 1) == 39) throw new Error("Sheet name cannot start or end with apostrophe (')");
+      if (n.toLowerCase() == "history") throw new Error("Sheet name cannot be 'History'");
       badchars.forEach(function(c) {
-        if (n.indexOf(c) == -1)
-          return;
+        if (n.indexOf(c) == -1) return;
         throw new Error("Sheet name cannot contain : \\ / ? * [ ]");
       });
     } catch (e) {
-      if (safe)
-        return false;
+      if (safe) return false;
       throw e;
     }
     return true;
@@ -10478,43 +9825,31 @@
   function check_wb_names(N, S, codes) {
     N.forEach(function(n, i) {
       check_ws_name(n);
-      for (var j = 0; j < i; ++j)
-        if (n == N[j])
-          throw new Error("Duplicate Sheet Name: " + n);
+      for (var j = 0; j < i; ++j) if (n == N[j]) throw new Error("Duplicate Sheet Name: " + n);
       if (codes) {
         var cn = S && S[i] && S[i].CodeName || n;
-        if (cn.charCodeAt(0) == 95 && cn.length > 22)
-          throw new Error("Bad Code Name: Worksheet" + cn);
+        if (cn.charCodeAt(0) == 95 && cn.length > 22) throw new Error("Bad Code Name: Worksheet" + cn);
       }
     });
   }
   function check_wb(wb) {
-    if (!wb || !wb.SheetNames || !wb.Sheets)
-      throw new Error("Invalid Workbook");
-    if (!wb.SheetNames.length)
-      throw new Error("Workbook is empty");
+    if (!wb || !wb.SheetNames || !wb.Sheets) throw new Error("Invalid Workbook");
+    if (!wb.SheetNames.length) throw new Error("Workbook is empty");
     var Sheets = wb.Workbook && wb.Workbook.Sheets || [];
     check_wb_names(wb.SheetNames, Sheets, !!wb.vbaraw);
-    for (var i = 0; i < wb.SheetNames.length; ++i)
-      check_ws(wb.Sheets[wb.SheetNames[i]], wb.SheetNames[i], i);
+    for (var i = 0; i < wb.SheetNames.length; ++i) check_ws(wb.Sheets[wb.SheetNames[i]], wb.SheetNames[i], i);
     wb.SheetNames.forEach(function(n, i2) {
       var ws = wb.Sheets[n];
-      if (!ws || !ws["!autofilter"])
-        return;
+      if (!ws || !ws["!autofilter"]) return;
       var DN;
-      if (!wb.Workbook)
-        wb.Workbook = {};
-      if (!wb.Workbook.Names)
-        wb.Workbook.Names = [];
+      if (!wb.Workbook) wb.Workbook = {};
+      if (!wb.Workbook.Names) wb.Workbook.Names = [];
       wb.Workbook.Names.forEach(function(dn) {
-        if (dn.Name == "_xlnm._FilterDatabase" && dn.Sheet == i2)
-          DN = dn;
+        if (dn.Name == "_xlnm._FilterDatabase" && dn.Sheet == i2) DN = dn;
       });
       var nn = formula_quote_sheet_name(n) + "!" + fix_range(ws["!autofilter"].ref);
-      if (DN)
-        DN.Ref = nn;
-      else
-        wb.Workbook.Names.push({ Name: "_xlnm._FilterDatabase", Sheet: i2, Ref: nn });
+      if (DN) DN.Ref = nn;
+      else wb.Workbook.Names.push({ Name: "_xlnm._FilterDatabase", Sheet: i2, Ref: nn });
     });
   }
   function write_wb_xml(wb) {
@@ -10529,10 +9864,8 @@
     var workbookPr = { codeName: "ThisWorkbook" };
     if (wb.Workbook && wb.Workbook.WBProps) {
       WBPropsDef.forEach(function(x) {
-        if (wb.Workbook.WBProps[x[0]] == null)
-          return;
-        if (wb.Workbook.WBProps[x[0]] == x[1])
-          return;
+        if (wb.Workbook.WBProps[x[0]] == null) return;
+        if (wb.Workbook.WBProps[x[0]] == x[1]) return;
         workbookPr[x[0]] = wb.Workbook.WBProps[x[0]];
       });
       if (wb.Workbook.WBProps.CodeName) {
@@ -10546,13 +9879,10 @@
     if (sheets && sheets[0] && !!sheets[0].Hidden) {
       o[o.length] = "<bookViews>";
       for (i = 0; i != wb.SheetNames.length; ++i) {
-        if (!sheets[i])
-          break;
-        if (!sheets[i].Hidden)
-          break;
+        if (!sheets[i]) break;
+        if (!sheets[i].Hidden) break;
       }
-      if (i == wb.SheetNames.length)
-        i = 0;
+      if (i == wb.SheetNames.length) i = 0;
       o[o.length] = '<workbookView firstSheet="' + i + '" activeTab="' + i + '"/>';
       o[o.length] = "</bookViews>";
     }
@@ -10561,33 +9891,27 @@
       var sht = { name: escapexml(wb.SheetNames[i].slice(0, 31)) };
       sht.sheetId = "" + (i + 1);
       sht["r:id"] = "rId" + (i + 1);
-      if (sheets[i])
-        switch (sheets[i].Hidden) {
-          case 1:
-            sht.state = "hidden";
-            break;
-          case 2:
-            sht.state = "veryHidden";
-            break;
-        }
+      if (sheets[i]) switch (sheets[i].Hidden) {
+        case 1:
+          sht.state = "hidden";
+          break;
+        case 2:
+          sht.state = "veryHidden";
+          break;
+      }
       o[o.length] = writextag("sheet", null, sht);
     }
     o[o.length] = "</sheets>";
     if (write_names) {
       o[o.length] = "<definedNames>";
-      if (wb.Workbook && wb.Workbook.Names)
-        wb.Workbook.Names.forEach(function(n) {
-          var d = { name: n.Name };
-          if (n.Comment)
-            d.comment = n.Comment;
-          if (n.Sheet != null)
-            d.localSheetId = "" + n.Sheet;
-          if (n.Hidden)
-            d.hidden = "1";
-          if (!n.Ref)
-            return;
-          o[o.length] = writextag("definedName", escapexml(n.Ref), d);
-        });
+      if (wb.Workbook && wb.Workbook.Names) wb.Workbook.Names.forEach(function(n) {
+        var d = { name: n.Name };
+        if (n.Comment) d.comment = n.Comment;
+        if (n.Sheet != null) d.localSheetId = "" + n.Sheet;
+        if (n.Hidden) d.hidden = "1";
+        if (!n.Ref) return;
+        o[o.length] = writextag("definedName", escapexml(n.Ref), d);
+      });
       o[o.length] = "</definedNames>";
     }
     if (o.length > 2) {
@@ -10604,10 +9928,8 @@
     for (var C = r.s.c; C <= r.e.c; ++C) {
       var RS = 0, CS = 0;
       for (var j = 0; j < M.length; ++j) {
-        if (M[j].s.r > R || M[j].s.c > C)
-          continue;
-        if (M[j].e.r < R || M[j].e.c < C)
-          continue;
+        if (M[j].s.r > R || M[j].s.c > C) continue;
+        if (M[j].e.r < R || M[j].e.c < C) continue;
         if (M[j].s.r < R || M[j].s.c < C) {
           RS = -1;
           break;
@@ -10616,32 +9938,23 @@
         CS = M[j].e.c - M[j].s.c + 1;
         break;
       }
-      if (RS < 0)
-        continue;
+      if (RS < 0) continue;
       var coord = encode_col(C) + encode_row(R);
       var cell = dense ? (ws["!data"][R] || [])[C] : ws[coord];
       if (cell && cell.t == "n" && cell.v != null && !isFinite(cell.v)) {
-        if (isNaN(cell.v))
-          cell = { t: "e", v: 36, w: BErr[36] };
-        else
-          cell = { t: "e", v: 7, w: BErr[7] };
+        if (isNaN(cell.v)) cell = { t: "e", v: 36, w: BErr[36] };
+        else cell = { t: "e", v: 7, w: BErr[7] };
       }
       var w = cell && cell.v != null && (cell.h || escapehtml(cell.w || (format_cell(cell), cell.w) || "")) || "";
       sp = {};
-      if (RS > 1)
-        sp.rowspan = RS;
-      if (CS > 1)
-        sp.colspan = CS;
-      if (o.editable)
-        w = '<span contenteditable="true">' + w + "</span>";
+      if (RS > 1) sp.rowspan = RS;
+      if (CS > 1) sp.colspan = CS;
+      if (o.editable) w = '<span contenteditable="true">' + w + "</span>";
       else if (cell) {
         sp["data-t"] = cell && cell.t || "z";
-        if (cell.v != null)
-          sp["data-v"] = escapehtml(cell.v instanceof Date ? cell.v.toISOString() : cell.v);
-        if (cell.z != null)
-          sp["data-z"] = cell.z;
-        if (cell.l && (cell.l.Target || "#").charAt(0) != "#")
-          w = '<a href="' + escapehtml(cell.l.Target) + '">' + w + "</a>";
+        if (cell.v != null) sp["data-v"] = escapehtml(cell.v instanceof Date ? cell.v.toISOString() : cell.v);
+        if (cell.z != null) sp["data-z"] = cell.z;
+        if (cell.l && (cell.l.Target || "#").charAt(0) != "#") w = '<a href="' + escapehtml(cell.l.Target) + '">' + w + "</a>";
       }
       sp.id = (o.id || "sjs") + "-" + coord;
       oo.push(writextag("td", w, sp));
@@ -10662,9 +9975,7 @@
     var out = [header];
     var r = decode_range(ws["!ref"] || "A1");
     out.push(make_html_preamble(ws, r, o));
-    if (ws["!ref"])
-      for (var R = r.s.r; R <= r.e.r; ++R)
-        out.push(make_html_row(ws, r, R, o));
+    if (ws["!ref"]) for (var R = r.s.r; R <= r.e.r; ++R) out.push(make_html_row(ws, r, R, o));
     out.push("</table>" + footer);
     return out.join("");
   }
@@ -10677,8 +9988,7 @@
     var dense = ws["!data"] != null;
     var or_R = 0, or_C = 0;
     if (opts.origin != null) {
-      if (typeof opts.origin == "number")
-        or_R = opts.origin;
+      if (typeof opts.origin == "number") or_R = opts.origin;
       else {
         var _origin = typeof opts.origin == "string" ? decode_cell(opts.origin) : opts.origin;
         or_R = _origin.r;
@@ -10693,26 +10003,22 @@
       range.s.c = Math.min(range.s.c, _range.s.c);
       range.e.r = Math.max(range.e.r, _range.e.r);
       range.e.c = Math.max(range.e.c, _range.e.c);
-      if (or_R == -1)
-        range.e.r = or_R = _range.e.r + 1;
+      if (or_R == -1) range.e.r = or_R = _range.e.r + 1;
     }
     var merges = [], midx = 0;
     var rowinfo = ws["!rows"] || (ws["!rows"] = []);
     var _R = 0, R = 0, _C = 0, C = 0, RS = 0, CS = 0;
-    if (!ws["!cols"])
-      ws["!cols"] = [];
+    if (!ws["!cols"]) ws["!cols"] = [];
     for (; _R < rows.length && R < sheetRows; ++_R) {
       var row = rows[_R];
       if (is_dom_element_hidden(row)) {
-        if (opts.display)
-          continue;
+        if (opts.display) continue;
         rowinfo[R] = { hidden: true };
       }
       var elts = row.cells;
       for (_C = C = 0; _C < elts.length; ++_C) {
         var elt = elts[_C];
-        if (opts.display && is_dom_element_hidden(elt))
-          continue;
+        if (opts.display && is_dom_element_hidden(elt)) continue;
         var v = elt.hasAttribute("data-v") ? elt.getAttribute("data-v") : elt.hasAttribute("v") ? elt.getAttribute("v") : htmldecode(elt.innerHTML);
         var z = elt.getAttribute("data-z") || elt.getAttribute("z");
         for (midx = 0; midx < merges.length; ++midx) {
@@ -10723,70 +10029,51 @@
           }
         }
         CS = +elt.getAttribute("colspan") || 1;
-        if ((RS = +elt.getAttribute("rowspan") || 1) > 1 || CS > 1)
-          merges.push({ s: { r: R + or_R, c: C + or_C }, e: { r: R + or_R + (RS || 1) - 1, c: C + or_C + (CS || 1) - 1 } });
+        if ((RS = +elt.getAttribute("rowspan") || 1) > 1 || CS > 1) merges.push({ s: { r: R + or_R, c: C + or_C }, e: { r: R + or_R + (RS || 1) - 1, c: C + or_C + (CS || 1) - 1 } });
         var o = { t: "s", v };
         var _t = elt.getAttribute("data-t") || elt.getAttribute("t") || "";
         if (v != null) {
-          if (v.length == 0)
-            o.t = _t || "z";
+          if (v.length == 0) o.t = _t || "z";
           else if (opts.raw || v.trim().length == 0 || _t == "s") {
-          } else if (_t == "e" && BErr[+v])
-            o = { t: "e", v: +v, w: BErr[+v] };
-          else if (v === "TRUE")
-            o = { t: "b", v: true };
-          else if (v === "FALSE")
-            o = { t: "b", v: false };
-          else if (!isNaN(fuzzynum(v)))
-            o = { t: "n", v: fuzzynum(v) };
+          } else if (_t == "e" && BErr[+v]) o = { t: "e", v: +v, w: BErr[+v] };
+          else if (v === "TRUE") o = { t: "b", v: true };
+          else if (v === "FALSE") o = { t: "b", v: false };
+          else if (!isNaN(fuzzynum(v))) o = { t: "n", v: fuzzynum(v) };
           else if (!isNaN(fuzzydate(v).getDate())) {
             o = { t: "d", v: parseDate(v) };
-            if (opts.UTC)
-              o.v = local_to_utc(o.v);
-            if (!opts.cellDates)
-              o = { t: "n", v: datenum(o.v) };
+            if (opts.UTC) o.v = local_to_utc(o.v);
+            if (!opts.cellDates) o = { t: "n", v: datenum(o.v) };
             o.z = opts.dateNF || table_fmt[14];
-          } else if (v.charCodeAt(0) == 35 && RBErr[v] != null)
-            o = { t: "e", v: RBErr[v], w: v };
+          } else if (v.charCodeAt(0) == 35 && RBErr[v] != null) o = { t: "e", v: RBErr[v], w: v };
         }
-        if (o.z === void 0 && z != null)
-          o.z = z;
+        if (o.z === void 0 && z != null) o.z = z;
         var l = "", Aelts = elt.getElementsByTagName("A");
         if (Aelts && Aelts.length) {
-          for (var Aelti = 0; Aelti < Aelts.length; ++Aelti)
-            if (Aelts[Aelti].hasAttribute("href")) {
-              l = Aelts[Aelti].getAttribute("href");
-              if (l.charAt(0) != "#")
-                break;
-            }
+          for (var Aelti = 0; Aelti < Aelts.length; ++Aelti) if (Aelts[Aelti].hasAttribute("href")) {
+            l = Aelts[Aelti].getAttribute("href");
+            if (l.charAt(0) != "#") break;
+          }
         }
-        if (l && l.charAt(0) != "#" && l.slice(0, 11).toLowerCase() != "javascript:")
-          o.l = { Target: l };
+        if (l && l.charAt(0) != "#" && l.slice(0, 11).toLowerCase() != "javascript:") o.l = { Target: l };
         if (dense) {
-          if (!ws["!data"][R + or_R])
-            ws["!data"][R + or_R] = [];
+          if (!ws["!data"][R + or_R]) ws["!data"][R + or_R] = [];
           ws["!data"][R + or_R][C + or_C] = o;
-        } else
-          ws[encode_cell({ c: C + or_C, r: R + or_R })] = o;
-        if (range.e.c < C + or_C)
-          range.e.c = C + or_C;
+        } else ws[encode_cell({ c: C + or_C, r: R + or_R })] = o;
+        if (range.e.c < C + or_C) range.e.c = C + or_C;
         C += CS;
       }
       ++R;
     }
-    if (merges.length)
-      ws["!merges"] = (ws["!merges"] || []).concat(merges);
+    if (merges.length) ws["!merges"] = (ws["!merges"] || []).concat(merges);
     range.e.r = Math.max(range.e.r, R - 1 + or_R);
     ws["!ref"] = encode_range(range);
-    if (R >= sheetRows)
-      ws["!fullref"] = encode_range((range.e.r = rows.length - _R + R - 1 + or_R, range));
+    if (R >= sheetRows) ws["!fullref"] = encode_range((range.e.r = rows.length - _R + R - 1 + or_R, range));
     return ws;
   }
   function parse_dom_table(table, _opts) {
     var opts = _opts || {};
     var ws = {};
-    if (opts.dense)
-      ws["!data"] = [];
+    if (opts.dense) ws["!data"] = [];
     return sheet_add_dom(ws, table, _opts);
   }
   function table_to_book(table, opts) {
@@ -10796,20 +10083,16 @@
   function is_dom_element_hidden(element) {
     var display = "";
     var get_computed_style = get_get_computed_style_function(element);
-    if (get_computed_style)
-      display = get_computed_style(element).getPropertyValue("display");
-    if (!display)
-      display = element.style && element.style.display;
+    if (get_computed_style) display = get_computed_style(element).getPropertyValue("display");
+    if (!display) display = element.style && element.style.display;
     return display === "none";
   }
   function get_get_computed_style_function(element) {
-    if (element.ownerDocument.defaultView && typeof element.ownerDocument.defaultView.getComputedStyle === "function")
-      return element.ownerDocument.defaultView.getComputedStyle;
-    if (typeof getComputedStyle === "function")
-      return getComputedStyle;
+    if (element.ownerDocument.defaultView && typeof element.ownerDocument.defaultView.getComputedStyle === "function") return element.ownerDocument.defaultView.getComputedStyle;
+    if (typeof getComputedStyle === "function") return getComputedStyle;
     return null;
   }
-  var subarray = function() {
+  var subarray = (function() {
     try {
       if (typeof Uint8Array == "undefined")
         return "slice";
@@ -10826,15 +10109,13 @@
     } catch (e) {
       return "slice";
     }
-  }();
+  })();
   function fix_opts_func(defaults) {
     return function fix_opts(opts) {
       for (var i = 0; i != defaults.length; ++i) {
         var d = defaults[i];
-        if (opts[d[0]] === void 0)
-          opts[d[0]] = d[1];
-        if (d[2] === "n")
-          opts[d[0]] = Number(opts[d[0]]);
+        if (opts[d[0]] === void 0) opts[d[0]] = d[1];
+        if (d[2] === "n") opts[d[0]] = Number(opts[d[0]]);
       }
     };
   }
@@ -10869,8 +10150,7 @@
     [];
     opts.Strings.Count = 0;
     opts.Strings.Unique = 0;
-    if (browser_has_Map)
-      opts.revStrings = /* @__PURE__ */ new Map();
+    if (browser_has_Map) opts.revStrings = /* @__PURE__ */ new Map();
     else {
       opts.revStrings = {};
       opts.revStrings.foo = [];
@@ -10884,21 +10164,18 @@
     var f = "", rId = 0;
     opts.cellXfs = [];
     get_cell_style(opts.cellXfs, {}, { revssf: { "General": 0 } });
-    if (!wb.Props)
-      wb.Props = {};
+    if (!wb.Props) wb.Props = {};
     f = "docProps/core.xml";
     zip_add_file(zip, f, write_core_props(wb.Props, opts));
     ct.coreprops.push(f);
     add_rels(opts.rels, 2, f, RELS.CORE_PROPS);
     f = "docProps/app.xml";
     if (wb.Props && wb.Props.SheetNames) {
-    } else if (!wb.Workbook || !wb.Workbook.Sheets)
-      wb.Props.SheetNames = wb.SheetNames;
+    } else if (!wb.Workbook || !wb.Workbook.Sheets) wb.Props.SheetNames = wb.SheetNames;
     else {
       var _sn = [];
       for (var _i = 0; _i < wb.SheetNames.length; ++_i)
-        if ((wb.Workbook.Sheets[_i] || {}).Hidden != 2)
-          _sn.push(wb.SheetNames[_i]);
+        if ((wb.Workbook.Sheets[_i] || {}).Hidden != 2) _sn.push(wb.SheetNames[_i]);
       wb.Props.SheetNames = _sn;
     }
     wb.Props.Worksheets = wb.Props.SheetNames.length;
@@ -10919,6 +10196,7 @@
       var _type = (ws || {})["!type"] || "sheet";
       switch (_type) {
         case "chart":
+        /* falls through */
         default:
           f = "xl/worksheets/sheet" + rId + "." + wbext;
           zip_add_file(zip, f, write_ws_xml(rId - 1, opts, wb, wsrels));
@@ -10933,8 +10211,7 @@
           var needtc = false;
           comments.forEach(function(carr) {
             carr[1].forEach(function(c) {
-              if (c.T == true)
-                needtc = true;
+              if (c.T == true) needtc = true;
             });
           });
           if (needtc) {
@@ -10950,14 +10227,12 @@
           need_vml = true;
         }
         if (ws["!legacy"]) {
-          if (need_vml)
-            zip_add_file(zip, "xl/drawings/vmlDrawing" + rId + ".vml", write_vml(rId, ws["!comments"]));
+          if (need_vml) zip_add_file(zip, "xl/drawings/vmlDrawing" + rId + ".vml", write_vml(rId, ws["!comments"]));
         }
         delete ws["!comments"];
         delete ws["!legacy"];
       }
-      if (wsrels["!id"].rId1)
-        zip_add_file(zip, get_rels_path(f), write_rels(wsrels));
+      if (wsrels["!id"].rId1) zip_add_file(zip, get_rels_path(f), write_rels(wsrels));
     }
     if (opts.Strings != null && opts.Strings.length > 0) {
       f = "xl/sharedStrings." + wbext;
@@ -11026,42 +10301,36 @@
   function write_zip_denouement(z, o) {
     var oopts = {};
     var ftype = has_buf ? "nodebuffer" : typeof Uint8Array !== "undefined" ? "array" : "string";
-    if (o.compression)
-      oopts.compression = "DEFLATE";
-    if (o.password)
-      oopts.type = ftype;
-    else
-      switch (o.type) {
-        case "base64":
-          oopts.type = "base64";
-          break;
-        case "binary":
-          oopts.type = "string";
-          break;
-        case "string":
-          throw new Error("'string' output type invalid for '" + o.bookType + "' files");
-        case "buffer":
-        case "file":
-          oopts.type = ftype;
-          break;
-        default:
-          throw new Error("Unrecognized type " + o.type);
-      }
+    if (o.compression) oopts.compression = "DEFLATE";
+    if (o.password) oopts.type = ftype;
+    else switch (o.type) {
+      case "base64":
+        oopts.type = "base64";
+        break;
+      case "binary":
+        oopts.type = "string";
+        break;
+      case "string":
+        throw new Error("'string' output type invalid for '" + o.bookType + "' files");
+      case "buffer":
+      case "file":
+        oopts.type = ftype;
+        break;
+      default:
+        throw new Error("Unrecognized type " + o.type);
+    }
     var out = z.FullPaths ? CFB.write(z, { fileType: "zip", type: (
       /*::(*/
       { "nodebuffer": "buffer", "string": "binary" }[oopts.type] || oopts.type
     ), compression: !!o.compression }) : z.generate(oopts);
     if (typeof Deno !== "undefined") {
       if (typeof out == "string") {
-        if (o.type == "binary" || o.type == "base64")
-          return out;
+        if (o.type == "binary" || o.type == "base64") return out;
         out = new Uint8Array(s2ab(out));
       }
     }
-    if (o.password && typeof encrypt_agile !== "undefined")
-      return write_cfb_ctr(encrypt_agile(out, o.password), o);
-    if (o.type === "file")
-      return write_dl(o.file, out);
+    if (o.password && typeof encrypt_agile !== "undefined") return write_cfb_ctr(encrypt_agile(out, o.password), o);
+    if (o.type === "file") return write_dl(o.file, out);
     return o.type == "string" ? utf8read(
       /*::(*/
       out
@@ -11085,8 +10354,7 @@
     return write_zip_typeXLSX(wb, o);
   }
   function resolve_book_type(o) {
-    if (o.bookType)
-      return;
+    if (o.bookType) return;
     var _BT = {
       "xls": "biff8",
       "htm": "html",
@@ -11095,8 +10363,7 @@
       "Sh33tJS": "WTF"
     };
     var ext = o.file.slice(o.file.lastIndexOf(".")).toLowerCase();
-    if (ext.match(/^\.[a-z]+$/))
-      o.bookType = ext.slice(1);
+    if (ext.match(/^\.[a-z]+$/)) o.bookType = ext.slice(1);
     o.bookType = _BT[o.bookType] || o.bookType;
   }
   function writeFileSyncXLSX(wb, filename, opts) {
@@ -11112,84 +10379,67 @@
     var isempty = true, dense = sheet["!data"] != null;
     var row = header === 1 ? [] : {};
     if (header !== 1) {
-      if (Object.defineProperty)
-        try {
-          Object.defineProperty(row, "__rowNum__", { value: R, enumerable: false });
-        } catch (e) {
-          row.__rowNum__ = R;
-        }
-      else
+      if (Object.defineProperty) try {
+        Object.defineProperty(row, "__rowNum__", { value: R, enumerable: false });
+      } catch (e) {
         row.__rowNum__ = R;
-    }
-    if (!dense || sheet["!data"][R])
-      for (var C = r.s.c; C <= r.e.c; ++C) {
-        var val2 = dense ? (sheet["!data"][R] || [])[C] : sheet[cols[C] + rr];
-        if (val2 == null || val2.t === void 0) {
-          if (defval === void 0)
-            continue;
-          if (hdr[C] != null) {
-            row[hdr[C]] = defval;
-          }
-          continue;
-        }
-        var v = val2.v;
-        switch (val2.t) {
-          case "z":
-            if (v == null)
-              break;
-            continue;
-          case "e":
-            v = v == 0 ? null : void 0;
-            break;
-          case "s":
-          case "b":
-          case "n":
-            if (!val2.z || !fmt_is_date(val2.z))
-              break;
-            v = numdate(v);
-            if (typeof v == "number")
-              break;
-          case "d":
-            if (!(o && (o.UTC || o.raw === false)))
-              v = utc_to_local(new Date(v));
-            break;
-          default:
-            throw new Error("unrecognized type " + val2.t);
-        }
-        if (hdr[C] != null) {
-          if (v == null) {
-            if (val2.t == "e" && v === null)
-              row[hdr[C]] = null;
-            else if (defval !== void 0)
-              row[hdr[C]] = defval;
-            else if (raw && v === null)
-              row[hdr[C]] = null;
-            else
-              continue;
-          } else {
-            row[hdr[C]] = (val2.t === "n" && typeof o.rawNumbers === "boolean" ? o.rawNumbers : raw) ? v : format_cell(val2, v, o);
-          }
-          if (v != null)
-            isempty = false;
-        }
       }
+      else row.__rowNum__ = R;
+    }
+    if (!dense || sheet["!data"][R]) for (var C = r.s.c; C <= r.e.c; ++C) {
+      var val2 = dense ? (sheet["!data"][R] || [])[C] : sheet[cols[C] + rr];
+      if (val2 == null || val2.t === void 0) {
+        if (defval === void 0) continue;
+        if (hdr[C] != null) {
+          row[hdr[C]] = defval;
+        }
+        continue;
+      }
+      var v = val2.v;
+      switch (val2.t) {
+        case "z":
+          if (v == null) break;
+          continue;
+        case "e":
+          v = v == 0 ? null : void 0;
+          break;
+        case "s":
+        case "b":
+        case "n":
+          if (!val2.z || !fmt_is_date(val2.z)) break;
+          v = numdate(v);
+          if (typeof v == "number") break;
+        /* falls through */
+        case "d":
+          if (!(o && (o.UTC || o.raw === false))) v = utc_to_local(new Date(v));
+          break;
+        default:
+          throw new Error("unrecognized type " + val2.t);
+      }
+      if (hdr[C] != null) {
+        if (v == null) {
+          if (val2.t == "e" && v === null) row[hdr[C]] = null;
+          else if (defval !== void 0) row[hdr[C]] = defval;
+          else if (raw && v === null) row[hdr[C]] = null;
+          else continue;
+        } else {
+          row[hdr[C]] = (val2.t === "n" && typeof o.rawNumbers === "boolean" ? o.rawNumbers : raw) ? v : format_cell(val2, v, o);
+        }
+        if (v != null) isempty = false;
+      }
+    }
     return { row, isempty };
   }
   function sheet_to_json(sheet, opts) {
-    if (sheet == null || sheet["!ref"] == null)
-      return [];
+    if (sheet == null || sheet["!ref"] == null) return [];
     var val2 = { t: "n", v: 0 }, header = 0, offset = 1, hdr = [], v = 0, vv = "";
     var r = { s: { r: 0, c: 0 }, e: { r: 0, c: 0 } };
     var o = opts || {};
     var range = o.range != null ? o.range : sheet["!ref"];
-    if (o.header === 1)
-      header = 1;
-    else if (o.header === "A")
-      header = 2;
-    else if (Array.isArray(o.header))
-      header = 3;
-    else if (o.header == null)
-      header = 0;
+    if (o.header === 1) header = 1;
+    else if (o.header === "A") header = 2;
+    else if (Array.isArray(o.header)) header = 3;
+    else if (o.header == null) header = 0;
     switch (typeof range) {
       case "string":
         r = safe_decode_range(range);
@@ -11201,8 +10451,7 @@
       default:
         r = range;
     }
-    if (header > 0)
-      offset = 0;
+    if (header > 0) offset = 0;
     var rr = encode_row(r.s.r);
     var cols = [];
     var out = [];
@@ -11210,13 +10459,11 @@
     var dense = sheet["!data"] != null;
     var R = r.s.r, C = 0;
     var header_cnt = {};
-    if (dense && !sheet["!data"][R])
-      sheet["!data"][R] = [];
+    if (dense && !sheet["!data"][R]) sheet["!data"][R] = [];
     var colinfo = o.skipHidden && sheet["!cols"] || [];
     var rowinfo = o.skipHidden && sheet["!rows"] || [];
     for (C = r.s.c; C <= r.e.c; ++C) {
-      if ((colinfo[C] || {}).hidden)
-        continue;
+      if ((colinfo[C] || {}).hidden) continue;
       cols[C] = encode_col(C);
       val2 = dense ? sheet["!data"][R][C] : sheet[cols[C] + rr];
       switch (header) {
@@ -11230,12 +10477,10 @@
           hdr[C] = o.header[C - r.s.c];
           break;
         default:
-          if (val2 == null)
-            val2 = { w: "__EMPTY", t: "s" };
+          if (val2 == null) val2 = { w: "__EMPTY", t: "s" };
           vv = v = format_cell(val2, null, o);
           counter = header_cnt[v] || 0;
-          if (!counter)
-            header_cnt[v] = 1;
+          if (!counter) header_cnt[v] = 1;
           else {
             do {
               vv = v + "_" + counter++;
@@ -11247,11 +10492,9 @@
       }
     }
     for (R = r.s.r + offset; R <= r.e.r; ++R) {
-      if ((rowinfo[R] || {}).hidden)
-        continue;
+      if ((rowinfo[R] || {}).hidden) continue;
       var row = make_json_row(sheet, r, R, cols, header, hdr, o);
-      if (row.isempty === false || (header === 1 ? o.blankrows !== false : !!o.blankrows))
-        out[outi++] = row.row;
+      if (row.isempty === false || (header === 1 ? o.blankrows !== false : !!o.blankrows)) out[outi++] = row.row;
     }
     out.length = outi;
     return out;
@@ -11263,118 +10506,88 @@
     var dense = sheet["!data"] != null;
     var datarow = dense && sheet["!data"][R] || [];
     for (var C = r.s.c; C <= r.e.c; ++C) {
-      if (!cols[C])
-        continue;
+      if (!cols[C]) continue;
       var val2 = dense ? datarow[C] : sheet[cols[C] + rr];
-      if (val2 == null)
-        txt = "";
+      if (val2 == null) txt = "";
       else if (val2.v != null) {
         isempty = false;
         txt = "" + (o.rawNumbers && val2.t == "n" ? val2.v : format_cell(val2, null, o));
-        for (var i = 0, cc = 0; i !== txt.length; ++i)
-          if ((cc = txt.charCodeAt(i)) === fs || cc === rs || cc === 34 || o.forceQuotes) {
-            txt = '"' + txt.replace(qreg, '""') + '"';
-            break;
-          }
-        if (txt == "ID" && w == 0 && row.length == 0)
-          txt = '"ID"';
+        for (var i = 0, cc = 0; i !== txt.length; ++i) if ((cc = txt.charCodeAt(i)) === fs || cc === rs || cc === 34 || o.forceQuotes) {
+          txt = '"' + txt.replace(qreg, '""') + '"';
+          break;
+        }
+        if (txt == "ID" && w == 0 && row.length == 0) txt = '"ID"';
       } else if (val2.f != null && !val2.F) {
         isempty = false;
         txt = "=" + val2.f;
-        if (txt.indexOf(",") >= 0)
-          txt = '"' + txt.replace(qreg, '""') + '"';
-      } else
-        txt = "";
+        if (txt.indexOf(",") >= 0) txt = '"' + txt.replace(qreg, '""') + '"';
+      } else txt = "";
       row.push(txt);
     }
-    if (o.strip)
-      while (row[row.length - 1] === "")
-        --row.length;
-    if (o.blankrows === false && isempty)
-      return null;
+    if (o.strip) while (row[row.length - 1] === "") --row.length;
+    if (o.blankrows === false && isempty) return null;
     return row.join(FS);
   }
   function sheet_to_csv(sheet, opts) {
     var out = [];
     var o = opts == null ? {} : opts;
-    if (sheet == null || sheet["!ref"] == null)
-      return "";
+    if (sheet == null || sheet["!ref"] == null) return "";
     var r = safe_decode_range(sheet["!ref"]);
     var FS = o.FS !== void 0 ? o.FS : ",", fs = FS.charCodeAt(0);
     var RS = o.RS !== void 0 ? o.RS : "\n", rs = RS.charCodeAt(0);
     var row = "", cols = [];
     var colinfo = o.skipHidden && sheet["!cols"] || [];
     var rowinfo = o.skipHidden && sheet["!rows"] || [];
-    for (var C = r.s.c; C <= r.e.c; ++C)
-      if (!(colinfo[C] || {}).hidden)
-        cols[C] = encode_col(C);
+    for (var C = r.s.c; C <= r.e.c; ++C) if (!(colinfo[C] || {}).hidden) cols[C] = encode_col(C);
     var w = 0;
     for (var R = r.s.r; R <= r.e.r; ++R) {
-      if ((rowinfo[R] || {}).hidden)
-        continue;
+      if ((rowinfo[R] || {}).hidden) continue;
       row = make_csv_row(sheet, r, R, cols, fs, rs, FS, w, o);
       if (row == null) {
         continue;
       }
-      if (row || o.blankrows !== false)
-        out.push((w++ ? RS : "") + row);
+      if (row || o.blankrows !== false) out.push((w++ ? RS : "") + row);
     }
     return out.join("");
   }
   function sheet_to_txt(sheet, opts) {
-    if (!opts)
-      opts = {};
+    if (!opts) opts = {};
     opts.FS = "	";
     opts.RS = "\n";
     var s = sheet_to_csv(sheet, opts);
-    if (typeof $cptable == "undefined" || opts.type == "string")
-      return s;
+    if (typeof $cptable == "undefined" || opts.type == "string") return s;
     var o = $cptable.utils.encode(1200, s, "str");
     return String.fromCharCode(255) + String.fromCharCode(254) + o;
   }
   function sheet_to_formulae(sheet, opts) {
     var y = "", x, val2 = "";
-    if (sheet == null || sheet["!ref"] == null)
-      return [];
+    if (sheet == null || sheet["!ref"] == null) return [];
     var r = safe_decode_range(sheet["!ref"]), rr = "", cols = [], C;
     var cmds = [];
     var dense = sheet["!data"] != null;
-    for (C = r.s.c; C <= r.e.c; ++C)
-      cols[C] = encode_col(C);
+    for (C = r.s.c; C <= r.e.c; ++C) cols[C] = encode_col(C);
     for (var R = r.s.r; R <= r.e.r; ++R) {
       rr = encode_row(R);
       for (C = r.s.c; C <= r.e.c; ++C) {
         y = cols[C] + rr;
         x = dense ? (sheet["!data"][R] || [])[C] : sheet[y];
         val2 = "";
-        if (x === void 0)
-          continue;
+        if (x === void 0) continue;
         else if (x.F != null) {
           y = x.F;
-          if (!x.f)
-            continue;
+          if (!x.f) continue;
           val2 = x.f;
-          if (y.indexOf(":") == -1)
-            y = y + ":" + y;
+          if (y.indexOf(":") == -1) y = y + ":" + y;
         }
-        if (x.f != null)
-          val2 = x.f;
-        else if (opts && opts.values === false)
-          continue;
-        else if (x.t == "z")
-          continue;
-        else if (x.t == "n" && x.v != null)
-          val2 = "" + x.v;
-        else if (x.t == "b")
-          val2 = x.v ? "TRUE" : "FALSE";
-        else if (x.w !== void 0)
-          val2 = "'" + x.w;
-        else if (x.v === void 0)
-          continue;
-        else if (x.t == "s")
-          val2 = "'" + x.v;
-        else
-          val2 = "" + x.v;
+        if (x.f != null) val2 = x.f;
+        else if (opts && opts.values === false) continue;
+        else if (x.t == "z") continue;
+        else if (x.t == "n" && x.v != null) val2 = "" + x.v;
+        else if (x.t == "b") val2 = x.v ? "TRUE" : "FALSE";
+        else if (x.w !== void 0) val2 = "'" + x.w;
+        else if (x.v === void 0) continue;
+        else if (x.t == "s") val2 = "'" + x.v;
+        else val2 = "" + x.v;
         cmds[cmds.length] = y + "=" + val2;
       }
     }
@@ -11383,16 +10596,13 @@
   function sheet_add_json(_ws, js, opts) {
     var o = opts || {};
     var dense = _ws ? _ws["!data"] != null : o.dense;
-    if (DENSE != null && dense == null)
-      dense = DENSE;
+    if (DENSE != null && dense == null) dense = DENSE;
     var offset = +!o.skipHeader;
     var ws = _ws || {};
-    if (!_ws && dense)
-      ws["!data"] = [];
+    if (!_ws && dense) ws["!data"] = [];
     var _R = 0, _C = 0;
     if (ws && o.origin != null) {
-      if (typeof o.origin == "number")
-        _R = o.origin;
+      if (typeof o.origin == "number") _R = o.origin;
       else {
         var _origin = typeof o.origin == "string" ? decode_cell(o.origin) : o.origin;
         _R = _origin.r;
@@ -11417,34 +10627,25 @@
     var hdr = o.header || [], C = 0;
     var ROW = [];
     js.forEach(function(JS, R) {
-      if (dense && !ws["!data"][_R + R + offset])
-        ws["!data"][_R + R + offset] = [];
-      if (dense)
-        ROW = ws["!data"][_R + R + offset];
+      if (dense && !ws["!data"][_R + R + offset]) ws["!data"][_R + R + offset] = [];
+      if (dense) ROW = ws["!data"][_R + R + offset];
       keys(JS).forEach(function(k) {
-        if ((C = hdr.indexOf(k)) == -1)
-          hdr[C = hdr.length] = k;
+        if ((C = hdr.indexOf(k)) == -1) hdr[C = hdr.length] = k;
         var v = JS[k];
         var t = "z";
         var z = "";
         var ref = dense ? "" : encode_col(_C + C) + encode_row(_R + R + offset);
         var cell = dense ? ROW[_C + C] : ws[ref];
         if (v && typeof v === "object" && !(v instanceof Date)) {
-          if (dense)
-            ROW[_C + C] = v;
-          else
-            ws[ref] = v;
+          if (dense) ROW[_C + C] = v;
+          else ws[ref] = v;
         } else {
-          if (typeof v == "number")
-            t = "n";
-          else if (typeof v == "boolean")
-            t = "b";
-          else if (typeof v == "string")
-            t = "s";
+          if (typeof v == "number") t = "n";
+          else if (typeof v == "boolean") t = "b";
+          else if (typeof v == "string") t = "s";
           else if (v instanceof Date) {
             t = "d";
-            if (!o.UTC)
-              v = local_to_utc(v);
+            if (!o.UTC) v = local_to_utc(v);
             if (!o.cellDates) {
               t = "n";
               v = datenum(v);
@@ -11455,34 +10656,26 @@
             v = 0;
           }
           if (!cell) {
-            if (!dense)
-              ws[ref] = cell = { t, v };
-            else
-              ROW[_C + C] = cell = { t, v };
+            if (!dense) ws[ref] = cell = { t, v };
+            else ROW[_C + C] = cell = { t, v };
           } else {
             cell.t = t;
             cell.v = v;
             delete cell.w;
             delete cell.R;
-            if (z)
-              cell.z = z;
+            if (z) cell.z = z;
           }
-          if (z)
-            cell.z = z;
+          if (z) cell.z = z;
         }
       });
     });
     range.e.c = Math.max(range.e.c, _C + hdr.length - 1);
     var __R = encode_row(_R);
-    if (dense && !ws["!data"][_R])
-      ws["!data"][_R] = [];
-    if (offset)
-      for (C = 0; C < hdr.length; ++C) {
-        if (dense)
-          ws["!data"][_R][C + _C] = { t: "s", v: hdr[C] };
-        else
-          ws[encode_col(C + _C) + __R] = { t: "s", v: hdr[C] };
-      }
+    if (dense && !ws["!data"][_R]) ws["!data"][_R] = [];
+    if (offset) for (C = 0; C < hdr.length; ++C) {
+      if (dense) ws["!data"][_R][C + _C] = { t: "s", v: hdr[C] };
+      else ws[encode_col(C + _C) + __R] = { t: "s", v: hdr[C] };
+    }
     ws["!ref"] = encode_range(range);
     return ws;
   }
@@ -11493,67 +10686,52 @@
     if (typeof R == "string") {
       if (ws["!data"] != null) {
         var RC = decode_cell(R);
-        if (!ws["!data"][RC.r])
-          ws["!data"][RC.r] = [];
+        if (!ws["!data"][RC.r]) ws["!data"][RC.r] = [];
         return ws["!data"][RC.r][RC.c] || (ws["!data"][RC.r][RC.c] = { t: "z" });
       }
       return ws[R] || (ws[R] = { t: "z" });
     }
-    if (typeof R != "number")
-      return ws_get_cell_stub(ws, encode_cell(R));
+    if (typeof R != "number") return ws_get_cell_stub(ws, encode_cell(R));
     return ws_get_cell_stub(ws, encode_col(C || 0) + encode_row(R));
   }
   function wb_sheet_idx(wb, sh) {
     if (typeof sh == "number") {
-      if (sh >= 0 && wb.SheetNames.length > sh)
-        return sh;
+      if (sh >= 0 && wb.SheetNames.length > sh) return sh;
       throw new Error("Cannot find sheet # " + sh);
     } else if (typeof sh == "string") {
       var idx = wb.SheetNames.indexOf(sh);
-      if (idx > -1)
-        return idx;
+      if (idx > -1) return idx;
       throw new Error("Cannot find sheet name |" + sh + "|");
-    } else
-      throw new Error("Cannot find sheet |" + sh + "|");
+    } else throw new Error("Cannot find sheet |" + sh + "|");
   }
   function book_new(ws, wsname) {
     var wb = { SheetNames: [], Sheets: {} };
-    if (ws)
-      book_append_sheet(wb, ws, wsname || "Sheet1");
+    if (ws) book_append_sheet(wb, ws, wsname || "Sheet1");
     return wb;
   }
   function book_append_sheet(wb, ws, name, roll) {
     var i = 1;
     if (!name) {
-      for (; i <= 65535; ++i, name = void 0)
-        if (wb.SheetNames.indexOf(name = "Sheet" + i) == -1)
-          break;
+      for (; i <= 65535; ++i, name = void 0) if (wb.SheetNames.indexOf(name = "Sheet" + i) == -1) break;
     }
-    if (!name || wb.SheetNames.length >= 65535)
-      throw new Error("Too many worksheets");
+    if (!name || wb.SheetNames.length >= 65535) throw new Error("Too many worksheets");
     if (roll && wb.SheetNames.indexOf(name) >= 0 && name.length < 32) {
       var m = name.match(/\d+$/);
       i = m && +m[0] || 0;
       var root = m && name.slice(0, m.index) || name;
-      for (++i; i <= 65535; ++i)
-        if (wb.SheetNames.indexOf(name = root + i) == -1)
-          break;
+      for (++i; i <= 65535; ++i) if (wb.SheetNames.indexOf(name = root + i) == -1) break;
     }
     check_ws_name(name);
-    if (wb.SheetNames.indexOf(name) >= 0)
-      throw new Error("Worksheet with name |" + name + "| already exists!");
+    if (wb.SheetNames.indexOf(name) >= 0) throw new Error("Worksheet with name |" + name + "| already exists!");
     wb.SheetNames.push(name);
     wb.Sheets[name] = ws;
     return name;
   }
   function book_set_sheet_visibility(wb, sh, vis) {
-    if (!wb.Workbook)
-      wb.Workbook = {};
-    if (!wb.Workbook.Sheets)
-      wb.Workbook.Sheets = [];
+    if (!wb.Workbook) wb.Workbook = {};
+    if (!wb.Workbook.Sheets) wb.Workbook.Sheets = [];
     var idx = wb_sheet_idx(wb, sh);
-    if (!wb.Workbook.Sheets[idx])
-      wb.Workbook.Sheets[idx] = {};
+    if (!wb.Workbook.Sheets[idx]) wb.Workbook.Sheets[idx] = {};
     switch (vis) {
       case 0:
       case 1:
@@ -11573,8 +10751,7 @@
       delete cell.l;
     } else {
       cell.l = { Target: target };
-      if (tooltip)
-        cell.l.Tooltip = tooltip;
+      if (tooltip) cell.l.Tooltip = tooltip;
     }
     return cell;
   }
@@ -11582,34 +10759,27 @@
     return cell_set_hyperlink(cell, "#" + range, tooltip);
   }
   function cell_add_comment(cell, text, author) {
-    if (!cell.c)
-      cell.c = [];
+    if (!cell.c) cell.c = [];
     cell.c.push({ t: text, a: author || "SheetJS" });
   }
   function sheet_set_array_formula(ws, range, formula, dynamic) {
     var rng = typeof range != "string" ? range : safe_decode_range(range);
     var rngstr = typeof range == "string" ? range : encode_range(range);
-    for (var R = rng.s.r; R <= rng.e.r; ++R)
-      for (var C = rng.s.c; C <= rng.e.c; ++C) {
-        var cell = ws_get_cell_stub(ws, R, C);
-        cell.t = "n";
-        cell.F = rngstr;
-        delete cell.v;
-        if (R == rng.s.r && C == rng.s.c) {
-          cell.f = formula;
-          if (dynamic)
-            cell.D = true;
-        }
+    for (var R = rng.s.r; R <= rng.e.r; ++R) for (var C = rng.s.c; C <= rng.e.c; ++C) {
+      var cell = ws_get_cell_stub(ws, R, C);
+      cell.t = "n";
+      cell.F = rngstr;
+      delete cell.v;
+      if (R == rng.s.r && C == rng.s.c) {
+        cell.f = formula;
+        if (dynamic) cell.D = true;
       }
+    }
     var wsr = decode_range(ws["!ref"]);
-    if (wsr.s.r > rng.s.r)
-      wsr.s.r = rng.s.r;
-    if (wsr.s.c > rng.s.c)
-      wsr.s.c = rng.s.c;
-    if (wsr.e.r < rng.e.r)
-      wsr.e.r = rng.e.r;
-    if (wsr.e.c < rng.e.c)
-      wsr.e.c = rng.e.c;
+    if (wsr.s.r > rng.s.r) wsr.s.r = rng.s.r;
+    if (wsr.s.c > rng.s.c) wsr.s.c = rng.s.c;
+    if (wsr.e.r < rng.e.r) wsr.e.r = rng.e.r;
+    if (wsr.e.c < rng.e.c) wsr.e.c = rng.e.c;
     ws["!ref"] = encode_range(wsr);
     return ws;
   }
@@ -11692,8 +10862,7 @@
       adminAjax.get_reservas(setReservas, setExcDetails);
     }, [adminAjax]);
     const reservasFiltradas = React.useMemo(() => {
-      if (!reservas)
-        return [];
+      if (!reservas) return [];
       let filtradas = filter > 0 ? reservas.filter((r) => r.variation_id == filter) : reservas;
       if (searchTerm) {
         const termo = searchTerm.toLowerCase();

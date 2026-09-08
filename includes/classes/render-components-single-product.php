@@ -136,14 +136,28 @@ class Single_Product_Template
       <div class="label"><?= aer_icons('ticket-red', 15, 15) ?>
         <span>Ingressos</span>
       </div>
+
+      <!-- abrir modal de ingressos botão -->
       <div class="value">
-        <a class="ingressos-link"
+        <?php if(false): ?>
+          <a class="ingressos-link" aria-label="Link para venda de ingressos" data-bs-toggle="modal" data-bs-target="#ingressosModal" data-bs-backdrop="static" >
+            Ver opções
+          </a>
+          <?php else: ?>
+          <a class="ingressos-link"
           aria-label="Link para venda de ingressos"
-          href="<?= $excursao['ingressos']['url'] ?>"
+          href="<?php echo $excursao['ingressos']['url'] ?>"
           target="_blank">
-          <?= $excursao['ingressos']['label'] ?>
-        </a>
+          <?php echo $excursao['ingressos']['label'] ?>
+          </a>
+        <?php endif; ?>
       </div>
+      <!-- abrir modal de ingressos botão -->
+
+
+      <!-- <div class="value">
+
+      </div> -->
     </div>
 
   <?php
@@ -350,6 +364,44 @@ class Single_Product_Template
           <button class="close-modal" type="button" data-bs-dismiss="modal">Fechar</button>
         </div>
 
+      </div>
+    </div>
+
+    <div id="ingressosModal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="vendor-box venda-oficial ms-3">
+              <p class="ingressos-section-title">Vendas oficias</p>
+              <a class="vendor-label"><?= $excursao['ingressos']['label'] ?></a>
+              <a href="<?= esc_url($excursao['ingressos']['url'] ?? '#') ?>" target="_blank" rel="noopener noreferrer" class="acessar">
+                Acessar
+                <svg class="external-link-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false" width="14" height="14">
+                  <rect x="4.5" y="4.5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/>
+                  <rect x="7" y="7" width="9" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/>
+                </svg>
+              </a>
+            </div>
+            <div class="vendor-box buyticket ms-3">
+              <p class="ingressos-section-title">Buyticket</p>
+              <a class="vendor-label"><?= isset($excursao['link_buyticket']['label']) ? $excursao['link_buyticket']['label'] : '' ?></a>
+              <a href="<?= esc_url(isset($excursao['link_buyticket']['url']) ? $excursao['link_buyticket']['url'] : '#') ?>" target="_blank" rel="noopener noreferrer" class="acessar">
+                Acessar
+                <svg class="external-link-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false" width="14" height="14">
+                  <rect x="4.5" y="4.5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/>
+                  <rect x="7" y="7" width="9" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/>
+                </svg>
+              </a>
+              
+            </div>
+            <div class="venda-buyticket"></div>
+          </div>
+
+        </div>
       </div>
     </div>
   <?php

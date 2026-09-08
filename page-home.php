@@ -56,7 +56,7 @@ $dados_js = array_map(function ($p) {
   }
 
   //HERO BANNER
-  include 'includes/main-carousel.php';
+  include 'includes/hero.php';
 
   //SLIDES DA PÁGINA INICIAL
   $displays_sections = get_option('aer_home_displays');
