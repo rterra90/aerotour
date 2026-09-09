@@ -28,12 +28,13 @@ function handle_edit_reserva($request){
         'status_data_nasc' => isset($params['status_data_nasc']) ? 'pendente': 'false'
     );
 
-    // Insere os dados de edição na tabela 'solic_edit_pax'
-    if($wpdb->insert($solic_edit_table, $payload)) {
-        return new WP_REST_Response(array('success' => true, 'message' => 'Solicitação de edição salva com sucesso!'), 200);
-    }else{
-        return new WP_Error('db_error', 'Falha ao salvar solicitação de edição: ' . $wpdb->last_error, array('status' => 500));
-    }   
+    return new WP_REST_Response(array('success' => true, 'payloadTeste' => $payload), 200);
+    // // Insere os dados de edição na tabela 'solic_edit_pax'
+    // if($wpdb->insert($solic_edit_table, $payload)) {
+    //     return new WP_REST_Response(array('success' => true, 'message' => 'Solicitação de edição salva com sucesso!'), 200);
+    // }else{
+    //     return new WP_Error('db_error', 'Falha ao salvar solicitação de edição: ' . $wpdb->last_error, array('status' => 500));
+    // }   
 
 
   } else if ($action_from === 'admin'){

@@ -368,48 +368,48 @@ async function submitSolicitacaoEditPax(event, resChave){
   let payload = Object.fromEntries(formData.entries());
   payload.action_from = 'user';
 
-  console.log(payload);
+  const fieldMap = {
+    'nome': 'status_nome',
+    'doc': 'status_doc',
+    'telefone': 'status_telefone',
+    'data-nasc': 'status_data_nasc'
+  };
 
-  // const fieldMap = {
-  //   'nome': 'status_nome',
-  //   'doc': 'status_doc',
-  //   'telefone': 'status_telefone',
-  //   'data-nasc': 'status_data_nasc'
-  // };
+  formInputs.forEach(input => {
+    if (input.value !== input.dataset.initialValue) {
+      const type = input.getAttribute('data-type');
+      payload[fieldMap[type]] = 'pendente';
+    }
+  });
 
-  // formInputs.forEach(input => {
-  //   if (input.value !== input.dataset.initialValue) {
-  //     const type = input.getAttribute('data-type');
-  //     payload[fieldMap[type]] = 'pendente';
-  //   }
-  // });
+  try {
+    const apiUrl = window.themeLinks.siteUrl + '/wp-json/api/v1/edit-reserva';
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
 
-  // try {
-  //   const apiUrl = window.themeLinks.siteUrl + '/wp-json/api/v1/edit-reserva';
-  //   const response = await fetch(apiUrl, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify(payload)
-  //   });
-  //   const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Erro desconhecido no servidor.');
 
-  //   if (!response.ok) throw new Error(data.message || 'Erro desconhecido no servidor.');
+    console.log(data)
 
-  //   // SUCESSO - Substitui interface
-  //   const editContainer = document.getElementById(`solic-edit-container-${resChave}`);
+    // SUCESSO - Substitui interface
+    const editContainer = document.getElementById(`solic-edit-container-${resChave}`);
 
-  //   editContainer.querySelector('.form-wrapper').classList.add('d-none');
-  //   editContainer.querySelector('.success-wrapper').classList.remove('d-none');
+    editContainer.querySelector('.form-wrapper').classList.add('d-none');
+    editContainer.querySelector('.success-wrapper').classList.remove('d-none');
 
-  //   setTimeout(() => {
-  //       const alertEl = editContainer.querySelector('.alert-success');
-  //       if(alertEl) alertEl.classList.add('show-animated');
-  //   }, 150);
+    setTimeout(() => {
+        const alertEl = editContainer.querySelector('.alert-success');
+        if(alertEl) alertEl.classList.add('show-animated');
+    }, 150);
 
-  // } catch (error) {
-  //   console.error('Falha na requisição:', error.message);
-  //   alert('Ocorreu um erro: ' + error.message);
-  //   submitButton.disabled = false;
-  //   submitButton.textContent = "Enviar Solicitação";
-  // }
+  } catch (error) {
+    console.error('Falha na requisição:', error.message);
+    alert('Ocorreu um erro: ' + error.message);
+    submitButton.disabled = false;
+    submitButton.textContent = "Enviar Solicitação";
+  }
 }
