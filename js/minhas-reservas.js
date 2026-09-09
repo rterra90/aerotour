@@ -368,52 +368,48 @@ async function submitSolicitacaoEditPax(event, resChave){
   let payload = Object.fromEntries(formData.entries());
   payload.action_from = 'user';
 
-  const fieldMap = {
-    'nome': 'status_nome',
-    'doc': 'status_doc',
-    'telefone': 'status_telefone',
-    'data-nasc': 'status_data_nasc'
-  };
+  console.log(payload);
 
-  formInputs.forEach(input => {
-    if (input.value !== input.dataset.initialValue) {
-      const type = input.getAttribute('data-type');
-      payload[fieldMap[type]] = 'pendente';
-    }
-  });
+  // const fieldMap = {
+  //   'nome': 'status_nome',
+  //   'doc': 'status_doc',
+  //   'telefone': 'status_telefone',
+  //   'data-nasc': 'status_data_nasc'
+  // };
 
-  try {
-    const apiUrl = window.themeLinks.siteUrl + '/wp-json/api/v1/edit-reserva';
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const data = await response.json();
+  // formInputs.forEach(input => {
+  //   if (input.value !== input.dataset.initialValue) {
+  //     const type = input.getAttribute('data-type');
+  //     payload[fieldMap[type]] = 'pendente';
+  //   }
+  // });
 
-    if (!response.ok) throw new Error(data.message || 'Erro desconhecido no servidor.');
+  // try {
+  //   const apiUrl = window.themeLinks.siteUrl + '/wp-json/api/v1/edit-reserva';
+  //   const response = await fetch(apiUrl, {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify(payload)
+  //   });
+  //   const data = await response.json();
 
-    // SUCESSO - Substitui interface
-    const editContainer = document.getElementById(`solic-edit-container-${resChave}`);
-    // editContainer.innerHTML = `
-    //   <div class="mt-3 mb-4 alert alert-success small animate-from-top">
-    //     Sua solicitação de edição foi enviada com sucesso! Ela será analisada antes de ser aplicada à reserva.
-    //   </div>
-    //   <button type="button" class="main-btn d-block mx-auto btn" onclick="closeEditScreen('${resChave}')">Voltar para lista de passageiros</button>
-    // `;
+  //   if (!response.ok) throw new Error(data.message || 'Erro desconhecido no servidor.');
 
-    editContainer.querySelector('.form-wrapper').classList.add('d-none');
-    editContainer.querySelector('.success-wrapper').classList.remove('d-none');
+  //   // SUCESSO - Substitui interface
+  //   const editContainer = document.getElementById(`solic-edit-container-${resChave}`);
 
-    setTimeout(() => {
-        const alertEl = editContainer.querySelector('.alert-success');
-        if(alertEl) alertEl.classList.add('show-animated');
-    }, 150);
+  //   editContainer.querySelector('.form-wrapper').classList.add('d-none');
+  //   editContainer.querySelector('.success-wrapper').classList.remove('d-none');
 
-  } catch (error) {
-    console.error('Falha na requisição:', error.message);
-    alert('Ocorreu um erro: ' + error.message);
-    submitButton.disabled = false;
-    submitButton.textContent = "Enviar Solicitação";
-  }
+  //   setTimeout(() => {
+  //       const alertEl = editContainer.querySelector('.alert-success');
+  //       if(alertEl) alertEl.classList.add('show-animated');
+  //   }, 150);
+
+  // } catch (error) {
+  //   console.error('Falha na requisição:', error.message);
+  //   alert('Ocorreu um erro: ' + error.message);
+  //   submitButton.disabled = false;
+  //   submitButton.textContent = "Enviar Solicitação";
+  // }
 }

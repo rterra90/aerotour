@@ -25,7 +25,7 @@ if ($user_cpf) {
           $wpdb->update(
             'aer_reservas',
             array('user_id' => $current_user_id), // Dados a serem alterados
-            array('id'      => $reserva['ID']),   // Onde (ajuste 'id' para o nome da sua chave primária)
+            array('id'      => isset($reserva['ID']) ? $reserva['ID'] : $reserva['id']),   // Onde (ajuste 'id' para o nome da sua chave primária)
             array('%d'),                          // Formato do dado alterado
             array('%d')                           // Formato do WHERE
           );
@@ -64,7 +64,7 @@ foreach ($reservas_db as $reg) {
 
   // Dados do passageiro
   $passageiro = [
-    'res_id' => $reg['ID'],
+    'res_id' => isset($reg['ID']) ? $reg['ID'] : $reg['id'],
     'nome' => $reg['p_nome'] ?: 'Não informado',
     'doc'  => $reg['p_cpf'] ?: '',
     'telefone' => $reg['p_telefone'] ?: '',
