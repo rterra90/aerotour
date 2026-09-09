@@ -393,8 +393,6 @@ async function submitSolicitacaoEditPax(event, resChave){
 
     if (!response.ok) throw new Error(data.message || 'Erro desconhecido no servidor.');
 
-    console.log(data)
-
     // SUCESSO - Substitui interface
     const editContainer = document.getElementById(`solic-edit-container-${resChave}`);
 
