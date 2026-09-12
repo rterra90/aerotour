@@ -1,9 +1,23 @@
 <?php get_header(); ?>
-<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+<?php if (have_posts()) : while (have_posts()) : the_post(); 
 
 
+$exceptions = array('Carrinho');
 
-    <main class="bg-df x-align py-5 py-4 aer-bg-light">
+//verificar se o título dessa página está na lista de exceções
+$is_exception = in_array(get_the_title(), $exceptions);
+if($is_exception) {
+  ?>
+  <main id="mainContent" class="bg-df x-align py-5 py-4">
+  <?php
+} else {
+  ?>
+  <main class="bg-df x-align py-5 py-4 aer-bg-light">
+  <?php
+}
+
+?>
+
       <div class="container-xxl index-inner">
         <!-- <h1 class="text-center mb-4"><?php //get_the_title() 
                                           ?></h1> -->

@@ -1,6 +1,4 @@
 :root {
-  --main-bg: #E7E7E7;
-
   --aer-light-text: #f3f3f3;
   --aer-dark-text: #111111;
   --aer-light-bg: #f3f3f3;
@@ -8,9 +6,6 @@
   --aer-primary: #ff6b6b;
   --aer-secondary: #4ecdc4;
   --aer-accent: #ffe66d;
-}
-body.theme-dark{
-  --main-bg: #111111;
 }
 
 

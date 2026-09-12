@@ -8,6 +8,7 @@ Description: Tema criado para o site da Aerotour Caravanas
 */
 @import url(css/bootstrap.min.css);
 :root{
+  --main-bg: #E7E7E7;
   --default-radius: .75rem;
   --light-text: #f9f9f9;
   --text-color-1: #111111;
@@ -16,14 +17,18 @@ Description: Tema criado para o site da Aerotour Caravanas
   --text-invert-color-2: #b6b6b6;
   --box-bg-1: #f8f8f8;
   --box-bg-2: #e5e5e5;
+  --theme-color-text: #400f0f;
 }
 body.theme-dark{
+  --main-bg: #111111;
   --text-color-1: #f9f9f9;
   --text-color-2: #b6b6b6;
   --text-invert-color-1: #111111;
   --text-invert-color-2: #555555;
   --box-bg-1: #1a1a1a;
   --box-bg-2: #222222;
+  --theme-color-text: #f9f9f9;
+
 }
 .aer-bg-light,
 .aer-box {
@@ -61,7 +66,9 @@ body.theme-dark{
   background-color: #111111;
   --page-title-color: #f9f9f9;
 }
-
+#mainContent{
+  background-color: var(--main-bg)
+}
 /* Accent color */
 .accent-color-text{
   color: var(--aer-accent);
@@ -114,6 +121,10 @@ h2.bg-title {
 }
 h3.bg-title {
   font-size: 1.15rem;
+}
+
+.index-inner h1{
+  color: var(--page-title-color);
 }
 
 /* BUTTONS */

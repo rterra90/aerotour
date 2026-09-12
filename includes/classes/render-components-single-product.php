@@ -139,7 +139,7 @@ class Single_Product_Template
 
       <!-- abrir modal de ingressos botão -->
       <div class="value">
-        <?php if(false): ?>
+        <?php if(true): ?>
           <a class="ingressos-link" aria-label="Link para venda de ingressos" data-bs-toggle="modal" data-bs-target="#ingressosModal" data-bs-backdrop="static" >
             Ver opções
           </a>
@@ -371,11 +371,11 @@ class Single_Product_Template
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">Ingressos</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="vendor-box venda-oficial ms-3">
+            <div class="vendor-box venda-oficial mx-4">
               <p class="ingressos-section-title">Vendas oficias</p>
               <a class="vendor-label"><?= $excursao['ingressos']['label'] ?></a>
               <a href="<?= esc_url($excursao['ingressos']['url'] ?? '#') ?>" target="_blank" rel="noopener noreferrer" class="acessar">
@@ -386,8 +386,9 @@ class Single_Product_Template
                 </svg>
               </a>
             </div>
-            <div class="vendor-box buyticket ms-3">
-              <p class="ingressos-section-title">Buyticket</p>
+            <div class="vendor-box buyticket mx-4">
+              <p class="ingressos-section-title mb-1">Buyticket</p>
+              <p class="buyticket-info mb-2">Plataforma de revenda de ingressos parceira da Aerotour</p>
               <a class="vendor-label"><?= isset($excursao['link_buyticket']['label']) ? $excursao['link_buyticket']['label'] : '' ?></a>
               <a href="<?= esc_url(isset($excursao['link_buyticket']['url']) ? $excursao['link_buyticket']['url'] : '#') ?>" target="_blank" rel="noopener noreferrer" class="acessar">
                 Acessar

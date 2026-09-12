@@ -4,26 +4,8 @@
 <?php
 //Busca excursões com data limite maior ou igual a hoje
 get_header();
-$hoje = date('Ymd');
-$args = [
-  'post_type' => 'product',
-  'post_status' => 'publish',
-  'posts_per_page' => 30,
-  'meta_key' => 'data_limite_excursao',
-  'orderby' => 'meta_value_num',
-  'order' => 'ASC',
-  'meta_query' => [
-    [
-      'key' => 'data_limite_excursao',
-      'value' => $hoje,
-      'compare' => '>=',
-      'type' => 'NUMERIC'
-    ]
-  ]
-];
-$query = new WP_Query($args);
-$excursoes_ids = $query->posts; // Converte IDs em objetos de produto do WooCommerce
-$excursoes = array_map('wc_get_product', $excursoes_ids);
+
+$excursoes = get_excursoes();
 
 // Prepara dados para JavaScript
 $dados_js = array_map(function ($p) {

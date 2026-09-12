@@ -1,4 +1,40 @@
 <?php
+function get_excursoes($args = []){
+  $product_cat = $args['product_cat'] ?? '';
+  $product_ids = $args['product_ids'] ?? [];
+
+  $hoje = date('Ymd');
+  $args = [
+    'post_type' => 'product',
+    'post_status' => 'publish',
+    'posts_per_page' => 30,
+    'tax_query' => $product_cat ? [
+      [
+        'taxonomy' => 'product_cat',
+        'field' => 'slug',
+        'terms' => $product_cat
+      ]
+    ] : [],
+    'post__in' => $product_ids ? $product_ids : [],
+    'meta_key' => 'data_limite_excursao',
+    'orderby' => 'meta_value_num',
+    'order' => 'ASC',
+    'meta_query' => [
+      [
+        'key' => 'data_limite_excursao',
+        'value' => $hoje,
+        'compare' => '>=',
+        'type' => 'NUMERIC'
+      ]
+    ]
+  ];
+  $query = new WP_Query($args); // Executa a consulta para obter as excursões com data limite maior ou igual a hoje
+  $excursoes_ids = $query->posts; // Obtém os IDs dos produtos retornados pela consulta
+  $excursoes = array_map('wc_get_product', $excursoes_ids); // Converte IDs em objetos de produto do WooCommerce
+  return $excursoes;
+}
+
+
 function aer_proximas_excursoes($excursoes, $filter = null)
 {
   if (empty($excursoes)) {

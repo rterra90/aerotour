@@ -64,9 +64,7 @@ $items_carrinho = $woocommerce->cart->get_cart();
                     $cart_item['quantity'] > 0
                   ): ?>
                         
-                        <div class="cart-item" data-cart-key="<?= esc_attr(
-                          $cart_item_key
-                        ) ?>">
+                        <div class="cart-item" data-cart-key="<?= esc_attr($cart_item_key) ?>">
                             <!-- Botão remover -->
                             <a href="<?= esc_url($remove_url) ?>" 
                                class="remove-item" 
@@ -97,12 +95,12 @@ $items_carrinho = $woocommerce->cart->get_cart();
 																<a class="title-link" href="<?= esc_url($parent_permalink) ?>">
 																		<h3 class="bg-title">
 																				Excursão <?= esc_html(
-                      preg_replace(
-                        '/ - \d{2}\/\d{2}\/\d{4}$/',
-                        '',
-                        $product_name
-                      )
-                    ) ?>
+                                        preg_replace(
+                                          '/ - \d{2}\/\d{2}\/\d{4}$/',
+                                          '',
+                                          $product_name
+                                        )
+                                      ) ?>
 																		</h3>
 																</a>
 
@@ -191,9 +189,7 @@ $items_carrinho = $woocommerce->cart->get_cart();
                                                   $passenger->celular
                                                 ) ?></p>
 																								<div>
-																									<p><strong>Nascimento:</strong> <?= esc_html(
-                           data_to_dmy($passenger->data_nascimento)
-                         ) ?></p>
+																									<p><strong>Nascimento:</strong> <?= esc_html(data_to_dmy($passenger->data_nascimento)) ?></p>
                                                 <span class="rota">
                                                     <?= strtoupper(
                                                       $passenger->tripType ===
