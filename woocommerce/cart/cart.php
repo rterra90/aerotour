@@ -8,9 +8,7 @@ global $wpdb;
 $items_carrinho = $woocommerce->cart->get_cart();
 ?>
 
-<link rel="stylesheet" href="<?= esc_url(
-  get_stylesheet_directory_uri()
-) ?>/css/woocommerce/carrinho.min.css?ver=<?= time() ?>">
+
 <link rel="stylesheet" href="<?= esc_url(
   get_stylesheet_directory_uri()
 ) ?>/css/includes/banner-cupom.css">
@@ -62,152 +60,14 @@ $items_carrinho = $woocommerce->cart->get_cart();
                     $_product &&
                     $_product->exists() &&
                     $cart_item['quantity'] > 0
-                  ): ?>
-                        
-                        <div class="cart-item" data-cart-key="<?= esc_attr($cart_item_key) ?>">
-                            <!-- Botão remover -->
-                            <a href="<?= esc_url($remove_url) ?>" 
-                               class="remove-item" 
-                               aria-label="<?php esc_attr_e(
-                                 'Remover',
-                                 'woocommerce'
-                               ); ?>" 
-                               data-product_id="<?= esc_attr($product_id) ?>" 
-                               data-cart_item_key="<?= esc_attr(
-                                 $cart_item_key
-                               ) ?>" 
-                               data-product_sku="<?= esc_attr(
-                                 $_product->get_sku()
-                               ) ?>">
-                               ✖
-                            </a>
-
-                            <!-- Informações da excursão -->
-                            <div class="tour-info">
-                              <?php
-                              // Se for uma variação, pega o ID do produto pai
-                              $parent_id = $_product->is_type('variation')
-                                ? $_product->get_parent_id()
-                                : $_product->get_id();
-                              $parent_permalink = get_permalink($parent_id);
-                              ?>
-
-																<a class="title-link" href="<?= esc_url($parent_permalink) ?>">
-																		<h3 class="bg-title">
-																				Excursão <?= esc_html(
-                                        preg_replace(
-                                          '/ - \d{2}\/\d{2}\/\d{4}$/',
-                                          '',
-                                          $product_name
-                                        )
-                                      ) ?>
-																		</h3>
-																</a>
-
-                                
-                                <div class="d-flex justify-content-between">
-                                    <?php if ($data_exc): ?>
-                                        <p><strong>Data:</strong> <?= esc_html(
-                                          $data_exc
-                                        ) ?></p>
-                                    <?php endif; ?>
-                                    <?php if (!empty($cart_item['horario'])): ?>
-                                        <p class="w-50"><strong>Horário:</strong> <?= esc_html(
-                                          $cart_item['horario']
-                                        ) ?></p>
-                                    <?php endif; ?>
-                                </div>
-
-                                <?php if (!empty($embarque)): ?>
-                                    <p><strong>Embarque:</strong> <?= esc_html(
-                                      $embarque
-                                    ) ?></p>
-                                <?php endif; ?>
-
-                                <p><strong>Valor:</strong>
-                                    <?php
-                                    if (
-                                      $_product->get_meta('preco_original') &&
-                                      $_product->get_meta(
-                                        'desconto_antecipado_rev'
-                                      ) !== false
-                                    ) {
-                                      echo '<span class="preco-original">R$ ' .
-                                        esc_html(
-                                          $_product->get_meta('preco_original')
-                                        ) .
-                                        '</span>';
-                                    }
-                                    echo WC()->cart->get_product_subtotal(
-                                      $_product,
-                                      $cart_item['quantity']
-                                    );
-                                    ?>
-                                </p>
-
-                                <?php if (
-                                  !empty($cart_item['desconto_antecipado']) &&
-                                  $_product->get_meta(
-                                    'desconto_antecipado_rev'
-                                  ) === true
-                                ): ?>
-                                    <p class="desconto-antecipado-alert">
-                                        Desconto de 5% válido até <?= esc_html(
-                                          data_to_dmy(
-                                            $_product->get_meta(
-                                              'data_limite_desconto'
-                                            )
-                                          )
-                                        ) ?>
-                                    </p>
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- Passageiros -->
-                            <?php if (!empty($passageiros)): ?>
-                                <div class="passengers">
-                                    <button type="button" data-qty="<?= count(
-                                      $passageiros
-                                    ) ?>" class="toggle-passengers secondary-btn toggle-active">
-                                        Ver passageiros (<?= count(
-                                          $passageiros
-                                        ) ?>)
-                                    </button>
-                                    <div class="passenger-list">
-                                        <?php foreach (
-                                          $passageiros
-                                          as $passenger
-                                        ): ?>
-                                            <div class="passenger">
-                                                <p><strong>Nome:</strong> <?= esc_html(
-                                                  $passenger->nome_completo
-                                                ) ?></p>
-                                                <p><strong>CPF:</strong> <?= esc_html(
-                                                  $passenger->cpf
-                                                ) ?></p>
-                                                <p><strong>Celular:</strong> <?= esc_html(
-                                                  $passenger->celular
-                                                ) ?></p>
-																								<div>
-																									<p><strong>Nascimento:</strong> <?= esc_html(data_to_dmy($passenger->data_nascimento)) ?></p>
-                                                <span class="rota">
-                                                    <?= strtoupper(
-                                                      $passenger->tripType ===
-                                                      'ida-e-volta'
-                                                        ? 'Ida e volta'
-                                                        : 'Apenas ' .
-                                                          $passenger->tripType
-                                                    ) ?>
-                                                </span>
-																								</div>
-                                                
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif;
+                  ): 
+                
+                  get_template_part('woocommerce/cart/cart-item', null, [
+                    'item' => $cart_item,
+                    'cart_item_key' => $cart_item_key,
+                    'passageiros' => $passageiros
+                  ]);
+                  endif;
                   ?>
                 <?php
                 endforeach; ?>
@@ -217,6 +77,7 @@ $items_carrinho = $woocommerce->cart->get_cart();
             </tbody>
         </table>
 
+        <!-- Coupon section -->
         <div class="pt-3">
             <tr>
                 <td colspan="6" class="actions">
@@ -263,6 +124,27 @@ $items_carrinho = $woocommerce->cart->get_cart();
 </div>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const accordions = document.querySelectorAll('.accordion-toggle');
+    
+    accordions.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const content = this.nextElementSibling;
+            content.classList.toggle('open');
+            
+            // Opcional: Mudar texto do botão dinamicamente
+            const count = this.getAttribute('data-qty');
+            const textSpan = this.querySelector('span');
+            if(this.classList.contains('active')) {
+                 // Mantém o ícone via innerHTML e atualiza o texto
+                 textSpan.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Ocultar passageiros`;
+            } else {
+                 textSpan.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Passageiros (${count})`;
+            }
+        });
+    });
+});
 
 </script>
 
@@ -280,3 +162,4 @@ wp_enqueue_script(
 
 
 ?>
+

@@ -1093,3 +1093,31 @@ add_action('wp_ajax_send_single_email', function () {
         }
     }
 });
+
+// Inserção de cupom via AJAX
+add_action( 'wp_ajax_aerotour_apply_coupon', 'aerotour_ajax_apply_coupon' );
+add_action( 'wp_ajax_nopriv_aerotour_apply_coupon', 'aerotour_ajax_apply_coupon' );
+function aerotour_ajax_apply_coupon() {
+    check_ajax_referer( 'apply-custom-coupon', 'security' );
+    
+    $coupon_code = isset( $_POST['coupon_code'] ) ? sanitize_text_field( $_POST['coupon_code'] ) : '';
+    
+    if ( empty( $coupon_code ) ) {
+        wp_send_json_error( 'Por favor, insira um código de cupom.' );
+    }
+    
+    $applied = WC()->cart->apply_coupon( $coupon_code );
+    $notices = wc_get_notices( 'error' );
+    
+    if ( ! $applied || ! empty( $notices ) ) {
+        $error_message = 'Cupom inválido ou expirado.';
+        if ( ! empty( $notices ) ) {
+            $error_message = wp_strip_all_tags( $notices[0]['notice'] ); 
+        }
+        wc_clear_notices(); 
+        wp_send_json_error( $error_message );
+    }
+    
+    wc_clear_notices();
+    wp_send_json_success();
+}

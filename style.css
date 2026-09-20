@@ -9,6 +9,7 @@ Description: Tema criado para o site da Aerotour Caravanas
 @import url(css/bootstrap.min.css);
 :root{
   --main-bg: #E7E7E7;
+  
   --default-radius: .75rem;
   --light-text: #f9f9f9;
   --text-color-1: #111111;
@@ -18,9 +19,13 @@ Description: Tema criado para o site da Aerotour Caravanas
   --box-bg-1: #f8f8f8;
   --box-bg-2: #e5e5e5;
   --theme-color-text: #400f0f;
+  --text-input-border: 1px solid #ddd;
+  --text-input-color: #333;
+  --text-input-bg: #fff;
 }
 body.theme-dark{
   --main-bg: #111111;
+  /* --main-bg: #110404; */
   --text-color-1: #f9f9f9;
   --text-color-2: #b6b6b6;
   --text-invert-color-1: #111111;
@@ -28,6 +33,9 @@ body.theme-dark{
   --box-bg-1: #1a1a1a;
   --box-bg-2: #222222;
   --theme-color-text: #f9f9f9;
+  --text-input-border: 1px solid #555;
+  --text-input-color: #f9f9f9;
+  --text-input-bg: #222;
 
 }
 .aer-bg-light,
@@ -58,6 +66,7 @@ body {
   --wc-message-text: #2b406e;
 
   font-family: Raleway, sans-serif !important;
+  font-variant-numeric: lining-nums;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -68,6 +77,10 @@ body.theme-dark{
 }
 #mainContent{
   background-color: var(--main-bg)
+}
+input[type="text"], input[type="number"] {
+font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum", "tnum";
 }
 /* Accent color */
 .accent-color-text{

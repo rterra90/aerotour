@@ -337,41 +337,9 @@ function remover_breadcrumb_em_arquivos_woocommerce()
 }
 add_action('wp', 'remover_breadcrumb_em_arquivos_woocommerce');
 
-//Remove a exibição de cross-sell do cart
+// Remove a exibição de cross-sell do cart
 remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
 
-function filter_woocommerce_cart_totals_coupon_html(
-    $coupon_html,
-    $coupon,
-    $discount_amount_html,
-) {
-    // Change text
-    $coupon_html =
-        $discount_amount_html .
-        ' <a href="' .
-        esc_url(
-            add_query_arg(
-                'remove_coupon',
-                rawurlencode($coupon->get_code()),
-                defined('WOOCOMMERCE_CHECKOUT')
-                    ? wc_get_checkout_url()
-                    : wc_get_cart_url(),
-            ),
-        ) .
-        '" class="woocommerce-remove-coupon" data-coupon="' .
-        esc_attr($coupon->get_code()) .
-        '">' .
-        __('<i class="bi bi-trash"></i>', 'woocommerce') .
-        '</a>';
-
-    return $coupon_html;
-}
-add_filter(
-    'woocommerce_cart_totals_coupon_html',
-    'filter_woocommerce_cart_totals_coupon_html',
-    10,
-    3,
-);
 
 // Adicionar o filtro ao texto de "obrigado pelo pedido"
 add_filter(

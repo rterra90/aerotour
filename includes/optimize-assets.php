@@ -64,7 +64,7 @@ function aer_get_segmented_css()
             'files' => [
                 '/css/woocommerce/checkout.min.css',
                 '/css/woocommerce/order-details.min.css',
-                // '/css/woocommerce/cart.min.css',
+                '/css/woocommerce/cart.min.css',
                 '/css/woocommerce/cart-empty.min.css',
 
             ],

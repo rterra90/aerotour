@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Ajustes visuais
-    const totalTitle = document.querySelector('.cart_totals h2');
-    if(totalTitle) totalTitle.classList.add('bg-title');
+    // const totalTitle = document.querySelector('.cart_totals h2');
+    // if(totalTitle) totalTitle.classList.add('bg-title');
     const finalizarBtn = document.querySelector('.checkout-button');
     if(finalizarBtn) finalizarBtn.innerText = "Continuar para pagamento";
 });

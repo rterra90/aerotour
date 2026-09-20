@@ -1,6 +1,6 @@
 <?php
-//
-// Adiciona cupom após login de usuário já anteriormente registrado, se habilitado
+// // // // // //
+// // Adiciona cupom após login de usuário já anteriormente registrado, se habilitado
 function add_coupon_after_login( $user_login, $user ) {
   $cupom_login = $_POST['qr_event_coupon_control'];
   if(isset($cupom_login)){
@@ -12,8 +12,8 @@ function add_coupon_after_login( $user_login, $user ) {
 add_action('wp_login', 'add_coupon_after_login', 10, 2);
 
 
-//
-//Adiciona opções na página de edição/criação de cupom
+// // // // // //
+// // Adiciona opções na página de edição/criação de cupom
 function action_woocommerce_coupon_options_usage_restriction( $coupon_get_id, $coupon ) {
   ?>
     <div class="options_group options_group_restrict_customers">
@@ -72,8 +72,8 @@ function action_woocommerce_coupon_options_usage_restriction( $coupon_get_id, $c
 add_action( 'woocommerce_coupon_options_usage_restriction', 'action_woocommerce_coupon_options_usage_restriction', 10, 2 );
 
 
-//
-//Salva as definições de cupom da página de edição/criação
+// // // // // //
+// // Salva as definições de cupom da página de edição/criação
 function action_woocommerce_coupon_options_save( $post_id, $coupon ) {
   // Isset
   if ( isset ( $_POST['restrict_customers_coupon'] ) ) {
@@ -85,8 +85,8 @@ function action_woocommerce_coupon_options_save( $post_id, $coupon ) {
 add_action( 'woocommerce_coupon_options_save', 'action_woocommerce_coupon_options_save', 10, 2 );
 
 
-//
-// Valida o cupom ao ser inserido no carrinho pelo usuário
+// // // // // //
+// // Valida o cupom ao ser inserido no carrinho pelo usuário
 function filter_woocommerce_coupon_is_valid( $valid, $coupon, $discount ) {
   // Get meta
   // $customer_user_id = $coupon->get_meta( 'customer_user_id' );
@@ -115,8 +115,8 @@ function filter_woocommerce_coupon_is_valid( $valid, $coupon, $discount ) {
 add_filter( 'woocommerce_coupon_is_valid', 'filter_woocommerce_coupon_is_valid', 10, 3 );
 
 
-//
-// Widget de cupom no painel WP
+// // // // // //
+// // Widget de cupom no painel WP
 function manage_coupons_widget(){
   // update_option("qr_code_coupon_status", array(
   //   'status' => 'desativado',
@@ -227,16 +227,16 @@ function manage_coupons_widget(){
   <?php
 }
 
-/**
- * Personaliza as mensagens de erro de cupons no WooCommerce
- */
+
+// // // // // //
+// // Personaliza as mensagens de erro de cupons no WooCommerce
 add_filter('woocommerce_coupon_error', 'customizar_erros_de_cupom', 10, 3);
 function customizar_erros_de_cupom($err, $err_code, $coupon) {
     
     switch ($err_code) {
         // Cenário 1: O cupom digitado simplesmente não existe ou expirou
         case WC_Coupon::E_WC_COUPON_NOT_EXIST:
-            $err = __('Código de cupom inválido. Verifique se digitou corretamente ou se o cupom aindas está ativo.', 'woocommerce');
+            $err = __('Código de cupom inválido. Verifique se digitou corretamente ou se o cupom ainda está ativo.', 'woocommerce');
             break;
 
         // Cenário 2: O cupom expirou a data de validade
@@ -265,4 +265,143 @@ function customizar_erros_de_cupom($err, $err_code, $coupon) {
 
     return $err;
 }
+
+
+// // // // // //
+// // Exibe o input de cupom no resumo do carrinho
+add_action('woocommerce_proceed_to_checkout', 'customizar_exibicao_cupom_no_resumo');
+function customizar_exibicao_cupom_no_resumo() {
+  $applied_coupons = WC()->cart->get_applied_coupons();
+    
+    echo '<div class="custom-coupon-wrapper" id="custom-coupon-wrapper">';
+    
+    // Se o cupom já está na sessão, exibe apenas a mensagem de sucesso
+    if ( ! empty( $applied_coupons ) ) {
+        $coupon_code = esc_html( $applied_coupons[0] );
+        echo '<div class="custom-coupon-success">';
+        echo '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+        echo '<span>Cupom <strong>' . strtoupper($coupon_code) . '</strong> aplicado!</span>';
+        echo '</div>';
+    } 
+    // Se não há cupom, exibe o input
+    else {
+        echo '<div class="custom-coupon-input-group">';
+        echo '<input type="text" name="custom_coupon_code" class="input-text" id="custom_coupon_code" value="" placeholder="Código do cupom" />';
+        echo '<button type="button" class="button alt" id="custom_apply_coupon_btn">Aplicar</button>';
+        echo '</div>';
+        echo '<div class="custom-coupon-message" id="custom_coupon_message" style="display:none;"></div>';
+        wp_nonce_field( 'apply-custom-coupon', 'custom_coupon_nonce' );
+    }
+    
+    echo '</div>';
+    ?>
+    <script>
+    jQuery(document).ready(function($) {
+        // Busca a URL padrão do AJAX do WooCommerce (ou usa fallback)
+        var ajaxUrl = typeof woocommerce_params !== 'undefined' ? woocommerce_params.ajax_url : '/wp-admin/admin-ajax.php';
+
+        $(document).on('click', '#custom_apply_coupon_btn', function(e) {
+            e.preventDefault();
+            
+            var btn = $(this);
+            var couponCode = $('#custom_coupon_code').val();
+            
+            if (couponCode) {
+                couponCode = couponCode.trim();
+            }
+            
+            var security = $('#custom_coupon_nonce').val();
+            var messageBox = $('#custom_coupon_message');
+            
+            if (!couponCode) {
+                messageBox.text('Digite um código de cupom.').slideDown();
+                return;
+            }
+            
+            // Estado de carregamento: congela o botão temporariamente
+            btn.text('Aplicando...').prop('disabled', true);
+            messageBox.slideUp();
+            
+            $.ajax({
+                type: 'POST',
+                url: ajaxUrl,
+                data: {
+                    action: 'aerotour_apply_coupon',
+                    coupon_code: couponCode,
+                    security: security
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // SUCESSO: O cupom foi aplicado no backend!
+                        // Dispara o clique no botão oculto/nativo de "Atualizar Carrinho"
+                        var $updateCartBtn = $('button[name="update_cart"]');
+                        
+                        if ($updateCartBtn.length) {
+                            // Isso fará o WooCommerce rodar seu próprio AJAX de atualização,
+                            // exibindo a linha de desconto e recarregando nossa interface verde via PHP
+                            $updateCartBtn.prop('disabled', false).trigger('click');
+                        } else {
+                            // Fallback de segurança caso o tema tenha removido o botão nativo
+                            window.location.reload();
+                        }
+                    } else {
+                        // ERRO: Libera o botão e exibe a mensagem de cupom inválido
+                        btn.text('Aplicar').prop('disabled', false);
+                        messageBox.text(response.data).slideDown();
+                    }
+                },
+                error: function() {
+                    // ERRO DE CONEXÃO
+                    btn.text('Aplicar').prop('disabled', false);
+                    messageBox.text('Ocorreu um erro na conexão. Tente novamente.').slideDown();
+                }
+            });
+        });
+
+        // Permite aplicar o cupom com a tecla "Enter"
+        $(document).on('keypress', '#custom_coupon_code', function(e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                $('#custom_apply_coupon_btn').trigger('click');
+            }
+        });
+    });
+    </script>
+    <?php
+}
+
+// // // // // //
+// // Customiza a exibição do cupom inserido no resumo do carrinho
+function filter_woocommerce_cart_totals_coupon_html(
+    $coupon_html,
+    $coupon,
+    $discount_amount_html,
+) {
+    // Change text
+    $coupon_html =
+        $discount_amount_html .
+        ' <a href="' .
+        esc_url(
+            add_query_arg(
+                'remove_coupon',
+                rawurlencode($coupon->get_code()),
+                defined('WOOCOMMERCE_CHECKOUT')
+                    ? wc_get_checkout_url()
+                    : wc_get_cart_url(),
+            ),
+        ) .
+        '" class="woocommerce-remove-coupon" data-coupon="' .
+        esc_attr($coupon->get_code()) .
+        '">' .
+        __('<i class="bi bi-trash"></i>', 'woocommerce') .
+        '</a>';
+
+    return $coupon_html;
+}
+add_filter(
+    'woocommerce_cart_totals_coupon_html',
+    'filter_woocommerce_cart_totals_coupon_html',
+    10,
+    3,
+);
 ?>
