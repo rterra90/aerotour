@@ -1,4 +1,5 @@
 :root{
+    --cart-page-title: #0c0c0c;
     --cart-item-background: #ffffff;
     --cart-item-color: #212529;
     --cart-item-border: 1px solid #eaeaea;
@@ -26,9 +27,13 @@
     --coupon-btn-border: 1px solid #ddd;
     --coupon-btn-hover-border: 1px solid #ccc;
     --coupon-btn-hover-bg: #eaeaea;
+    --cart-info-banner-color: #2e2e2e;
+    --cart-info-banner-highlight: #4a1523;
 
 }
 body.theme-dark{
+    --cart-page-title: #f9f9f9;
+
     --cart-item-background: #1f1f1f;
     --cart-item-color: #cdcdcd;
     --cart-item-border: 1px solid #333; 
@@ -56,9 +61,76 @@ body.theme-dark{
     --coupon-btn-color: #b8b8b8;
     --coupon-btn-border: 1px solid #ddd;
     --coupon-btn-hover-border: 1px solid #ccc;
+    --cart-info-banner-color: #adadad;
+    --cart-info-banner-highlight: #a6a6a6;
 
 
 
+}
+#cart h1{
+    text-align: center;
+    color: var(--cart-page-title);
+}
+/* ==========================================================================
+   Cabeçalho do Carrinho (Stepper)
+   ========================================================================== */
+.aerotour-cart-header {
+    margin: 22px 0;
+    width: 100%;
+}
+
+/* ==========================================================================
+   Banner Informativo
+   ========================================================================== */
+.cart-info-banner {
+    display: flex;
+    gap: 15px;
+    background-color: var(--cart-item-background); /* Fundo bege bem suave */
+    border: 1px dashed var(--cart-item-border, #e5d5c5);
+    color: var(--cart-info-banner-color);
+    border-radius: 8px;
+    padding: 16px 20px;
+    align-items: flex-start;
+}
+
+.cart-info-banner svg {
+    color: #4a1523;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.cart-info-text strong {
+    color: var(--cart-info-banner-highlight );
+    margin-bottom: 4px;
+}
+
+.cart-info-text p {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.cart-info-text a {
+    color: var(--cart-info-banner-highlight );
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: opacity 0.2s;
+}
+
+.cart-info-text a:hover {
+    opacity: 0.7;
+}
+
+/* Responsividade Básica para Mobile */
+@media (max-width: 600px) {
+    .checkout-progress-bar .step-label {
+        font-size: 11px; /* Diminui a fonte para caber na tela do celular */
+    }
+    .cart-info-banner {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
 /* CART ITEM */
@@ -395,7 +467,7 @@ body.theme-dark{
 }
 .woocommerce-cart .cart-collaterals .cart_totals table.shop_table th,
 .woocommerce-cart .cart-collaterals .cart_totals table.shop_table td {
-    padding: 12px 0;
+    padding: 10px 0;
     border: none;
     border-bottom: 1px dashed #eaeaea;
     background: transparent;
@@ -442,13 +514,8 @@ body.theme-dark{
     font-weight: 700;
     color: var(--cart-totals-highlight); /* Destaque na cor principal */
 }
-/* 4. Ajuste de espaçamento para o Cupom Customizado que criamos */
-.custom-coupon-wrapper {
-    border-top: var(--cart-totals-border);
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eaeaea;
-}
+
+
 /* 5. Botão de "Continuar para pagamento" */
 .woocommerce-cart .cart-collaterals .wc-proceed-to-checkout {
     padding: 0;
@@ -490,7 +557,7 @@ body.theme-dark{
 }
 
 
-
+/* CUPOM CUSTOMIZADO */
 /* Oculta a área de cupom padrão da tabela */
 .woocommerce-cart-form .coupon {
     display: none !important;
@@ -498,9 +565,30 @@ body.theme-dark{
 
 /* Container do Novo Cupom */
 .custom-coupon-wrapper {
-
+    border-top: var(--cart-totals-border);
+    margin: 0px;
+    padding-bottom: 20px;
+    border-bottom: var(--cart-totals-border);
 }
-
+.custom-coupon-toggle {
+    background: none;
+    border: none;
+    color: var(--cart-totals-labels);
+    font-weight: 600;
+    font-size: .825rem;
+    letter-spacing: 0.015rem;
+    opacity: .65;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 8px;
+}
+.custom-coupon-toggle:hover, .custom-coupon-toggle[aria-expanded="true"] {
+    opacity: 1;
+}
+.custom-coupon-collapse {
+  overflow: hidden;
+}
 .custom-coupon-input-group {
     display: flex;
     gap: 10px;
@@ -512,11 +600,14 @@ body.theme-dark{
     border: var(--text-input-border);
     color: var(--text-input-color);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
     transition: border-color 0.3s;
     text-transform: uppercase;
     letter-spacing: 0.075rem;
     background-color: var(--text-input-bg);
+}
+.custom-coupon-input-group input:focus-visible{
+    outline: none;
 }
 
 .custom-coupon-input-group button {
@@ -528,14 +619,19 @@ body.theme-dark{
     font-weight: 600;
     cursor: pointer;
     transition: background 0.3s;
-    font-size: .875rem;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.015rem;
+    
 }
 
 .custom-coupon-input-group button:hover {
     background-color: var(--coupon-btn-hover-bg);
     border: var(--coupon-btn-hover-border);
 }
-
+.remove-coupon-link{
+    display: none;
+}
 /* Mensagem de Erro */
 .custom-coupon-message {
     color: #d32f2f;
@@ -547,6 +643,7 @@ body.theme-dark{
 
 /* Mensagem de Sucesso (Elemento que substitui o input) */
 .custom-coupon-success {
+    margin-top: 8px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -561,6 +658,13 @@ body.theme-dark{
 
 /* Responsividade para telas maiores */
 @media (min-width: 576px) {
+    .aerotour-cart-header{
+        margin-top: 32px;
+    }
+    .cart-info-text p {
+    font-size: 13.2px;
+    line-height: 1.5;
+}
     .detail-badge span {
         font-size: .65rem;
     }

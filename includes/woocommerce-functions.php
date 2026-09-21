@@ -23,6 +23,11 @@ require_once get_template_directory() .
 require_once get_template_directory() .
     '/includes/woocommerce/archive-product-functions.php';
 
+// // //
+// FUNÇÕES DA PÁGINA CART
+require_once get_template_directory() .
+    '/includes/woocommerce/cart-functions.php';
+
 
 
 // // //

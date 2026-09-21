@@ -285,18 +285,34 @@ function customizar_exibicao_cupom_no_resumo() {
     } 
     // Se não há cupom, exibe o input
     else {
+        echo '<button type="button" class="custom-coupon-toggle" id="custom_coupon_toggle" aria-expanded="false" aria-controls="custom_coupon_collapse">Tem um cupom de desconto?</button>';
+        echo '<div class="custom-coupon-collapse" id="custom_coupon_collapse" style="display:none;">';
         echo '<div class="custom-coupon-input-group">';
         echo '<input type="text" name="custom_coupon_code" class="input-text" id="custom_coupon_code" value="" placeholder="Código do cupom" />';
         echo '<button type="button" class="button alt" id="custom_apply_coupon_btn">Aplicar</button>';
         echo '</div>';
         echo '<div class="custom-coupon-message" id="custom_coupon_message" style="display:none;"></div>';
         wp_nonce_field( 'apply-custom-coupon', 'custom_coupon_nonce' );
+        echo '</div>';
     }
     
     echo '</div>';
     ?>
     <script>
     jQuery(document).ready(function($) {
+      // Toggle do accordion de cupom
+        $(document).on('click', '#custom_coupon_toggle', function(e) {
+            e.preventDefault();
+            var $collapse = $('#custom_coupon_collapse');
+            var isOpen = $collapse.is(':visible');
+            $collapse.slideToggle(200);
+            $(this).attr('aria-expanded', !isOpen);
+            if (!isOpen) {
+                setTimeout(function() {
+                    $('#custom_coupon_code').trigger('focus');
+                }, 210);
+            }
+        });
         // Busca a URL padrão do AJAX do WooCommerce (ou usa fallback)
         var ajaxUrl = typeof woocommerce_params !== 'undefined' ? woocommerce_params.ajax_url : '/wp-admin/admin-ajax.php';
 

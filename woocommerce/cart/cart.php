@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit();
 
-do_action('woocommerce_before_cart');
+
 
 global $woocommerce;
 global $wpdb;
@@ -12,9 +12,10 @@ $items_carrinho = $woocommerce->cart->get_cart();
 <link rel="stylesheet" href="<?= esc_url(
   get_stylesheet_directory_uri()
 ) ?>/css/includes/banner-cupom.css">
+<section id="cart">
+<h1 class="mt-2"><?php echo get_the_title();?></h1>
 
-<h1 class="mt-2">Carrinho de reservas</h1>
-
+<?php do_action('woocommerce_before_cart'); ?>
 <div class="notices woocommerce-notices-wrapper">
     <?php wc_print_notices(); ?>
 </div>
@@ -117,12 +118,13 @@ $items_carrinho = $woocommerce->cart->get_cart();
 
     <?php do_action('woocommerce_before_cart_collaterals'); ?>
     <div class="col-lg-4">
+
         <div class="cart-collaterals">
             <?php do_action('woocommerce_cart_collaterals'); ?>
         </div>
     </div>
 </div>
-
+</section>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const accordions = document.querySelectorAll('.accordion-toggle');

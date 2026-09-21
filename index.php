@@ -2,13 +2,13 @@
 <?php if (have_posts()) : while (have_posts()) : the_post(); 
 
 
-$exceptions = array('Carrinho');
+$exceptions = array('Carrinho de reservas');
 
 //verificar se o título dessa página está na lista de exceções
 $is_exception = in_array(get_the_title(), $exceptions);
 if($is_exception) {
   ?>
-  <main id="mainContent" class="bg-df x-align py-5 py-4">
+  <main id="mainContent" class="bg-df x-align py-4">
   <?php
 } else {
   ?>

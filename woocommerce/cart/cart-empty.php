@@ -85,33 +85,35 @@ defined( 'ABSPATH' ) || exit;
 	</div>
 
 		<!-- 2. Seção de Educação / Blog -->
-		<div class="empty-cart-blog">
-			<h3>Primeira vez viajando com a gente?</h3>
-			<p>Preparamos alguns guias rápidos para tirar todas as suas dúvidas antes de reservar:</p>
-			
-			<div class="blog-grid">
-				<!-- Card 1 -->
-				<a href="<?= esc_url( get_home_url( null, '/como-reservar' ) ); ?>" class="blog-card">
-					<span class="blog-icon">📝</span>
-					<h4>Como fazer sua reserva</h4>
-					<p>Veja o passo a passo de como garantir sua vaga em nossas excursões.</p>
-				</a>
+		<?php if(false): ?>
+			<div class="empty-cart-blog">
+				<h3>Primeira vez viajando com a gente?</h3>
+				<p>Preparamos alguns guias rápidos para tirar todas as suas dúvidas antes de reservar:</p>
 				
-				<!-- Card 2 -->
-				<a href="<?= esc_url( get_home_url( null, '/o-que-esta-incluso' ) ); ?>" class="blog-card">
-					<span class="blog-icon">🎒</span>
-					<h4>O que está incluso?</h4>
-					<p>Saiba tudo o que o nosso pacote oferece para o seu conforto.</p>
-				</a>
-				
-				<!-- Card 3 -->
-				<a href="<?= esc_url( get_home_url( null, '/formas-de-pagamento' ) ); ?>" class="blog-card">
-					<span class="blog-icon">🔒</span>
-					<h4>Formas de pagamento</h4>
-					<p>Conheça nossas opções seguras para parcelar a sua viagem.</p>
-				</a>
+				<div class="blog-grid">
+					<!-- Card 1 -->
+					<a href="<?= esc_url( get_home_url( null, '/como-reservar' ) ); ?>" class="blog-card">
+						<span class="blog-icon">📝</span>
+						<h4>Como fazer sua reserva</h4>
+						<p>Veja o passo a passo de como garantir sua vaga em nossas excursões.</p>
+					</a>
+					
+					<!-- Card 2 -->
+					<a href="<?= esc_url( get_home_url( null, '/o-que-esta-incluso' ) ); ?>" class="blog-card">
+						<span class="blog-icon">🎒</span>
+						<h4>O que está incluso?</h4>
+						<p>Saiba tudo o que o nosso pacote oferece para o seu conforto.</p>
+					</a>
+					
+					<!-- Card 3 -->
+					<a href="<?= esc_url( get_home_url( null, '/formas-de-pagamento' ) ); ?>" class="blog-card">
+						<span class="blog-icon">🔒</span>
+						<h4>Formas de pagamento</h4>
+						<p>Conheça nossas opções seguras para parcelar a sua viagem.</p>
+					</a>
+				</div>
 			</div>
-		</div>
+		<?php endif; ?>
 
 </div>
 

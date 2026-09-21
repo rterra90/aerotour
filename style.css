@@ -22,6 +22,17 @@ Description: Tema criado para o site da Aerotour Caravanas
   --text-input-border: 1px solid #ddd;
   --text-input-color: #333;
   --text-input-bg: #fff;
+  --wc-message-bg: #f0f9ff;
+  --wc-message-text: #075985;
+  --wc-message-border: 5px solid #0284c7;
+  --wc-success-message-bg: #f0fdf4;
+  --wc-success-message-text: #166534;
+  --wc-success-message-border: 5px solid #10b981;
+  --wc-error-message-bg: #fef2f2;
+  --wc-error-message-text: #b91c1c;
+  --wc-error-message-border: 5px solid #dc2626;
+  /* --page-title-color: #0c0c0c; */
+
 }
 body.theme-dark{
   --main-bg: #111111;
@@ -36,6 +47,17 @@ body.theme-dark{
   --text-input-border: 1px solid #555;
   --text-input-color: #f9f9f9;
   --text-input-bg: #222;
+  /* variáveis de mensagens do WooCommerce para tema escuro */
+  --wc-message-bg: #1a1a1a;
+  --wc-message-text: #f9f9f9;
+  --wc-message-border: 5px solid #0284c7;
+  --wc-success-message-bg: #1a1a1a;
+  --wc-success-message-text: #f9f9f9;
+  --wc-success-message-border: 5px solid #10b981;
+  --wc-error-message-bg: #1a1a1a;
+  --wc-error-message-text: #f9f9f9;
+  --wc-error-message-border: 5px solid #dc2626;
+
 
 }
 .aer-bg-light,
@@ -43,7 +65,6 @@ body.theme-dark{
   background-color: var(--aer-bg-light);
 }
 body {
-  --page-title-color: #0c0c0c;
 
 
   --aer-light-text: #b6b6b6;
@@ -54,7 +75,6 @@ body {
   --aer-light-dark: #474747;
   --aer-red-error: #ab6262;
 
-  /* novas variaveis */
   --aer-text-dark: #202020;
   --aer-text-light: #f9f9f9;
   --aer-accent: #400f0f;
@@ -62,8 +82,6 @@ body {
   --aer-accent-hover: #672222;
   --aer-box-light: #f9f9f9;
   --aer-radius: 0.875rem;
-  --wc-message-bg: #d3dff9;
-  --wc-message-text: #2b406e;
 
   font-family: Raleway, sans-serif !important;
   font-variant-numeric: lining-nums;
@@ -137,7 +155,8 @@ h3.bg-title {
 }
 
 .index-inner h1{
-  color: var(--page-title-color);
+  /* color: var(--page-title-color); */
+  color: #0c0c0c;
 }
 
 /* BUTTONS */
@@ -259,9 +278,9 @@ a.message-link {
 
 /* Tratamento específico para Alertas de Erro (Ex: Embarque indisponível) */
 .woocommerce-error {
-    background-color: #fdf2f2 !important; /* Vermelho pastel suave */
-    color: #9b1c1c !important; /* Texto vinho legível */
-    border-left: 5px solid #de350b !important; /* Linha de destaque na esquerda */
+    background-color: var(--wc-error-message-bg) !important; /* Vermelho pastel suave */
+    color: var(--wc-error-message-text) !important; /* Texto vinho legível */
+    border-left: var(--wc-error-message-border) !important; /* Linha de destaque na esquerda */
 }
 
 /* Correção para quando o erro renderiza em formato de lista (padrão WC) */
@@ -271,16 +290,16 @@ a.message-link {
 
 /* Tratamento específico para Alertas de Sucesso/Mensagens (Ex: Cupom aplicado) */
 .woocommerce-message {
-    background-color: #f0fdf4 !important; /* Verde pastel suave */
-    color: #166534 !important;
-    border-left: 5px solid #10b981 !important;
+    background-color: var(--wc-success-message-bg) !important; /* Verde pastel suave */
+    color: var(--wc-success-message-text) !important;
+    border-left: var(--wc-success-message-border) !important;
 }
 
 /* Tratamento específico para Alertas Informativos */
 .woocommerce-info {
-    background-color: #f0f9ff !important; /* Azul pastel suave */
-    color: #075985 !important;
-    border-left: 5px solid #0284c7 !important;
+    background-color: var(--wc-message-bg) !important; /* Azul pastel suave */
+    color: var(--wc-message-text) !important;
+    border-left: var(--wc-message-border) !important;
 }
 
 /* Ajuste nos links de ação dentro dos alertas (Ex: "Retornar ao carrinho") */
@@ -443,7 +462,7 @@ form#searchform input#s::after {
     font-size: 0.9rem !important;
   }
   h1 {
-    font-size: 1.4rem;
+    /* font-size: 1.4rem; */
   }
   .woocommerce-notices-wrapper > * {
     width: auto;
