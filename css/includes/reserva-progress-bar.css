@@ -14,8 +14,11 @@
 --bar-step-bg: #ffffff;
 --bar-step-border: 1px solid #eaeaea;
 --bar-step-color: #999;
+--bar-step-cancelled-bg:#e00000;
+--bar-step-cancelled-color: #d2bbbb;
+--bar-step-cancelled-label-color: #e00000;
 }
-body.theme-dark { 
+body.theme-dark-x { 
 --bar-line-color: #232323;
 --bar-line-active-color: #d5d5d5;
 --bar-completed-color: #b33a3a;
@@ -31,6 +34,11 @@ body.theme-dark {
 --bar-step-bg: #3f3f3f;
 --bar-step-border: 1px solid #444;
 --bar-step-color: #ccc;
+--bar-step-cancelled-bg:#e00000;
+--bar-step-cancelled-label-color: #c88f8f;;
+--bar-step-cancelled-label-color: #e00000;
+
+
 }
 
 .checkout-progress-bar {
@@ -92,6 +100,15 @@ body.theme-dark {
     color: var(--bar-step-label-color);
     font-weight: 500;
 }
+.checkout-progress-bar .step.cancelled .step-circle {
+    background-color: var(--bar-step-cancelled-bg);
+    color: var(--bar-step-cancelled-color);
+
+}
+.checkout-progress-bar .step.cancelled .step-label {
+    color: var(--bar-step-cancelled-label-color);
+    font-weight: 700;
+}
 
 /* Passo Anterior (Concluído) */
 .checkout-progress-bar .step.completed::before {
@@ -115,10 +132,13 @@ body.theme-dark {
     border-color: var(--bar-step-active-border-color);
     color: var(--bar-step-active-color);
     box-shadow: var(--bar-step-active-box-shadow);
+    font-weight: 700;
+
 }
-.checkout-progress-bar .step.active .step-label {
+.checkout-progress-bar .step.active .step-label, .checkout-progress-bar .step.final.completed .step-label {
     color: var(--bar-completed-color);
     font-weight: 700;
+    line-height: 1.15;
 }
 
 @media(min-width: 400px){

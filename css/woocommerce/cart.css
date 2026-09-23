@@ -31,13 +31,13 @@
     --cart-info-banner-highlight: #4a1523;
 
 }
-body.theme-dark{
+body.theme-dark-x{
     --cart-page-title: #f9f9f9;
 
     --cart-item-background: #1f1f1f;
     --cart-item-color: #cdcdcd;
     --cart-item-border: 1px solid #333; 
-    --cart-item-title: #ffffff; 
+    --cart-item-title: #f9f9f9; 
     --cart-item-remove-bg: #333; 
     --cart-item-remove-color: #ccc;
     --cart-item-detail-badge-background: #333;

@@ -1,8 +1,16 @@
 :root{
     --empty-cart-hero-bg: #f8f9fa;
+    --alt-card-bg: #f8f8f8;
+    --alt-card-text-color: #111;
+    --alt-card-border: 1px solid #eaeaea;
 }
-body.theme-dark{
+body.theme-dark-x{
     --empty-cart-hero-bg: linear-gradient(145deg, #241a1e 0%, #161517 100%);
+    --alt-card-bg: #1a1a1a;
+    --alt-card-text-color: #f9f9f9;
+    --alt-card-border: 1px solid #333;
+
+
 }
 /* Container Principal */
 #carrinho-container.empty-cart-modern h1{
@@ -37,14 +45,14 @@ body.theme-dark{
 
 }
 .empty-cart-icon svg > g:first-of-type{
-    stroke: var(--theme-color-text);
+    stroke: var(--cart-item-title);
 }
 
 .empty-cart-title {
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 10px;
-    color: var(--theme-color-text);
+    color: var(--cart-item-title);
 }
 
 .empty-cart-subtitle {
@@ -109,8 +117,8 @@ body.theme-dark{
 }
 
 .blog-card {
-    background: #fff;
-    border: 1px solid #eaeaea;
+    background: var(--alt-card-bg);
+    border: var(--alt-card-border);
     border-radius: 10px;
     padding: 25px 20px;
     text-decoration: none;
@@ -133,7 +141,7 @@ body.theme-dark{
 
 .blog-card h4 {
     font-size: 16px;
-    color: #333;
+    color: var(--alt-card-text-color);
     margin-bottom: 10px;
     font-weight: 600;
 }
@@ -152,7 +160,7 @@ body.theme-dark{
 }
 h3.recommendations-title{
     font-size: .925rem;
-    color: var(--text-color-1);
+    color: var(--cart-page-title);
     margin-bottom: 12px;
     letter-spacing: .03rem;
 }
@@ -164,7 +172,7 @@ h3.recommendations-title{
 .alt-exc-card{
     border-radius: var(--default-radius);
     overflow: hidden;
-    background-color: var(--box-bg-1);
+    background-color: var(--alt-card-bg);
     margin: 0 auto;
     box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     cursor: pointer;
@@ -179,7 +187,7 @@ h3.recommendations-title{
     text-align: left;
     padding: 6px 12px;
     margin-bottom: 0px;
-    color: var(--text-color-1);
+    color: var(--alt-card-text-color);
 }
 
 @media (min-width: 576px){

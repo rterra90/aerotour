@@ -1,30 +1,285 @@
+:root{
+  --checkout-page-title: #0c0c0c;
+  --checkout-box-bg: #ffffff;
+  --checkout-box-bg-2: #f9f9f9;
+  --checkout-box-title-color: #4a1523;
+  --checkout-box-border: 1px solid #eaeaea;
+  --checkout-box-color: #1f1f1f;
+  --checkout-box-text-color: #606060;
+  --checkout-single-excursao-bg: #fdfaf6;
+  --checkout-single-excursao-border: 1px dashed #e5d5c5;
+  --checkout-box-bg-3: #fff;
+  --checkout-pax-border: 1px solid #eaeaea;
+  --checkout-coupon-color: #3e793e;
+  --checkout-input-text-error-bg: #fff5f5;
+  --checkout-input-text-error-border: 1px solid #e3342f;
+
+}
+body.theme-dark-x{
+  --checkout-page-title: #f9f9f9;
+
+  --checkout-box-bg: #1f1f1f; /* Exemplo de cor para tema escuro */
+  --checkout-box-bg-2: #2a2a2a; /* Exemplo de cor para o segundo fundo no tema escuro */
+  --checkout-box-title-color: #f9f9f9; /* Exemplo de cor para o título no tema escuro */
+    --checkout-box-border: 1px solid #333;
+  --checkout-box-color: #f9f9f9;
+  --checkout-box-text-color: #d8d8d8;
+  --checkout-single-excursao-bg: #2a2a2a;
+  --checkout-single-excursao-border: 1px dashed #444;
+  --checkout-box-bg-3: #484848;
+  --checkout-pax-border: 1px solid #666;
+  --checkout-coupon-color: #3e793e;
+  --checkout-input-text-error-bg: #3b2828;
+  --checkout-input-text-error-border: 1px solid #89504f;
+
+
+
+
+}
+
+#checkout-page h1{
+  color: var(--checkout-page-title);
+}
+#page-thankyou h1.completed-title{
+  color: #fff;
+}
+/* CABEÇALHO */
+.reserva-header{
+      margin: 22px 0;
+}
+/* ==========================================================================
+   Checkout - Estrutura e Cards Modernos
+   ========================================================================== */
+
+/* Ajuste da linha principal para alinhar os cards no topo e permitir o Sticky */
+.woocommerce-checkout .row.justify-content-between {
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+/* Transformando as colunas em Cards Brancos e Limpos */
+#customer_details .customer-details-inner, 
+.checkout-pagamento-inner {
+    background: var(--checkout-box-bg);
+    border: var(--checkout-box-border);
+    border-radius: var(--default-radius);
+    padding: 30px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    margin-bottom: 30px;
+}
+
+/* Remove a borda marrom externa gigante da direita (caso exista no container pai) */
+.checkout-pagamento {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 15px !important;
+}
+
+/* Torna a coluna de pagamento "Sticky" (Acompanha o scroll da tela) */
+.checkout-pagamento {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 30px; 
+}
+
+/* ==========================================================================
+   Títulos (Substituindo o antigo .bg-title)
+   ========================================================================== */
+.woocommerce-checkout h2,
+.woocommerce-checkout h3 {
+    background: transparent !important;
+    color: var(--checkout-box-title-color) !important;
+    font-size: 20px !important;
+    font-weight: 700;
+    text-align: left !important;
+    padding: 0 0 15px 0 !important;
+    margin: 0 0 25px 0 !important;
+    border-bottom: var(--checkout-box-border);
+    border-radius: 0;
+    width: 100%;
+}
+
+/* ==========================================================================
+   Resumo do Pedido (review-order)
+   ========================================================================== */
+
+/* Card de cada excursão no resumo */
+#order_review .checkout-box {
+    background: var(--checkout-single-excursao-bg); /* Fundo levemente bege para destacar do fundo branco do card principal */
+    border: var(--checkout-single-excursao-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.checkout-box.single-excursao {
+  
+}
+
+/* Título da excursão no resumo */
+.checkout-box-title {
+    font-weight: 700;
+    color: var(--checkout-box-title-color);
+    margin-bottom: 15px !important;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+    text-align: center;
+}
+.checkout-box-title.exc-name {
+  font-size: 16px;
+}
+.checkout-box-title.coupon-box-title {
+    font-size: .875rem;
+    text-transform: uppercase;
+    letter-spacing: .075rem;
+    font-weight: 600;
+}
+
+
+/* Detalhes e Passageiros */
+.flex-checkout-review-order-table .detalhes p,
+.flex-checkout-review-order-table .passageiros p {
+    font-size: 13px;
+    color: var(--checkout-box-text-color);
+    margin-bottom: 5px;
+}
+
+.flex-checkout-review-order-table .passageiros li.checkout-single-pax {
+    background: var(--checkout-box-bg-3);
+    border: 1px solid var(--checkout-pax-border);
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.flex-checkout-review-order-table .passageiros .nome-passageiro {
+    font-weight: 600;
+    color: var(--checkout-box-text-color);
+    margin-bottom: 2px;
+}
+
+/* Subtotal e Total */
+.flex-checkout-review-order-table .subtotal strong {
+    font-size: 14px;
+    color: var(--checkout-box-text-color);
+    border-top: 1px solid #eaeaea;
+    margin-top: 15px;
+    padding-top: 15px !important;
+}
+
+.flex-checkout-review-order-table .checkout-price{
+    background: var(--checkout-box-bg-2);
+    border: var(--checkout-box-border);
+    border-radius: 8px;
+    padding: 20px !important;
+    margin-top: 25px !important;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    color: var(--checkout-box-text-color);
+}
+
+.flex-checkout-review-order-table > .checkout-box.d-flex p.fw-bold {
+    font-size: 16px;
+    color: #333;
+}
+
+.flex-checkout-review-order-table > .checkout-box.d-flex p:last-child {
+    font-size: 22px;
+    font-weight: 700;
+    color: #4a1523;
+    margin: 0;
+}
+
+.carrinho-link {
+  text-align: center;
+  color: var(--checkout-box-text-color);
+}
+
+/* ==========================================================================
+   Métodos de Pagamento e Botão Finalizar
+   ========================================================================== */
+#payment {
+    background: transparent !important;
+    border-radius: 0;
+}
+
+#payment ul.payment_methods {
+    border-bottom: 1px solid #eaeaea;
+    padding: 0 0 20px 0;
+    margin: 20px 0;
+}
+
+#payment ul.payment_methods li {
+    background: var(--checkout-box-bg-3);
+    border: var(--checkout-box-border);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+    color: var(--checkout-box-color);
+}
+
+#payment ul.payment_methods li:hover {
+    border-color: var(--checkout-box-title-color);
+}
+
+/* Botão de Finalizar Compra */
+#payment .place-order {
+    padding: 20px 0 0 0;
+    background: transparent;
+}
+
+#payment .place-order .button {
+    width: 100%;
+    background-color: #4a1523;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 18px 20px;
+    border-radius: 8px;
+    border: none;
+    text-transform: none;
+    transition: all 0.3s ease;
+}
+
+#payment .place-order .button:hover {
+    background-color: #360f19;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(74, 21, 35, 0.2);
+}
+.woocommerce-terms-and-conditions-wrapper label.checkbox {
+  color: var(--checkout-box-text-color);
+  cursor: pointer;
+}
 /* DETALHES DE COBRANÇA */
 #customer_details label {
   display: block;
 }
 .woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper {
     display: none;
+    row-gap: 12px;
 }
 .woocommerce-billing-fields__field-wrapper input.input-text {
-    border: 1px solid #ddd;
+    border: var(--text-input-border);
     border-radius: 4px;
     padding: 12px;
     font-size: 14px;
     transition: border-color 0.3s ease;
-    background-color: #fff;
+    background-color: var(--text-input-bg);
+    color: var(--text-input-color);
   width: 100%;
 }
 
 .woocommerce-billing-fields__field-wrapper input.input-text:focus {
-    border-color: #701c1c; /* Cor do seu tema */
+    border-color: var(--text-input-border); /* Cor do seu tema */
     outline: none;
 }
 
 /* Container de Resumo */
 #billing-summary-section {
   display: none;
-    background: #f9f9f9;
-    border: 1px solid #e0e0e0;
+    background: var(--checkout-box-bg-2);
+    border: var(--checkout-box-border);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
@@ -56,7 +311,8 @@
       background: none;
     border-radius: .4rem;
     padding: 1px 10px;
-    border: 1px solid var(--aer-bg-dark);
+    border: 1px solid var(--checkout-box-text-color);
+    color: var(--checkout-box-text-color);
     font-size: .75rem;
     display: flex;
     align-items: center;
@@ -74,7 +330,7 @@
 .summary-content p {
     margin: 5px 0;
     font-size: .875rem;
-    color: #555;
+    color: var(--checkout-box-text-color );
 }
 .summary-content p.summary-name{
   font-size: 1rem;
@@ -90,8 +346,8 @@
 }
 /* Estilo para o campo com erro */
 .input-error {
-    border-color: #e3342f !important;
-    background-color: #fff5f5 !important;
+    border: var(--checkout-input-text-error-border) !important;
+    background-color: var(--checkout-input-text-error-bg) !important;
 }
 
 .cpf-error-message {
@@ -116,11 +372,7 @@
 .woocommerce-form-coupon-toggle {
   display: none;
 }
-.checkout-pagamento .checkout-pagamento-inner {
-  padding: 15px;
-  border-radius: var(--aer-radius);
-  border: 3px solid var(--aer-accent);
-}
+
 .checkout-box {
   padding: 10px 0;
 }
@@ -133,9 +385,12 @@
   + .single-excursao {
   margin-top: 8px;
 }
-.flex-checkout-review-order-table .checkout-box .valor-cupom {
-  color: #3e793e;
+.checkout-box.cupom {
+  color: var(--checkout-coupon-color);
   font-weight: 600;
+}
+.checkout-box.cupom .valor-cupom a{
+  display: none;
 }
 .flex-checkout-review-order-table .checkout-box.cupom .title {
   text-align: center;
@@ -163,23 +418,13 @@
   text-transform: uppercase;
   letter-spacing: 0.075rem;
 }
-.flex-checkout-review-order-table .single-excursao .detalhes {
-  padding: 8px 16px;
-  font-size: 0.85rem;
-}
 .flex-checkout-review-order-table .single-excursao .detalhes p {
   margin-bottom: 0px;
 }
 .flex-checkout-review-order-table .single-excursao .nome-passageiro {
   margin-bottom: 2px;
 }
-.flex-checkout-review-order-table .passageiros {
-  background-color: #ececec;
-  padding: 10px 16px;
-}
-.flex-checkout-review-order-table .passageiros li + li {
-  margin-top: 12px;
-}
+
 .flex-checkout-review-order-table .passageiros > p {
   text-transform: uppercase;
   font-size: 0.825rem;
@@ -195,7 +440,7 @@
 .flex-checkout-review-order-table .pax-info-flex > p {
   flex-basis: 50%;
   margin-bottom: 0px;
-  font-size: 0.775rem;
+  font-size: 0.7rem;
 }
 .checkout-pagamento table {
   width: 100%;
@@ -229,6 +474,15 @@ form.woocommerce-checkout #customer_details label {
 }
 .woocommerce-billing-fields__field-wrapper p {
   margin-bottom: 2px;
+}
+.woocommerce-billing-fields__field-wrapper p label{
+  color: var(--checkout-box-color);
+}
+#page-thankyou.completed .detalhes-gateway{
+  order: 2;
+}
+#page-thankyou.completed .detalhes-pedido{
+  order: 3;
 }
 .woocommerce-order .detalhes-pedido p {
   color: #161616;
@@ -268,6 +522,9 @@ form.woocommerce-checkout #customer_details label {
 #payment .woocommerce-terms-and-conditions-wrapper a {
   font-weight: 600;
 }
+#payment .woocommerce-terms-and-conditions-wrapper a:hover{
+  text-decoration: underline;
+}
 #order_review tfoot {
   font-size: 0.9rem;
 }
@@ -297,6 +554,7 @@ form.woocommerce-checkout #customer_details label {
     color: #2d3748;
     text-decoration: none;
 }
+
 @media (max-width: 576px) {
   .flex-checkout-review-order-table .single-excursao .detalhes {
     font-size: 0.8rem;
@@ -317,3 +575,14 @@ form.woocommerce-checkout #customer_details label {
 }
 
 
+@media (min-width: 577px) {
+  .reserva-header{
+      margin: 32px 0;
+}
+}
+
+@media(min-width: 768px) {
+  .woocommerce-order .detalhes-gateway, .woocommerce-order .detalhes-pedido{
+  order: unset;
+}
+}

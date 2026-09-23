@@ -2,7 +2,8 @@
 <?php if (have_posts()) : while (have_posts()) : the_post(); 
 
 
-$exceptions = array('Carrinho de reservas');
+$exceptions = array();
+// $exceptions = array('Carrinho de reservas', 'Pagamento');
 
 //verificar se o título dessa página está na lista de exceções
 $is_exception = in_array(get_the_title(), $exceptions);

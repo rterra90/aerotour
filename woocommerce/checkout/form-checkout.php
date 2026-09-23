@@ -20,7 +20,6 @@ if (!defined('ABSPATH')) {
 	exit();
 }
 
-do_action('woocommerce_before_checkout_form', $checkout);
 
 // If checkout registration is disabled and not logged in, the user cannot checkout.
 if (
@@ -36,31 +35,30 @@ if (
 	);
 	return;
 }
-?>
 
-<form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url(
-																																										wc_get_checkout_url()
-																																									); ?>" enctype="multipart/form-data" aria-label="<?php echo esc_attr__(
-																																																																			'Checkout',
-																																																																			'woocommerce'
-																																																																		); ?>">
+?>
+<section id="checkout-page">
+<h1 class="text-center mt-2"><?php the_title(); // obter o nome da página dinamicamente ?></h1>
+<?php
+do_action('woocommerce_before_checkout_form', $checkout);
+
+?>
+<form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data" aria-label="<?php echo esc_attr__('Checkout', 'woocommerce'); ?>">
 
 	<?php if ($checkout->get_checkout_fields()): ?>
 
 		<?php do_action('woocommerce_checkout_before_customer_details'); ?>
 		<div class="row justify-content-between">
-			<div class="col-sm-6 col-md-7 p-3" id="customer_details">
-				<div class="row">
-					<div>
-						<?php do_action('woocommerce_checkout_billing'); ?>
-					</div>
-
-					<!-- <div class="col-6">
-				<?php
-				//do_action( 'woocommerce_checkout_shipping' );
-				?>
-			</div> -->
+			<div class="col-sm-6 col-md-7 px-3" id="customer_details">
+			
+				<div class="customer-details-inner">
+					<?php do_action('woocommerce_checkout_billing'); ?>
 				</div>
+
+				<!-- Observações do pedido desabilitadas -->
+				<?php // do_action( 'woocommerce_checkout_shipping' ); ?>
+
+		
 			</div>
 			<?php do_action('woocommerce_checkout_after_customer_details'); ?>
 
@@ -69,7 +67,7 @@ if (
 		<?php do_action('woocommerce_checkout_before_order_review_heading'); ?>
 		<div class="checkout-pagamento col-sm-6 col-md-5 p-3">
 			<div class="checkout-pagamento-inner">
-				<h2 id="order_review_heading" class="bg-title mx-auto mb-3">Confira seu pedido</h2>
+				<h2 id="order_review_heading" class="mx-auto mb-3">Confira seu pedido</h2>
 				<?php do_action('woocommerce_checkout_before_order_review'); ?>
 				<div id="order_review" class="woocommerce-checkout-review-order">
 					<?php do_action('woocommerce_checkout_order_review'); ?>
@@ -84,10 +82,9 @@ if (
 </form>
 
 <?php do_action('woocommerce_after_checkout_form', $checkout); ?>
+</section>
 
 <script>
-	const formCheckoutTitle = document.querySelector('#customer_details h3');
-	formCheckoutTitle.classList.add('bg-title');
 
 	// Adiciona listeners para aplicação de máscaras ao digitar nos inputs de doc, telefone e data
 	function setupInputListeners() {

@@ -9,21 +9,24 @@ defined( 'ABSPATH' ) || exit;
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 			$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 			$passageiros = array_filter(json_decode(str_replace('\"', '"', $cart_item['passageiros'])), function($item) {if($item !== false) return $item;});
+			$data_evento = esc_html($_product->get_attribute('dia'));
+			$data_iso = $data_iso = date('Y-m-d', strtotime(str_replace('/', '-', $data_evento)));
+	
+			$embarque_dia_anterior = !empty($cart_item['embarque_dia_anterior']) ? $cart_item['embarque_dia_anterior'] : false;
+			$data_embarque = !empty($embarque_dia_anterior) ?esc_html(date('d/m/Y', strtotime($data_iso . ' -1 day'))) : esc_html($_product->get_attribute('dia'));
 
-  		$aer_embarques = get_option('aer_embarques');
-			foreach($aer_embarques as $embarque){
-				if($embarque['nome'] === $cart_item['embarque']) $endereco_embarque = $embarque['endereco'];
-			};
+			$endereco_embarque = 'Endereço do embarque';
 			
 			if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
 				?>
 					<div class="single-excursao checkout-box">
-						<p class="exc-name mb-0"><?php echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', substr($_product->get_name(), 0, -13), $cart_item, $cart_item_key ) ); ?>
+						<p class="exc-name checkout-box-title mb-0"><?php echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', substr($_product->get_name(), 0, -13), $cart_item, $cart_item_key ) ); ?>
 						<?php echo wc_get_formatted_cart_item_data( $cart_item ); ?></p>
-						<div class="detalhes">
-							<p>Data: <?= $_product->get_attribute('dia') ?></p>
-							<p>Embarque: <?php print_r(get_embarque_by_id($cart_item['embarque'], 'nome')); ?> &nbsp; <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?= $endereco_embarque; ?>"></i></p>
-							<p>Horário: <?= $cart_item['horario'] ?></p>
+						<div class="detalhes mb-3">
+							<p><strong>Data do evento:</strong> <?= $data_evento; ?></p>
+							<p><strong>Data do embarque:</strong> <?= $data_embarque; ?></p>
+							<p><strong>Embarque:</strong> <?php print_r(get_embarque_by_id($cart_item['embarque'], 'nome')); ?> &nbsp; </p>
+							<p><strong>Horário:</strong> <?= $cart_item['horario'] ?></p>
 						</div>
 						<div class="passageiros">
 							<p>Reserva para <?= sizeof($passageiros) ?> <?= sizeof($passageiros) > 1 ? 'passageiros' : 'passageiro'; ?></p>
@@ -31,7 +34,7 @@ defined( 'ABSPATH' ) || exit;
 								<?php
 									foreach($passageiros as $passageiro){
 										?>
-										<li class="d-flex gap-2">
+										<li class="d-flex gap-2 checkout-single-pax">
 											<div>
 												<svg xmlns="http://www.w3.org/2000/svg" width="12.211" height="8.141" viewBox="0 0 12.211 8.141">
 													<path id="Icon_awesome-ticket-alt" data-name="Icon awesome-ticket-alt" d="M2.714,6.535H9.5v4.07H2.714Zm8.48,2.035a1.018,1.018,0,0,0,1.018,1.018v2.035a1.018,1.018,0,0,1-1.018,1.018H1.018A1.018,1.018,0,0,1,0,11.623V9.588A1.018,1.018,0,0,0,1.018,8.57,1.018,1.018,0,0,0,0,7.553V5.518A1.018,1.018,0,0,1,1.018,4.5H11.193a1.018,1.018,0,0,1,1.018,1.018V7.553A1.018,1.018,0,0,0,11.193,8.57Zm-1.018-2.2a.509.509,0,0,0-.509-.509H2.544a.509.509,0,0,0-.509.509v4.409a.509.509,0,0,0,.509.509H9.667a.509.509,0,0,0,.509-.509Z" transform="translate(0 -4.5)" fill="#707070"/>
@@ -65,7 +68,7 @@ defined( 'ABSPATH' ) || exit;
 		if(sizeof(WC()->cart->get_coupons()) > 0){
 			foreach ( WC()->cart->get_coupons() as $code => $coupon ) : ?>
 				<div class="checkout-box cupom mt-3 coupon-<?php echo esc_attr( sanitize_title( $code ) ); ?>">
-					<p class="title">Cupom aplicado</p>
+					<p class="checkout-box-title coupon-box-title">Cupom aplicado</p>
 					<div class="d-flex justify-content-between px-3">
 						<p class="mb-1"><?= strtoupper($code); ?></p>
 						<p class="mb-1 valor-cupom"><?php wc_cart_totals_coupon_html( $coupon ); ?></p>
@@ -75,10 +78,10 @@ defined( 'ABSPATH' ) || exit;
 		}
 	?>
 
-	<p class="text-center my-2" style="font-size: .725rem; opacity: .85">Precisa alterar algo? Vá para o <a class="fw-bold" href="<?= wc_get_cart_url(); ?>">carrinho.</a></p>
+	<p class="carrinho-link text-center my-2" style="font-size: .725rem; opacity: .85">Precisa alterar algo? Vá para o <a class="fw-bold" href="<?= wc_get_cart_url(); ?>">carrinho.</a></p>
 
 	<!-- Total -->
-	<div class="checkout-box d-flex justify-content-between mt-3 px-3">
+	<div class="checkout-box checkout-price mt-3 px-3">
 		<p class="mb-1 fw-bold">TOTAL</p>
 		<p class="mb-1"><?php wc_cart_totals_order_total_html(); ?></p>
 	</div>

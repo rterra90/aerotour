@@ -36,7 +36,6 @@ Description: Tema criado para o site da Aerotour Caravanas
 }
 body.theme-dark{
   --main-bg: #111111;
-  /* --main-bg: #110404; */
   --text-color-1: #f9f9f9;
   --text-color-2: #b6b6b6;
   --text-invert-color-1: #111111;
@@ -44,9 +43,7 @@ body.theme-dark{
   --box-bg-1: #1a1a1a;
   --box-bg-2: #222222;
   --theme-color-text: #f9f9f9;
-  --text-input-border: 1px solid #555;
-  --text-input-color: #f9f9f9;
-  --text-input-bg: #222;
+
   /* variáveis de mensagens do WooCommerce para tema escuro */
   --wc-message-bg: #1a1a1a;
   --wc-message-text: #f9f9f9;
@@ -58,7 +55,14 @@ body.theme-dark{
   --wc-error-message-text: #f9f9f9;
   --wc-error-message-border: 5px solid #dc2626;
 
-
+  /* INPUTS */
+  --text-input-border: 1px solid #555;
+  --text-input-color: #f9f9f9;
+  --text-input-bg: #222;
+  --checkbox-bg: #222;
+  /* adicionar estilos dark para checkbox, inclusive para o estado checked */
+  --checkbox-checked-bg: #adadad;
+  --checkbox-border: 1px solid #555;
 }
 .aer-bg-light,
 .aer-box {
@@ -89,16 +93,51 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
-body.theme-dark{
-  background-color: #111111;
-  --page-title-color: #f9f9f9;
-}
 #mainContent{
   background-color: var(--main-bg)
 }
+
+/* ESTILOS GLOBAIS PARA INPUTS */
 input[type="text"], input[type="number"] {
 font-variant-numeric: lining-nums tabular-nums;
     font-feature-settings: "lnum", "tnum";
+}
+/* body.theme-dark input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+        width: 15px;
+    height: 15px;
+    border-radius: .2rem;
+    background-color: var(--checkbox-bg);
+    border: var(--checkbox-border);
+    cursor: pointer;
+    outline: none;
+      position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+body.theme-dark input[type="checkbox"]:checked {
+  background-color: var(--checkbox-checked-bg);
+}
+/* Criando o símbolo de check com ::after */
+body.theme-dark input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--aer-accent);
+  border-width: 0 3px 3px 0;
+  /* Esconde por padrão */
+  display: none;
+  border-radius: .04rem;
+}
+
+/* Mostra o check apenas quando estiver marcado */
+body.theme-dark input[type="checkbox"]:checked::after {
+  display: block;
 }
 /* Accent color */
 .accent-color-text{
@@ -106,7 +145,7 @@ font-variant-numeric: lining-nums tabular-nums;
 }
 .accent-color-bg{
   background-color: var(--aer-accent);
-}
+} */
 /* Footer background image */
 footer#aer-footer{
   background-image:url('./assets/images/header-banner.webp')
@@ -423,12 +462,6 @@ form#searchform input#s::after {
   border-radius: 19px;
   left: 0;
   background-color: tomato;
-}
-/* Checkout e carrinho */
-.checkout-box {
-  background-color: #e1e1e1;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 6px #00000065;
 }
 
 /* Ponto de venda */

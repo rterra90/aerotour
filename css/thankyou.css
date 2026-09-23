@@ -1,4 +1,7 @@
 
+#page-thankyou .checkout-progress-bar{
+  margin-bottom: 0px;
+}
 .progress {
   margin-bottom: 20px;
   background-color: rgb(201, 201, 201) !important;
@@ -164,9 +167,6 @@
 }
 
 @media (max-width: 768px) {
-  .woocommerce-order {
-    gap: 15px;
-  }
   #pagamentoSucesso .h4 {
     font-size: 1.2rem;
   }
@@ -178,12 +178,13 @@
   }
 }
 
-#page-thankyou .mp-details-title, #page-thankyou h2.thankyou-title {
-  margin: 0 0 32px 0;
-  text-align: center;
+#page-thankyou .mp-details-title, #page-thankyou h1.thankyou-title {
+  text-align: center!important;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 @media(max-width: 576px){
-  #page-thankyou .mp-details-title, #page-thankyou h2.thankyou-title {
+  #page-thankyou .mp-details-title, #page-thankyou h1.thankyou-title {
     font-size: 1.075rem!important;
     margin-bottom: 6px!important;
     font-weight: 600;

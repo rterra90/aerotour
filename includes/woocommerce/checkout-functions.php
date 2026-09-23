@@ -28,6 +28,35 @@ function custom_override_checkout_fields($fields)
   return $fields;
 }
 
+add_action( 'woocommerce_before_checkout_form', 'aerotour_custom_checkout_progress_header', 5 );
+function aerotour_custom_checkout_progress_header($order_id) {
+        ?>
+    <div class="checkout-header reserva-header">
+        <?php get_template_part( 'includes/reserva-progress-bar', null, array( 'step' => 3 ) ); ?>
+    </div>
+    <?php
+}
+
+add_action( 'woocommerce_before_thankyou', 'aerotour_custom_thankyou_progress_header', 5 );
+function aerotour_custom_thankyou_progress_header($order_id) {
+        // 1. Verifica se o ID do pedido existe para evitar erros
+    if ( ! $order_id ) return;
+
+    // 2. Obtém o objeto $order completo
+    $order = wc_get_order( $order_id );
+    $order_status = $order->get_status();
+
+        ?>
+    <div class="checkout-header reserva-header">
+        <?php get_template_part( 'includes/reserva-progress-bar', null, array( 'step' => 4, 'order_status' => $order_status ) ); ?>
+    </div>
+    <?php
+}
+
+
+
+
+
 // Accordion métodos de pagamento em payment.php
 // add_action('woocommerce_review_order_after_payment', 'accordion_formas_pagamento');
 function accordion_formas_pagamento()

@@ -12,7 +12,7 @@ function aerotour_custom_cart_progress_header() {
         <!-- Barra de Progresso (Stepper) -->
         <?php
         // Inclui a barra de progresso do checkout
-        get_template_part( 'includes/features/leads/reserva-progress-bar', null, array( 'step' => 2 ) );
+        get_template_part( 'includes/reserva-progress-bar', null, array( 'step' => 2 ) );
         ?>
 
         <!-- Banner Informativo -->
