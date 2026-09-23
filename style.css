@@ -56,14 +56,7 @@ body.theme-dark{
   --wc-error-message-border: 5px solid #dc2626;
   --page-title-color: #c3c3c3;
 
-  /* INPUTS */
-  --text-input-border: 1px solid #555;
-  --text-input-color: #f9f9f9;
-  --text-input-bg: #222;
-  --checkbox-bg: #222;
-  /* adicionar estilos dark para checkbox, inclusive para o estado checked */
-  --checkbox-checked-bg: #adadad;
-  --checkbox-border: 1px solid #555;
+
 }
 .aer-bg-light,
 .aer-box {

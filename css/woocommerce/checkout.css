@@ -32,7 +32,14 @@ body.theme-dark-x{
   --checkout-input-text-error-bg: #3b2828;
   --checkout-input-text-error-border: 1px solid #89504f;
 
-
+  /* INPUTS */
+  --text-input-border: 1px solid #555;
+  --text-input-color: #f9f9f9;
+  --text-input-bg: #222;
+  --checkbox-bg: #222;
+  /* adicionar estilos dark para checkbox, inclusive para o estado checked */
+  --checkbox-checked-bg: #adadad;
+  --checkbox-border: 1px solid #555;
 
 
 }
