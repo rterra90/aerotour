@@ -139,7 +139,7 @@ class Single_Product_Template
 
       <!-- abrir modal de ingressos botão -->
       <div class="value">
-        <?php if(true): ?>
+        <?php if(false): ?>
           <a class="ingressos-link" aria-label="Link para venda de ingressos" data-bs-toggle="modal" data-bs-target="#ingressosModal" data-bs-backdrop="static" >
             Ver opções
           </a>
