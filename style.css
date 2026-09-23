@@ -31,7 +31,7 @@ Description: Tema criado para o site da Aerotour Caravanas
   --wc-error-message-bg: #fef2f2;
   --wc-error-message-text: #b91c1c;
   --wc-error-message-border: 5px solid #dc2626;
-  /* --page-title-color: #0c0c0c; */
+  --page-title-color: #0c0c0c;
 
 }
 body.theme-dark{
@@ -54,6 +54,7 @@ body.theme-dark{
   --wc-error-message-bg: #1a1a1a;
   --wc-error-message-text: #f9f9f9;
   --wc-error-message-border: 5px solid #dc2626;
+  --page-title-color: #c3c3c3;
 
   /* INPUTS */
   --text-input-border: 1px solid #555;
