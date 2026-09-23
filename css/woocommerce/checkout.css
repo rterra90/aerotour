@@ -448,6 +448,7 @@ body.theme-dark-x{
   flex-basis: 50%;
   margin-bottom: 0px;
   font-size: 0.7rem;
+  white-space: nowrap;
 }
 .checkout-pagamento table {
   width: 100%;
