@@ -114,25 +114,24 @@ body.theme-dark input[type="checkbox"]:checked {
   background-color: var(--checkbox-checked-bg);
 }
 /* Criando o símbolo de check com ::after */
-body.theme-dark input[type="checkbox"]::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  top: 0px;
-  width: 5px;
-  height: 10px;
-  border: solid var(--aer-accent);
-  border-width: 0 3px 3px 0;
-  /* Esconde por padrão */
-  display: none;
-  border-radius: .04rem;
-}
+  /* body.theme-dark input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--aer-accent);
+    border-width: 0 3px 3px 0;
+    display: none;
+    border-radius: .04rem;
+  } */
 
 /* Mostra o check apenas quando estiver marcado */
-body.theme-dark input[type="checkbox"]:checked::after {
+/* body.theme-dark input[type="checkbox"]:checked::after {
   display: block;
-}
+} */
 /* Accent color */
 .accent-color-text{
   color: var(--aer-accent);
