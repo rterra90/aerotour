@@ -187,6 +187,13 @@ ul.main-embarques-list > li[data-status='inativo'] > .emb-item-body {
 .emb-item-body .opcoes .dashicons:hover {
   opacity: 0.9;
 }
+.emb-item-body .excursao-date-toggle[data-status="dia-anterior"] {
+  color: #d67718;
+  opacity: 1;
+}
+.emb-item-body .excursao-date-toggle:hover {
+  opacity: 0.9;
+}
 .emb-item-body .add-horario-btn {
   cursor: pointer;
   font-size: 0.65rem;

@@ -6,10 +6,12 @@ function painel_exc_embarques()
     global $post;
     global $wpdb;
 
+    // Obtém o produto atual
     $product = wc_get_product($post->ID);
-    if (!$product) {
-        return;
-    }
+
+    // Retorna se o produto não for válido
+    if (!$product) return;
+
 
     $nome_tabela = $wpdb->prefix . 'embarques';
     $embarques_db = $wpdb->get_results("SELECT * from $nome_tabela");
@@ -64,23 +66,10 @@ function painel_exc_embarques()
                     }
                 }
 
-                // if ($found_index === -1) {
-                //     $ui_data[$emb_id]['horarios'][] = [
-                //         'horario'         => $hora,
-                //         // 'disponibilidade' => [ $v_id => $h['disponivel'] ],
-                //         'status' => isset($h['status']) ? [ $v_id => $h['status'] ] : []
-                //     ];
-                // } else {
-                //     if(!isset($ui_data[$emb_id]['horarios'][$found_index]['status'])) {
-                //         $ui_data[$emb_id]['horarios'][$found_index]['status'] = [];
-                //     }else{
-                //     $ui_data[$emb_id]['horarios'][$found_index]['status'][$v_id] = 'disponivel';
-
-                //     }
-                // }
                 if ($found_index === -1) {
                     $ui_data[$emb_id]['horarios'][] = [
                         'horario' => $hora,
+                        'diaAnterior' => isset($h['diaAnterior']) ? filter_var($h['diaAnterior'], FILTER_VALIDATE_BOOLEAN) : false,
                         'status'  => isset($h['status']) ? [ $v_id => $h['status'] ] : []
                     ];
                 } else {
@@ -100,8 +89,6 @@ function painel_exc_embarques()
             }
         }
 
-        // print_r($ui_data);
-
     }
     ?>
     <div class="panel woocommerce_options_panel wc_metaboxes_wrapper hidden px-4" id="exc_embarques_meta">
@@ -114,7 +101,6 @@ function painel_exc_embarques()
                 <button>Definir</button>
             </dialog>
 
-            
             <p>Selecione os embarques da excursão</p>
             <div class="main-embarques-header">
                 <div id="padraoSelector">
@@ -155,6 +141,7 @@ function painel_exc_embarques()
                     $is_ativo = $has_meta ? 'ativo' : 'inativo';
                     $taxa_val = $has_meta ? $ui_data[$embarque_db->id]['taxa'] : 0;
                     $horarios_salvos = $has_meta ? $ui_data[$embarque_db->id]['horarios'] : [];
+                    print_r($ui_data[$embarque_db->id]);
                     ?>
                     <li data-embarque-id="<?= esc_attr($embarque_db->id) ?>" data-status="<?= esc_attr($is_ativo) ?>" data-endereco="<?= esc_attr($embarque_db->endereco) ?>" data-referencia="<?= esc_attr($embarque_db->obs) ?>">
                         <div class="emb-item-head">
@@ -172,16 +159,14 @@ function painel_exc_embarques()
                                     $horariosIndex = 1;
                                     foreach ($horarios_salvos as $h_info) { 
                                         $current_hora = $h_info['horario'];
+                                        $dia_anterior = isset($h_info['diaAnterior']) ? filter_var($h_info['diaAnterior'], FILTER_VALIDATE_BOOLEAN) : false;
                                         ?>
                                         <li data-order="<?= $horariosIndex ?>">
                                             <div class="horario">
                                                 <input type="time" data-order="<?= $horariosIndex ?>" value="<?= esc_attr($current_hora) ?>" onchange="salvaEmbarques()">
                                             </div>
 
-                                            
-
                                                 <?php
-
                                                 foreach ($variacoes_list as $v) :
                                                     ?>
                                                     <div class="disponibilidade" 
@@ -219,16 +204,23 @@ function painel_exc_embarques()
                                                             
                                                             <input type="hidden" class="disp-status-input" value="<?= esc_attr($current_status); ?>">
                                                         </div>
-                                                        <?php
-                                                        endforeach; 
-                                                    ?>
+                                                    <?php
+                                                endforeach; 
+                                                
+                                                // print_r($h_info);
+                                                ?>
 
 
-                                            <div class="opcoes">
-                                                <?php if ($horariosIndex > 1) { ?> 
-                                                    <span onclick="excluirHorario(this.dataset.embarqueId, this.dataset.order)" class="dashicons dashicons-trash" data-embarque-id="<?= esc_attr($embarque_db->id) ?>" data-order="<?= $horariosIndex ?>"></span>
-                                                <?php } ?>
-                                            </div>
+                                                <div class="opcoes">
+
+                                                    <!-- ícone mesmo dia / dia anterior -->
+                                                    <span class="excursao-date-toggle dashicons dashicons-calendar" data-status="<?= esc_attr($dia_anterior ? 'dia-anterior' : 'mesmo-dia') ?>" data-embarque-id="<?= esc_attr($embarque_db->id) ?>" data-order="<?= $horariosIndex ?>" data-order="<?= $horariosIndex ?>" onclick="toggleEmbarqueDate(this)"></span>
+
+
+                                                    <?php if ($horariosIndex > 1) { ?> 
+                                                        <span onclick="excluirHorario(this.dataset.embarqueId, this.dataset.order)" class="dashicons dashicons-trash" data-embarque-id="<?= esc_attr($embarque_db->id) ?>" data-order="<?= $horariosIndex ?>"></span>
+                                                    <?php } ?>
+                                                </div>
                                         </li>
                                         <?php 
                                         $horariosIndex++;
@@ -407,6 +399,16 @@ function painel_exc_embarques()
                     spanExcluir.dataset.order = order;
                     spanExcluir.dataset.embarqueId = _embId;
                     spanExcluir.addEventListener('click', () => excluirHorario(_embId, order));
+
+                    //incluir o botão de alternância de data do embarque
+                    let spanToggleDate = document.createElement('span');
+                    spanToggleDate.classList.add("dashicons", "dashicons-calendar");
+                    spanToggleDate.dataset.order = order;
+                    spanToggleDate.dataset.embarqueId = _embId;
+                    spanToggleDate.addEventListener('click', () => toggleEmbarqueDate(spanToggleDate));
+                    opcoesDiv.appendChild(spanToggleDate);
+                    // Define o status inicial da data do embarque como "mesmo-dia"
+                    spanToggleDate.setAttribute('data-status', 'mesmo-dia');
                     
                     opcoesDiv.appendChild(spanExcluir);
                     listaHorariosRef.appendChild(cloneLi);
@@ -454,6 +456,7 @@ function painel_exc_embarques()
                         const taxaCheckbox = _emb.querySelector('.switch.taxa input[type="checkbox"]');
                         const taxaInput = _emb.querySelector('.switch.taxa input[type="number"]');
                         const taxaVal = (taxaCheckbox && taxaCheckbox.checked) ? +taxaInput.value : 0;
+                        const diaAnteriorBtn = _emb.querySelector('.excursao-date-toggle');
 
                         _emb.querySelectorAll('ul.lista-horarios > li').forEach(horarioLi => {
                             const inputHora = horarioLi.querySelector('input[type="time"]');
@@ -487,7 +490,8 @@ function painel_exc_embarques()
                                     embConfig.horarios.push({
                                         horario: horaStr,
                                         status: statusVal,                       // Novo: 'disponivel', 'esgotado' ou 'indisponivel'
-                                        disponivel: (statusVal === 'disponivel') // Fallback retrocompatível (true/false)
+                                        disponivel: (statusVal === 'disponivel'), // Fallback retrocompatível (true/false)
+                                        diaAnterior: diaAnteriorBtn.dataset.status === 'dia-anterior' ? true : false,
                                     });
                                 });
                             }
@@ -536,6 +540,16 @@ function painel_exc_embarques()
                     // Dispara o salvamento
                     salvaEmbarques();
                 });
+
+                // Alterna entre "mesmo-dia" e "dia-anterior" para o horário do embarque
+                function toggleEmbarqueDate(element) {
+                    const currentStatus = element.getAttribute('data-status');
+                    const newStatus = currentStatus === 'mesmo-dia' ? 'dia-anterior' : 'mesmo-dia';
+                    element.setAttribute('data-status', newStatus);
+
+                    // chamar a função salvaEmbarques, que deve configurar a chave "diaAnterior" no objeto de configuração do horário de acordo com a opção escolhida
+                    salvaEmbarques();
+                }
             </script>   
         </div>
         
