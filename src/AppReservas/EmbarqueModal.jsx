@@ -12,10 +12,8 @@ const EmbarquesModal = ({
   variacoesSelecionadas,
   setPrecoUnitario,
   setTaxa,
-  estadoDestino,
-  cidadesDiaAnterior,
   horario,
-  getDateByVarId
+  getDateByVarId,
 }) => {
   const [visible, setVisible] = React.useState(false);
   const [preEmbarque, setPreEmbarque] = React.useState([]);
@@ -28,7 +26,7 @@ const EmbarquesModal = ({
   const embarqueForm = React.useRef();
   const priceContainerRef = React.useRef();
   const saveBtnRef = React.useRef();
-
+// console.log(embarquesVariacoes);
   function closeEmbarqueModal(_save) {
     if (_save && preEmbarque.length > 0) {
       // O ID agora vem direto do objeto detalhe
@@ -131,6 +129,8 @@ const EmbarquesModal = ({
 
         const embVar = varData.variation_embarques.find(e => e.embarque_id == embId);
         let hasAvailable = false;
+        
+        // console.log(embVar);
 
         if (embVar) {
           taxaEmb = embVar.taxa || 0; // Atualiza a taxa com base no objeto de variação
@@ -143,7 +143,7 @@ const EmbarquesModal = ({
 
               // evita duplicatas de horários ao inserir em _horariosDisp
               if(!_horariosDisp.some(existing => existing.horario === h.horario)) {
-                _horariosDisp.push({horario: h.horario, status: h.status, dia: varData.variation_dia, varID: varId});
+                _horariosDisp.push({horario: h.horario, status: h.status, dia: varData.variation_dia, varID: varId, dia_anterior: h.diaAnterior});
               }
 
             } else if (h.status === 'indisponivel') {
@@ -371,13 +371,12 @@ const EmbarquesModal = ({
                     {horariosDisponiveis.filter(h => h.status !== 'indisponivel').length === 1 && (
                       <>
                         <h3 className="title">Horário de embarque</h3>
+                        
                         <span className="horario-single d-block text-center">
                           {horariosDisponiveis[0].horario}
                         
                         {/* Exibe badge "do dia anterior" */}
-                        {estadoDestino === 'rj' && 
-                        preEmbarque[0] && 
-                        cidadesDiaAnterior.includes(preEmbarque[0].nome.split(' - ')[0]) ? 
+                        {preEmbarque[0] && horariosDisponiveis[0].dia_anterior ? 
                         <span className="aviso-dia-anterior">do dia anterior</span> : null}
                         </span>
                       </>
@@ -444,9 +443,7 @@ const EmbarquesModal = ({
                                   {isStringArray ? disponiveis[0] : disponiveis[0].horario}
                                   
                                   {/* Exibe badge "do dia anterior" se a lógica for atendida */}
-                                  {estadoDestino === 'rj' && 
-                                  preEmbarque[0] && 
-                                  cidadesDiaAnterior.includes(preEmbarque[0].nome.split(' - ')[0]) ? 
+                                  {preEmbarque[0] && disponiveis[0].dia_anterior ? 
                                   <span className="aviso-dia-anterior ms-2">do dia anterior</span> : null}
                                 </span>
                               )}
@@ -481,7 +478,7 @@ const EmbarquesModal = ({
 
                                             //remove a classe 'selected' de todos os labels que fazem parte do mesmo grupo de data
                                             const allLabels = embarqueForm.current.querySelectorAll(`[name="horario-${_var_id}"]`);
-                                            console.log('allLabels', allLabels);
+                                            // console.log('allLabels', allLabels);
                                             // allLabels.forEach(label => label.classList.remove('selected'));
 
 
@@ -566,8 +563,6 @@ EmbarquesModal.propTypes = {
   getDateByVarId: PropTypes.func.isRequired,
   setPrecoUnitario: PropTypes.func.isRequired,
   setTaxa: PropTypes.func.isRequired,
-  estadoDestino: PropTypes.string.isRequired,
-  cidadesDiaAnterior: PropTypes.array.isRequired,
   horario: PropTypes.string.isRequired,
 
 };

@@ -265,7 +265,8 @@ function ajax_add_variation_to_cart()
         'taxa'                => $taxa, 
         'embarque'            => $embarque_id,
         'horario'             => $horario, // O valor inserido no carrinho agora é apenas a string (ex: "17:00")
-        'passageiros'         => $passageiros_raw, 
+        'passageiros'         => $passageiros_raw,
+        'dia_anterior'        => isset($_POST['dia_anterior']) ? sanitize_text_field($_POST['dia_anterior']) : 'mesmo-dia',
     ];
 
     // 4. Adiciona ao carrinho 

@@ -12,10 +12,62 @@
 #topAdBanner small {
   font-size: 0.575rem;
 }
-#modal-promo-rir .modal-content{
-  opacity: 1
+
+/* DIA ANTERIOR ELEMENTOS */
+.dia-anterior-notice-box {
+    display: flex;
+    align-items: flex-start;
+    background-color: #fffbeb !important; /* Fundo amarelo pastel bem suave */
+    border: 1px solid #fef08a !important; /* Borda sutil amarela */
+    border-left: 5px solid #eab308 !important; /* Destaque lateral no tom dourado da badge */
+    padding: .8rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.06) !important; /* Sombra dourada cirúrgica */
+}
+.dia-anterior-notice-box .dia-anterior-notice-icon {
+    margin-right: 1rem;
+    color: #eab308 !important; /* Dourado */
+    font-size: 1.4rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    padding-top: 2px;
+}
+.dia-anterior-notice-box .dia-anterior-notice-content {
+    font-size: 0.85rem;
+    line-height: 1.2;
+    color: #1e293b !important; /* Azul escuro/grafite legível */
+}
+.dia-anterior-notice-box .dia-anterior-notice-content strong {
+    color: #0f172a !important; /* Destaque do título em quase preto */
+    font-weight: 700;
+    display: block;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    margin-bottom: .2rem
+}
+.dia-anterior-notice-box .dia-anterior-notice-content p {
+    margin: 0 !important;
+} 
+.dia-anterior-notice-box .dia-anterior-notice-content u {
+    font-weight: 600;
+    text-decoration-color: #eab308;
+    text-decoration-thickness: 2px;
+}
+.badge-dia-anterior{
+    color: #212529;
+    background-color: #fff3cd;
+    font-size: .65rem;
+    position: relative;
+    top: -6px;
+    display: block;
+    margin: 4px 0 0px auto;
+    width: fit-content;
 }
 
+/* MODAL DE INGRESSOS */
 #ingressosModal .ingressos-section-title{
   display: block; 
   text-transform: uppercase;
@@ -884,15 +936,6 @@ dl#principaisDuvidasContent .resposta {
   padding: 0 20px 0 20px;
 }
 
-.badge-dia-anterior{
-    color: #212529;
-    background-color: #fff3cd;
-    font-size: .65rem;
-    margin-bottom: 6px;
-    position: relative;
-    top: -6px;
-}
-
 .filtro-scroll {
   display: flex;
   overflow-x: auto;
@@ -1049,6 +1092,9 @@ dl#principaisDuvidasContent .resposta {
   .filtro-btn {
     font-size: 0.75rem;
     padding: 3px 8px;
+  }
+  .badge-dia-anterior{
+    margin: 3px auto 0 0;
   }
 }
 

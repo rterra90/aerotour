@@ -43,7 +43,6 @@ add_action('wp_enqueue_scripts', function () {
     'embarquesDetalhes' => isset($excursao['embarques_detalhes']) ? $excursao['embarques_detalhes'] : null,
     'embarquesVariacao' => isset($excursao['embarques_por_variacao']) ? $excursao['embarques_por_variacao'] : null,
     'productId' => $excursao['id'],
-    'estadoDestino' => has_term('rock-in-rio', 'product_cat', $post->ID) ? 'rj' : 'sp',
     'userData' => $user_id ? [
       'nome_completo'   => $current_user->first_name . ' ' . $current_user->last_name,
       'cpf'             => get_user_meta($user_id, 'cpf', true), // Ajuste a meta_key se for outra

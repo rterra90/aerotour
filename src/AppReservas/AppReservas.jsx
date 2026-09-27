@@ -15,9 +15,9 @@ import {
 } from '../Utilities';
 
 function AppReservas() {
-  const { variacoes, embarquesDetalhes, embarquesVariacao, productId, estadoDestino } = window.singleProductData;
+  const { variacoes, embarquesDetalhes, embarquesVariacao, productId } = window.singleProductData;
   const {ajaxUrl, cartUrl} = window.themeLinks;
-
+// console.log(embarquesVariacao);
   const [availableDates, setAvailableDates] = React.useState([]);
   const [selectedDates, setSelectedDates] = React.useState([]);
   const [variacoesSelecionadas, setVariacoesSelecionadas] = React.useState([]);
@@ -37,14 +37,13 @@ function AppReservas() {
   const [totalCost, setTotalCost] = React.useState('R$ 0,00');
   const [discountCost, setDiscountCost] = React.useState(false);
   const [dataLimiteDesconto, setDataLimiteDesconto] = React.useState([]);
+  const [isDiaAnterior, setIsDiaAnterior] = React.useState('mesmo-dia');
 
   const botaoContinuarRef = React.useRef();
   const dataBoxRef = React.useRef();
   const embarqueBoxRef = React.useRef();
 
   // const totalCost = precoUnitario * passageiros.length * selectedDates.length;
-
-  const cidadesDiaAnterior = ['Campinas', 'Limeira', 'Americana', 'Sumaré', 'Itu', 'Salto', 'Indaiatuba'];
 
   function calculaValorTotal() {
     const total = precoUnitario * passageiros.length * selectedDates.length;
@@ -191,6 +190,7 @@ function AppReservas() {
         horario: submitHorario,
         passageiros: submitPax,
         desconto_antecipado: hasDiscount,
+        dia_anterior: isDiaAnterior,
       }
 
     $.ajax({
@@ -288,11 +288,21 @@ function AppReservas() {
 
   const toggleEmbarque = (idEmbarqueSelecionado, horarioSelecionado) => {
     
+
+// buscar em embarquesVariacao -> variation_embarques a array que contém embarque_id: idEmbarqueSelecionado
+    const embarqueObj = embarquesVariacao[0].variation_embarques.find(_emb => 
+      _emb.embarque_id == idEmbarqueSelecionado);
+
+      const horarioObj = embarqueObj.horarios.find(h => h.horario == horarioSelecionado);
+      const _isDiaAnterior = horarioObj?.diaAnterior || false;
+
     embarquesDetalhes.forEach(embDet => {
       if(embDet.id === idEmbarqueSelecionado){
         setEmbarque([embDet]);
 
         setHorario(horarioSelecionado);
+
+        setIsDiaAnterior(_isDiaAnterior ? 'dia-anterior' : 'mesmo-dia');
         
       }
     })
@@ -471,8 +481,6 @@ function AppReservas() {
                 variacoesSelecionadas={variacoesSelecionadas}
                 setPrecoUnitario={setPrecoUnitario}
                 setTaxa={setTaxa}
-                estadoDestino={estadoDestino}
-                cidadesDiaAnterior={cidadesDiaAnterior}
                 horario={horario}
                 getDateByVarId={getDateByVarId}
               />

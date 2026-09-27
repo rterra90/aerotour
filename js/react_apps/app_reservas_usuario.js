@@ -3844,8 +3844,6 @@
     variacoesSelecionadas,
     setPrecoUnitario,
     setTaxa,
-    estadoDestino,
-    cidadesDiaAnterior,
     horario,
     getDateByVarId
   }) => {
@@ -3941,7 +3939,7 @@
               if (h.status !== "indisponivel") {
                 hasAvailable = true;
                 if (!_horariosDisp.some((existing) => existing.horario === h.horario)) {
-                  _horariosDisp.push({ horario: h.horario, status: h.status, dia: varData.variation_dia, varID: varId });
+                  _horariosDisp.push({ horario: h.horario, status: h.status, dia: varData.variation_dia, varID: varId, dia_anterior: h.diaAnterior });
                 }
               } else if (h.status === "indisponivel") {
               }
@@ -4087,7 +4085,7 @@
                               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "title", children: "Hor\xE1rio de embarque" }),
                               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "horario-single d-block text-center", children: [
                                 horariosDisponiveis[0].horario,
-                                estadoDestino === "rj" && preEmbarque[0] && cidadesDiaAnterior.includes(preEmbarque[0].nome.split(" - ")[0]) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "aviso-dia-anterior", children: "do dia anterior" }) : null
+                                preEmbarque[0] && horariosDisponiveis[0].dia_anterior ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "aviso-dia-anterior", children: "do dia anterior" }) : null
                               ] })
                             ] }),
                             horariosDisponiveis.filter((h) => h.status !== "indisponivel").length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
@@ -4131,7 +4129,7 @@
                                 ] }),
                                 disponiveis.length === 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { className: "horario-single d-block text-center", children: [
                                   isStringArray ? disponiveis[0] : disponiveis[0].horario,
-                                  estadoDestino === "rj" && preEmbarque[0] && cidadesDiaAnterior.includes(preEmbarque[0].nome.split(" - ")[0]) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "aviso-dia-anterior ms-2", children: "do dia anterior" }) : null
+                                  preEmbarque[0] && disponiveis[0].dia_anterior ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "aviso-dia-anterior ms-2", children: "do dia anterior" }) : null
                                 ] }),
                                 disponiveis.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "multi-radios mb-3", children: horariosDaData.map((h, index) => {
                                   const horarioTexto = isStringArray ? h : h.horario;
@@ -4154,7 +4152,6 @@
                                             onChange: (e) => {
                                               const _var_id = e.target.name.split("-")[1];
                                               const allLabels = embarqueForm.current.querySelectorAll(`[name="horario-${_var_id}"]`);
-                                              console.log("allLabels", allLabels);
                                               e.target.parentElement.classList.add("selected");
                                               setPreHorario((prev) => ({
                                                 ...prev,
@@ -4237,8 +4234,6 @@
     getDateByVarId: import_prop_types2.default.func.isRequired,
     setPrecoUnitario: import_prop_types2.default.func.isRequired,
     setTaxa: import_prop_types2.default.func.isRequired,
-    estadoDestino: import_prop_types2.default.string.isRequired,
-    cidadesDiaAnterior: import_prop_types2.default.array.isRequired,
     horario: import_prop_types2.default.string.isRequired
   };
 
@@ -5130,7 +5125,7 @@
   // src/AppReservas/AppReservas.jsx
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   function AppReservas() {
-    const { variacoes, embarquesDetalhes, embarquesVariacao, productId, estadoDestino } = window.singleProductData;
+    const { variacoes, embarquesDetalhes, embarquesVariacao, productId } = window.singleProductData;
     const { ajaxUrl, cartUrl } = window.themeLinks;
     const [availableDates, setAvailableDates] = React.useState([]);
     const [selectedDates, setSelectedDates] = React.useState([]);
@@ -5150,10 +5145,10 @@
     const [totalCost, setTotalCost] = React.useState("R$ 0,00");
     const [discountCost, setDiscountCost] = React.useState(false);
     const [dataLimiteDesconto, setDataLimiteDesconto] = React.useState([]);
+    const [isDiaAnterior, setIsDiaAnterior] = React.useState("mesmo-dia");
     const botaoContinuarRef = React.useRef();
     const dataBoxRef = React.useRef();
     const embarqueBoxRef = React.useRef();
-    const cidadesDiaAnterior = ["Campinas", "Limeira", "Americana", "Sumar\xE9", "Itu", "Salto", "Indaiatuba"];
     function calculaValorTotal() {
       const total = precoUnitario * passageiros.length * selectedDates.length;
       const formatar = (valor) => valor.toLocaleString("pt-BR", {
@@ -5269,7 +5264,8 @@
         embarque: submitEmbarque,
         horario: submitHorario,
         passageiros: submitPax,
-        desconto_antecipado: hasDiscount
+        desconto_antecipado: hasDiscount,
+        dia_anterior: isDiaAnterior
       };
       $.ajax({
         type: "POST",
@@ -5346,10 +5342,14 @@
       }
     };
     const toggleEmbarque = (idEmbarqueSelecionado, horarioSelecionado) => {
+      const embarqueObj = embarquesVariacao[0].variation_embarques.find((_emb) => _emb.embarque_id == idEmbarqueSelecionado);
+      const horarioObj = embarqueObj.horarios.find((h) => h.horario == horarioSelecionado);
+      const _isDiaAnterior = horarioObj?.diaAnterior || false;
       embarquesDetalhes.forEach((embDet) => {
         if (embDet.id === idEmbarqueSelecionado) {
           setEmbarque([embDet]);
           setHorario(horarioSelecionado);
+          setIsDiaAnterior(_isDiaAnterior ? "dia-anterior" : "mesmo-dia");
         }
       });
     };
@@ -5492,8 +5492,6 @@
             variacoesSelecionadas,
             setPrecoUnitario,
             setTaxa,
-            estadoDestino,
-            cidadesDiaAnterior,
             horario,
             getDateByVarId
           }

@@ -21,10 +21,11 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
         $agrupado[$dia]['horarios'][] = [
             'horario' => $item['horario'],
             'disponivel' => $item['disponivel'],
-            'status' => isset($item['status']) ? $item['status'] : 'indisponivel'
+            'status' => isset($item['status']) ? $item['status'] : 'indisponivel',
+            'diaAnterior' => isset($item['diaAnterior']) ? $item['diaAnterior'] : false
         ];
     }
-
+// print_r($agrupado); 
     // Reindexa para retornar um array numérico
     return array_values($agrupado);
 }
@@ -61,7 +62,37 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
       </div>
     </div>
 
-
+<!-- // verificar se alguma array de horários contém diaAnterior definido como true -->
+ <?php
+ $tem_dia_anterior = false;
+ foreach ($embarques_detalhes as $embarque) {
+     foreach ($var_embarque_settings as $emb_var) {
+         foreach ($emb_var['variation_embarques'] as $var_emb) {
+             if ($var_emb['embarque_id'] == $embarque->id) {
+                 foreach ($var_emb['horarios'] as $horario_emb) {
+                     if (isset($horario_emb['diaAnterior']) && $horario_emb['diaAnterior']) {
+                         $tem_dia_anterior = true;
+                         break 4;
+                     }
+                 }
+             }
+         }
+     }
+ }
+ if($tem_dia_anterior) {
+     ?>
+<div class="dia-anterior-notice-box">
+    <div class="dia-anterior-notice-icon">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+    </div>
+    <div class="dia-anterior-notice-content">
+      <strong>Atenção com o horário:</strong>
+      <p>Os embarques se iniciam na <u>noite do dia anterior</u> à data do evento. Verifique atentamente o horário de cada ponto abaixo para não perder o ônibus!</p>
+    </div>
+  </div>
+     <?php
+ }
+ ?>
 
     <div class="lista-embarque" id="listaEmbarque">
       <?php
@@ -128,7 +159,14 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
             <?php
 
             if(count($horarios_unicos) === 1){ // apenas um horário para o embarque
-              echo $horarios_unicos[0] . '</p>';
+
+            // se diaAnterior, adicionar um elemento span após o fechamento do parágrafo
+              
+              if(isset($horarios_do_embarque[0]['diaAnterior']) && $horarios_do_embarque[0]['diaAnterior']){
+                echo $horarios_unicos[0] . '<span class="badge badge-dia-anterior">do dia anterior</span>';
+              }else{
+echo $horarios_unicos[0];
+              }
             } elseif(count($horarios_unicos) > 1 && $horarios_iguais_nos_embarques){ // horários múltiplos iguais em todos os dias
               ?>
               <div class="dia-horarios-area">
@@ -199,14 +237,14 @@ function agruparHorariosPorDia(array $horarios_do_embarque): array
 
                   </div>
                 <?php endif; ?>
-              <?php endforeach;
-              ?>
+                <?php endforeach; ?>
               </div>
               <?php
             }
             ?>
-
             </div>
+
+
             <?php
             if(count($horarios_unicos) === 1 || $horarios_iguais_nos_embarques):
               ?>

@@ -11,7 +11,7 @@ $data_exc = explode(' - ', $product_name);
 $data_exc = end($data_exc); //formato dd/mm/aaaa
 $data_iso = date('Y-m-d', strtotime(str_replace('/', '-', $data_exc)));
 $remove_url = wc_get_cart_remove_url($cart_item_key);
-$embarque_dia_anterior = !empty($cart_item['embarque_dia_anterior']) ? $cart_item['embarque_dia_anterior'] : false;
+$embarque_dia_anterior = !empty($cart_item['dia_anterior']) ? ($cart_item['dia_anterior'] === 'dia-anterior' ? true : false) : false;
 
 $passageiros = !empty($args['passageiros']) ? $args['passageiros'] : 0;
 ?>
