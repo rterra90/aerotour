@@ -166,7 +166,6 @@ class Single_Product_Template
     public static function render_info_tabs($excursao)
     {
         $product_id = $excursao['id'];
-        $is_rir = has_term('rock-in-rio', 'product_cat', $product_id);
         ?>
 
     <section id="informacoes-excursao">
@@ -207,7 +206,7 @@ class Single_Product_Template
         ]);
 
         // TAB EMBARQUES content
-        $tab_embarque_slug = $is_rir ? 'embarques-rir' : 'embarques';
+        $tab_embarque_slug = 'embarques';
         get_template_part(
             'woocommerce/single-product/tab',
             $tab_embarque_slug,
