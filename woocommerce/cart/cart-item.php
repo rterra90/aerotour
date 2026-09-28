@@ -12,10 +12,8 @@ $data_exc = end($data_exc); //formato dd/mm/aaaa
 $data_iso = date('Y-m-d', strtotime(str_replace('/', '-', $data_exc)));
 $remove_url = wc_get_cart_remove_url($cart_item_key);
 $embarque_dia_anterior = !empty($cart_item['dia_anterior']) ? ($cart_item['dia_anterior'] === 'dia-anterior' ? true : false) : false;
-
 $passageiros = !empty($args['passageiros']) ? $args['passageiros'] : 0;
 ?>
-
 
 <div class="cart-item-modern" data-cart-key="<?= esc_attr($cart_item_key) ?>">    
     <!-- Cabeçalho do Card: Título e Botão Fechar -->
@@ -37,22 +35,18 @@ $passageiros = !empty($args['passageiros']) ? $args['passageiros'] : 0;
     <!-- Informações da Excursão -->
     <div class="cart-item-details">
         <div class="detail-row badges-row">
+            <!-- Badge data do evento -->
             <?php if ($data_exc): ?>
                 <span class="detail-badge"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> <span>Data do evento: <?= esc_html($data_exc) ?></span></span>
             <?php endif; ?>
-            
-            <!-- <?php if (!empty($cart_item['horario'])): ?>
-                <span class="detail-badge"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <?= esc_html($cart_item['horario']) ?></span>
-            <?php endif; ?> -->
 
+            <!-- Badge de embarque no dia anterior -->
             <?php if (!empty($embarque_dia_anterior)): ?>
                 <span class="detail-badge attention">
-
-<i class="bi bi-moon-stars" style="line-height: 1.2;"></i>
-
-                    <span>Embarque no dia anterior</span></span>
+                    <i class="bi bi-moon-stars" style="line-height: 1.2;"></i>
+                    <span>Embarque no dia anterior</span>
+                </span>
             <?php endif; ?>
-
         </div>
 
         <div class="embarque-detail-area">
@@ -79,12 +73,7 @@ $passageiros = !empty($args['passageiros']) ? $args['passageiros'] : 0;
                     ?></span><span style="white-space: nowrap;"><strong>Horário:</strong> <?= esc_html($cart_item['horario']) ?></span></p>
                 <?php endif; ?>
             </div>
-
-
-
         </div>
-
-
     </div>
 
     <!-- Seção de Preço e Desconto -->
