@@ -323,7 +323,7 @@ const PaxModal = ({
 
 
           <label>
-            Nome:
+            Nome completo:
             <input
               type="text"
               name="nome_completo"

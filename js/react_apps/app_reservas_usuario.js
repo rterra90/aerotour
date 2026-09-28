@@ -4694,7 +4694,7 @@
                       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "label-text", children: "Usar meus dados de cadastro" })
                     ] }) }),
                     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { children: [
-                      "Nome:",
+                      "Nome completo:",
                       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
                         "input",
                         {
