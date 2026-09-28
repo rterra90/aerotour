@@ -22,15 +22,19 @@ add_action('wp_enqueue_scripts', function () {
   );
 
   // Enfileira o App de Reservas
-  $app_reservas_file = get_stylesheet_directory_uri() . '/js/react_apps/app_reservas_usuario.js';
-  wp_enqueue_script(
-    'aer-reserva-app',
-    $app_reservas_file,
-    ['react', 'react-dom'], // Dependências garantem a ordem correta
-    file_exists($app_reservas_file) ? filemtime($app_reservas_file) : '1.0.0', // Cache busting automático
-    null,
-  );
+  // 1. Caminho FÍSICO no servidor (para o PHP ler o arquivo e gerar a versão)
+  $app_reservas_path = get_stylesheet_directory() . '/js/react_apps/app_reservas_usuario.js';
 
+  // 2. URL pública (para o navegador baixar o arquivo)
+  $app_reservas_uri = get_stylesheet_directory_uri() . '/js/react_apps/app_reservas_usuario.js';
+
+  wp_enqueue_script(
+      'aer-reserva-app',
+      $app_reservas_uri,
+      ['react', 'react-dom'],
+      file_exists($app_reservas_path) ? filemtime($app_reservas_path) : '1.0.0', // Agora o cache busting vai funcionar
+      true // Mudei para true para carregar no footer (recomendado para React)
+  );
   // 4. Passa os dados necessários (o que estava nos data-attributes)
   global $post;
   $current_user = wp_get_current_user();
