@@ -46,7 +46,11 @@ $passageiros = !empty($args['passageiros']) ? $args['passageiros'] : 0;
             <?php endif; ?> -->
 
             <?php if (!empty($embarque_dia_anterior)): ?>
-                <span class="detail-badge attention"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> <span>Embarque no dia anterior</span></span>
+                <span class="detail-badge attention">
+
+<i class="bi bi-moon-stars" style="line-height: 1.2;"></i>
+
+                    <span>Embarque no dia anterior</span></span>
             <?php endif; ?>
 
         </div>

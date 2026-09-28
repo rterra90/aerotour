@@ -12,7 +12,8 @@ defined( 'ABSPATH' ) || exit;
 			$data_evento = esc_html($_product->get_attribute('dia'));
 			$data_iso = $data_iso = date('Y-m-d', strtotime(str_replace('/', '-', $data_evento)));
 	
-			$embarque_dia_anterior = !empty($cart_item['embarque_dia_anterior']) ? $cart_item['embarque_dia_anterior'] : false;
+			$embarque_dia_anterior = !empty($cart_item['dia_anterior']) ? ($cart_item['dia_anterior'] === 'dia-anterior' ? true : false) : false;
+			
 			$data_embarque = !empty($embarque_dia_anterior) ?esc_html(date('d/m/Y', strtotime($data_iso . ' -1 day'))) : esc_html($_product->get_attribute('dia'));
 
 			$endereco_embarque = 'Endereço do embarque';
