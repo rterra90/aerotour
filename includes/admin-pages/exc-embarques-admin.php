@@ -491,7 +491,8 @@ function painel_exc_embarques()
                                         horario: horaStr,
                                         status: statusVal,                       // Novo: 'disponivel', 'esgotado' ou 'indisponivel'
                                         disponivel: (statusVal === 'disponivel'), // Fallback retrocompatível (true/false)
-                                        diaAnterior: diaAnteriorBtn.dataset.status === 'dia-anterior' ? true : false,
+                                        diaAnterior: diaAnteriorBtn && diaAnteriorBtn.dataset.status === 'dia-anterior' ? true : false, // verificar se diaAnteriorBtn existe
+
                                     });
                                 });
                             }
