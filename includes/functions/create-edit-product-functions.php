@@ -79,6 +79,23 @@ function exc_advanced_details()
 
     ?>
   </div>
+
+  <!-- SEO Description -->
+  <div class="options_group options_group_seo_description">
+    <?php woocommerce_wp_textarea_input([
+      'id' => 'meta_seo_description',
+      'value' => get_post_meta(get_the_ID(), 'seo_description', true),
+      'label' => 'Descrição SEO',
+      'desc_tip' => true,
+      'description' => 'Descrição para SEO (meta description)',
+      'rows'        => 4,
+      'style'       => 'width:90%; height:unset;',
+    ]); ?>
+  </div>
+  
+
+
+
   <!-- Define se será destaque na home -->
   <div class="options_group options_group_destaque">
     <?php woocommerce_wp_checkbox([
@@ -299,7 +316,13 @@ function process_product_meta_optimized($id)
     }else {
       // SALVAMENTO PADRÃO para outros campos meta_ 
       // Certifique-se de sanitizar conforme o tipo de dado
-      $sanitized_value = is_array($post_value) ? array_map('sanitize_text_field', $post_value) : sanitize_text_field($post_value);
+
+      // não sanitizar se for seo_description
+      if ($clean_key === 'seo_description') {
+        $sanitized_value = $post_value;
+      } else {
+        $sanitized_value = is_array($post_value) ? array_map('sanitize_text_field', $post_value) : sanitize_text_field($post_value);
+      }
       update_post_meta($id, $clean_key, $sanitized_value);
     }
   }

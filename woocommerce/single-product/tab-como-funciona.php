@@ -1,5 +1,6 @@
 <!-- TAB CONTENT COMO FUNCIONA -->
 <?php
+$seo_description = get_post_meta(get_the_ID(), 'seo_description', true);
 $todos_sets = get_option('como_funciona_sets', []);
 $set_padrao_id = get_option('como_funciona_set_padrao', '');
 $set_id_final  = (!empty($args['set_escolhido']) && isset($todos_sets[$args['set_escolhido']]))
@@ -10,6 +11,14 @@ $frases = (isset($todos_sets[$set_id_final]['frases'])) ? $todos_sets[$set_id_fi
 ?>
 
 <div id="tab1" class="tab-content tab-como-funciona active">
+
+<!-- exibe o conteúdo da Meta SEO se existir -->
+ <?php if ($seo_description) : ?>
+             <div class="seo-description-area mt-2 mt-sm-4 mb-4">
+                <p class="seo-description"><?= wp_kses_post(wpautop($seo_description)); ?></p>
+             </div> 
+ <?php endif; ?>
+
   <ul class="list-group list-group-flush">
     <?php if (!empty($frases)) : ?>
       <?php foreach ($frases as $f) :

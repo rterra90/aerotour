@@ -305,9 +305,16 @@ background: linear-gradient(90deg, rgb(64 15 15 / 66%) 0%, rgb(35 8 8 / 80%) 50%
         </div>
 
         <div class="info">
+            
+
           <section class="grid-container">
             <?php Single_Product_Template::render_info_grid($excursao); ?>
           </section>
+
+          <!-- exibe o conteúdo da Meta SEO -->
+             <!-- <div class="seo-description-area ps-5 mt-3">
+                <p class="seo-description"><?= wp_kses_post(wpautop(get_post_meta(get_the_ID(), 'seo_description', true))); ?></p>
+             </div> -->
 
 
           <a href="#reservaBox" class="cta-button">

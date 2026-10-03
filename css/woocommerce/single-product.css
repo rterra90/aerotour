@@ -500,6 +500,33 @@ filter: contrast(0.675);
 .tab-content.active {
   display: block;
 }
+div.seo-description-area {
+  font-size: 0.825rem;
+  color: #666;
+  position: relative;
+      padding-left: 32px;
+    margin-bottom: 16px;
+}
+div.seo-description-area::before{
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 122%;
+  background-color: var(--aer-accent);
+  margin-right: 8px;
+  vertical-align: middle;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 16px;
+}
+div.seo-description-area p{
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+div.seo-description-area p b{
+  color: var(--aer-accent);
+}
 .tab-content.tab-como-funciona ul {
   font-size: 0.925rem;
 }
@@ -685,6 +712,17 @@ dl#principaisDuvidasContent .resposta {
   padding: 0 20px;
 }
 @media (max-width: 576px) {
+  .seo-description-area{
+    padding: 0 18px!important;
+    margin: 0 0 12px 0!important;
+
+  }
+  .seo-description-area::before {
+    content: ''!important;
+    display: none!important;
+    margin: 0!important;
+    padding: 0;
+  }
   #social-footer > div {
     padding: 0px;
   }
