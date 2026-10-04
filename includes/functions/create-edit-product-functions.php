@@ -93,6 +93,30 @@ function exc_advanced_details()
     ]); ?>
   </div>
   
+  <div class="options_group options_group_seo_short_description">
+    <?php
+
+    // //instacia o produto atual se já existir
+    $current_product = wc_get_product(get_the_ID());
+
+    // sort_description padrão do woocommerce
+    $short_description = $current_product ? $current_product->get_short_description() : '';
+
+    // descrição do Yoast SEO (meta description)
+    $yoast_seo_description = get_post_meta(get_the_ID(), '_yoast_wpseo_metadesc', true);
+
+    woocommerce_wp_textarea_input( array(
+        'id'          => '_custom_short_desc',
+        'label'       => __( 'Minha Descrição Curta', 'woocommerce' ),
+        'placeholder' => __( 'Digite a descrição curta aqui...', 'woocommerce' ),
+        'rows'        => 4,
+        'style'       => 'width:90%; height:unset;',
+        'desc_tip'    => 'true',
+        'description' => __( 'Este campo alimenta diretamente a descrição curta padrão do produto.', 'woocommerce' ),
+        'value'       => $short_description ? $short_description : $yoast_seo_description,
+    ) );
+    ?>
+  </div>
 
 
 
@@ -218,6 +242,16 @@ function exc_advanced_details()
 }
 
 //SALVA AS METAS PERSONALIZADAS
+add_action( 'woocommerce_admin_process_product_object', 'save_custom_short_description_field' );
+function save_custom_short_description_field( $product ) {
+    // Verifica se o campo foi enviado na requisição POST
+    if ( isset( $_POST['_custom_short_desc'] ) ) {
+        $sanitized_value = wp_kses_post( $_POST['_custom_short_desc'] );
+        
+        // Define o valor diretamente no objeto do produto como short_description (post_excerpt)
+        $product->set_short_description( $sanitized_value );
+    }
+}
 add_action('woocommerce_process_product_meta', 'process_product_meta_optimized');
 
 function process_product_meta_optimized($id)
@@ -319,11 +353,20 @@ function process_product_meta_optimized($id)
 
       // não sanitizar se for seo_description
       if ($clean_key === 'seo_description') {
-        $sanitized_value = $post_value;
+              update_post_meta($id, $clean_key, $post_value);
+
+      } else if ($clean_key === '_custom_short_desc') {
+          // Trate o caso especial aqui, se necessário
+
+
+
+
+
       } else {
         $sanitized_value = is_array($post_value) ? array_map('sanitize_text_field', $post_value) : sanitize_text_field($post_value);
-      }
       update_post_meta($id, $clean_key, $sanitized_value);
+
+      }
     }
   }
 }

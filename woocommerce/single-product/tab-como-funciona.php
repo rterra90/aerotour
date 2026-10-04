@@ -14,9 +14,9 @@ $frases = (isset($todos_sets[$set_id_final]['frases'])) ? $todos_sets[$set_id_fi
 
 <!-- exibe o conteúdo da Meta SEO se existir -->
  <?php if ($seo_description) : ?>
-             <div class="seo-description-area mt-2 mt-sm-4 mb-4">
-                <p class="seo-description"><?= wp_kses_post(wpautop($seo_description)); ?></p>
-             </div> 
+  <section class="seo-description-area mt-2 mt-sm-4 mb-4" itemprop="description" aria-label="Resumo da Excursão">
+            <p class="seo-description"><?= wp_kses_post(wpautop($seo_description)); ?></p>
+  </section>
  <?php endif; ?>
 
   <ul class="list-group list-group-flush">

@@ -500,14 +500,14 @@ filter: contrast(0.675);
 .tab-content.active {
   display: block;
 }
-div.seo-description-area {
+section.seo-description-area {
   font-size: 0.825rem;
   color: #666;
   position: relative;
       padding-left: 32px;
     margin-bottom: 16px;
 }
-div.seo-description-area::before{
+section.seo-description-area::before{
   content: '';
   display: inline-block;
   width: 3px;
@@ -520,11 +520,11 @@ div.seo-description-area::before{
   transform: translateY(-50%);
   left: 16px;
 }
-div.seo-description-area p{
+section.seo-description-area p{
   margin-bottom: 8px;
   line-height: 1.4;
 }
-div.seo-description-area p b{
+section.seo-description-area p b{
   color: var(--aer-accent);
 }
 .tab-content.tab-como-funciona ul {

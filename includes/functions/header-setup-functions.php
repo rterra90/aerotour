@@ -10,15 +10,27 @@
 function aer_get_seo_description()
 {
   if (is_product()) {
-    return get_post_meta(get_the_ID(), '_yoast_wpseo_metadesc', true);
+
+    $current_product = wc_get_product(get_the_ID());
+
+    // sort_description padrão do woocommerce
+    $short_description = $current_product ? $current_product->get_short_description() : '';
+
+    // descrição do Yoast SEO (meta description)
+    $yoast_seo_description = get_post_meta(get_the_ID(), '_yoast_wpseo_metadesc', true);
+
+    // Prioriza a descrição curta do produto, se não existir usa a descrição do Yoast SEO
+    $seo_description = $short_description ? $short_description : $yoast_seo_description;
+
+    return $seo_description;
   } elseif (is_product_category()) {
     $cat_name = strtolower(get_queried_object()->name);
-    return "Confira todas as nossas próximas excursões para $cat_name e faça sua reserva!";
+    return "Confira as nossas próximas excursões para $cat_name e faça sua reserva!";
   } elseif (is_archive()) {
-    return 'Confira todas as nossas próximas excursões e faça sua reserva!';
+    return 'Confira as nossas próximas excursões e faça sua reserva!';
   }
 
-  return 'Excursões para shows e eventos é com a Aerotour! Saídas de Campinas, Indaiatuba, Sumaré, Hortolândia, Paulínia, Salto, Valinhos, Vinhedo e Jundiaí.';
+  return 'Excursões para shows e eventos é com a Aerotour! Saídas de Campinas, Indaiatuba, Sumaré, Hortolândia, Paulínia, Salto, Itu, Valinhos, Vinhedo e Jundiaí.';
 }
 
 /**
