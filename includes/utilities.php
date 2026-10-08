@@ -123,6 +123,15 @@ function aer_icons($name, $_w, $_h, $extensao = '.svg')
           </i>';
 }
 
+//função que imprime um ícone svg, tendo como argumentos o nome, as dimensões e personalizações de cor e stroke-width
+function aer_icons_svg($name, $_w, $_h, $color = '#000000', $stroke_width = 1)
+{
+  $svg_icon_code = file_get_contents(get_stylesheet_directory() . '/assets/icons/' . $name . '.svg');
+  $svg_icon_code = str_replace('<svg', '<svg width="' . $_w . '" height="' . $_h . '"', $svg_icon_code);
+  $svg_icon_code = str_replace('<path', '<path stroke="' . $color . '" stroke-width="' . $stroke_width . '"', $svg_icon_code);
+  return $svg_icon_code; 
+}
+
 function registration_error_messages($error)
 {
   return str_replace('Já existe uma conta com este nome de usuário. Escolha outro.', 'CPF já cadastrado! Faça o login ou <a href=' . wp_lostpassword_url() . '>recupere sua senha</a>.', $error);

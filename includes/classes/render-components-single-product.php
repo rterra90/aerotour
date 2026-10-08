@@ -8,6 +8,10 @@ class Single_Product_Template
      */
     public static function render_status_badges($excursao)
     {
+
+        // cria uma array com todas as IDs dasvariações da excursão
+        $variacao_ids = array_column($excursao['variacoes'], 'variation_id');
+
         $statuses = [];
         foreach ($excursao['variacoes'] as $var) {
 
@@ -82,11 +86,26 @@ class Single_Product_Template
         } else {
             echo '<div class="badge-slider-container"><div class="badge-slider-track">';
             foreach ($statuses as $s) {
-                $dia_curto = substr($s['dia'], 0, -5);
-                echo "<div class='badge-excursao badge-item multi-badges badge-{$s['slug']}'><span>$dia_curto</span>{$s['label']}</div>";
+                $dia_mes = substr($s['dia'], 0, -5);
+                echo "<div class='badge-excursao badge-item multi-badges badge-{$s['slug']}'><span>$dia_mes</span>{$s['label']}</div>";
             }
             echo '</div></div>';
         }
+
+        // se o usuário estiver logado, verifica na tabela 'reservas' se existe algum registro em que 'user_id' seja igual ao usuário atual e que 'variation_id' esteja contido em $variacao_ids
+        if (is_user_logged_in()) {
+            global $wpdb;
+            $user_id = get_current_user_id();
+            $placeholders = implode(',', array_fill(0, count($variacao_ids), '%d'));
+            $query = "SELECT COUNT(*) FROM {$wpdb->prefix}reservas WHERE user_id = %d AND variation_id IN ($placeholders) AND status != 'cancel'";
+            $query_params = array_merge([$user_id], $variacao_ids);
+            $count = (int) $wpdb->get_var($wpdb->prepare($query, ...$query_params));
+
+            if ($count > 0) {
+                echo "<div class='badge-excursao badge-reservado d-flex align-items-center gap-1'> " . aer_icons_svg('check', 12, 12, '#400f0f') . " Você já reservou</div>";
+            }
+        }
+
         return ob_get_clean();
     }
 
