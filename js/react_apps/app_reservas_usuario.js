@@ -4450,6 +4450,7 @@
     const { validarCPF, validarMaioridade } = useValidations_default();
     const [visible, setVisible] = React.useState(false);
     const [useAccountData, setUseAccountData] = React.useState(false);
+    const [telefoneRepetido, setTelefoneRepetido] = React.useState(false);
     const { userData } = window.singleProductData;
     const currentSessionId = window.singleProductData?.session_id || "anon_lead";
     const canShowAutofill = React.useMemo(() => {
@@ -4512,8 +4513,17 @@
         case "celular": {
           const celValido = celularMask(target.value).length == 14 || celularMask(target.value).length == 15;
           target.classList.remove("input-error");
-          if (celValido) target.classList.remove("input-attention");
-          else if (valueLength < 14) target.classList.remove("input-error");
+          if (celValido) {
+            target.classList.remove("input-attention");
+            if (passageiros.length > 0) {
+              const celularRepetido = passageiros.some(
+                (_pax) => _pax.celular === celularMask(target.value)
+              );
+              setTelefoneRepetido(celularRepetido);
+            } else {
+              setTelefoneRepetido(false);
+            }
+          } else if (valueLength < 14) target.classList.remove("input-error");
           atualizarErros(target.name, !celValido);
           setFormData({ ...formData, celular: celularMask(target.value) });
           break;
@@ -4734,6 +4744,7 @@
                         }
                       )
                     ] }),
+                    telefoneRepetido && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "aviso-telefone-repetido", children: "\u26A0\uFE0F Este n\xFAmero de celular j\xE1 foi usado para outro passageiro. \xC9 recomend\xE1vel informar n\xFAmeros \xFAnicos para cada passageiro." }),
                     /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { children: [
                       "Data de nascimento:",
                       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(

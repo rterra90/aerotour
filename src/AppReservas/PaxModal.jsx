@@ -29,6 +29,7 @@ const PaxModal = ({
   const { validarCPF, validarMaioridade } = useValidations();
   const [visible, setVisible] = React.useState(false);
   const [useAccountData, setUseAccountData] = React.useState(false);
+  const [telefoneRepetido, setTelefoneRepetido] = React.useState(false);
 
   // Dados do usuário logado
   const { userData } = window.singleProductData;
@@ -114,7 +115,19 @@ const PaxModal = ({
           celularMask(target.value).length == 14 ||
           celularMask(target.value).length == 15;
         target.classList.remove('input-error');
-        if (celValido) target.classList.remove('input-attention');
+        if (celValido){
+target.classList.remove('input-attention');
+
+//se já houver passageiros adicionados, verifica se o celular já foi usado por outro passageiro e renderiza um aviso sobre preferir informar números únicos para cada passageiro
+          if (passageiros.length > 0) {
+            const celularRepetido = passageiros.some(
+              (_pax) => _pax.celular === celularMask(target.value),
+            );
+            setTelefoneRepetido(celularRepetido);
+          } else {
+            setTelefoneRepetido(false);
+          }
+        } 
         else if (valueLength < 14) target.classList.remove('input-error');
         atualizarErros(target.name, !celValido);
         setFormData({ ...formData, celular: celularMask(target.value) });
@@ -356,6 +369,12 @@ const PaxModal = ({
               onChange={inputChange}
             />
           </label>
+          {telefoneRepetido && (
+            <div className="aviso-telefone-repetido">
+              ⚠️ Este número de celular já foi usado para outro passageiro. 
+              É recomendável informar números únicos para cada passageiro.
+            </div>
+          )}
           <label>
             Data de nascimento:
             <input

@@ -534,7 +534,14 @@ padding: 6px 10px;
 .texto-aviso {
   flex: 1;
 }
-
+#newReservasContainer .modal-content #paxForm .aviso-telefone-repetido {
+    background: #FEF3C7;
+    border: 1px solid #FBBF24;
+    color: #78350F;
+    padding: 6px 12px;
+    font-size: .7rem;
+    border-radius: .3rem;
+}
 #newReservasContainer .modal-content #paxForm .custom-select {
   position: relative;
   height: fit-content;
